@@ -1,0 +1,14 @@
+## Interface: 40000
+## Titel: oUF Rain
+## Author: Rainrider
+## Version: pre alpha
+## Notes: oUF layout
+## RequiredDeps: oUF
+## OptionalDeps: oUF_Experience, oUF_Reputation, oUF_Swing, oUF_TotemBar
+
+rain_config.lua
+rain_tags.lua
+rain_icons.lua
+rain_bars.lua
+rain_modules.lua
+oUF_Rain.lua
