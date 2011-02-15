@@ -9,12 +9,12 @@ local siValue = function(val)
 end
 
 oUF.Tags['rain:health'] = function(unit)
-	if(not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
+	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
-	if(not UnitIsFriend("player", unit)) then
+	if (not UnitIsFriend("player", unit)) then
 		return siValue(min)
-	elseif(min ~= 0 and min ~= max) then
+	elseif (min ~= 0 and min ~= max) then
 		return '-' .. siValue(max - min)
 	else
 		return siValue(max)

@@ -98,6 +98,8 @@ end
 local UnitSpecific = {
 	player = function(self)
 		ns.AddPortrait(self, nil, nil)
+		ns.AddOverlay(self)
+		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, 230, true)
 		ns.AddSwingBar(self, nil, nil)
 		ns.AddReputationBar(self, nil, nil)
@@ -112,7 +114,7 @@ local UnitSpecific = {
 		if (playerClass == "WARLOCK") then
 			ns.AddSoulshardsBar(self, 230, 5)
 		end
-		if (playerClass == "SHAMAN" and IsAddOnLoaded("oUF_TotemBar")) then
+		if (playerClass == "SHAMAN") then
 			ns.AddTotemBar(self, nil, 5)
 		end
 		if (playerClass == "DRUID") then
@@ -122,6 +124,8 @@ local UnitSpecific = {
 	
 	target = function(self)
 		ns.AddPortrait(self, nil, nil)
+		ns.AddOverlay(self)
+		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, 230, true)
 		ns.AddComboPointsBar(self, nil, 5)
 	end,

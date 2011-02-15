@@ -27,19 +27,39 @@ local combocolors = {
 	[5] = {180/255, 95/255, 4/255},
 }
 
+local function AddPortrait(self, width, height)
+	self.Portrait = CreateFrame("PlayerModel", self:GetName().."Portrait", self)
+	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
+	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
+	self.Portrait:SetFrameLevel(self:GetFrameLevel() + 3)
+	self.Portrait:SetBackdrop(cfg.BACKDROP)
+	self.Portrait:SetBackdropColor(0, 0, 0, 1)
+end
+ns.AddPortrait = AddPortrait
+
+local function AddOverlay(self)
+	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self)
+	self.Overlay:SetParent(self.Portrait)
+	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+	self.Overlay:SetAllPoints()
+	self.Overlay:SetStatusBarTexture(cfg.OVERLAY)
+	self.Overlay:SetStatusBarColor(0.1, 0.1, 0.1, 0.75)
+end
+ns.AddOverlay = AddOverlay
+
 local function AddRuneBar(self, width, height)
 	self.Runes = CreateFrame("Frame", self:GetName().."_RunesBar", self)
-	self.Runes:SetPoint("BOTTOMLEFT", self.Portrait, 1, 1)
-	self.Runes:SetPoint("BOTTOMRIGHT", self.Portrait, -1, 1)
-	self.Runes:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
+	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
+	self.Runes:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 	self.Runes:SetBackdrop(cfg.BACKDROP)
 	self.Runes:SetBackdropColor(0, 0, 0)
 
 	for i = 1, numRunes do
 		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self)
 		self.Runes[i]:SetSize((215 - numRunes - 1) / numRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Portrait, (i - 1) * (214 / numRunes) + 1, 1)
-		self.Runes[i]:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numRunes) + 1, 1)
+		self.Runes[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.Runes[i]:SetStatusBarTexture(cfg.TEXTURE)
 		self.Runes[i]:GetStatusBarTexture():SetHorizTile(false)
 		self.Runes[i]:SetStatusBarColor(unpack(runeloadcolors[i]))
@@ -48,7 +68,7 @@ local function AddRuneBar(self, width, height)
 		--[[
 		self.Runes[i].bg = self.Runes[i]:CreateTexture(nil, "BORDER")
 		self.Runes[i].bg:SetAllPoints()
-		self.Runes[i].bg:SetTexture(normtex)
+		self.Runes[i].bg:SetTexture(cfg.TEXTURE)
 		self.Runes[i].bg:SetVertexColor(0.15, 0.15, 0.15)--]]
 	end
 end
@@ -60,8 +80,8 @@ local function AddSoulShardsBar(self, width, height)
 	for i = 1, numShards do
 		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShards"..i, self)
 		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
-		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Portrait, (i - 1) * (214 / numShards) + 1, 1)
-		self.SoulShards[i]:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numShards) + 1, 1)
+		self.SoulShards[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.SoulShards[i]:SetStatusBarTexture(cfg.TEXTURE)
 		self.SoulShards[i]:GetStatusBarTexture():SetHorizTile(false)
 		self.SoulShards[i]:SetStatusBarColor(0.50, 0.32, 0.55) -- TODO: oUF.colors.power.SOUL_SHARDS
@@ -77,8 +97,8 @@ local function AddHolyPowerBar(self, width, height)
 	for i = 1, numHoly do
 		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self)
 		self.HolyPower[i]:SetSize((215 - numHoly - 1) / numHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Portrait, (i - 1) * (214 / numHoly) + 1, 1)
-		self.HolyPower[i]:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numHoly) + 1, 1)
+		self.HolyPower[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.HolyPower[i]:SetStatusBarTexture(cfg.TEXTURE)
 		self.HolyPower[i]:GetStatusBarTexture():SetHorizTile(false)
 		self.HolyPower[i]:SetStatusBarColor(0.95, 0.9, 0.6) -- TODO: oUF_colors.power.HOLY_POWER
@@ -89,14 +109,16 @@ end
 ns.AddHolyPowerBar = AddHolyPowerBar
 
 local function AddTotemBar(self, width, height)
+	if (not IsAddOnLoaded("oUF_TotemBar")) then return end
+
 	self.TotemBar = {}
 	self.TotemBar.Destroy = true
 	
 	for i = 1, numTotems do
 		self.TotemBar[i] = CreateFrame("StatusBar", "oUF_Rain_TotemBar"..i, self)
 		self.TotemBar[i]:SetSize((215 - numTotems - 1) / numTotems, height)
-		self.TotemBar[i]:SetPoint("BOTTOMLEFT", self.Portrait, (i - 1) * (214 / numTotems) + 1, 1)
-		self.TotemBar[i]:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+		self.TotemBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
+		self.TotemBar[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.TotemBar[i]:SetStatusBarTexture(cfg.TEXTURE)
 		self.TotemBar[i]:GetStatusBarTexture():SetHorizTile(false)
 		self.TotemBar[i]:SetMinMaxValues(0, 1)
@@ -116,9 +138,9 @@ local function AddComboPointsBar(self, width, height)
 	
 	for i = 1, numCPoints do
 		self.CPoints[i] = CreateFrame("StatusBar", self:GetName().."CPoint_"..i, self)
-		self.CPoints[i]:SetSize((215 - numCPoints - 1) / numCPoints, height) -- frame width=230 ; portrait width=215 ; 5 cp + 6 * 1 px = 215 => 1cp = 209/5
-		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Portrait, (i - 1) * (214 / numCPoints) + 1, 1)
-		self.CPoints[i]:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+		self.CPoints[i]:SetSize((215 - numCPoints - 1) / numCPoints, height) -- frame width=230 ; Overlay width=215 ; 5 cp + 6 * 1 px = 215 => 1cp = 209/5
+		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numCPoints) + 1, 1)
+		self.CPoints[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.CPoints[i]:SetStatusBarTexture(cfg.TEXTURE)
 		self.CPoints[i]:GetStatusBarTexture():SetHorizTile(false)
 		self.CPoints[i]:SetStatusBarColor(unpack(combocolors[i]))
@@ -159,13 +181,3 @@ local function AddEclipseBar(self, width, height)
 	self.EclipseBar = eclipseBar
 end
 ns.AddEclipseBar = AddEclipseBar
-
-local function AddPortrait(self, width, height)
-	self.Portrait = CreateFrame("PlayerModel", self:GetName().."Portrait", self)
-	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
-	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
-	self.Portrait:SetFrameLevel(self:GetFrameLevel() + 3)
-	self.Portrait:SetBackdrop(cfg.BACKDROP)
-	self.Portrait:SetBackdropColor(0, 0, 0, 1)
-end
-ns.AddPortrait = AddPortrait
