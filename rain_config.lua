@@ -2,9 +2,11 @@ local _, ns = ...
 
 local config = {
 	FONT = [=[Interface\AddOns\oUF_Rain\russel square lt.ttf]=],
-	TEXTURE = [=[Interface\ChatFrame\ChatFrameBackground]=],
+	TEXTURE = [=[Interface\AddOns\oUF_Rain\normtexc]=],
+	BORDER = [=[Interface\AddOns\oUF_Rain\glowTex3]=],
 	BACKDROP = {
-		bgFile = TEXTURE, insets = {top = -1, bottom = -1, left = -1, right = -1}
+		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+		insets = {top = -1, bottom = -1, left = -1, right = -1},
 	},
 }
 

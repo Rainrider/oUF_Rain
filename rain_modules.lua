@@ -123,19 +123,19 @@ ns.AddExperienceBar = AddExperienceBar
 
 local function AddSwingBar(self, width, height)
 	if IsAddOnLoaded("oUF_Swing") then
-		self.Swing = CreateFrame("StatusBar", "oUF_Rain_Swing", self)
+		
+		self.Swing = CreateFrame("Frame", self:GetName().."_Swing", self)
 		self.Swing:SetHeight(3)
 		self.Swing:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 7)
 		self.Swing:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 7)
-		self.Swing:SetStatusBarTexture(cfg.TEXTURE)
-		self.Swing:SetStatusBarColor(0.55, 0.57, 0.61)
-		self.Swing:SetBackdrop(cfg.BACKDROP)
-		self.Swing:SetBackdropColor(0, 0, 0)
-
-		self.Swing.bg = self.Swing:CreateTexture(nil, "BORDER")
-		self.Swing.bg:SetAllPoints(self.Swing)
-		self.Swing.bg:SetTexture(cfg.TEXTURE)
-		self.Swing.bg:SetVertexColor(0.15, 0.15, 0.15)
+		--self.Swing:SetBackdrop(cfg.BACKDROP)
+		--self.Swing:SetBackdropColor(0, 0, 0)
+		self.Swing.texture = cfg.TEXTURE
+		self.Swing.color = {0.55, 0.57, 0.61, 1}
+		self.Swing.textureBG = cfg.TEXTURE
+		self.Swing.colorBG = {0, 0, 0, 0.6}
+			
+		self.Swing.hideOoc = true
 	end
 end
 ns.AddSwingBar = AddSwingBar

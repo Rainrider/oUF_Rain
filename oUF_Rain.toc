@@ -1,5 +1,5 @@
 ## Interface: 40000
-## Titel: oUF Rain
+## Title: oUF Rain
 ## Author: Rainrider
 ## Version: pre alpha
 ## Notes: oUF layout
