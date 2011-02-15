@@ -3,6 +3,7 @@
 
 local _, ns = ...
 local cfg = ns.config
+local SetFontString = ns.SetFontString
 
 local numRunes = 6 -- MAX_RUNES does not function any more
 local numHoly = MAX_HOLY_POWER
@@ -46,6 +47,32 @@ local function AddOverlay(self)
 	self.Overlay:SetStatusBarColor(0.1, 0.1, 0.1, 0.75)
 end
 ns.AddOverlay = AddOverlay
+
+local function AddCastbar(self, unit)
+	self.Castbar = CreateFrame("StatusBar", self:GetName().."_Castbar", (unit == "player" or unit == "target") and self.Portrait or self.Power)
+	self.Castbar:SetStatusBarTexture(cfg.TEXTURE)
+	--self.Castbar:SetStatusBarColor()
+	self.Castbar:SetAlpha(0.75)
+	
+	if (unit == "player" or unit == "target") then
+		self.Castbar:SetAllPoints(self.Overlay)
+		
+		self.Castbar.Time = SetFontString(self.Overlay, cfg.FONT2, 12, nil, "RIGHT")
+		self.Castbar.Time:SetPoint("RIGHT", -3.5, 3)
+		self.Castbar.Time:SetTextColor(0.84, 0.75, 0.65)
+		
+		self.Castbar.Text = SetFontString(self.Overlay, cfg.FONT2, 12, nil, "LEFT")
+		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
+		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
+		
+		self.Castbar:HookScript("OnShow", function() self.Castbar.Text:Show(); self.Castbar.Time:Show() end)
+		self.Castbar:HookScript("OnHide", function() self.Castbar.Text:Hide(); self.Castbar.Time:Hide() end)
+		
+	else
+	
+	end
+end
+ns.AddCastbar = AddCastbar
 
 local function AddRuneBar(self, width, height)
 	self.Runes = CreateFrame("Frame", self:GetName().."_RunesBar", self)
