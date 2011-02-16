@@ -5,21 +5,9 @@ local SetFontString = ns.SetFontString
 
 local playerClass = select(2, UnitClass("player"))
 
-local backdrop = {
-	bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-	edgeFile = cfg.BORDER,
-	edgeSize = 2,
-	insets = {top = 2, left = 2, bottom = 2, right = 2},
-}
-
 -- layout rules for specific unit frames (auras, combo points, totembar, runes, holy power, shards, druid mana ...)
 local UnitSpecific = {
 	player = function(self)
-		ns.AddPortrait(self, nil, nil)
-		ns.AddOverlay(self)
-		ns.AddCastbar(self, "player") -- TODO: put in Shared
-		ns.AddCombatFeedbackText(self)
-		ns.AddHealPredictionBar(self, 230, true)
 		ns.AddSwingBar(self, nil, nil)
 		ns.AddReputationBar(self, nil, nil)
 		ns.AddExperienceBar(self, nil, nil)
@@ -42,16 +30,10 @@ local UnitSpecific = {
 	end,
 	
 	target = function(self)
-		ns.AddPortrait(self, nil, nil)
-		ns.AddOverlay(self)
-		ns.AddCastbar(self, "target") -- TODO: put in Shared
-		ns.AddCombatFeedbackText(self)
-		ns.AddHealPredictionBar(self, 230, true)
 		ns.AddComboPointsBar(self, nil, 5)
 	end,
 	
 	pet = function(self)
-		ns.AddCastbar(self, "pet") -- TODO: put in Shared
 		ns.AddHealPredictionBar(self, 230, true)
 		ns.AddExperienceBar(self, nil, nil)
 	end,
@@ -69,7 +51,7 @@ local function Shared(self, unit)
 	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
 	self.FrameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
 	self.FrameBackdrop:SetPoint("BOTTOMRIGHT", self, 5, -5)
-	self.FrameBackdrop:SetBackdrop(backdrop)
+	self.FrameBackdrop:SetBackdrop(cfg.BACKDROP2)
 	self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
 	self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
 	
@@ -132,6 +114,12 @@ local function Shared(self, unit)
 		self.Power:SetSize(230, 15)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
+		
+		ns.AddPortrait(self, unit)
+		ns.AddOverlay(self, unit)
+		ns.AddCastbar(self, unit)
+		ns.AddCombatFeedbackText(self)
+		ns.AddHealPredictionBar(self, unit)
 	end
 	
 	if(unit == "pet" or unit == "focus" or unit:find("target") and unit ~= "target") then
@@ -144,6 +132,8 @@ local function Shared(self, unit)
 		self.Power:SetSize(110, 5)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
+		
+		ns.AddCastbar(self, unit)
 	end
 	
 	if(UnitSpecific[unit]) then

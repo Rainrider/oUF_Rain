@@ -28,7 +28,7 @@ local combocolors = {
 	[5] = {180/255, 95/255, 4/255},
 }
 
-local function AddPortrait(self, width, height)
+local function AddPortrait(self, unit)
 	self.Portrait = CreateFrame("PlayerModel", self:GetName().."Portrait", self)
 	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
 	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
@@ -38,7 +38,7 @@ local function AddPortrait(self, width, height)
 end
 ns.AddPortrait = AddPortrait
 
-local function AddOverlay(self)
+local function AddOverlay(self, unit)
 	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self)
 	self.Overlay:SetParent(self.Portrait)
 	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
@@ -51,7 +51,7 @@ ns.AddOverlay = AddOverlay
 local function AddCastbar(self, unit)
 	self.Castbar = CreateFrame("StatusBar", self:GetName().."_Castbar", (unit == "player" or unit == "target") and self.Portrait or self.Power)
 	self.Castbar:SetStatusBarTexture(cfg.TEXTURE)
-	--self.Castbar:SetStatusBarColor()
+	self.Castbar:GetStatusBarTexture():SetHorizTile(false)
 	self.Castbar:SetAlpha(0.75)
 	
 	if (unit == "player" or unit == "target") then
@@ -69,7 +69,34 @@ local function AddCastbar(self, unit)
 		self.Castbar:HookScript("OnHide", function() self.Castbar.Text:Hide(); self.Castbar.Time:Hide() end)
 		
 	else
+		self.Castbar:SetAllPoints(self.Power)
+	end
 	
+	if (unit == "player") then
+		self.Castbar.SafeZone = self.Castbar:CreateTexture(nil, "ARTWORK")
+		self.Castbar.SafeZone:SetTexture(cfg.TEXTURE)
+		self.Castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
+	end
+	
+	if (unit == "target") then
+		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
+		self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
+		self.Castbar.Icon:SetSize(32, 32)
+		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		--self.Castbar.Icon:SetTexCoord(0, 1, 0, 1)
+		--[[
+		self.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
+		self.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -2, 2)
+		self.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 2, -2)
+		self.IconOverlay:SetTexture(cfg.BTNTEXTURE)
+		self.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
+		--]]
+		self.IconBackdrop = CreateFrame("Frame", nil, self.Castbar)
+		self.IconBackdrop:SetPoint("TOPLEFT", self.Castbar.Icon, -3, 3)
+		self.IconBackdrop:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 3, -3)
+		self.IconBackdrop:SetBackdrop(cfg.BACKDROP2)
+		self.IconBackdrop:SetBackdropColor(0, 0, 0, 0)
+		self.IconBackdrop:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 ns.AddCastbar = AddCastbar

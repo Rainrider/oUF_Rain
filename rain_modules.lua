@@ -3,27 +3,27 @@ local _, ns = ...
 local cfg = ns.config
 local SetFontString = ns.SetFontString
 
-local function AddHealPredictionBar(self, width, allowOverflow)
+local function AddHealPredictionBar(self, unit)
 	-- bar for the players heals
-	local mhpb = CreateFrame('StatusBar', nil, self.Health)
-	mhpb:SetPoint('TOPLEFT', self.Health:GetStatusBarTexture(), 'TOPRIGHT', 0, 0)
-	mhpb:SetPoint('BOTTOMLEFT', self.Health:GetStatusBarTexture(), 'BOTTOMRIGHT', 0, 0)
-	mhpb:SetWidth(width)
+	local mhpb = CreateFrame("StatusBar", nil, self.Health)
+	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	mhpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
 	mhpb:SetStatusBarTexture(cfg.TEXTURE)
 	mhpb:SetStatusBarColor(0, 1, 0.5, 0.25)
 
 	-- bar for others' heals
-	local ohpb = CreateFrame('StatusBar', nil, self.Health)
-	ohpb:SetPoint('TOPLEFT', mhpb:GetStatusBarTexture(), 'TOPRIGHT', 0, 0)
-	ohpb:SetPoint('BOTTOMLEFT', mhpb:GetStatusBarTexture(), 'BOTTOMRIGHT', 0, 0)
-	ohpb:SetWidth(width)
+	local ohpb = CreateFrame("StatusBar", nil, self.Health)
+	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	ohpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
 	ohpb:SetStatusBarTexture(cfg.TEXTURE)
-	ohpb:SetStatusBarColor(0, 1, 0, 0.25)
+	ohpb:SetStatusBarColor(0, 1, 0, 0.25)	-- TODO better color
 
 	self.HealPrediction = {
 		myBar = mhpb,
 		otherBar = ohpb,
-		maxOverflow = allowOverflow and 1.25 or 1,
+		maxOverflow = unit == "target" and 1.25 or 1,
 	}
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
