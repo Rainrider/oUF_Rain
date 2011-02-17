@@ -30,6 +30,10 @@ local UnitSpecific = {
 	end,
 	
 	target = function(self)
+		self.Info = SetFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
+		self.Info:SetPoint("TOP", self.Health, 0, -5)
+		self:Tag(self.Info, "[rain:color][name]|r [difficulty][level] [shortclassification]|r")
+		
 		ns.AddComboPointsBar(self, nil, 5)
 	end,
 	
@@ -55,7 +59,6 @@ local function Shared(self, unit)
 	self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
 	self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
 	
-	-- health bar
 	self.Health = CreateFrame("StatusBar", self:GetName().."_Health", self)
 	self.Health:SetStatusBarTexture(cfg.TEXTURE)
 	self.Health.colorTapping = true
@@ -74,8 +77,8 @@ local function Shared(self, unit)
 	
 	self.Health.PostUpdate = ns.PostUpdateHealth
 	
-	self.Health.value = SetFontString(self.Health, cfg.FONT2, 12, nil, "RIGHT")
-	self.Health.value:SetPoint("TOPRIGHT", self.Health, -2, -5)
+	self.Health.value = SetFontString(self.Health, cfg.FONT2, (unit == "player" or unit == "target") and 12 or 9, nil, "RIGHT")
+	self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
 	self.Health.value.frequentUpdates = 1/4
 	self:Tag(self.Health.value, "[dead][offline][rain:health]")
 	
@@ -95,13 +98,9 @@ local function Shared(self, unit)
 	self.Power.bg:SetTexture(cfg.TEXTURE)
 	self.Power.bg.multiplier = 0.5
 	
-	self.Power.value = SetFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
-	self.Power.value:SetPoint("TOPLEFT", self.Health, 2, -5)
-	self.Power.value.frequentUpdates = 1/4
-	self:Tag(self.Power.value, "[rain:perpp][rain:power]")
-	
 	self.Power.PreUpdate = ns.PreUpdatePower
 	self.Power.PostUpdate = ns.PostUpdatePower
+	
 	
 	if(unit == "player" or unit == "target") then
 		-- set frame size
@@ -114,6 +113,11 @@ local function Shared(self, unit)
 		self.Power:SetSize(230, 15)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
+		
+		self.Power.value = SetFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
+		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
+		self.Power.value.frequentUpdates = 1/4
+		self:Tag(self.Power.value, "[rain:perpp][rain:power]")
 		
 		ns.AddPortrait(self, unit)
 		ns.AddOverlay(self, unit)
@@ -129,9 +133,16 @@ local function Shared(self, unit)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
 		
+		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
+		
 		self.Power:SetSize(110, 5)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
+		
+		self.Name = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.Name:SetPoint("TOPLEFT", 2, -2)
+		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+		self:Tag(self.Name, "[rain:color][name]|r")
 		
 		ns.AddCastbar(self, unit)
 	end

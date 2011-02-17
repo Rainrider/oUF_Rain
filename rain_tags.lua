@@ -1,3 +1,5 @@
+local _, ns = ...
+
 local siValue = function(val)
 	if(val >= 1e6) then
 		return ("%.1f".."m"):format(val / 1e6)--:gsub('%.', 'm')
@@ -8,7 +10,28 @@ local siValue = function(val)
 	end
 end
 
-oUF.Tags['rain:health'] = function(unit)
+oUF.Tags["rain:petcolor"] = function(unit)
+	if not UnitIsUnit(unit, "pet") then return end
+	local color = ns.colors.happiness[GetPetHappiness()]
+	return ns.RGBtoHEX(color[1], color[2], color[3])
+end
+oUF.TagEvents["rain:petcolor"] = "UNIT_POWER"
+
+oUF.Tags["rain:color"] = function(unit)
+	local color = {r = 1, g = 1, b = 1}
+	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
+		color = {r = 0.4, g = 0.4, b = 0.4}
+	elseif (UnitIsPlayer(unit)) then
+		color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
+	else
+		color = FACTION_BAR_COLORS[UnitReaction(unit, "player")]
+	end
+	
+	return ns.RGBtoHEX(color.r, color.g, color.b)
+end
+oUF.TagEvents["rain:color"] = "UNIT_FACTION UNIT_CONNECTION"
+
+oUF.Tags["rain:health"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
@@ -20,9 +43,9 @@ oUF.Tags['rain:health'] = function(unit)
 		return siValue(max)
 	end
 end
-oUF.TagEvents['rain:health'] = oUF.TagEvents.missinghp
+oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
 
-oUF.Tags['rain:perpp'] = function(unit)
+oUF.Tags["rain:perpp"] = function(unit)
 	local pType = UnitPowerType(unit)
 	if (pType ~= 0) then return end
 
@@ -34,12 +57,19 @@ oUF.Tags['rain:perpp'] = function(unit)
 	
 	return ret .. "% - "
 end
-oUF.TagEvents['rain:perpp'] = oUF.TagEvents.perpp
+oUF.TagEvents["rain:perpp"] = oUF.TagEvents.perpp
 
-oUF.Tags['rain:power'] = function(unit)
+oUF.Tags["rain:power"] = function(unit)
 	local min, max = UnitPower(unit), UnitPowerMax(unit)
 	if(min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 	
 	return siValue(min)
 end
-oUF.TagEvents['rain:power'] = oUF.TagEvents.missingpp
+oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
+
+oUF.Tags["rain:name"] = function(unit, r) -- TODO: what is r supposed to be?
+	local color = oUF.Tags["rain:color"](unit)
+    local name = UnitName(r or unit)
+    return color..(name or "").."|r"
+end
+oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE"

@@ -22,8 +22,17 @@ local colors = setmetatable({
 		[3] = {0.33, 0.59, 0.33},
 	}, {__index = oUF.colors.happiness}),
 }, {__index = oUF.colors})
+ns.colors = colors
 
 oUF.colors.power["MANA"] = {0.31, 0.45, 0.63}
+
+local function RGBtoHEX(r, g, b)
+	r = r <= 1 and r >= 0 and r or 1
+	g = g <= 1 and g >= 0 and g or 1
+	b = b <= 1 and b >= 0 and b or 1
+	return string.format("|cff%02x%02x%02x", r * 255, g * 255, b * 255)
+end
+ns.RGBtoHEX = RGBtoHEX
 
 local function SetFontString(parent, fontName, fontHeight, fontStyle, justifyH)
 	local fontString = parent:CreateFontString(nil, "OVERLAY")
@@ -83,11 +92,23 @@ end
 ns.PreUpdatePower = PreUpdatePower
 
 local function PostUpdatePower(Power, unit, min, max)
+	if (unit ~= "player" and unit ~= "target") then return end
+
 	local pType, pName = UnitPowerType(unit)
 	local color = colors.power[pName]
 	
 	if color then
 		Power.value:SetTextColor(unpack(color))
+	end
+	
+	if (unit == "target") then
+		local self = Power:GetParent()
+		self.Info:ClearAllPoints()
+		if (Power.value:GetText()) then
+			self.Info:SetPoint("TOP", 0, -3.5)
+		else
+			self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
+		end
 	end
 end
 ns.PostUpdatePower = PostUpdatePower
