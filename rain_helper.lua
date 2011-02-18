@@ -100,7 +100,7 @@ local function PostUpdatePower(Power, unit, min, max)
 	end
 	
 	if (unit == "target") then
-		local self = Power:GetParent()
+		local self = Power.__owner
 		self.Info:ClearAllPoints()
 		if (Power.value:GetText()) then
 			self.Info:SetPoint("TOP", 0, -3.5)
