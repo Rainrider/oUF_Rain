@@ -87,7 +87,7 @@ local function Shared(self, unit)
 	self.Health.value = PutFontString(self.Health, cfg.FONT2, (unit == "player" or unit == "target") and 12 or 9, nil, "RIGHT")
 	self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
 	self.Health.value.frequentUpdates = 1/4
-	self:Tag(self.Health.value, "[dead][offline][rain:health]")
+	self:Tag(self.Health.value, "[dead][offline][rain:health][ - >rain:perhp<%]")
 	
 	self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
 	self.Power:SetStatusBarTexture(cfg.TEXTURE)
@@ -124,7 +124,7 @@ local function Shared(self, unit)
 		self.Power.value = PutFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
 		self.Power.value.frequentUpdates = 1/4
-		self:Tag(self.Power.value, "[rain:perpp][rain:power]")
+		self:Tag(self.Power.value, "[rain:perpp<% - ][rain:power]")
 		
 		ns.AddPortrait(self, unit)
 		ns.AddOverlay(self, unit)
