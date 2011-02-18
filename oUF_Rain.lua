@@ -24,7 +24,7 @@ local UnitSpecific = {
 		if (playerClass == "SHAMAN") then
 			ns.AddTotemBar(self, nil, 5)
 		end
-		if (playerClass == "DRUID") then
+		if (playerClass == "DRUID") then -- TODO: check if eclipsebar is actually visible
 			ns.AddEclipseBar(self, 230, 7)
 		end
 	end,

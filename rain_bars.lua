@@ -29,7 +29,7 @@ local combocolors = {
 }
 
 local function AddPortrait(self, unit)
-	self.Portrait = CreateFrame("PlayerModel", self:GetName().."Portrait", self)
+	self.Portrait = CreateFrame("PlayerModel", self:GetName().."_Portrait", self)
 	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
 	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
 	self.Portrait:SetFrameLevel(self:GetFrameLevel() + 3)
@@ -52,6 +52,7 @@ local function AddCastbar(self, unit)
 	self.Castbar = CreateFrame("StatusBar", self:GetName().."_Castbar", (unit == "player" or unit == "target") and self.Portrait or self.Power)
 	self.Castbar:SetStatusBarTexture(cfg.TEXTURE)
 	self.Castbar:GetStatusBarTexture():SetHorizTile(false)
+	self.Castbar:SetStatusBarColor(0.55, 0.57, 0.61)
 	self.Castbar:SetAlpha(0.75)
 	
 	if (unit == "player" or unit == "target") then
@@ -84,7 +85,6 @@ local function AddCastbar(self, unit)
 		self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
 		self.Castbar.Icon:SetSize(32, 32)
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-		--self.Castbar.Icon:SetTexCoord(0, 1, 0, 1)
 		--[[
 		self.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
 		self.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -2, 2)
@@ -103,7 +103,7 @@ end
 ns.AddCastbar = AddCastbar
 
 local function AddRuneBar(self, width, height)
-	self.Runes = CreateFrame("Frame", self:GetName().."_RunesBar", self)
+	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self)
 	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
 	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
 	self.Runes:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
@@ -133,7 +133,7 @@ local function AddSoulShardsBar(self, width, height)
 	self.SoulShards = {}
 	
 	for i = 1, numShards do
-		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShards"..i, self)
+		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self)
 		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
 		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numShards) + 1, 1)
 		self.SoulShards[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
@@ -192,7 +192,7 @@ local function AddComboPointsBar(self, width, height)
 	self.CPoints = {}
 	
 	for i = 1, numCPoints do
-		self.CPoints[i] = CreateFrame("StatusBar", self:GetName().."CPoint_"..i, self)
+		self.CPoints[i] = CreateFrame("StatusBar", "oUF_Rain_CPoint_"..i, self)
 		self.CPoints[i]:SetSize((215 - numCPoints - 1) / numCPoints, height) -- frame width=230 ; Overlay width=215 ; 5 cp + 6 * 1 px = 215 => 1cp = 209/5
 		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numCPoints) + 1, 1)
 		self.CPoints[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
@@ -206,23 +206,28 @@ end
 ns.AddComboPointsBar = AddComboPointsBar
 
 local function AddEclipseBar(self, width, height)
-	local eclipseBar = CreateFrame("Frame", self:GetName().."EclipseBar", self)
-	eclipseBar:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -1)
-	eclipseBar:SetSize(width, height)
+	local eclipseBar = CreateFrame("Frame", "oUF_Rain_EclipseBar", self)
+	eclipseBar:SetHeight(5)
+	eclipseBar:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
+	eclipseBar:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
+	eclipseBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 	eclipseBar:SetBackdrop(cfg.BACKDROP)
-	eclipseBar:SetBackdropColor(0.25, 0.25, 0.25)
+	eclipseBar:SetBackdropColor(0, 0, 0)
 	
 	local lunarBar = CreateFrame("StatusBar", "oUF_Rain_LunarBar", eclipseBar)
-	lunarBar:SetPoint("LEFT", eclipseBar, "LEFT", 0, 0)
-	lunarBar:SetSize(width , height)
+	lunarBar:SetAllPoints(eclipseBar)
+	lunarBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 	lunarBar:SetStatusBarTexture(cfg.TEXTURE)
 	lunarBar:GetStatusBarTexture():SetHorizTile(false)
 	lunarBar:SetStatusBarColor(0.34, 0.1, 0.86)
 	eclipseBar.LunarBar = lunarBar
 
 	local solarBar = CreateFrame("StatusBar", "oUF_Rain_SolarBar", eclipseBar)
+	solarBar:SetHeight(5)
+	solarBar:SetWidth(213)
 	solarBar:SetPoint("LEFT", lunarBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-	solarBar:SetSize(width , height)
+	--solarBar:SetPoint("RIGHT", eclipseBar, "RIGHT", 0, 0)
+	solarBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 	solarBar:SetStatusBarTexture(cfg.TEXTURE)
 	solarBar:GetStatusBarTexture():SetHorizTile(false)
 	solarBar:SetStatusBarColor(0.95, 0.73, 0.15)
@@ -230,7 +235,7 @@ local function AddEclipseBar(self, width, height)
 	
 	local eclipseBarText = solarBar:CreateFontString(nil, "OVERLAY")
 	eclipseBarText:SetPoint("CENTER", eclipseBar, "CENTER", 0, 0)
-	eclipseBarText:SetFont(cfg.FONT, 10, "OUTLINE")
+	eclipseBarText:SetFont(cfg.FONT2, 10, "OUTLINE")
 	self:Tag(eclipseBarText, "[pereclipse]%")
 	
 	self.EclipseBar = eclipseBar
