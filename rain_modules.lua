@@ -10,7 +10,8 @@ local function AddHealPredictionBar(self, unit)
 	mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	mhpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
 	mhpb:SetStatusBarTexture(cfg.TEXTURE)
-	mhpb:SetStatusBarColor(0, 1, 0.5, 0.25)
+	--mhpb:SetStatusBarColor(0, 1, 0.5, 0.25)
+	mhpb:SetStatusBarColor(0, 0, 1, 0.25)
 
 	-- bar for others' heals
 	local ohpb = CreateFrame("StatusBar", nil, self.Health)

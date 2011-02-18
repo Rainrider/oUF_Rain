@@ -25,9 +25,9 @@ local colors = setmetatable({
 ns.colors = colors
 
 local function RGBtoHEX(r, g, b)
-	r = r <= 1 and r >= 0 and r or 1
-	g = g <= 1 and g >= 0 and g or 1
-	b = b <= 1 and b >= 0 and b or 1
+	if not r then r = 1 end
+	if not g then g = 1 end
+	if not b then b = 1 end
 	return string.format("|cff%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 ns.RGBtoHEX = RGBtoHEX

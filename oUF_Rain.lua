@@ -38,7 +38,7 @@ local UnitSpecific = {
 	end,
 	
 	pet = function(self)
-		ns.AddHealPredictionBar(self, 230, true)
+		--ns.AddHealPredictionBar(self, 110, true)
 		ns.AddExperienceBar(self, nil, nil)
 		
 		self.PetName = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
