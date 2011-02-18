@@ -12,8 +12,13 @@ end
 
 oUF.Tags["rain:petcolor"] = function(unit)
 	if not UnitIsUnit(unit, "pet") then return end
-	local color = ns.colors.happiness[GetPetHappiness()]
-	return ns.RGBtoHEX(color[1], color[2], color[3])
+	
+	local happiness = GetPetHappiness()
+	local color = {r = 0.33, g = 0.59, b = 0.33} -- default is happy
+	if happiness then
+		color = ns.colors.happiness[happiness]
+	end
+	return ns.RGBtoHEX(color.r, color.g, color.b)
 end
 oUF.TagEvents["rain:petcolor"] = "UNIT_POWER"
 

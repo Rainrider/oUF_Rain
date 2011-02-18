@@ -24,8 +24,6 @@ local colors = setmetatable({
 }, {__index = oUF.colors})
 ns.colors = colors
 
-oUF.colors.power["MANA"] = {0.31, 0.45, 0.63}
-
 local function RGBtoHEX(r, g, b)
 	r = r <= 1 and r >= 0 and r or 1
 	g = g <= 1 and g >= 0 and g or 1

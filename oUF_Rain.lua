@@ -40,12 +40,19 @@ local UnitSpecific = {
 	pet = function(self)
 		ns.AddHealPredictionBar(self, 230, true)
 		ns.AddExperienceBar(self, nil, nil)
+		
+		self.PetName = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.PetName:SetPoint("TOPLEFT", 2, -2)
+		self.PetName:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+		self:Tag(self.PetName, "[rain:petcolor][name]|r")
 	end,
 }
 
 -- shared rules between more than one unit
 -- pet, focus, tot and focustarget would be basicaly the same
 local function Shared(self, unit)
+
+	self.colors = ns.colors
 
 	self:RegisterForClicks("AnyDown")
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
@@ -124,6 +131,11 @@ local function Shared(self, unit)
 		ns.AddCastbar(self, unit)
 		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, unit)
+		
+		self.Status = SetFontString(self.Portrait, cfg.FONT2, 18, "OUTLINE", "RIGHT")
+		self.Status:SetPoint("RIGHT", -3.5, 2)
+		self.Status:SetTextColor(0.69, 0.31, 0.31, 0.6)
+		self:Tag(self.Status, "[pvp]")
 	end
 	
 	if(unit == "pet" or unit == "focus" or unit:find("target") and unit ~= "target") then
@@ -139,10 +151,12 @@ local function Shared(self, unit)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
 		
-		self.Name = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
-		self.Name:SetPoint("TOPLEFT", 2, -2)
-		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.Name, "[rain:color][name]|r")
+		if unit ~= "pet" then
+			self.Name = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+			self.Name:SetPoint("TOPLEFT", 2, -2)
+			self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+			self:Tag(self.Name, "[rain:color][name]|r")
+		end
 		
 		ns.AddCastbar(self, unit)
 	end
