@@ -61,6 +61,7 @@ local function PostUpdateHealth(health, unit, min, max)
 
 		health:SetValue(0)
 		health.bg:SetVertexColor(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
+		health.value:SetTextColor(0.75, 0.75, 0.75)
 --[[ This is included in the health tag
 		if not UnitIsConnected(unit) then
 			health.value:SetText("|cffD7BEA5".._G["PLAYER_OFFLINE"].."|r")

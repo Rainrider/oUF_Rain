@@ -15,16 +15,16 @@ end
 oUF.TagEvents["rain:petcolor"] = "UNIT_POWER"
 
 oUF.Tags["rain:color"] = function(unit)
-	local color = {r = 1, g = 1, b = 1}
+	local color = {1,  1,  1}
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
-		color = {r = 0.4, g = 0.4, b = 0.4}
+		color = {0.75, 0.75, 0.75}
 	elseif (UnitIsPlayer(unit)) then
-		color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
+		color = oUF.colors.class[select(2, UnitClass(unit))]
 	else
-		color = FACTION_BAR_COLORS[UnitReaction(unit, "player")]
+		color = oUF.colors.reaction[UnitReaction(unit, "player")]
 	end
 	
-	return ns.RGBtoHEX(color.r, color.g, color.b)
+	return ns.RGBtoHEX(color[1], color[2], color[3])
 end
 oUF.TagEvents["rain:color"] = "UNIT_FACTION UNIT_CONNECTION"
 
