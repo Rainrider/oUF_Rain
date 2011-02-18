@@ -11,7 +11,7 @@ local numShards = SHARD_BAR_NUM_SHARDS
 local numTotems = MAX_TOTEMS
 local numCPoints = MAX_COMBO_POINTS
 
-local runeloadcolors = {
+local runecolors = {
 	[1] = {0.69, 0.31, 0.31},
 	[2] = {0.69, 0.31, 0.31},
 	[3] = {0.33, 0.59, 0.33},
@@ -117,7 +117,7 @@ local function AddRuneBar(self, width, height)
 		self.Runes[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.Runes[i]:SetStatusBarTexture(cfg.TEXTURE)
 		self.Runes[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.Runes[i]:SetStatusBarColor(unpack(runeloadcolors[i]))
+		self.Runes[i]:SetStatusBarColor(unpack(runecolors[i]))
 		self.Runes[i]:SetBackdrop(cfg.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
 		--[[
