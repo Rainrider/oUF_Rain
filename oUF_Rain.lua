@@ -9,8 +9,8 @@ local playerClass = select(2, UnitClass("player"))
 local UnitSpecific = {
 	player = function(self)
 		ns.AddSwingBar(self, nil, nil)
-		ns.AddReputationBar(self, nil, nil)
-		ns.AddExperienceBar(self, nil, nil)
+		ns.AddReputationBar(self)
+		ns.AddExperienceBar(self)
 		
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 230, 5)
@@ -38,8 +38,8 @@ local UnitSpecific = {
 	end,
 	
 	pet = function(self)
-		--ns.AddHealPredictionBar(self, 110, true)
-		ns.AddExperienceBar(self, nil, nil)
+		ns.AddHealPredictionBar(self, 110, false)
+		ns.AddExperienceBar(self)
 		
 		self.PetName = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 		self.PetName:SetPoint("TOPLEFT", 2, -2)

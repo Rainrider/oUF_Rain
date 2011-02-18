@@ -5,7 +5,7 @@ local SetFontString = ns.SetFontString
 
 local function AddHealPredictionBar(self, unit)
 	-- bar for the players heals
-	local mhpb = CreateFrame("StatusBar", nil, self.Health)
+	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
 	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	mhpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
@@ -14,12 +14,12 @@ local function AddHealPredictionBar(self, unit)
 	mhpb:SetStatusBarColor(0, 0, 1, 0.25)
 
 	-- bar for others' heals
-	local ohpb = CreateFrame("StatusBar", nil, self.Health)
+	local ohpb = CreateFrame("StatusBar", self:GetName().."OthersHealBar", self.Health)
 	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	ohpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
 	ohpb:SetStatusBarTexture(cfg.TEXTURE)
-	ohpb:SetStatusBarColor(0, 1, 0, 0.25)	-- TODO better color
+	ohpb:SetStatusBarColor(0, 1, 0, 0.25)
 
 	self.HealPrediction = {
 		myBar = mhpb,
@@ -34,7 +34,7 @@ ns.AddHealPredictionBar = AddHealPredictionBar
 			AuraWatch
 ]]
 
-local function AddReputationBar(self, width, height)
+local function AddReputationBar(self)
 	if IsAddOnLoaded("oUF_Reputation") then
 		self.Reputation = CreateFrame("StatusBar", "oUF_Rain_Reputation", self)
 		self.Reputation:SetHeight(5)
@@ -76,7 +76,7 @@ ns.AddReputationBar = AddReputationBar
 
 -- TODO: rested bar 
 --		math.min(curXP + rested, maxXP) -- this would be the rested bar
-local function AddExperienceBar(self, width, height)
+local function AddExperienceBar(self)
 	if IsAddOnLoaded("oUF_Experience") then
 		self.Experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
 		self.Experience:SetHeight(5)
@@ -123,7 +123,7 @@ local function AddExperienceBar(self, width, height)
 end
 ns.AddExperienceBar = AddExperienceBar
 
-local function AddSwingBar(self, width, height)
+local function AddSwingBar(self)
 	if IsAddOnLoaded("oUF_Swing") then
 		
 		self.Swing = CreateFrame("Frame", self:GetName().."_Swing", self)
