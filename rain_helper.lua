@@ -32,7 +32,7 @@ local function RGBtoHEX(r, g, b)
 end
 ns.RGBtoHEX = RGBtoHEX
 
-local function SetFontString(parent, fontName, fontHeight, fontStyle, justifyH)
+local function PutFontString(parent, fontName, fontHeight, fontStyle, justifyH)
 	local fontString = parent:CreateFontString(nil, "OVERLAY")
 	fontString:SetFont(fontName, fontHeight, fontStyle)
 	fontString:SetJustifyH(justifyH)
@@ -41,7 +41,7 @@ local function SetFontString(parent, fontName, fontHeight, fontStyle, justifyH)
 	
 	return fontString
 end
-ns.SetFontString = SetFontString
+ns.PutFontString = PutFontString
 
 local function PostUpdateHealth(health, unit, min, max)
 	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then

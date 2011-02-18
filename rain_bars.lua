@@ -3,7 +3,7 @@
 
 local _, ns = ...
 local cfg = ns.config
-local SetFontString = ns.SetFontString
+local PutFontString = ns.PutFontString
 
 local numRunes = 6 -- MAX_RUNES does not function any more
 local numHoly = MAX_HOLY_POWER
@@ -58,11 +58,11 @@ local function AddCastbar(self, unit)
 	if (unit == "player" or unit == "target") then
 		self.Castbar:SetAllPoints(self.Overlay)
 		
-		self.Castbar.Time = SetFontString(self.Overlay, cfg.FONT2, 12, nil, "RIGHT")
+		self.Castbar.Time = PutFontString(self.Overlay, cfg.FONT2, 12, nil, "RIGHT")
 		self.Castbar.Time:SetPoint("RIGHT", -3.5, 3)
 		self.Castbar.Time:SetTextColor(0.84, 0.75, 0.65)
 		
-		self.Castbar.Text = SetFontString(self.Overlay, cfg.FONT2, 12, nil, "LEFT")
+		self.Castbar.Text = PutFontString(self.Overlay, cfg.FONT2, 12, nil, "LEFT")
 		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
 		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
 		self.Castbar.Text:SetTextColor(0.84, 0.75, 0.65)

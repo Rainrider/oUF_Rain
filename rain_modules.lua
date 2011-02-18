@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local cfg = ns.config
-local SetFontString = ns.SetFontString
+local PutFontString = ns.PutFontString
 
 local function AddHealPredictionBar(self, unit)
 	-- bar for the players heals
@@ -145,7 +145,7 @@ ns.AddSwingBar = AddSwingBar
 local function AddCombatFeedbackText(self)
 	if (not IsAddOnLoaded("oUF_CombatFeedback")) then return end
 
-	self.CombatFeedbackText = SetFontString(self.Overlay, cfg.FONT, 14, "OUTLINE", "LEFT")
+	self.CombatFeedbackText = PutFontString(self.Overlay, cfg.FONT, 14, "OUTLINE", "LEFT")
 	self.CombatFeedbackText:SetPoint("CENTER", 0, 5)
 	self.CombatFeedbackText.colors = {
 		DAMAGE = {0.69, 0.31, 0.31},

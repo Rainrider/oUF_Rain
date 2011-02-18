@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local cfg = ns.config
-local SetFontString = ns.SetFontString
+local PutFontString = ns.PutFontString
 
 local playerClass = select(2, UnitClass("player"))
 
@@ -30,7 +30,7 @@ local UnitSpecific = {
 	end,
 	
 	target = function(self)
-		self.Info = SetFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
+		self.Info = PutFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
 		self.Info:SetPoint("TOP", self.Health, 0, -5)
 		self:Tag(self.Info, "[rain:color][name]|r [difficulty][level] [shortclassification]|r")
 		
@@ -41,7 +41,7 @@ local UnitSpecific = {
 		ns.AddHealPredictionBar(self, 110, false)
 		ns.AddExperienceBar(self)
 		
-		self.PetName = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.PetName = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 		self.PetName:SetPoint("TOPLEFT", 2, -2)
 		self.PetName:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		self:Tag(self.PetName, "[rain:petcolor][name]|r")
@@ -84,7 +84,7 @@ local function Shared(self, unit)
 	
 	self.Health.PostUpdate = ns.PostUpdateHealth
 	
-	self.Health.value = SetFontString(self.Health, cfg.FONT2, (unit == "player" or unit == "target") and 12 or 9, nil, "RIGHT")
+	self.Health.value = PutFontString(self.Health, cfg.FONT2, (unit == "player" or unit == "target") and 12 or 9, nil, "RIGHT")
 	self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
 	self.Health.value.frequentUpdates = 1/4
 	self:Tag(self.Health.value, "[dead][offline][rain:health]")
@@ -121,7 +121,7 @@ local function Shared(self, unit)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
 		
-		self.Power.value = SetFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
+		self.Power.value = PutFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
 		self.Power.value.frequentUpdates = 1/4
 		self:Tag(self.Power.value, "[rain:perpp][rain:power]")
@@ -132,7 +132,7 @@ local function Shared(self, unit)
 		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, unit)
 		
-		self.Status = SetFontString(self.Portrait, cfg.FONT2, 18, "OUTLINE", "RIGHT")
+		self.Status = PutFontString(self.Portrait, cfg.FONT2, 18, "OUTLINE", "RIGHT")
 		self.Status:SetPoint("RIGHT", -3.5, 2)
 		self.Status:SetTextColor(0.69, 0.31, 0.31, 0.6)
 		self:Tag(self.Status, "[pvp]")
@@ -152,7 +152,7 @@ local function Shared(self, unit)
 		self.Power:SetPoint("BOTTOMLEFT")
 		
 		if unit ~= "pet" then
-			self.Name = SetFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+			self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 			self.Name:SetPoint("TOPLEFT", 2, -2)
 			self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 			self:Tag(self.Name, "[rain:color][name]|r")
