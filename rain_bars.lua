@@ -240,3 +240,36 @@ local function AddEclipseBar(self, width, height)
 	self.EclipseBar = eclipseBar
 end
 ns.AddEclipseBar = AddEclipseBar
+
+local function AddAltPowerBar(self, width, height)
+	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
+	self.AltPowerBar:SetHeight(3)
+	self.AltPowerBar:SetPoint("BOTTOMLEFT", self.Overlay, "TOPLEFT", 0, 1)
+	self.AltPowerBar:SetPoint("BOTTOMRIGHT", self.Overlay, "TOPRIGHT", 0, 1)
+	self.AltPowerBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+	self.AltPowerBar:SetStatusBarTexture(cfg.TEXTURE)
+	self.AltPowerBar:SetStatusBarColor(0, 0.5, 1)
+	self.AltPowerBar:SetBackdrop(cfg.BACKDROP)
+	self.AltPowerBar:SetBackdropColor(0, 0, 0)
+	
+	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, cfg.FONT2, 8, "OUTLINE", "CENTER")
+	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
+	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
+	
+	self.AltPowerBar.Tooltip = function(self)
+		local powerName = select(10, UnitAlternatePowerInfo(self.__owner.unit))
+		local powerTooltip = select(11, UnitAlternatePowerInfo(self.__owner.unit))
+		
+		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
+		GameTooltip:AddLine(powerName)
+		GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
+		GameTooltip:Show()
+	end
+	
+	self.AltPowerBar:EnableMouse()
+	self.AltPowerBar:HookScript("OnLeave", GameTooltip_Hide)
+	self.AltPowerBar:HookScript("OnEnter", self.AltPowerBar.Tooltip)
+	
+	self.AltPowerBar.PostUpdate = ns.PostUpdateAltPower
+end
+ns.AddAltPowerBar = AddAltPowerBar

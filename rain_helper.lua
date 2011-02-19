@@ -101,6 +101,7 @@ local function PreUpdatePower(power, unit)
 end
 ns.PreUpdatePower = PreUpdatePower
 
+-- TODO: power value for vehicles does not get set
 local function PostUpdatePower(Power, unit, min, max)
 	if (unit ~= "player" and unit ~= "target") then return end
 
@@ -122,3 +123,24 @@ local function PostUpdatePower(Power, unit, min, max)
 	end
 end
 ns.PostUpdatePower = PostUpdatePower
+
+local function PostUpdateAltPower(AltPower, min, cur, max)
+	local self = AltPower.__owner
+	
+	local tPath, r, g, b = UnitAlternatePowerTextureInfo(self.unit, 2) -- 2 is statusbar index
+	if(r) then
+		AltPower:SetStatusBarColor(r, g, b)
+	end
+	
+end
+ns.PostUpdateAltPower = PostUpdateAltPower
+
+
+
+
+
+
+
+
+
+

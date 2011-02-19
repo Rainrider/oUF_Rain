@@ -80,3 +80,14 @@ oUF.Tags["rain:name"] = function(unit, r) -- TODO: what is r supposed to be?
     return color..(name or "").."|r"
 end
 oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE"
+
+oUF.Tags["rain:altpower"] = function(unit)
+	if (unit ~= "player") then return end
+	
+	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
+	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
+	local perc = math.floor(cur / max * 100 + 0.5)
+	
+	return cur .. " - " .. perc .. "%"
+end
+oUF.TagEvents["rain:altpower"] = "UNIT_POWER UNIT_MAXPOWER"

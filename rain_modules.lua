@@ -1,3 +1,8 @@
+--[[ TODO:	WeaponEnchant
+			DebuffHighlight
+			AuraWatch
+]]
+
 local _, ns = ...
 
 local cfg = ns.config
@@ -11,7 +16,7 @@ local function AddHealPredictionBar(self, unit)
 	mhpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
 	mhpb:SetStatusBarTexture(cfg.TEXTURE)
 	--mhpb:SetStatusBarColor(0, 1, 0.5, 0.25)
-	mhpb:SetStatusBarColor(0, 0, 1, 0.25)
+	mhpb:SetStatusBarColor(0.1, 0.5, 1, 0.25)
 
 	-- bar for others' heals
 	local ohpb = CreateFrame("StatusBar", self:GetName().."OthersHealBar", self.Health)
@@ -28,11 +33,6 @@ local function AddHealPredictionBar(self, unit)
 	}
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
-
---[[ TODO:	WeaponEnchant
-			DebuffHighlight
-			AuraWatch
-]]
 
 local function AddReputationBar(self)
 	if IsAddOnLoaded("oUF_Reputation") then
@@ -56,7 +56,7 @@ local function AddReputationBar(self)
 
 		self.Reputation.PostUpdate = function(bar, unit, min, max)
 			local name, id = GetWatchedFactionInfo()
-			bar:SetStatusBarColor(FACTION_BAR_COLORS[id].r, FACTION_BAR_COLORS[id].g, FACTION_BAR_COLORS[id].b)
+			bar:SetStatusBarColor(unpack(oUF.colors.reaction[id]))
 		end
 		
 		self.Reputation.Tooltip = function(self)
@@ -72,7 +72,6 @@ local function AddReputationBar(self)
 	end
 end
 ns.AddReputationBar = AddReputationBar
-
 
 -- TODO: rested bar 
 --		math.min(curXP + rested, maxXP) -- this would be the rested bar

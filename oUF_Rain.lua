@@ -8,9 +8,10 @@ local playerClass = select(2, UnitClass("player"))
 -- layout rules for specific unit frames (auras, combo points, totembar, runes, holy power, shards, druid mana ...)
 local UnitSpecific = {
 	player = function(self)
-		ns.AddSwingBar(self, nil, nil)
+		ns.AddSwingBar(self)
 		ns.AddReputationBar(self)
 		ns.AddExperienceBar(self)
+		ns.AddAltPowerBar(self)
 		
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 230, 5)
