@@ -8,6 +8,7 @@
 
 rain_config.lua
 rain_functions.lua
+rain_menu.lua
 rain_tags.lua
 rain_icons.lua
 rain_bars.lua

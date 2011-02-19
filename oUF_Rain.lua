@@ -53,6 +53,7 @@ local UnitSpecific = {
 -- pet, focus, tot and focustarget would be basicaly the same
 local function Shared(self, unit)
 
+	self.menu = ns.menu
 	self.colors = ns.colors
 
 	self:RegisterForClicks("AnyDown")
