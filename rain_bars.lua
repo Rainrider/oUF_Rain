@@ -1,5 +1,7 @@
--- TODO: eclipse bar
--- TODO: vengeance bar??
+--[[================================================================
+	DESCRIPTION:
+	Contrains functions for adding bars for the default oUF elements
+	================================================================--]]
 
 local _, ns = ...
 local cfg = ns.config
@@ -28,25 +30,38 @@ local combocolors = {
 	[5] = {180/255, 95/255, 4/255},
 }
 
-local function AddPortrait(self, unit)
-	self.Portrait = CreateFrame("PlayerModel", self:GetName().."_Portrait", self)
-	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
-	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
-	self.Portrait:SetFrameLevel(self:GetFrameLevel() + 3)
-	self.Portrait:SetBackdrop(cfg.BACKDROP)
-	self.Portrait:SetBackdropColor(0, 0, 0, 1)
+local function AddAltPowerBar(self, width, height)
+	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
+	self.AltPowerBar:SetHeight(3)
+	self.AltPowerBar:SetPoint("BOTTOMLEFT", self.Overlay, "TOPLEFT", 0, 1)
+	self.AltPowerBar:SetPoint("BOTTOMRIGHT", self.Overlay, "TOPRIGHT", 0, 1)
+	self.AltPowerBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+	self.AltPowerBar:SetStatusBarTexture(cfg.TEXTURE)
+	self.AltPowerBar:SetStatusBarColor(0, 0.5, 1)
+	self.AltPowerBar:SetBackdrop(cfg.BACKDROP)
+	self.AltPowerBar:SetBackdropColor(0, 0, 0)
+	
+	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, cfg.FONT2, 8, nil, "CENTER")
+	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
+	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
+	
+	self.AltPowerBar.Tooltip = function(self)
+		local powerName = select(10, UnitAlternatePowerInfo(self.__owner.unit))
+		local powerTooltip = select(11, UnitAlternatePowerInfo(self.__owner.unit))
+		
+		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
+		GameTooltip:AddLine(powerName)
+		GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
+		GameTooltip:Show()
+	end
+	
+	self.AltPowerBar:EnableMouse()
+	self.AltPowerBar:HookScript("OnLeave", GameTooltip_Hide)
+	self.AltPowerBar:HookScript("OnEnter", self.AltPowerBar.Tooltip)
+	
+	self.AltPowerBar.PostUpdate = ns.PostUpdateAltPower
 end
-ns.AddPortrait = AddPortrait
-
-local function AddOverlay(self, unit)
-	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self)
-	self.Overlay:SetParent(self.Portrait)
-	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
-	self.Overlay:SetAllPoints()
-	self.Overlay:SetStatusBarTexture(cfg.OVERLAY)
-	self.Overlay:SetStatusBarColor(0.1, 0.1, 0.1, 0.75)
-end
-ns.AddOverlay = AddOverlay
+ns.AddAltPowerBar = AddAltPowerBar
 
 local function AddCastbar(self, unit)
 	self.Castbar = CreateFrame("StatusBar", self:GetName().."_Castbar", (unit == "player" or unit == "target") and self.Portrait or self.Power)
@@ -102,92 +117,6 @@ local function AddCastbar(self, unit)
 end
 ns.AddCastbar = AddCastbar
 
-local function AddRuneBar(self, width, height)
-	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self)
-	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
-	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
-	self.Runes:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-	self.Runes:SetBackdrop(cfg.BACKDROP)
-	self.Runes:SetBackdropColor(0, 0, 0)
-
-	for i = 1, numRunes do
-		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self)
-		self.Runes[i]:SetSize((215 - numRunes - 1) / numRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numRunes) + 1, 1)
-		self.Runes[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-		self.Runes[i]:SetStatusBarTexture(cfg.TEXTURE)
-		self.Runes[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.Runes[i]:SetStatusBarColor(unpack(runecolors[i]))
-		self.Runes[i]:SetBackdrop(cfg.BACKDROP)
-		self.Runes[i]:SetBackdropColor(0, 0, 0)
-		--[[
-		self.Runes[i].bg = self.Runes[i]:CreateTexture(nil, "BORDER")
-		self.Runes[i].bg:SetAllPoints()
-		self.Runes[i].bg:SetTexture(cfg.TEXTURE)
-		self.Runes[i].bg:SetVertexColor(0.15, 0.15, 0.15)--]]
-	end
-end
-ns.AddRuneBar = AddRuneBar
-
-local function AddSoulShardsBar(self, width, height)
-	self.SoulShards = {}
-	
-	for i = 1, numShards do
-		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self)
-		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
-		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numShards) + 1, 1)
-		self.SoulShards[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-		self.SoulShards[i]:SetStatusBarTexture(cfg.TEXTURE)
-		self.SoulShards[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.SoulShards[i]:SetStatusBarColor(0.50, 0.32, 0.55) -- TODO: oUF.colors.power.SOUL_SHARDS
-		self.SoulShards[i]:SetBackdrop(cfg.BACKDROP)
-		self.SoulShards[i]:SetBackdropColor(0, 0, 0)
-	end
-end
-ns.AddSoulshardsBar = AddSoulShardsBar
-
-local function AddHolyPowerBar(self, width, height)
-	self.HolyPower = {}
-
-	for i = 1, numHoly do
-		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self)
-		self.HolyPower[i]:SetSize((215 - numHoly - 1) / numHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numHoly) + 1, 1)
-		self.HolyPower[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-		self.HolyPower[i]:SetStatusBarTexture(cfg.TEXTURE)
-		self.HolyPower[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.HolyPower[i]:SetStatusBarColor(0.95, 0.9, 0.6) -- TODO: oUF_colors.power.HOLY_POWER
-		self.HolyPower[i]:SetBackdrop(cfg.BACKDROP)
-		self.HolyPower[i]:SetBackdropColor(0, 0, 0)
-	end
-end
-ns.AddHolyPowerBar = AddHolyPowerBar
-
-local function AddTotemBar(self, width, height)
-	if (not IsAddOnLoaded("oUF_TotemBar")) then return end
-
-	self.TotemBar = {}
-	self.TotemBar.Destroy = true
-	
-	for i = 1, numTotems do
-		self.TotemBar[i] = CreateFrame("StatusBar", "oUF_Rain_TotemBar"..i, self)
-		self.TotemBar[i]:SetSize((215 - numTotems - 1) / numTotems, height)
-		self.TotemBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
-		self.TotemBar[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-		self.TotemBar[i]:SetStatusBarTexture(cfg.TEXTURE)
-		self.TotemBar[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.TotemBar[i]:SetMinMaxValues(0, 1)
-		self.TotemBar[i]:SetBackdrop(cfg.BACKDROP)
-		self.TotemBar[i]:SetBackdropColor(0, 0, 0)
-
-		self.TotemBar[i].bg = self.TotemBar[i]:CreateTexture(nil, "BORDER")
-		self.TotemBar[i].bg:SetAllPoints()
-		self.TotemBar[i].bg:SetTexture(cfg.TEXTURE)
-		self.TotemBar[i].bg:SetVertexColor(0.15, 0.15, 0.15)
-	end
-end
-ns.AddTotemBar = AddTotemBar
-
 local function AddComboPointsBar(self, width, height)
 	self.CPoints = {}
 	
@@ -241,35 +170,106 @@ local function AddEclipseBar(self, width, height)
 end
 ns.AddEclipseBar = AddEclipseBar
 
-local function AddAltPowerBar(self, width, height)
-	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
-	self.AltPowerBar:SetHeight(3)
-	self.AltPowerBar:SetPoint("BOTTOMLEFT", self.Overlay, "TOPLEFT", 0, 1)
-	self.AltPowerBar:SetPoint("BOTTOMRIGHT", self.Overlay, "TOPRIGHT", 0, 1)
-	self.AltPowerBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-	self.AltPowerBar:SetStatusBarTexture(cfg.TEXTURE)
-	self.AltPowerBar:SetStatusBarColor(0, 0.5, 1)
-	self.AltPowerBar:SetBackdrop(cfg.BACKDROP)
-	self.AltPowerBar:SetBackdropColor(0, 0, 0)
-	
-	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, cfg.FONT2, 8, nil, "CENTER")
-	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
-	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
-	
-	self.AltPowerBar.Tooltip = function(self)
-		local powerName = select(10, UnitAlternatePowerInfo(self.__owner.unit))
-		local powerTooltip = select(11, UnitAlternatePowerInfo(self.__owner.unit))
-		
-		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
-		GameTooltip:AddLine(powerName)
-		GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
-		GameTooltip:Show()
-	end
-	
-	self.AltPowerBar:EnableMouse()
-	self.AltPowerBar:HookScript("OnLeave", GameTooltip_Hide)
-	self.AltPowerBar:HookScript("OnEnter", self.AltPowerBar.Tooltip)
-	
-	self.AltPowerBar.PostUpdate = ns.PostUpdateAltPower
+local function AddHealPredictionBar(self, unit)
+	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
+	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	mhpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
+	mhpb:SetStatusBarTexture(cfg.TEXTURE)
+	mhpb:SetStatusBarColor(0.1, 0.5, 1, 0.25)
+
+	local ohpb = CreateFrame("StatusBar", self:GetName().."OthersHealBar", self.Health)
+	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	ohpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
+	ohpb:SetStatusBarTexture(cfg.TEXTURE)
+	ohpb:SetStatusBarColor(0, 1, 0, 0.25)
+
+	self.HealPrediction = {
+		myBar = mhpb,
+		otherBar = ohpb,
+		maxOverflow = unit == "target" and 1.25 or 1,
+	}
 end
-ns.AddAltPowerBar = AddAltPowerBar
+ns.AddHealPredictionBar = AddHealPredictionBar
+
+local function AddHolyPowerBar(self, width, height)
+	self.HolyPower = {}
+
+	for i = 1, numHoly do
+		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self)
+		self.HolyPower[i]:SetSize((215 - numHoly - 1) / numHoly, height)
+		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numHoly) + 1, 1)
+		self.HolyPower[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+		self.HolyPower[i]:SetStatusBarTexture(cfg.TEXTURE)
+		self.HolyPower[i]:GetStatusBarTexture():SetHorizTile(false)
+		self.HolyPower[i]:SetStatusBarColor(0.95, 0.9, 0.6) -- TODO: oUF_colors.power.HOLY_POWER
+		self.HolyPower[i]:SetBackdrop(cfg.BACKDROP)
+		self.HolyPower[i]:SetBackdropColor(0, 0, 0)
+	end
+end
+ns.AddHolyPowerBar = AddHolyPowerBar
+
+local function AddOverlay(self, unit)
+	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self)
+	self.Overlay:SetParent(self.Portrait)
+	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
+	self.Overlay:SetAllPoints()
+	self.Overlay:SetStatusBarTexture(cfg.OVERLAY)
+	self.Overlay:SetStatusBarColor(0.1, 0.1, 0.1, 0.75)
+end
+ns.AddOverlay = AddOverlay
+
+local function AddPortrait(self, unit)
+	self.Portrait = CreateFrame("PlayerModel", self:GetName().."_Portrait", self)
+	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
+	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
+	self.Portrait:SetFrameLevel(self:GetFrameLevel() + 3)
+	self.Portrait:SetBackdrop(cfg.BACKDROP)
+	self.Portrait:SetBackdropColor(0, 0, 0, 1)
+end
+ns.AddPortrait = AddPortrait
+
+local function AddRuneBar(self, width, height)
+	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self)
+	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
+	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
+	self.Runes:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+	self.Runes:SetBackdrop(cfg.BACKDROP)
+	self.Runes:SetBackdropColor(0, 0, 0)
+
+	for i = 1, numRunes do
+		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self)
+		self.Runes[i]:SetSize((215 - numRunes - 1) / numRunes, height)
+		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numRunes) + 1, 1)
+		self.Runes[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+		self.Runes[i]:SetStatusBarTexture(cfg.TEXTURE)
+		self.Runes[i]:GetStatusBarTexture():SetHorizTile(false)
+		self.Runes[i]:SetStatusBarColor(unpack(runecolors[i]))
+		self.Runes[i]:SetBackdrop(cfg.BACKDROP)
+		self.Runes[i]:SetBackdropColor(0, 0, 0)
+		--[[
+		self.Runes[i].bg = self.Runes[i]:CreateTexture(nil, "BORDER")
+		self.Runes[i].bg:SetAllPoints()
+		self.Runes[i].bg:SetTexture(cfg.TEXTURE)
+		self.Runes[i].bg:SetVertexColor(0.15, 0.15, 0.15)--]]
+	end
+end
+ns.AddRuneBar = AddRuneBar
+
+local function AddSoulShardsBar(self, width, height)
+	self.SoulShards = {}
+	
+	for i = 1, numShards do
+		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self)
+		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
+		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numShards) + 1, 1)
+		self.SoulShards[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+		self.SoulShards[i]:SetStatusBarTexture(cfg.TEXTURE)
+		self.SoulShards[i]:GetStatusBarTexture():SetHorizTile(false)
+		self.SoulShards[i]:SetStatusBarColor(0.50, 0.32, 0.55) -- TODO: oUF.colors.power.SOUL_SHARDS
+		self.SoulShards[i]:SetBackdrop(cfg.BACKDROP)
+		self.SoulShards[i]:SetBackdropColor(0, 0, 0)
+	end
+end
+ns.AddSoulshardsBar = AddSoulShardsBar

@@ -1,3 +1,7 @@
+--[[==========================
+	DESCRIPTION:
+	Configuration for oUF_Rain
+	==========================--]]
 local _, ns = ...
 
 local config = {

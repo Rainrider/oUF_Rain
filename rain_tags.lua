@@ -1,3 +1,8 @@
+--[[===================================
+	DESCRIPTION:
+	Contrains the tags used in oUF_Rain
+	===================================--]]
+
 local _, ns = ...
 local SiValue = ns.SiValue
 

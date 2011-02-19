@@ -1,3 +1,8 @@
+--[[========================================================================
+	DESCRIPTION:
+	Contrains the pre and post update and some helper functions for oUF_Rain
+	========================================================================--]]
+
 local _, ns = ...
 
 local colors = setmetatable({
