@@ -7,7 +7,7 @@
 ## OptionalDeps: oUF_CombatFeedback, oUF_Experience, oUF_Reputation, oUF_Swing, oUF_TotemBar
 
 rain_config.lua
-rain_helper.lua
+rain_functions.lua
 rain_tags.lua
 rain_icons.lua
 rain_bars.lua

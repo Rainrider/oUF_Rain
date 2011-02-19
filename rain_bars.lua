@@ -252,7 +252,7 @@ local function AddAltPowerBar(self, width, height)
 	self.AltPowerBar:SetBackdrop(cfg.BACKDROP)
 	self.AltPowerBar:SetBackdropColor(0, 0, 0)
 	
-	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, cfg.FONT2, 8, "OUTLINE", "CENTER")
+	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, cfg.FONT2, 8, nil, "CENTER")
 	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
 	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
 	
