@@ -107,7 +107,6 @@ local function PreUpdatePower(power, unit)
 end
 ns.PreUpdatePower = PreUpdatePower
 
--- TODO: power value when in vehicles gets hidden and this errors at line 117
 local function PostUpdatePower(Power, unit, min, max)
 	if (unit ~= "player" and unit ~= "target" and unit ~= "vehicle") then return end
 	local pType, pName = UnitPowerType(unit)
