@@ -49,10 +49,14 @@ local function AddAltPowerBar(self, width, height)
 		local powerName = select(10, UnitAlternatePowerInfo(self.__owner.unit))
 		local powerTooltip = select(11, UnitAlternatePowerInfo(self.__owner.unit))
 		
-		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
-		GameTooltip:AddLine(powerName)
-		GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
-		GameTooltip:Show()
+		if powerName then
+			GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
+			GameTooltip:AddLine(powerName)
+			if powerTooltip then
+				GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
+			end
+			GameTooltip:Show()
+		end
 	end
 	
 	self.AltPowerBar:EnableMouse()

@@ -73,7 +73,7 @@ oUF.TagEvents["rain:perpp"] = oUF.TagEvents.perpp
 oUF.Tags["rain:power"] = function(unit)
 	local min, max = UnitPower(unit), UnitPowerMax(unit)
 	if (min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
-	if (not UnitIsPlayer(unit)) then return end
+	if (not UnitIsPlayer(unit) and unit ~= "vehicle") then return end
 	
 	return SiValue(min)
 end

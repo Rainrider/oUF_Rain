@@ -20,6 +20,7 @@ local colors = setmetatable({
 		["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},
 		["HOLY_POWER"] = {0.95, 0.93, 0.15},	
 		["SOUL_SHARDS"] = {0.5, 0.0, 0.56},
+		["POWER_TYPE_SUN_POWER"] = {0.65, 0.63, 0.35},
 	}, {__index = oUF.colors.power}),
 	happiness = setmetatable({
 		[1] = {0.69, 0.31, 0.31},
@@ -106,14 +107,13 @@ local function PreUpdatePower(power, unit)
 end
 ns.PreUpdatePower = PreUpdatePower
 
--- TODO: power value for vehicles does not get set
+-- TODO: power value when in vehicles gets hidden and this errors at line 117
 local function PostUpdatePower(Power, unit, min, max)
-	if (unit ~= "player" and unit ~= "target") then return end
-
+	if (unit ~= "player" and unit ~= "target" and unit ~= "vehicle") then return end
 	local pType, pName = UnitPowerType(unit)
 	local color = colors.power[pName]
 	
-	if color then
+	if color and Power.value then
 		Power.value:SetTextColor(unpack(color))
 	end
 	
