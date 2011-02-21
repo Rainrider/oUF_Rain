@@ -87,6 +87,9 @@ end
 oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE"
 
 oUF.Tags["rain:altpower"] = function(unit)
+	-- XXX Temp fix for vehicle
+	if unit == "vehicle" then unit = "player" end
+	-- XXX
 	if (unit ~= "player") then return end
 	
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)

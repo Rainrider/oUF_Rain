@@ -46,8 +46,12 @@ local function AddAltPowerBar(self, width, height)
 	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
 	
 	self.AltPowerBar.Tooltip = function(self)
-		local powerName = select(10, UnitAlternatePowerInfo(self.__owner.unit))
-		local powerTooltip = select(11, UnitAlternatePowerInfo(self.__owner.unit))
+		local unit = self.__owner.unit
+		-- XXX Temp fix for vehicle
+		if unit == "vehicle" then unit = "player" end
+		-- XXX
+		local powerName = select(10, UnitAlternatePowerInfo(unit))
+		local powerTooltip = select(11, UnitAlternatePowerInfo(unit))
 		
 		if powerName then
 			GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
@@ -85,6 +89,9 @@ local function AddCastbar(self, unit)
 		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
 		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
 		self.Castbar.Text:SetTextColor(0.84, 0.75, 0.65)
+		
+		self.Castbar.CustomTimeText = ns.CustomCastTimeText
+		self.Castbar.CustomDelayText = ns.CustomCastDelayText
 		
 		self.Castbar:HookScript("OnShow", function() self.Castbar.Text:Show(); self.Castbar.Time:Show() end)
 		self.Castbar:HookScript("OnHide", function() self.Castbar.Text:Hide(); self.Castbar.Time:Hide() end)

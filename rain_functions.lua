@@ -60,6 +60,16 @@ local function PutFontString(parent, fontName, fontHeight, fontStyle, justifyH)
 end
 ns.PutFontString = PutFontString
 
+local CustomCastTimeText = function(self, duration)
+	self.Time:SetText(("%.1f / %.1f"):format(self.channeling and duration or self.max - duration, self.max))
+end
+ns.CustomCastTimeText = CustomCastTimeText
+
+local CustomCastDelayText = function(self, duration)
+	self.Time:SetText(("%.1f |cffaf5050%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
+end
+ns.CustomCastDelayText = CustomCastDelayText
+
 local function PostUpdateHealth(health, unit, min, max)
 	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
 		local class = select(2, UnitClass(unit))
