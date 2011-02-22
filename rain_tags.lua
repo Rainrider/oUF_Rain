@@ -26,49 +26,56 @@ oUF.Tags["rain:namecolor"] = function(unit)
 	return ns.RGBtoHEX(color[1], color[2], color[3])
 end
 
-oUF.Tags["rain:perhp"] = function(unit)
+oUF.Tags["rain:perchp"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
-	local min, max = UnitHealth(unit), UnitHealthMax(unit)
-	if (min == 0 or max == 0 or min == max) then return end
+	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	if (cur == 0 or max == 0) then return end
+	if (cur == max and (unit == "player" or unit == "target")) then return end
 	
-	return math.floor(min / max * 100 + 0.5)
+	return math.floor(cur / max * 100 + 0.5)
 end
-oUF.TagEvents["rain:perhp"] = oUF.TagEvents.perhp
+oUF.TagEvents["rain:perchp"] = oUF.TagEvents.perhp
 
 oUF.Tags["rain:health"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
-	local min, max = UnitHealth(unit), UnitHealthMax(unit)
+	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	if (not UnitIsFriend("player", unit)) then
-		return SiValue(min)
-	elseif (min ~= 0 and min ~= max) then
-		return '-' .. SiValue(max - min)
+		return SiValue(cur)
+	elseif (cur ~= 0 and cur ~= max) then
+		return '-' .. SiValue(max - cur)
 	else
 		return SiValue(max)
 	end
 end
 oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
 
-oUF.Tags["rain:perpp"] = function(unit)
+oUF.Tags["rain:power"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 	
+	local cur, max = UnitPower(unit), UnitPowerMax(unit)
+	
+	if (cur == 0 or max == 0) then return end
+	
+	local powerValue = ""
 	local pType = UnitPowerType(unit)
-	if (pType ~= 0) then return end
-
-	local min, max = UnitPower(unit), UnitPowerMax(unit)
-	if (min == 0 or max == 0 or min == max) then return end
+	if (pType == 0) then
+		if (cur ~= max) then
+			powerValue = math.floor(cur / max * 100 + 0.5) .. "%"
+		end
+	end
+	if (UnitIsPlayer(unit) or UnitIsUnit(unit, "pet")) then
+		if (powerValue ~= "") then
+			powerValue = powerValue .." - " .. SiValue(cur)
+		else
+			powerValue = SiValue(cur)
+		end
+	else
+		powerValue = SiValue(cur)
+	end
 	
-	return math.floor(min / max * 100 + 0.5)
-end
-oUF.TagEvents["rain:perpp"] = oUF.TagEvents.perpp
-
-oUF.Tags["rain:power"] = function(unit)
-	local min, max = UnitPower(unit), UnitPowerMax(unit)
-	if (min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
-	if (not UnitIsPlayer(unit) and unit ~= "vehicle") then return end
-	
-	return SiValue(min)
+	return powerValue
 end
 oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
 
