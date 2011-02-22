@@ -71,6 +71,7 @@ end
 ns.CustomCastDelayText = CustomCastDelayText
 
 local function PostCastStart(castbar, unit, name, rank, castid)
+	print("PostCastStart fired")
 	if castbar.interrupt and UnitCanAttack("player", unit) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 	else
@@ -78,6 +79,26 @@ local function PostCastStart(castbar, unit, name, rank, castid)
 	end
 end
 ns.PostCastStart = PostCastStart
+
+local function PostCastInterruptible(castbar, unit)
+	print("PostCastInterruptible fired")
+	if castbar.interrupt and UnitCanAttack("player", unit) then
+		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
+	else
+		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
+	end
+end
+ns.PostCastInterruptible = PostCastInterruptible
+
+local function PostCastNotInterruptible(castbar, unit)
+	print("PostCastNotInterruptible fired")
+	if castbar.interrupt and UnitCanAttack("player", unit) then
+		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
+	else
+		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
+	end
+end
+ns.PostCastNotInterruptible = PostCastNotInterruptible
 
 local function PostChannelStart(castbar, unit, name)
 	if castbar.interrupt and UnitCanAttack("player", unit) then

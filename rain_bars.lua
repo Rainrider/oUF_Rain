@@ -127,6 +127,8 @@ local function AddCastbar(self, unit)
 		
 		self.Castbar.PostCastStart = ns.PostCastStart
 		self.Castbar.PostChannelStart = ns.PostChannelStart
+		self.Castbar.PostCastInterruptible = ns.PostCastInterruptible
+		self.Castbar.PostCastNotInterruptible = ns.PostCastNotInterruptible
 	end
 end
 ns.AddCastbar = AddCastbar
