@@ -30,6 +30,8 @@ local colors = setmetatable({
 }, {__index = oUF.colors})
 ns.colors = colors
 
+--[[ HELPER FUNCTIONS ]]--
+
 local SiValue = function(val)
 	if(val >= 1e6) then
 		return ("%.1f".."m"):format(val / 1e6)--:gsub('%.', 'm')
@@ -70,6 +72,8 @@ local CustomCastDelayText = function(self, duration)
 end
 ns.CustomCastDelayText = CustomCastDelayText
 
+--[[PRE AND POST FUNCTIONS]]--
+
 local function PostCastStart(castbar, unit, name, rank, castid)
 	if castbar.interrupt and UnitCanAttack("player", unit) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
@@ -106,7 +110,7 @@ local function PostChannelStart(castbar, unit, name)
 end
 ns.PostchannelStart = PostChannelStart
 
-local function PostUpdateHealth(health, unit, min, max)
+local function PostUpdateHealth(health, unit, cur, max)
 	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
 		local class = select(2, UnitClass(unit))
 		local color = UnitIsPlayer(unit) and oUF.colors.class[class] or {0.84, 0.75, 0.65}
@@ -114,27 +118,18 @@ local function PostUpdateHealth(health, unit, min, max)
 		health:SetValue(0)
 		health.bg:SetVertexColor(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
 		health.value:SetTextColor(0.75, 0.75, 0.75)
---[[ This is included in the health tag
-		if not UnitIsConnected(unit) then
-			health.value:SetText("|cffD7BEA5".._G["PLAYER_OFFLINE"].."|r")
-		elseif UnitIsDead(unit) then
-			health.value:SetText("|cffD7BEA5".._G["DEAD"].."|r")
-		elseif UnitIsGhost(unit) then
-			health.value:SetText("|cffD7BEA5".."Ghost".."|r")
-		end		--]]
 	elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
 		health:SetStatusBarColor(unpack(oUF.colors.tapped))
 		health.bg:SetVertexColor(0.15, 0.15, 0,15)
 	else
 		local r, g, b
-		r, g, b = oUF.ColorGradient(min/max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
+		r, g, b = oUF.ColorGradient(cur/max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
 
 		health:SetStatusBarColor(r, g, b)
 		health.bg:SetVertexColor(0.15, 0.15, 0.15)
 		
-		-- TODO health value coloring / doable with tags?
-		r, g, b = oUF.ColorGradient(min/max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
-		if min ~= max then
+		r, g, b = oUF.ColorGradient(cur/max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+		if cur ~= max then
 			health.value:SetTextColor(r, g, b)
 		else
 			health.value:SetTextColor(r, g, b)
@@ -153,7 +148,7 @@ local function PreUpdatePower(power, unit)
 end
 ns.PreUpdatePower = PreUpdatePower
 
-local function PostUpdatePower(Power, unit, min, max)
+local function PostUpdatePower(Power, unit, cur, max)
 	if (unit ~= "player" and unit ~= "target" and unit ~= "vehicle") then return end
 	local pType, pName = UnitPowerType(unit)
 	local color = colors.power[pName]
@@ -177,7 +172,7 @@ ns.PostUpdatePower = PostUpdatePower
 local function PostUpdateAltPower(AltPower, min, cur, max)
 	local self = AltPower.__owner
 	
-	local tPath, r, g, b = UnitAlternatePowerTextureInfo(self.unit, 2) -- 2 is statusbar index
+	local _, r, g, b = UnitAlternatePowerTextureInfo(self.unit, 2) -- 2 is statusbar index
 	if(r) then
 		AltPower:SetStatusBarColor(r, g, b)
 	end
