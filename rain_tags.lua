@@ -6,32 +6,25 @@
 local _, ns = ...
 local SiValue = ns.SiValue
 
-
-oUF.Tags["rain:petcolor"] = function(unit)
-	if UnitIsUnit(unit, "pet") then
-		local color = ns.colors.happiness[3]
-		local happiness = GetPetHappiness()
-		if happiness then
-			color = ns.colors.happiness[happiness]
-		end
-		return ns.RGBtoHEX(color[1], color[2], color[3])
-	end
-end
-oUF.TagEvents["rain:petcolor"] = "UNIT_POWER"
-
-oUF.Tags["rain:color"] = function(unit)
+oUF.Tags["rain:namecolor"] = function(unit)
 	local color = {1,  1,  1}
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		color = {0.75, 0.75, 0.75}
 	elseif (UnitIsPlayer(unit)) then
 		color = oUF.colors.class[select(2, UnitClass(unit))]
+	elseif (unit == "pet") then
+		local happiness = GetPetHappiness()
+		if happiness then
+			color = ns.colors.happiness[happiness]
+		else
+			color = {0.33, 0.59, 0.33}
+		end
 	else
 		color = oUF.colors.reaction[UnitReaction(unit, "player")]
 	end
 	
 	return ns.RGBtoHEX(color[1], color[2], color[3])
 end
-oUF.TagEvents["rain:color"] = "UNIT_FACTION UNIT_CONNECTION"
 
 oUF.Tags["rain:perhp"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
@@ -80,11 +73,11 @@ end
 oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
 
 oUF.Tags["rain:name"] = function(unit, r) -- TODO: what is r supposed to be?
-	local color = oUF.Tags["rain:color"](unit)
+	local color = oUF.Tags["rain:namecolor"](unit)
     local name = UnitName(r or unit)
     return color..(name or "").."|r"
 end
-oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE"
+oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION UNIT_POWER"
 
 oUF.Tags["rain:altpower"] = function(unit)
 	-- XXX Temp fix for vehicle

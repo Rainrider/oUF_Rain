@@ -33,7 +33,7 @@ local UnitSpecific = {
 	target = function(self)
 		self.Info = PutFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
 		self.Info:SetPoint("TOP", self.Health, 0, -5)
-		self:Tag(self.Info, "[rain:color][name]|r [difficulty][level] [shortclassification]|r")
+		self:Tag(self.Info, "[rain:name] [difficulty][level] [shortclassification]|r")
 		
 		ns.AddComboPointsBar(self, nil, 5)
 	end,
@@ -45,7 +45,7 @@ local UnitSpecific = {
 		self.PetName = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 		self.PetName:SetPoint("TOPLEFT", 2, -2)
 		self.PetName:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.PetName, "[rain:petcolor][name]|r")
+		self:Tag(self.PetName, "[rain:name]")
 	end,
 }
 
@@ -157,7 +157,7 @@ local function Shared(self, unit)
 			self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 			self.Name:SetPoint("TOPLEFT", 2, -2)
 			self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-			self:Tag(self.Name, "[rain:color][name]|r")
+			self:Tag(self.Name, "[rain:name]")
 		end
 		
 		ns.AddCastbar(self, unit)
