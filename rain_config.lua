@@ -20,7 +20,14 @@ local config = {
 		edgeFile = [=[Interface\AddOns\oUF_Rain\media\textures\glowTex3]=],
 		edgeSize = 2,
 		insets = {top = 2, left = 2, bottom = 2, right = 2},
-}
+	},
+	
+	showParty = true,
+	showPartyTargets = true,
+	showPartyPets = true,
+	showRaid = true,
+	showMT = true,
+	showMTT = true,
 }
 
 ns.config = config

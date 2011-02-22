@@ -184,4 +184,89 @@ oUF:Factory(function(self)
 	self:Spawn("target", "oUF_Rain_Target"):SetPoint("CENTER", 300, -250)
 	self:Spawn("targettarget", "oUF_Rain_TargetTarget"):SetPoint("BOTTOMRIGHT", oUF_Rain_Target, "TOPRIGHT", 0, 10)
 	self:Spawn("focustarget", "oUF_Rain_FocusTarget"):SetPoint("BOTTOMLEFT", oUF_Rain_Target, "TOPLEFT", 0 , 10)
+	
+	if (cfg.showParty) then
+		local party = self:SpawnHeader(
+			"oUF_Rain_Party", nil, nil,
+			"showParty", true,
+			"showPlayer", false,
+			"showSolo", false,
+			"maxColumns", 4,
+			"unitsPerColumn", 1,
+			"columnAnchorPoint", "LEFT",
+			"columnSpacing", 7.5,
+			"oUF-initialConfigFunction", [[
+				self:SetWidth(110)
+				self:SetHeight(22)
+			]]
+		)
+		party:SetPoint("LEFT", UIParent, "CENTER", -231.25, -250)
+	end
+	
+	if (cfg.showParty and cfg.showPartyTargets) then
+		local partyTargets = self.SpawnHeader(
+			"oUF_Rain_PartyTargets", nil, nil,
+			"showParty", true,
+			"showSolo", false,
+			"maxColumns", 4,
+			"unitsPerColumn", 1,
+			"columnAnchorPoint", "LEFT",
+			"columnSpacing", 7.5,
+			"oUF-initialConfigFunction", [[
+				self:SetWidth(110)
+				self:SetHeight(22)
+				self:SetAttribute("unitsuffix", "target")
+			]]
+		)
+		partyTargets:SetPoint("TOPLEFT", party, "BOTTOMLEFT", 0, -27.5)
+	end
+	
+	if (cfg.showParty and cfg.showPartyPets) then
+		local partyPets = self:SpawnHeader(
+			"oUF_Rain_Party", nil, nil,
+			"showParty", true,
+			"showSolo", false,
+			"maxColumns", 4,
+			"unitsPerColumn", 1,
+			"columnAnchorPoint", "LEFT",
+			"columnSpacing", 7.5,
+			"oUF-initialConfigFunction", [[
+				self:SetWidth(110)
+				self:SetHeight(11)
+				self:SetAttribute("unitsuffix", "pet")
+			]]
+		)
+		partyPets:SetPoint("TOPLEFT", party, "BOTTOMLEFT", 0, -7.5)
+	end
+	
+	if (cfg.showMT) then
+		local mainTanks = self:SpawnHeader(
+			"oUF_Rain_MainTanks", nil, nil,
+			"showRaid", true,
+			"showSolo", false,
+			"groupFilter", "MAINTANK",
+			"yOffset", -7.5,
+			"oUF-initialConfigFunction", [[
+				self:SetWidth(110)
+				self:SetHeight(22)
+			]]
+		)
+		mainTanks:SetPoint("TOPLEFT", UIParent, "LEFT", 50, -50)
+	end
+	
+	if (cfg.showMT and cfg.showMTT) then
+		local mainTankTargets = self:SpawnHeader(
+			"oUF_Rain_MainTankTargets", nil, nil,
+			"showRaid", true,
+			"showSolo", false,
+			"groupFilter", "MAINTANK",
+			"yOffset", -7.5,
+			"oUF-initialConfigFunction", [[
+				self:SetWidth(110)
+				self:SetHeight(22)
+				self:SetAttribute("unitsuffix", "target")
+			]]
+		)
+		mainTankTargets:SetPoint("TOPLEFT", mainTanks, "TOPRIGHT", 7.5, 0)
+	end
 end)

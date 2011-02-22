@@ -43,6 +43,7 @@ local function AddPhaseIcon(self, unit)
 end
 ns.AddPhaseIcon = AddPhaseIcon
 
+-- only availably for quest bosses
 local function AddQuestIcon(self, unit)
 	self.QuestIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	self.QuestIcon:SetSize(16, 16)
@@ -50,10 +51,14 @@ local function AddQuestIcon(self, unit)
 end
 ns.AddQuestIcon = AddQuestIcon
 
+-- oUF checks ready status only for raid and party
 local function AddReadyCheckIcon(self, unit)
 	self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
 	self.ReadyCheck:SetSize(16, 16)
 	self.ReadyCheck:SetPoint("RIGHT", -5, 0)
+	
+	self.ReadyCheck.finishedTime = 10
+	self.ReadyCheck.fadeTime = 3
 end
 ns.AddReadyCheckIcon = AddReadyCheckIcon
 
