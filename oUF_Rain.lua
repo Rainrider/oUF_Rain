@@ -32,7 +32,8 @@ local UnitSpecific = {
 	
 	target = function(self)
 		self.Info = PutFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
-		self.Info:SetPoint("TOP", self.Health, 0, -5)
+		self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
+		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", 0, -5)
 		self:Tag(self.Info, "[rain:name] [difficulty][level] [shortclassification]|r")
 		
 		ns.AddComboPointsBar(self, nil, 5)
@@ -41,11 +42,6 @@ local UnitSpecific = {
 	pet = function(self)
 		ns.AddHealPredictionBar(self, 110, false)
 		ns.AddExperienceBar(self)
-		
-		self.PetName = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
-		self.PetName:SetPoint("TOPLEFT", 2, -2)
-		self.PetName:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.PetName, "[rain:name]")
 	end,
 }
 
@@ -107,7 +103,6 @@ local function Shared(self, unit)
 	
 	
 	if(unit == "player" or unit == "target") then
-		-- set frame size
 		self:SetSize(230, 50)
 	
 		self.Health:SetSize(230, 30)
@@ -156,12 +151,10 @@ local function Shared(self, unit)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
 		
-		if unit ~= "pet" then
-			self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
-			self.Name:SetPoint("TOPLEFT", 2, -2)
-			self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-			self:Tag(self.Name, "[rain:name]")
-		end
+		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.Name:SetPoint("TOPLEFT", 2, -2)
+		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+		self:Tag(self.Name, "[rain:name]")
 		
 		ns.AddCastbar(self, unit)
 	end
