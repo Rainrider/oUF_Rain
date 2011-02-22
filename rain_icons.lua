@@ -3,12 +3,63 @@
 	Contains functions for adding icons to oUF_Rain
 	===============================================--]]
 
---[[ TODO:	leader
-			assistant
-			master looter
-			resting
-			pvp
-			LFD role
-			phase icon
-			quest icon
-]]
+-- TODO: LFD role -- maybe through a tag
+
+local _, ns = ...
+local cfg = ns.config
+
+local function AddAssistantIcon(self, unit)
+	self.Assistant = self.Health:CreateTexture(nil, "OVERLAY")
+	self.Assistant:SetSize(16, 16)
+	self.Assistant:SetPoint("TOPLEFT", -8.5, 8.5)
+end
+ns.AddAssistantIcon = AddAssistantIcon
+
+local function AddCombatIcon(self)
+	self.Combat = self.Health:CreateTexture(nil, "OVERLAY")
+	self.Combat:SetSize(20, 20)
+	self.Combat:SetPoint("TOP", 0, 1)
+end
+ns.AddCombatIcon = AddCombatIcon
+
+local function AddLeaderIcon(self, unit)
+	self.Leader = self.Health:CreateTexture(nil, "OVERLAY")
+	self.Leader:SetSize(16, 16)
+	self.Leader:SetPoint("TOPLEFT", -8.5, 8.5)
+end
+ns.AddLeaderIcon = AddLeaderIcon
+
+local function AddMasterLooterIcon(self, unit)
+	self.MasterLooter = self.Health:CreateTexture(nil, "OVERLAY")
+	self.MasterLooter:SetSize(16, 16)
+	self.MasterLooter:SetPoint("TOPRIGHT", 8.5, 8.5)
+end
+ns.AddMasterLooterIcon = AddMasterLooterIcon
+
+local function AddPhaseIcon(self, unit)
+	self.PhaseIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	self.PhaseIcon:SetSize(16, 16)
+	self.PhaseIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
+end
+ns.AddPhaseIcon = AddPhaseIcon
+
+local function AddQuestIcon(self, unit)
+	self.QuestIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	self.QuestIcon:SetSize(16, 16)
+	self.QuestIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
+end
+ns.AddQuestIcon = AddQuestIcon
+
+local function AddReadyCheckIcon(self, unit)
+	self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
+	self.ReadyCheck:SetSize(16, 16)
+	self.ReadyCheck:SetPoint("RIGHT", -5, 0)
+end
+ns.AddReadyCheckIcon = AddReadyCheckIcon
+
+local function AddRestingIcon(self)
+	self.Resting = self.Power:CreateTexture(nil, "OVERLAY")
+	self.Resting:SetSize(16, 16)
+	self.Resting:SetPoint("BOTTOMLEFT", -8.5, -8.5)
+end
+ns.AddRestingIcon = AddRestingIcon

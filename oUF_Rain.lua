@@ -28,6 +28,9 @@ local UnitSpecific = {
 		if (playerClass == "DRUID") then -- TODO: check if eclipsebar is actually visible
 			ns.AddEclipseBar(self, 230, 7)
 		end
+		
+		ns.AddCombatIcon(self)
+		ns.AddRestingIcon(self)
 	end,
 	
 	target = function(self)
@@ -37,6 +40,8 @@ local UnitSpecific = {
 		self:Tag(self.Info, "[rain:name] [difficulty][level] [shortclassification]|r")
 		
 		ns.AddComboPointsBar(self, nil, 5)
+		
+		ns.AddQuestIcon(self, "target")
 	end,
 	
 	pet = function(self)
@@ -101,6 +106,11 @@ local function Shared(self, unit)
 	self.Power.PreUpdate = ns.PreUpdatePower
 	self.Power.PostUpdate = ns.PostUpdatePower
 	
+	ns.AddAssistantIcon(self, unit)
+	ns.AddLeaderIcon(self, unit)
+	ns.AddMasterLooterIcon(self, unit)
+	ns.AddPhaseIcon(self, unit)
+	ns.AddReadyCheckIcon(self, unit)
 	
 	if(unit == "player" or unit == "target") then
 		self:SetSize(230, 50)
