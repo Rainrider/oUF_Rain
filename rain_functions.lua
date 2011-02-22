@@ -70,6 +70,24 @@ local CustomCastDelayText = function(self, duration)
 end
 ns.CustomCastDelayText = CustomCastDelayText
 
+local function PostCastStart(castbar, unit, name, rank, castid)
+	if castbar.interrupt and UnitCanAttack("player", unit) then
+		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
+	else
+		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
+	end
+end
+ns.PostCastStart = PostCastStart
+
+local function PostChannelStart(castbar, unit, name)
+	if castbar.interrupt and UnitCanAttack("player", unit) then
+		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
+	else
+		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
+	end
+end
+ns.PostchannelStart = PostChannelStart
+
 local function PostUpdateHealth(health, unit, min, max)
 	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
 		local class = select(2, UnitClass(unit))

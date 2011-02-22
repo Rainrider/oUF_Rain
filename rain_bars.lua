@@ -85,13 +85,13 @@ local function AddCastbar(self, unit)
 		self.Castbar.Time:SetPoint("RIGHT", -3.5, 3)
 		self.Castbar.Time:SetTextColor(0.84, 0.75, 0.65)
 		
+		self.Castbar.CustomTimeText = ns.CustomCastTimeText
+		self.Castbar.CustomDelayText = ns.CustomCastDelayText
+		
 		self.Castbar.Text = PutFontString(self.Overlay, cfg.FONT2, 12, nil, "LEFT")
 		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
 		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
 		self.Castbar.Text:SetTextColor(0.84, 0.75, 0.65)
-		
-		self.Castbar.CustomTimeText = ns.CustomCastTimeText
-		self.Castbar.CustomDelayText = ns.CustomCastDelayText
 		
 		self.Castbar:HookScript("OnShow", function() self.Castbar.Text:Show(); self.Castbar.Time:Show() end)
 		self.Castbar:HookScript("OnHide", function() self.Castbar.Text:Hide(); self.Castbar.Time:Hide() end)
@@ -124,6 +124,9 @@ local function AddCastbar(self, unit)
 		self.IconBackdrop:SetBackdrop(cfg.BACKDROP2)
 		self.IconBackdrop:SetBackdropColor(0, 0, 0, 0)
 		self.IconBackdrop:SetBackdropBorderColor(0, 0, 0)
+		
+		self.Castbar.PostCastStart = ns.PostCastStart
+		self.Castbar.PostChannelStart = ns.PostChannelStart
 	end
 end
 ns.AddCastbar = AddCastbar
