@@ -61,6 +61,13 @@ local function Shared(self, unit)
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	
+	local unitIsInParty = self:GetParent():GetName():match("oUF_Rain_Party")
+	local unitIsPartyTarget = self:GetParent():GetName():match("oUF_Rain_PartyTargets")
+	--local unitIsPartyPet = self:GetParent():GetName():match("oUF_Rain_PartyPets")
+	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
+	local unitIsMT = self:GetParent():GetName():match("oUF_Rain_MT")
+	local unitIsMTT = self:GetParent():GetName():match("oUF_Rain_MTT")
+	
 	self.FrameBackdrop = CreateFrame("Frame", nil, self)
 	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
 	self.FrameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
@@ -145,7 +152,7 @@ local function Shared(self, unit)
 		self:Tag(self.Status, "[pvp]")
 	end
 	
-	if(unit == "pet" or unit == "focus" or unit:find("target") and unit ~= "target") then
+	if(unit == "pet" or unit == "focus" or unit:find("target") and unit ~= "target" and not unitIsPartyPet) then
 		self:SetSize(110, 22)
 		
 		self.Health:SetSize(110, 15)
@@ -169,6 +176,65 @@ local function Shared(self, unit)
 		ns.AddCastbar(self, unit)
 	end
 	
+	if(unitIsInParty or unitIsPartyTarget or unitIsMT) then
+		self.Health:SetSize(110, 15)
+		self.Health:SetPoint("TOPRIGHT")
+		self.Health:SetPoint("TOPLEFT")
+	
+		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
+		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
+		self.Health.value.frequentUpdates = 1/4
+		self:Tag(self.Health.value, "[dead][offline][rain:health][ - >rain:perchp<%]")
+		
+		self.Power:SetSize(110, 5)
+		self.Power:SetPoint("BOTTOMRIGHT")
+		self.Power:SetPoint("BOTTOMLEFT")
+		
+		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.Name:SetPoint("TOPLEFT", 2, -2)
+		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+		self:Tag(self.Name, "[rain:name]")
+	end
+	
+	if(unitIsPartyPet) then
+		self:SetSize(110, 10)
+		self.Health:SetSize(110, 9)
+		self.Health:SetPoint("TOPRIGHT")
+		self.Health:SetPoint("TOPLEFT")
+		
+		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
+		self.Health.value:SetPoint("RIGHT", -2, 0)
+		self:Tag(self.Health.value, "[rain:perchp<%]")
+		
+		self.Power:Hide()
+		
+		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.Name:SetPoint("LEFT", 2, 0)
+		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+		self:Tag(self.Name, "[rain:name]")
+	end
+	
+	if(unitIsMTT) then
+		self:SetSize(110, 22)
+		self.Health:SetSize(110, 15)
+		self.Health:SetPoint("TOPRIGHT")
+		self.Health:SetPoint("TOPLEFT")
+	
+		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
+		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
+		self.Health.value.frequentUpdates = 1/4
+		self:Tag(self.Health.value, "[dead][offline][rain:health][ - >rain:perchp<%]")
+		
+		self.Power:SetSize(110, 5)
+		self.Power:SetPoint("BOTTOMRIGHT")
+		self.Power:SetPoint("BOTTOMLEFT")
+		
+		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.Name:SetPoint("TOPLEFT", 2, -2)
+		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+		self:Tag(self.Name, "[rain:name]")
+	end
+	
 	if(UnitSpecific[unit]) then
 		return UnitSpecific[unit](self)
 	end
@@ -187,28 +253,34 @@ oUF:Factory(function(self)
 	
 	if (cfg.showParty) then
 		local party = self:SpawnHeader(
-			"oUF_Rain_Party", nil, nil,
+			"oUF_Rain_Party", nil, "solo,party,raid",
 			"showParty", true,
-			"showPlayer", false,
-			"showSolo", false,
-			"maxColumns", 4,
+			"showRaid", true,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
 			"oUF-initialConfigFunction", [[
 				self:SetWidth(110)
 				self:SetHeight(22)
+				self:SetAttribute("type3", "spell")
+				self:SetAttribute("spell3", "Misdirection")
 			]]
 		)
 		party:SetPoint("LEFT", UIParent, "CENTER", -231.25, -250)
+		party:Show()
 	end
-	
+
 	if (cfg.showParty and cfg.showPartyTargets) then
 		local partyTargets = self.SpawnHeader(
-			"oUF_Rain_PartyTargets", nil, nil,
+			"oUF_Rain_PartyTargets", nil, "solo,party,raid",
 			"showParty", true,
-			"showSolo", false,
-			"maxColumns", 4,
+			"showRaid", true,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -218,15 +290,18 @@ oUF:Factory(function(self)
 				self:SetAttribute("unitsuffix", "target")
 			]]
 		)
-		partyTargets:SetPoint("TOPLEFT", party, "BOTTOMLEFT", 0, -27.5)
+		partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -27.5)
+		partyTarget:Show()
 	end
-	
+
 	if (cfg.showParty and cfg.showPartyPets) then
 		local partyPets = self:SpawnHeader(
-			"oUF_Rain_Party", nil, nil,
+			"oUF_Rain_PartyPets", nil, "solo,party,raid",
 			"showParty", true,
-			"showSolo", false,
-			"maxColumns", 4,
+			"showRaid", true,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -234,31 +309,35 @@ oUF:Factory(function(self)
 				self:SetWidth(110)
 				self:SetHeight(11)
 				self:SetAttribute("unitsuffix", "pet")
+				self:SetAttribute("type3", "spell")
+				self:SetAttribute("spell3", "Misdirection")
 			]]
 		)
-		partyPets:SetPoint("TOPLEFT", party, "BOTTOMLEFT", 0, -7.5)
+		partyPets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -7.5)
+		partyPets:Show()
 	end
 	
 	if (cfg.showMT) then
 		local mainTanks = self:SpawnHeader(
-			"oUF_Rain_MainTanks", nil, nil,
+			"oUF_Rain_MT", nil, "raid",
 			"showRaid", true,
-			"showSolo", false,
 			"groupFilter", "MAINTANK",
 			"yOffset", -7.5,
 			"oUF-initialConfigFunction", [[
 				self:SetWidth(110)
 				self:SetHeight(22)
+				self:SetAttribute("type3", "spell")
+				self:SetAttribute("spell3", "Misdirection")
 			]]
 		)
 		mainTanks:SetPoint("TOPLEFT", UIParent, "LEFT", 50, -50)
+		mainTanks:Show()
 	end
 	
 	if (cfg.showMT and cfg.showMTT) then
 		local mainTankTargets = self:SpawnHeader(
-			"oUF_Rain_MainTankTargets", nil, nil,
+			"oUF_Rain_MTT", nil, "raid",
 			"showRaid", true,
-			"showSolo", false,
 			"groupFilter", "MAINTANK",
 			"yOffset", -7.5,
 			"oUF-initialConfigFunction", [[
@@ -267,6 +346,7 @@ oUF:Factory(function(self)
 				self:SetAttribute("unitsuffix", "target")
 			]]
 		)
-		mainTankTargets:SetPoint("TOPLEFT", mainTanks, "TOPRIGHT", 7.5, 0)
+		mainTankTargets:SetPoint("TOPLEFT", "oUF_Rain_MT", "TOPRIGHT", 7.5, 0)
+		mainTankTargets:Show()
 	end
 end)

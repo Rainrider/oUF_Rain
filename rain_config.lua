@@ -21,9 +21,8 @@ local config = {
 		edgeSize = 2,
 		insets = {top = 2, left = 2, bottom = 2, right = 2},
 	},
-	
 	showParty = true,
-	showPartyTargets = true,
+	showPartyTargets = false,
 	showPartyPets = true,
 	showRaid = true,
 	showMT = true,
