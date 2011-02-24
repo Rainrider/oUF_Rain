@@ -243,6 +243,22 @@ end
 
 oUF:RegisterStyle("Rain", Shared)
 oUF:Factory(function(self)
+
+	local _, playerClass = UnitClass("player")
+	local spellName = ""
+	
+	if playerClass == "HUNTER" then
+		 spellName = GetSpellInfo(34477)	-- Misdirection
+	elseif playerClass == "DRUID" then
+		spellName = GetSpellInfo(29166)		-- Innervate
+	elseif playerClass == "PALADIN" then
+		spellName = GetSpellInfo(31789)		-- Righteous Defense
+	elseif playerClass == "WARRIOR" then
+		spellName = GetSpellInfo(3411)		-- Intervene
+	else
+		spellName = "Misdirection"
+	end
+
 	self:SetActiveStyle("Rain")
 	self:Spawn("player", "oUF_Rain_Player"):SetPoint("CENTER", -300, -250)
 	self:Spawn("pet", "oUF_Rain_Pet"):SetPoint("BOTTOMLEFT", oUF_Rain_Player, "TOPLEFT", 0, 10)
@@ -262,12 +278,12 @@ oUF:Factory(function(self)
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
-			"oUF-initialConfigFunction", [[
+			"oUF-initialConfigFunction", ([[
 				self:SetWidth(110)
 				self:SetHeight(22)
 				self:SetAttribute("type3", "spell")
-				self:SetAttribute("spell3", "Misdirection")
-			]]
+				self:SetAttribute("spell3", %s)
+			]]):format(spellName)
 		)
 		party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 150)
 		party:Show()
@@ -305,13 +321,13 @@ oUF:Factory(function(self)
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
-			"oUF-initialConfigFunction", [[
+			"oUF-initialConfigFunction", ([[
 				self:SetWidth(110)
 				self:SetHeight(11)
 				self:SetAttribute("unitsuffix", "pet")
 				self:SetAttribute("type3", "spell")
-				self:SetAttribute("spell3", "Misdirection")
-			]]
+				self:SetAttribute("spell3", %s)
+			]]):format(spellName)
 		)
 		partyPets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -7.5)
 		partyPets:Show()
