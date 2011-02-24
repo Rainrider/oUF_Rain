@@ -255,6 +255,8 @@ oUF:Factory(function(self)
 		spellName = GetSpellInfo(31789)		-- Righteous Defense
 	elseif playerClass == "WARRIOR" then
 		spellName = GetSpellInfo(3411)		-- Intervene
+	elseif playerClass == "ROGUE" then
+		spellName = GetSpellInfo(57934)		-- Tricks of the Trade
 	else
 		spellName = "Misdirection"
 	end
