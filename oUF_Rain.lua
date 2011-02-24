@@ -152,7 +152,7 @@ local function Shared(self, unit)
 		self:Tag(self.Status, "[pvp]")
 	end
 	
-	if(unit == "pet" or unit == "focus" or unit:find("target") and unit ~= "target" and not unitIsPartyPet) then
+	if(unit == "pet" or unit == "focus" or (unit:find("target") and unit ~= "target")) then
 		self:SetSize(110, 22)
 		
 		self.Health:SetSize(110, 15)
@@ -176,11 +176,11 @@ local function Shared(self, unit)
 		ns.AddCastbar(self, unit)
 	end
 	
-	if(unitIsInParty or unitIsPartyTarget or unitIsMT) then
+	if((unitIsInParty or unitIsPartyTarget or unitIsMT) and not unitIsPartyPet) then
 		self.Health:SetSize(110, 15)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
-	
+		
 		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
 		self.Health.value.frequentUpdates = 1/4
@@ -274,7 +274,7 @@ oUF:Factory(function(self)
 	end
 
 	if (cfg.showParty and cfg.showPartyTargets) then
-		local partyTargets = self.SpawnHeader(
+		local partyTargets = self:SpawnHeader(
 			"oUF_Rain_PartyTargets", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
@@ -291,7 +291,7 @@ oUF:Factory(function(self)
 			]]
 		)
 		partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -27.5)
-		partyTarget:Show()
+		partyTargets:Show()
 	end
 
 	if (cfg.showParty and cfg.showPartyPets) then

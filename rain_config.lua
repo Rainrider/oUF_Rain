@@ -22,7 +22,7 @@ local config = {
 		insets = {top = 2, left = 2, bottom = 2, right = 2},
 	},
 	showParty = true,
-	showPartyTargets = false,
+	showPartyTargets = true,
 	showPartyPets = true,
 	showRaid = true,
 	showMT = true,
