@@ -8,6 +8,7 @@ local maxFocus = 100
 local talentTree = GetPrimaryTalentTree()
 
 local function SetShotFocusCost()
+	talentTree = GetPrimaryTalentTree()
 	if talentTree == 3 then -- SURVIVAL
 		shotFocusCost = select(4, GetSpellInfo(53301)) -- Explosive Shot
 	elseif talentTree == 2 then -- MARKMANSHIP
@@ -19,6 +20,7 @@ local function SetShotFocusCost()
 end
 
 local function SetMaxFocus()
+	maxFocus = 100
 	if talentTree == 1 then
 		-- get info about Kindred Spirits
 		local numTalentPoints = select(5, GetTalentInfo(1, 16))
@@ -35,7 +37,7 @@ local function GetFocusSparkXPoint(powerBarWidth)
 	SetShotFocusCost()
 	SetMaxFocus()
 	
-	print("shotfocusCost: ", shotFocusCost, " taltentTree: ", talentTree)
+	print("shotfocusCost: ", shotFocusCost, " talentTree: ", talentTree)
 	return (shotFocusCost * powerBarWidth / maxFocus)
 end
 ns.GetFocusSparkXPoint = GetFocusSparkXPoint

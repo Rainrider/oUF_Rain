@@ -96,6 +96,15 @@ local function AddHunterFocusSpark(self)
 	self.FocusSpark.backdrop:SetAllPoints(self.FocusSpark)
 	self.FocusSpark.backdrop:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 	self.FocusSpark.backdrop:SetBlendMode("ADD")
+	
+	self.FocusSpark:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	self.FocusSpark:RegisterEvent("LEARNED_SPELL_IN_TAB")
+	self.FocusSpark:SetScript("OnEvent", function(frame, eventName, spellID, tabID)
+		print(eventName)
+		if eventName == "LEARNED_SPELL_IN_TAB" then print("learned: ", spellID, " in tab: ", tabID) end
+		frame:ClearAllPoints()
+		frame:SetPoint("LEFT", ns.GetFocusSparkXPoint(self.Power:GetWidth()) - 5, 0)
+	end)
 end
 ns.AddHunterFocusSpark = AddHunterFocusSpark
 
