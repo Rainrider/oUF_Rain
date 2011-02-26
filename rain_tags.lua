@@ -30,8 +30,7 @@ oUF.Tags["rain:perchp"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	if (cur == 0 or max == 0) then return end
-	if (cur == max and (unit == "player" or unit == "target")) then return end
+	if (cur == 0 or max == 0 or cur == max) then return end
 	
 	return math.floor(cur / max * 100 + 0.5)
 end
@@ -41,6 +40,7 @@ oUF.Tags["rain:health"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	
 	if (not UnitIsFriend("player", unit)) then
 		return SiValue(cur)
 	elseif (cur ~= 0 and cur ~= max) then
