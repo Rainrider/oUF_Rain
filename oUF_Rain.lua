@@ -15,18 +15,24 @@ local UnitSpecific = {
 		
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 230, 5)
-		end
-		if (playerClass == "PALADIN") then
+		elseif (playerClass == "PALADIN") then
 			ns.AddHolyPowerBar(self, nil, 5)
-		end
-		if (playerClass == "WARLOCK") then
+		elseif (playerClass == "WARLOCK") then
 			ns.AddSoulshardsBar(self, 230, 5)
-		end
-		if (playerClass == "SHAMAN") then
+		elseif (playerClass == "SHAMAN") then
 			ns.AddTotemBar(self, nil, 5)
-		end
-		if (playerClass == "DRUID") then -- TODO: check if eclipsebar is actually visible
+		elseif (playerClass == "DRUID") then -- TODO: check if eclipsebar is actually visible
 			ns.AddEclipseBar(self, 230, 7)
+		elseif (playerClass == "HUNTER") then
+			self.FocusSpark = CreateFrame("Frame", "FocusSpark", self.Power)
+			self.FocusSpark:SetWidth(10)
+			self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
+			self.FocusSpark:SetPoint("LEFT", ns.GetFocusSparkXPoint(self.Power:GetWidth()) - 5, 0)
+			
+			self.FocusSpark.backdrop = self.FocusSpark:CreateTexture(nil, "OVERLAY")
+			self.FocusSpark.backdrop:SetAllPoints(self.FocusSpark)
+			self.FocusSpark.backdrop:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+			self.FocusSpark.backdrop:SetBlendMode("ADD")
 		end
 		
 		ns.AddCombatIcon(self)
