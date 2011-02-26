@@ -24,15 +24,7 @@ local UnitSpecific = {
 		elseif (playerClass == "DRUID") then -- TODO: check if eclipsebar is actually visible
 			ns.AddEclipseBar(self, 230, 7)
 		elseif (playerClass == "HUNTER") then
-			self.FocusSpark = CreateFrame("Frame", "FocusSpark", self.Power)
-			self.FocusSpark:SetWidth(10)
-			self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
-			self.FocusSpark:SetPoint("LEFT", ns.GetFocusSparkXPoint(self.Power:GetWidth()) - 5, 0)
-			
-			self.FocusSpark.backdrop = self.FocusSpark:CreateTexture(nil, "OVERLAY")
-			self.FocusSpark.backdrop:SetAllPoints(self.FocusSpark)
-			self.FocusSpark.backdrop:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-			self.FocusSpark.backdrop:SetBlendMode("ADD")
+			ns.AddHunterFocusSpark(self)
 		end
 		
 		ns.AddCombatIcon(self)

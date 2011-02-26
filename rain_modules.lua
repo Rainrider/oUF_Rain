@@ -86,6 +86,19 @@ local function AddExperienceBar(self)
 end
 ns.AddExperienceBar = AddExperienceBar
 
+local function AddHunterFocusSpark(self)
+	self.FocusSpark = CreateFrame("Frame", "FocusSpark", self.Power)
+	self.FocusSpark:SetWidth(10)
+	self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
+	self.FocusSpark:SetPoint("LEFT", ns.GetFocusSparkXPoint(self.Power:GetWidth()) - 5, 0)
+	
+	self.FocusSpark.backdrop = self.FocusSpark:CreateTexture(nil, "OVERLAY")
+	self.FocusSpark.backdrop:SetAllPoints(self.FocusSpark)
+	self.FocusSpark.backdrop:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+	self.FocusSpark.backdrop:SetBlendMode("ADD")
+end
+ns.AddHunterFocusSpark = AddHunterFocusSpark
+
 local function AddReputationBar(self)
 	if IsAddOnLoaded("oUF_Reputation") then
 		self.Reputation = CreateFrame("StatusBar", "oUF_Rain_Reputation", self)
