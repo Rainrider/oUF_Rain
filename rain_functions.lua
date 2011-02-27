@@ -182,3 +182,15 @@ local function PostUpdateAltPower(AltPower, min, cur, max)
 	end
 end
 ns.PostUpdateAltPower = PostUpdateAltPower
+
+--[[END OF PRE AND POST FUNCTIONS]]--
+
+local function AddBuffs(self, unit)
+
+end
+ns.AddBuffs = AddBuffs
+
+local function AddDebuffs(self, unit)
+
+end
+ns.AddDebuffs = AddDebuffs

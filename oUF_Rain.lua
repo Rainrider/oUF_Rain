@@ -111,6 +111,7 @@ local function Shared(self, unit)
 	self.Power.PreUpdate = ns.PreUpdatePower
 	self.Power.PostUpdate = ns.PostUpdatePower
 	
+	ns.AddRaidIcon(self, unit)
 	ns.AddAssistantIcon(self, unit)
 	ns.AddLeaderIcon(self, unit)
 	ns.AddMasterLooterIcon(self, unit)
@@ -127,7 +128,7 @@ local function Shared(self, unit)
 		self.Health.value = PutFontString(self.Health, cfg.FONT2, 12, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
 		self.Health.value.frequentUpdates = 1/4
-		self:Tag(self.Health.value, "[dead][offline][rain:health][ - >rain:perchp<%]")
+		self:Tag(self.Health.value, "[dead][offline][rain:health]")
 		
 		self.Power:SetSize(230, 15)
 		self.Power:SetPoint("BOTTOMRIGHT")
@@ -160,7 +161,7 @@ local function Shared(self, unit)
 		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
 		self.Health.value.frequentUpdates = 1/4
-		self:Tag(self.Health.value, "[dead][offline][rain:perchp<%]")
+		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
 		
 		self.Power:SetSize(110, 5)
 		self.Power:SetPoint("BOTTOMRIGHT")
@@ -182,7 +183,7 @@ local function Shared(self, unit)
 		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
 		self.Health.value.frequentUpdates = 1/4
-		self:Tag(self.Health.value, "[dead][offline][rain:health][ - >rain:perchp<%]")
+		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
 		
 		self.Power:SetSize(110, 5)
 		self.Power:SetPoint("BOTTOMRIGHT")
@@ -202,7 +203,7 @@ local function Shared(self, unit)
 		
 		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("RIGHT", -2, 0)
-		self:Tag(self.Health.value, "[rain:perchp<%]")
+		self:Tag(self.Health.value, "[perhp]")
 		
 		self.Power:Hide()
 		
@@ -221,7 +222,7 @@ local function Shared(self, unit)
 		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
 		self.Health.value.frequentUpdates = 1/4
-		self:Tag(self.Health.value, "[dead][offline][rain:health][ - >rain:perchp<%]")
+		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
 		
 		self.Power:SetSize(110, 5)
 		self.Power:SetPoint("BOTTOMRIGHT")

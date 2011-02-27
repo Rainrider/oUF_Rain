@@ -26,28 +26,38 @@ oUF.Tags["rain:namecolor"] = function(unit)
 	return ns.RGBtoHEX(color[1], color[2], color[3])
 end
 
-oUF.Tags["rain:perchp"] = function(unit)
+oUF.Tags["rain:healthSmall"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
-
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	if (cur == 0 or max == 0 or cur == max) then return end
 	
-	return math.floor(cur / max * 100 + 0.5)
+	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	if (cur == 0 or max == 0) then return end
+
+	if (cur == max) then
+		return SiValue(max)
+	end
+	if (UnitIsFriend("player", unit) and unit ~= "pet") then
+		return "-" .. SiValue(max - cur)
+	end
+	
+	return math.floor(cur / max * 100 + 0.5) .. "%"
 end
-oUF.TagEvents["rain:perchp"] = oUF.TagEvents.perhp
+oUF.TagEvents["rain:healthSmall"] = oUF.TagEvents.perhp
 
 oUF.Tags["rain:health"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	if (cur == 0 or max == 0) then return end
 	
-	if (not UnitIsFriend("player", unit)) then
-		return SiValue(cur)
-	elseif (cur ~= 0 and cur ~= max) then
-		return '-' .. SiValue(max - cur)
-	else
+	if (cur == max) then
 		return SiValue(max)
 	end
+	
+	if (UnitIsFriend("player", unit)) then
+		return "-" .. SiValue(max - cur) .. " - " .. math.floor(cur / max * 100 + 0.5) .. "%"
+	end
+	
+	return SiValue(cur) .. " - " .. math.floor(cur / max * 100 + 0.5) .. "%"
 end
 oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
 

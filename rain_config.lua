@@ -11,6 +11,7 @@ local config = {
 	BTNTEXTURE = [=[Interface\AddOns\oUF_Rain\media\textures\buttonnormal]=],
 	BORDER = [=[Interface\AddOns\oUF_Rain\media\textures\glowTex3]=],
 	OVERLAY = [=[Interface\AddOns\oUF_Rain\media\textures\smallshadertex]=],
+	RAIDICONS = [=[Interface\AddOns\oUF_Rain\media\icons\raidicons]=],
 	BACKDROP = {
 		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
 		insets = {top = -1, bottom = -1, left = -1, right = -1},

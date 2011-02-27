@@ -51,6 +51,19 @@ local function AddQuestIcon(self, unit)
 end
 ns.AddQuestIcon = AddQuestIcon
 
+local function AddRaidIcon(self, unit)
+	self.RaidIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	self.RaidIcon:SetTexture(cfg.RAIDICONS)
+	if unit ~= "player" and unit ~= "target" then
+		self.RaidIcon:SetSize(14, 14)
+		self.RaidIcon:SetPoint("TOP", 0, 10)
+	else
+		self.RaidIcon:SetSize(18, 18)
+		self.RaidIcon:SetPoint("TOP", 0, 10)
+	end
+end
+ns.AddRaidIcon = AddRaidIcon
+
 -- oUF checks ready status only for raid and party
 local function AddReadyCheckIcon(self, unit)
 	self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")

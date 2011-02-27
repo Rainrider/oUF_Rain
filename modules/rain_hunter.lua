@@ -26,13 +26,13 @@ local function GetMaxFocus(talentTree)
 		end
 	end
 	
-	return maxfocus
+	return maxFocus
 end
 
 local function GetFocusSparkXPoint(powerBarWidth)
 	local talentTree = GetPrimaryTalentTree()
 	local shotFocusCost = GetShotFocusCost(talentTree)
-	local maxFocus = GetMaxFocus(talentTree)
+	local maxFocus = GetMaxFocus()
 	
 	return (shotFocusCost * powerBarWidth / maxFocus)
 end
