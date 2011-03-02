@@ -45,6 +45,9 @@ local UnitSpecific = {
 	pet = function(self)
 		ns.AddHealPredictionBar(self, 110, false)
 		ns.AddExperienceBar(self)
+		
+		ns.AddDebuffs(self, "pet")
+		ns.AddBuffs(self, "pet")
 	end,
 }
 
@@ -144,6 +147,9 @@ local function Shared(self, unit)
 		ns.AddCastbar(self, unit)
 		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, unit)
+		
+		ns.AddBuffs(self, unit)
+		ns.AddDebuffs(self, unit)
 		
 		self.Status = PutFontString(self.Portrait, cfg.FONT2, 18, "OUTLINE", "RIGHT")
 		self.Status:SetPoint("RIGHT", -3.5, 2)
@@ -261,10 +267,10 @@ oUF:Factory(function(self)
 	end
 
 	self:SetActiveStyle("Rain")
-	self:Spawn("player", "oUF_Rain_Player"):SetPoint("CENTER", -300, -250)
+	self:Spawn("player", "oUF_Rain_Player"):SetPoint("CENTER", -210, -215)
 	self:Spawn("pet", "oUF_Rain_Pet"):SetPoint("BOTTOMLEFT", oUF_Rain_Player, "TOPLEFT", 0, 10)
 	self:Spawn("focus", "oUF_Rain_Focus"):SetPoint("BOTTOMRIGHT", oUF_Rain_Player, "TOPRIGHT", 0, 10)
-	self:Spawn("target", "oUF_Rain_Target"):SetPoint("CENTER", 300, -250)
+	self:Spawn("target", "oUF_Rain_Target"):SetPoint("CENTER", 210, -215)
 	self:Spawn("targettarget", "oUF_Rain_TargetTarget"):SetPoint("BOTTOMRIGHT", oUF_Rain_Target, "TOPRIGHT", 0, 10)
 	self:Spawn("focustarget", "oUF_Rain_FocusTarget"):SetPoint("BOTTOMLEFT", oUF_Rain_Target, "TOPLEFT", 0 , 10)
 	

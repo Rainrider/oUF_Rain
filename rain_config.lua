@@ -22,12 +22,19 @@ local config = {
 		edgeSize = 2,
 		insets = {top = 2, left = 2, bottom = 2, right = 2},
 	},
+	BORDERBACKDROP = {
+		bgFile = nil,
+		edgeFile = [=[Interface\AddOns\oUF_Rain\media\textures\glowTex3]=],
+		edgeSize = 4,
+		insets = {top = 2, left = 2, bottom = 2, right = 2},
+	},
 	showParty = true,
 	showPartyTargets = true,
 	showPartyPets = true,
 	showRaid = true,
 	showMT = true,
 	showMTT = true,
+	playerClass = select(2, UnitClass("player"))
 }
 
 ns.config = config
