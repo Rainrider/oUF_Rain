@@ -97,7 +97,6 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 		if caster then
 			_, casterClass = UnitClass(caster)
 		end
-		print("customFilter |cffff0000casterClass:|r ", casterClass)
 		if not icon.debuff or (casterClass and casterClass == cfg.playerClass) then	-- return all buffs and only debuffs cast by the players class
 			return true
 		end
@@ -302,7 +301,7 @@ do
 
 	PostUpdateIcon = function(icons, unit, icon, index, offset)
 		local _, _, _, _, _, duration, expirationTime, unitCaster, _ = UnitAura(unit, index, icon.filter)
-		print("PostUpdateIcon |cffff0000caster:|r ", unitCaster, "|cffff0000unit:|r ", unit)
+
 		if playerUnits[unitCaster] then
 			if icon.debuff then
 				icon.overlay:SetVertexColor(0.69, 0.31, 0.31)

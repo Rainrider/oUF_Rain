@@ -12,6 +12,7 @@ local _, ns = ...
 
 local cfg = ns.config
 local PutFontString = ns.PutFontString
+local numTotems = MAX_TOTEMS
 
 local function AddCombatFeedbackText(self)
 	if (not IsAddOnLoaded("oUF_CombatFeedback")) then return end

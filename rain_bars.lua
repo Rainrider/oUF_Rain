@@ -10,7 +10,6 @@ local PutFontString = ns.PutFontString
 local numRunes = 6 -- MAX_RUNES does not function any more
 local numHoly = MAX_HOLY_POWER
 local numShards = SHARD_BAR_NUM_SHARDS
-local numTotems = MAX_TOTEMS
 local numCPoints = MAX_COMBO_POINTS
 
 local runecolors = {
