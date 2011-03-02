@@ -7,7 +7,7 @@ local _, ns = ...
 local SiValue = ns.SiValue
 
 oUF.Tags["rain:namecolor"] = function(unit)
-	local color = {1,  1,  1}
+	local color
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		color = {0.75, 0.75, 0.75}
 	elseif (UnitIsPlayer(unit)) then
@@ -20,7 +20,8 @@ oUF.Tags["rain:namecolor"] = function(unit)
 			color = {0.33, 0.59, 0.33}
 		end
 	else
-		color = oUF.colors.reaction[UnitReaction(unit, "player")]
+		local reaction = UnitReaction("player", unit)
+		color = oUF.colors.reaction[reaction and reaction or 4]
 	end
 	
 	return ns.RGBtoHEX(color[1], color[2], color[3])
