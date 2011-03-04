@@ -6,22 +6,28 @@
 local _, ns = ...
 local SiValue = ns.SiValue
 
+-- local references for some Blizz functions
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
+local UnitIsPlayer = UnitIsPlayer
+local UnitIsUnit = UnitIsUnit
+local UnitIsFriend = UnitIsFriend
+local UnitName = UnitName
+
 oUF.Tags["rain:namecolor"] = function(unit)
 	local color
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		color = {0.75, 0.75, 0.75}
 	elseif (UnitIsPlayer(unit)) then
 		color = oUF.colors.class[select(2, UnitClass(unit))]
-	elseif (unit == "pet") then
-		local happiness = GetPetHappiness()
-		if happiness then
-			color = ns.colors.happiness[happiness]
-		else
-			color = {0.33, 0.59, 0.33}
-		end
 	else
-		local reaction = UnitReaction("player", unit)
-		color = oUF.colors.reaction[reaction and reaction or 4]
+		local reaction = UnitReaction(unit, "player")
+		print(unit, reaction)
+		color = oUF.colors.reaction[reaction or 4]
 	end
 	
 	return ns.RGBtoHEX(color[1], color[2], color[3])
@@ -95,7 +101,22 @@ oUF.Tags["rain:name"] = function(unit, r) -- TODO: what is r supposed to be?
     local name = UnitName(r or unit)
     return color..(name or "").."|r"
 end
-oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION UNIT_POWER"
+oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"
+
+oUF.Tags["rain:petname"] = function(unit, r)
+	local color = {0.33, 0.59, 0.33}
+	local name = UnitName(r or unit)
+	if (UnitIsDeadOrGhost(unit)) then
+		color = {0.75, 0.75, 0.75}
+	end
+	local happiness = GetPetHappiness()
+	if happiness then
+		color = ns.colors.happiness[happiness]
+	end
+	
+	return ns.RGBtoHEX(color[1], color[2], color[3]) .. (name or r) .. "|r"
+end
+oUF.TagEvents["rain:petcolor"] = "UNIT_NAME_UPDATE UNIT_POWER"
 
 oUF.Tags["rain:altpower"] = function(unit)
 	-- XXX Temp fix for vehicle

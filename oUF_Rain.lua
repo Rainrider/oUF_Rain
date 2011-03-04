@@ -176,7 +176,11 @@ local function Shared(self, unit)
 		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("TOPLEFT", 2, -2)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.Name, "[rain:name]")
+		if (unit ~= "pet") then
+			self:Tag(self.Name, "[rain:name]")
+		else
+			self:Tag(self.Name, "[rain:petname]")
+		end
 		
 		ns.AddCastbar(self, unit)
 	end
@@ -249,7 +253,7 @@ end
 oUF:RegisterStyle("Rain", Shared)
 oUF:Factory(function(self)
 
-	local _, playerClass = UnitClass("player")
+	local playerClass = cfg.playerClass
 	local spellName = ""
 	
 	if playerClass == "HUNTER" then
