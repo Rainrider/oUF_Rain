@@ -26,7 +26,6 @@ oUF.Tags["rain:namecolor"] = function(unit)
 		color = oUF.colors.class[select(2, UnitClass(unit))]
 	else
 		local reaction = UnitReaction(unit, "player")
-		print(unit, reaction)
 		color = oUF.colors.reaction[reaction or 4]
 	end
 	
