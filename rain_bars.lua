@@ -29,16 +29,19 @@ local combocolors = {
 	[5] = {180/255, 95/255, 4/255},
 }
 
-local function AddAltPowerBar(self, width, height)
+local function AddAltPowerBar(self)
 	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
 	self.AltPowerBar:SetHeight(3)
-	self.AltPowerBar:SetPoint("BOTTOMLEFT", self.Overlay, "TOPLEFT", 0, 1)
-	self.AltPowerBar:SetPoint("BOTTOMRIGHT", self.Overlay, "TOPRIGHT", 0, 1)
-	self.AltPowerBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+	--self.AltPowerBar:SetPoint("BOTTOMLEFT", self.Overlay, "TOPLEFT", 0, 1)
+	--self.AltPowerBar:SetPoint("BOTTOMRIGHT", self.Overlay, "TOPRIGHT", 0, 1)
+	--self.AltPowerBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+	self.AltPowerBar:SetPoint("TOPLEFT", "oUF_Rain_Player_Overlay", 0, 0)
+	self.AltPowerBar:SetPoint("TOPRIGHT", "oUF_Rain_Player_Overlay", 0, 0)
+	self.AltPowerBar:SetToplevel(true)
 	self.AltPowerBar:SetStatusBarTexture(cfg.TEXTURE)
 	self.AltPowerBar:SetStatusBarColor(0, 0.5, 1)
 	self.AltPowerBar:SetBackdrop(cfg.BACKDROP)
-	self.AltPowerBar:SetBackdropColor(0, 0, 0)
+	self.AltPowerBar:SetBackdropColor(0, 0, 0, 0)
 	
 	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, cfg.FONT2, 8, nil, "CENTER")
 	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
@@ -47,7 +50,7 @@ local function AddAltPowerBar(self, width, height)
 	self.AltPowerBar.Tooltip = function(self)
 		local unit = self.__owner.unit
 		-- XXX Temp fix for vehicle
-		if unit == "vehicle" then unit = "player" end
+		if unit == "vehicle" or unit == "pet" then unit = "player" end
 		-- XXX
 		local powerName = select(10, UnitAlternatePowerInfo(unit))
 		local powerTooltip = select(11, UnitAlternatePowerInfo(unit))
@@ -55,7 +58,7 @@ local function AddAltPowerBar(self, width, height)
 		if powerName then
 			GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
 			GameTooltip:AddLine(powerName)
-			if powerTooltip then
+			if powerTooltip and powerTooltip ~= "" then
 				GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
 			end
 			GameTooltip:Show()
@@ -226,10 +229,10 @@ end
 ns.AddHolyPowerBar = AddHolyPowerBar
 
 local function AddOverlay(self, unit)
-	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self)
-	self.Overlay:SetParent(self.Portrait)
+	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self.Portrait)
 	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
-	self.Overlay:SetAllPoints()
+	self.Overlay:SetPoint("TOPLEFT", self.Portrait, 0, 0)
+	self.Overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 0, -1)
 	self.Overlay:SetStatusBarTexture(cfg.OVERLAY)
 	self.Overlay:SetStatusBarColor(0.1, 0.1, 0.1, 0.75)
 end

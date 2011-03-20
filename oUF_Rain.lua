@@ -45,6 +45,8 @@ local UnitSpecific = {
 	pet = function(self)
 		ns.AddHealPredictionBar(self, 110, false)
 		ns.AddExperienceBar(self)
+		-- TODO: we have to add altpowerbar for the pet frame as it holds the player unit when in vehicle
+		ns.AddAltPowerBar(self) -- we need to pass the player frame here (which holds the vehicle unit) -> rework positioning code to use player frame name
 		
 		ns.AddDebuffs(self, "pet")
 		ns.AddBuffs(self, "pet")

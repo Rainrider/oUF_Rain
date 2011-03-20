@@ -250,9 +250,9 @@ end
 ns.PostUpdatePower = PostUpdatePower
 
 local function PostUpdateAltPower(AltPower, min, cur, max)
-	local self = AltPower.__owner
+	local unit = AltPower.__owner.unit
 	
-	local _, r, g, b = UnitAlternatePowerTextureInfo(self.unit, 2) -- 2 is statusbar index
+	local _, r, g, b = UnitAlternatePowerTextureInfo(unit, 2) -- 2 is statusbar index
 	if(r) then
 		AltPower:SetStatusBarColor(r, g, b)
 	end
