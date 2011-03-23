@@ -38,6 +38,38 @@ local function AddCombatFeedbackText(self)
 end
 ns.AddCombatFeedbackText = AddCombatFeedbackText
 
+local function AddDruidMushrooms(self)
+	self.TotemBar = {}
+	self.TotemBar.Destroy = true
+	local r, g, b = unpack(ns.colors.class[cfg.playerClass])
+	self.TotemBar.colors = {
+		[1] = {r, g, b},
+		[2] = {r, g, b},
+		[3] = {r, g, b},
+	}
+
+	for i = 1, 3 do
+		self.TotemBar[i] = CreateFrame("StatusBar", "oUF_Rain_Mushroom"..i, self.Overlay)
+		self.TotemBar[i]:SetSize(30, 3)
+		if i == 1 then
+			self.TotemBar[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+		elseif i == 2 then
+			self.TotemBar[i]:SetPoint("RIGHT", self.TotemBar[1], "LEFT", -1, 0)
+		else
+			self.TotemBar[i]:SetPoint("LEFT", self.TotemBar[1], "RIGHT", 1, 0)
+		end
+		self.TotemBar[i]:SetStatusBarTexture(cfg.TEXTURE)
+		self.TotemBar[i]:SetBackdrop(cfg.BACKDROP)
+		self.TotemBar[i]:SetBackdropColor(1, 1, 1)
+		
+		self.TotemBar[i].bg = self.TotemBar[i]:CreateTexture(nil, "BORDER")
+		self.TotemBar[i].bg:SetAllPoints()
+		self.TotemBar[i].bg:SetTexture(cfg.TEXTURE)
+		self.TotemBar[i].bg:SetVertexColor(0.15, 0.15, 0.15)
+	end
+end
+ns.AddDruidMushrooms = AddDruidMushrooms
+
 -- TODO: rested bar 
 --		math.min(curXP + rested, maxXP) -- this would be the rested bar
 local function AddExperienceBar(self)

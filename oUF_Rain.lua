@@ -21,8 +21,10 @@ local UnitSpecific = {
 			ns.AddSoulshardsBar(self, 230, 5)
 		elseif (playerClass == "SHAMAN") then
 			ns.AddTotemBar(self, nil, 5)
-		elseif (playerClass == "DRUID") then -- TODO: check if eclipsebar is actually visible
+		elseif (playerClass == "DRUID") then
 			ns.AddEclipseBar(self, 230, 7)
+			ns.AddDruidMushrooms(self)
+			--self:RegisterEvent("PLAYER_TOTEM_UPDATE", ns.AddDruidMushrooms(self))
 		elseif (playerClass == "HUNTER") then
 			ns.AddHunterFocusSpark(self)
 		end
@@ -45,8 +47,7 @@ local UnitSpecific = {
 	pet = function(self)
 		ns.AddHealPredictionBar(self, 110, false)
 		ns.AddExperienceBar(self)
-		-- TODO: we have to add altpowerbar for the pet frame as it holds the player unit when in vehicle
-		ns.AddAltPowerBar(self) -- we need to pass the player frame here (which holds the vehicle unit) -> rework positioning code to use player frame name
+		ns.AddAltPowerBar(self) -- this is needed when the player is in vehicle. because the pet frame then holds the player unit
 		
 		ns.AddDebuffs(self, "pet")
 		ns.AddBuffs(self, "pet")
