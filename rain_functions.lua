@@ -432,7 +432,7 @@ local function AddDebuffs(self, unit)
 end
 ns.AddDebuffs = AddDebuffs
 
-function ns.PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, icon)
+local function PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, icon)
 	local delay = 0.5
 	local total = 0
 
@@ -451,3 +451,4 @@ function ns.PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, ico
 		end
 	end
 end
+ns.PostUpdateTotems = PostUpdateTotems
