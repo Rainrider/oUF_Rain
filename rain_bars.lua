@@ -11,6 +11,7 @@ local numRunes = 6 -- MAX_RUNES does not function any more
 local numHoly = MAX_HOLY_POWER
 local numShards = SHARD_BAR_NUM_SHARDS
 local numCPoints = MAX_COMBO_POINTS
+local playerClass = cfg.playerClass
 
 local runecolors = {
 	[1] = {0.69, 0.31, 0.31},
@@ -288,3 +289,90 @@ local function AddSoulShardsBar(self, width, height)
 	end
 end
 ns.AddSoulshardsBar = AddSoulShardsBar
+
+
+--[[
+	NOTES:
+		Possible elements handled by oUF's core
+		self.Totems[i].Icon - Texture
+		self.Totems[i].Cooldown = Frame of type Cooldown
+--]]
+
+local function AddTotems(self, width, height)
+	self.Totems = {}
+	local numTotems = MAX_TOTEMS
+	
+	for i = 1, numTotems do
+		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self)
+		self.Totems[i]:SetStatusBarTexture(cfg.TEXTURE)
+		self.Totems[i]:SetBackdrop(cfg.BACKDROP)
+		self.Totems[i]:SetBackdropColor(0, 0, 0)
+		self.Totems[i]:SetMinMaxValues(0, 1)
+		
+		if playerClass == "SHAMAN" then
+			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
+			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
+			self.Totems[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+			
+			if i == 1 then
+				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[FIRE_TOTEM_SLOT]))
+			elseif i == 2 then
+				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[EARTH_TOTEM_SLOT]))
+			elseif i ==3 then
+				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[WATER_TOTEM_SLOT]))
+			else
+				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[AIR_TOTEM_SLOT]))
+			end
+			
+		elseif playerClass == "DRUID" then -- Druid's mushrooms
+			self.Totems[i]:SetSize(width, height)
+			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.class[playerClass]))
+				if i == 1 then
+					self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+				elseif i == 2 then
+					self.Totems[i]:SetPoint("RIGHT", self.TotemBar[1], "LEFT", -1, 0)
+				else
+					self.Totems[i]:SetPoint("LEFT", self.TotemBar[1], "RIGHT", 1, 0)
+				end
+		elseif playerClass == "DEATHKNIGHT" then -- Death knight's ghoul
+			self.Totems[i]:SetSize(width, height)
+			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.class[playerClass]))
+			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+		end
+		
+		self.Totems[i]:EnableMouse() -- this allows for tooltips
+		
+		self.Totems[i].Destroy = CreateFrame("Button", nil, self.Totems[i])
+		self.Totems[i].Destroy:SetAllPoints()
+		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
+		self.Totems[i].Destroy:SetScript("OnClick", function()
+			DestroyTotem(i)
+		end)
+	end
+	
+	self.Totems.PostUpdate = ns.PostUpdateTotems
+end
+ns.AddTotems = AddTotems
+
+--[[
+	NOTES: Just an example for icons with cooldowns
+local function AddTotems(self, width, height)
+	Totems = {}
+
+	for i = 1, MAX_TOTEMS do
+		Totems[i] = CreateFrame("Botton", "Totem"..i, self)
+		Totems[i]:SetSize(40, 40)
+		Totems[i]:SetPoint(anchor whereever you want)
+
+		Totems[i].Icon = Totems[i]:CreateTexture(nil, "OVERLAY")
+		Totems[i].Icon:SetAllPoints()
+		Totems[i].Cooldown = CreateFrame("Cooldown", nil, Totems[i])
+		Totems[i].Cooldown:SetAllPoints()
+
+		Totems[i]:EnableMouse() -- for tooltips
+		Totems[i]:RegisterForClicks("RightButtonUp") -- Rightclick for destroy
+	end
+
+	self.Totems = Totems
+end
+--]]

@@ -46,9 +46,10 @@ local function AddDruidMushrooms(self)
 		[1] = {r, g, b},
 		[2] = {r, g, b},
 		[3] = {r, g, b},
+		[4] = {r, g, b},
 	}
 
-	for i = 1, 3 do
+	for i = 1, 4 do
 		self.TotemBar[i] = CreateFrame("StatusBar", "oUF_Rain_Mushroom"..i, self.Overlay)
 		self.TotemBar[i]:SetSize(30, 3)
 		if i == 1 then
@@ -58,9 +59,12 @@ local function AddDruidMushrooms(self)
 		else
 			self.TotemBar[i]:SetPoint("LEFT", self.TotemBar[1], "RIGHT", 1, 0)
 		end
+		if i == 4 then
+			self.TotemBar[i]:SetAlpha(0)
+		end
 		self.TotemBar[i]:SetStatusBarTexture(cfg.TEXTURE)
 		self.TotemBar[i]:SetBackdrop(cfg.BACKDROP)
-		self.TotemBar[i]:SetBackdropColor(1, 1, 1)
+		self.TotemBar[i]:SetBackdropColor(0, 0, 0)
 		
 		self.TotemBar[i].bg = self.TotemBar[i]:CreateTexture(nil, "BORDER")
 		self.TotemBar[i].bg:SetAllPoints()

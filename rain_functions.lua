@@ -431,3 +431,23 @@ local function AddDebuffs(self, unit)
 	end
 end
 ns.AddDebuffs = AddDebuffs
+
+function ns.PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, icon)
+	local delay = 0.5
+	local total = 0
+
+	if duration > 0 then
+		local current = GetTime() - start
+		if current > 0 then
+			Totems[slot]:SetValue(1 - (current / duration))
+			Totems[slot]:SetScript("OnUpdate", function(self, elapsed)
+				total = total + elapsed
+				if total >= delay then
+					total = 0
+					local value = 1 - ((GetTime() - start) / duration)
+					self:SetValue(value)
+				end
+			end)
+		end
+	end
+end
