@@ -290,14 +290,6 @@ local function AddSoulShardsBar(self, width, height)
 end
 ns.AddSoulshardsBar = AddSoulShardsBar
 
-
---[[
-	NOTES:
-		Possible elements handled by oUF's core
-		self.Totems[i].Icon - Texture
-		self.Totems[i].Cooldown = Frame of type Cooldown
---]]
-
 local function AddTotems(self, width, height)
 	self.Totems = {}
 	local numTotems = MAX_TOTEMS
