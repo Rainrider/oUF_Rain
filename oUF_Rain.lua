@@ -13,8 +13,6 @@ local UnitSpecific = {
 		ns.AddExperienceBar(self)
 		ns.AddAltPowerBar(self)
 		
-		self:RegisterEvent("PLAYER_TOTEM_UPDATE", function() print("TOTEM_UPDATE") end)
-		
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 230, 5)
 			ns.AddTotems(self, 60, 5)
