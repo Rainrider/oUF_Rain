@@ -305,17 +305,7 @@ local function AddTotems(self, width, height)
 			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
 			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
 			self.Totems[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-			
-			if i == 1 then
-				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[FIRE_TOTEM_SLOT]))
-			elseif i == 2 then
-				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[EARTH_TOTEM_SLOT]))
-			elseif i ==3 then
-				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[WATER_TOTEM_SLOT]))
-			else
-				self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[AIR_TOTEM_SLOT]))
-			end
-			
+			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[i]))
 		elseif playerClass == "DRUID" then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.class[playerClass]))
