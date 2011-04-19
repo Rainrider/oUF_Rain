@@ -326,7 +326,9 @@ local function AddTotems(self, width, height)
 		self.Totems[i].Destroy:SetAllPoints()
 		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
 		self.Totems[i].Destroy:SetScript("OnClick", function()
-			DestroyTotem(i)
+			if IsShiftKeyDown() then
+				DestroyTotem(i)
+			end
 		end)
 		
 		self.Totems[i].Destroy:EnableMouse()
@@ -334,7 +336,7 @@ local function AddTotems(self, width, height)
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 			local totem = self:GetParent()
 			GameTooltip:SetTotem(totem:GetID())
-			GameTooltip:AddLine("|cffff0000<Right-click> to destroy|r")
+			GameTooltip:AddLine("|cffff0000"..GLYPH_SLOT_REMOVE_TOOLTIP.."|r") -- <Shift Right Click to Remove>
 			GameTooltip:Show()
 		end)
 		self.Totems[i].Destroy:SetScript("OnLeave", function()
