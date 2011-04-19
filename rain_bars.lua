@@ -322,8 +322,6 @@ local function AddTotems(self, width, height)
 			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 		end
 		
-		self.Totems[i]:EnableMouse() -- this allows for tooltips
-		
 		self.Totems[i].Destroy = CreateFrame("Button", nil, self.Totems[i])
 		self.Totems[i].Destroy:SetAllPoints()
 		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
@@ -336,7 +334,7 @@ local function AddTotems(self, width, height)
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 			local totem = self:GetParent()
 			GameTooltip:SetTotem(totem:GetID())
-			GameTooltip:AddLine("|cffff0000Right-click to destroy|r")
+			GameTooltip:AddLine("|cffff0000<Right-click> to destroy|r")
 			GameTooltip:Show()
 		end)
 		self.Totems[i].Destroy:SetScript("OnLeave", function()
@@ -362,6 +360,7 @@ local function AddTotems(self, width, height)
 		Totems[i].Icon:SetAllPoints()
 		Totems[i].Cooldown = CreateFrame("Cooldown", nil, Totems[i])
 		Totems[i].Cooldown:SetAllPoints()
+		Totems[i].Cooldown:SetReverse(true)
 
 		Totems[i]:EnableMouse() -- for tooltips
 		Totems[i]:RegisterForClicks("RightButtonUp") -- Rightclick for destroy
