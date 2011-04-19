@@ -165,6 +165,7 @@ local function AddSwingBar(self)
 end
 ns.AddSwingBar = AddSwingBar
 
+--TODO: for removal
 local function AddTotemBar(self, width, height)
 	if (not IsAddOnLoaded("oUF_TotemBar")) then return end
 

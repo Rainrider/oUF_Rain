@@ -262,8 +262,9 @@ oUF:Factory(function(self)
 	
 	if playerClass == "HUNTER" then
 		 spellName = GetSpellInfo(34477)	-- Misdirection
+		 print(spellName)
 	elseif playerClass == "DRUID" then
-		spellName = GetSpellInfo(29166)		-- Innervate
+		spellName = GetSpellInfo(29166)		-- Innervate 33763 Blühendes Leben
 	elseif playerClass == "PALADIN" then
 		spellName = GetSpellInfo(31789)		-- Righteous Defense
 	elseif playerClass == "WARRIOR" then

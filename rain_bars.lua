@@ -312,9 +312,9 @@ local function AddTotems(self, width, height)
 				if i == 1 then
 					self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 				elseif i == 2 then
-					self.Totems[i]:SetPoint("RIGHT", self.TotemBar[1], "LEFT", -1, 0)
+					self.Totems[i]:SetPoint("RIGHT", self.Totems[1], "LEFT", -1, 0)
 				else
-					self.Totems[i]:SetPoint("LEFT", self.TotemBar[1], "RIGHT", 1, 0)
+					self.Totems[i]:SetPoint("LEFT", self.Totems[1], "RIGHT", 1, 0)
 				end
 		elseif playerClass == "DEATHKNIGHT" then -- Death knight's ghoul
 			self.Totems[i]:SetSize(width, height)

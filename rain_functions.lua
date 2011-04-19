@@ -106,7 +106,7 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 		if caster == "player" or caster == "pet" or caster == "vehicle" then
 			isPlayer = true
 		end
-
+		
 		if((icons.onlyShowPlayer and isPlayer) or (not icons.onlyShowPlayer and name)) then -- onlyShowPlayer or everything?
 			icon.isPlayer = isPlayer
 			icon.owner = caster
@@ -146,6 +146,40 @@ local function SortAuras(a, b)
 	if (a and b) then
 		return (a.timeLeft and a.timeLeft) > (b.timeLeft and b.timeLeft)
 	end
+end
+
+local function Aura_OnEnter(self, icon)
+	local r, g, b = icon.overlay:GetVertexColor()
+	local iconW, iconH = icon:GetSize()
+	
+	if icon.debuff then
+		self.Debuffs.Magnify:SetSize(iconW * 2, iconH * 2)
+		self.Debuffs.Magnify:SetPoint("CENTER", icon, "CENTER")
+		
+		self.Debuffs.Magnify.icon:SetSize(iconW * 2, iconH * 2)
+		self.Debuffs.Magnify.icon:SetTexture(icon.icon:GetTexture())
+		self.Debuffs.Magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		
+		self.Debuffs.Magnify.border:SetVertexColor(r, g, b)
+		
+		self.Debuffs.Magnify:Show()
+	else
+		self.Buffs.Magnify:SetSize(iconW * 2, iconH * 2)
+		self.Buffs.Magnify:SetPoint("CENTER", icon, "CENTER")
+		
+		self.Buffs.Magnify.icon:SetSize(iconW * 2, iconH * 2)
+		self.Buffs.Magnify.icon:SetTexture(icon.icon:GetTexture())
+		self.Buffs.Magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		
+		self.Buffs.Magnify.border:SetVertexColor(r, g, b)
+		
+		self.Buffs.Magnify:Show()
+	end
+end
+
+local function Aura_OnLeave(self)
+	self.Buffs.Magnify:Hide()
+	self.Debuffs.Magnify:Hide()
 end
 
 --[[PRE AND POST FUNCTIONS]]--
@@ -259,32 +293,29 @@ local function PostUpdateAltPower(AltPower, min, cur, max)
 end
 ns.PostUpdateAltPower = PostUpdateAltPower
 
-local function PostCreateAura(Auras, button)
+local function PostCreateIcon(Icons, icon)
 	-- remove OmniCC and CooldownCount timers
-	button.cd.noOCC = true
-	button.cd.noCooldownCount = true
+	icon.cd.noOCC = true
+	icon.cd.noCooldownCount = true
 	
-	button.count:SetPoint("BOTTOMRIGHT", 1, 1.5)
-	button.count:SetFont(cfg.FONT, 8, "OUTLINE")
-	button.count:SetTextColor(0.84, 0.75, 0.65)
-	button.count:SetJustifyH("RIGHT")
+	icon.count:SetPoint("BOTTOMRIGHT", 1, 1.5)
+	icon.count:SetFont(cfg.FONT, 8, "OUTLINE")
+	icon.count:SetTextColor(0.84, 0.75, 0.65)
+	icon.count:SetJustifyH("RIGHT")
 	
-	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	icon.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+
+	icon.overlay:SetTexture(cfg.BTNTEXTURE)
+	icon.overlay:SetPoint("TOPLEFT", -3.5, 3.5)
+	icon.overlay:SetPoint("BOTTOMRIGHT", 3.5, -3.5)
+	icon.overlay:SetTexCoord(0, 1, 0, 1)
+	--icon.overlay.Hide = function(self) end -- TODO unneeded?
 	
-	button.backdrop = CreateFrame("Frame", nil, button)
-	button.backdrop:SetPoint("TOPLEFT", -5, 5)
-	button.backdrop:SetPoint("BOTTOMRIGHT", 5, -5)
-	button.backdrop:SetBackdrop(cfg.BORDERBACKDROP)
-	button.backdrop:SetBackdropBorderColor(0, 0, 0)
+	icon.remaining = PutFontString(icon, cfg.FONT, 8, "OUTLINE", "LEFT")
+	icon.remaining:SetPoint("TOP", 0, 1)
 	
-	button.overlay:SetTexture(cfg.BTNTEXTURE)
-	button.overlay:SetPoint("TOPLEFT", -3.5, 3.5)
-	button.overlay:SetPoint("BOTTOMRIGHT", 3.5, -3.5)
-	button.overlay:SetTexCoord(0, 1, 0, 1)
-	--button.overlay.Hide = function(self) end -- TODO unneeded?
-	
-	button.remaining = PutFontString(button.backdrop, cfg.FONT, 8, "OUTLINE", "LEFT")
-	button.remaining:SetPoint("TOP", 0, -2)
+	icon:HookScript("OnEnter", function() Aura_OnEnter(Icons.__owner, icon) end)
+	icon:HookScript("OnLeave", function() Aura_OnLeave(Icons.__owner) end)
 end
 
 local function PreSetPosition(Auras)
@@ -301,7 +332,7 @@ do
 
 	PostUpdateIcon = function(icons, unit, icon, index, offset)
 		local _, _, _, _, _, duration, expirationTime, unitCaster, _ = UnitAura(unit, index, icon.filter)
-
+		
 		if playerUnits[unitCaster] then
 			if icon.debuff then
 				icon.overlay:SetVertexColor(0.69, 0.31, 0.31)
@@ -316,7 +347,7 @@ do
 			end
 			icon.overlay:SetVertexColor(0.5, 0.5, 0.5)
 		end
-
+		
 		if duration and duration > 0 then
 			icon.remaining:Show()
 			icon.timeLeft = expirationTime
@@ -364,7 +395,7 @@ local function AddAuras(self, unit)
 	self.Auras.showType = true
 	self.Auras.onlyShowPlayer = false
 	self.Auras.PreSetPosition = PreSetPosition
-	self.Auras.PostCreateIcon = PostCreateAura
+	self.Auras.PostCreateIcon = PostCreateIcon
 	self.Auras.PostUpdateIcon = PostUpdateIcon
 end
 ns.AddAuras = AddAuras
@@ -377,7 +408,7 @@ local function AddBuffs(self, unit)
 	self.Buffs.showType = true
 	self.Buffs.onlyShowPlayer = false
 	self.Buffs.PreSetPosition = PreSetPosition
-	self.Buffs.PostCreateIcon = PostCreateAura
+	self.Buffs.PostCreateIcon = PostCreateIcon
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
 	
 	if (unit == "player" or unit == "target") then
@@ -402,6 +433,17 @@ local function AddBuffs(self, unit)
 		self.Buffs.initialAnchor = "RIGHT"
 		self.Buffs["growth-x"] = "LEFT"
 	end
+	
+	self.Buffs.Magnify = CreateFrame("Frame", nil, self)
+	self.Buffs.Magnify:SetFrameLevel(self.Buffs:GetFrameLevel() + 3)
+	
+	self.Buffs.Magnify.icon = self.Buffs.Magnify:CreateTexture(nil, "ARTWORK")
+	self.Buffs.Magnify.icon:SetPoint("CENTER")
+	
+	self.Buffs.Magnify.border = self.Buffs.Magnify:CreateTexture(nil, "OVERLAY")
+	self.Buffs.Magnify.border:SetTexture(cfg.BTNTEXTURE)
+	self.Buffs.Magnify.border:SetPoint("TOPLEFT", self.Buffs.Magnify.icon, -5, 5)
+	self.Buffs.Magnify.border:SetPoint("BOTTOMRIGHT", self.Buffs.Magnify.icon, 5, -5)
 end
 ns.AddBuffs = AddBuffs
 
@@ -413,7 +455,7 @@ local function AddDebuffs(self, unit)
 	self.Debuffs.disableCooldown = true
 	self.Debuffs.onlyShowPlayer = false
 	self.Debuffs.PreSetPosition = PreSetPosition
-	self.Debuffs.PostCreateIcon = PostCreateAura
+	self.Debuffs.PostCreateIcon = PostCreateIcon
 	self.Debuffs.PostUpdateIcon = PostUpdateIcon
 	
 	if (unit == "player" or unit == "target") then
@@ -447,26 +489,16 @@ local function AddDebuffs(self, unit)
 		self.Debuffs.initialAnchor = "LEFT"
 		self.Debuffs["growth-x"] = "RIGHT"
 	end
+	
+	self.Debuffs.Magnify = CreateFrame("Frame", nil, self)
+	self.Debuffs.Magnify:SetFrameLevel(self.Debuffs:GetFrameLevel() + 3)
+	
+	self.Debuffs.Magnify.icon = self.Debuffs.Magnify:CreateTexture(nil, "ARTWORK")
+	self.Debuffs.Magnify.icon:SetPoint("CENTER")
+	
+	self.Debuffs.Magnify.border = self.Debuffs.Magnify:CreateTexture(nil, "OVERLAY")
+	self.Debuffs.Magnify.border:SetTexture(cfg.BTNTEXTURE)
+	self.Debuffs.Magnify.border:SetPoint("TOPLEFT", self.Debuffs.Magnify.icon, -5, 5)
+	self.Debuffs.Magnify.border:SetPoint("BOTTOMRIGHT", self.Debuffs.Magnify.icon, 5, -5)
 end
 ns.AddDebuffs = AddDebuffs
-
-local function PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, icon)
-	local delay = 0.5
-	local total = 0
-
-	if duration > 0 then
-		local current = GetTime() - start
-		if current > 0 then
-			Totems[slot]:SetValue(1 - (current / duration))
-			Totems[slot]:SetScript("OnUpdate", function(self, elapsed)
-				total = total + elapsed
-				if total >= delay then
-					total = 0
-					local value = 1 - ((GetTime() - start) / duration)
-					self:SetValue(value)
-				end
-			end)
-		end
-	end
-end
-ns.PostUpdateTotems = PostUpdateTotems
