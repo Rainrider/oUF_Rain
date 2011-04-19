@@ -330,6 +330,18 @@ local function AddTotems(self, width, height)
 		self.Totems[i].Destroy:SetScript("OnClick", function()
 			DestroyTotem(i)
 		end)
+		
+		self.Totems[i].Destroy:EnableMouse()
+		self.Totems[i].Destroy:SetScript("OnEnter", function(self)
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+			local totem = self:GetParent()
+			GameTooltip:SetTotem(totem:GetID())
+			GameTooltip:AddLine("|cffff0000Right-click to destroy|r")
+			GameTooltip:Show()
+		end)
+		self.Totems[i].Destroy:SetScript("OnLeave", function()
+			GameTooltip:Hide()
+		end)
 	end
 	
 	self.Totems.PostUpdate = ns.PostUpdateTotems
