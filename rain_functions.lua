@@ -358,7 +358,7 @@ local function AddAuras(self, unit)
 	self.Auras.numBuffs = 6
 	self.Auras.numDebuffs = 6
 	self.Auras.spacing = 6
-	self.Auras.size = ((230 - 9 * self.Auras.spacing) / 10)
+	self.Auras.size = (230 - 9 * self.Auras.spacing) / 10
 	self.Auras:SetSize(12 * self.Auras.size + 11 * self.Auras.spacing, self.Auras.size)
 	self.Auras.disableCooldown = true
 	self.Auras.showType = true
@@ -372,8 +372,7 @@ ns.AddAuras = AddAuras
 local function AddBuffs(self, unit)
 	self.Buffs = CreateFrame("Frame", self:GetName().."_Buffs", self)
 	self.Buffs.spacing = 6
-	self.Buffs.size = ((230 - 7 * self.Buffs.spacing) / 8)
-	--self.Buffs.size = 22
+	self.Buffs.size = (230 - 9 * self.Buffs.spacing) / 10
 	self.Buffs.disableCooldown = true
 	self.Buffs.showType = true
 	self.Buffs.onlyShowPlayer = false
@@ -409,7 +408,7 @@ ns.AddBuffs = AddBuffs
 local function AddDebuffs(self, unit)
 	self.Debuffs = CreateFrame("Frame", self:GetName().."_Debuffs", self)
 	self.Debuffs.spacing = 6
-	self.Debuffs.size = (230 - 7 * self.Debuffs.spacing) / 8
+	self.Debuffs.size = (230 - 9 * self.Debuffs.spacing) / 10
 	self.Debuffs.showType = true
 	self.Debuffs.disableCooldown = true
 	self.Debuffs.onlyShowPlayer = false
