@@ -272,12 +272,14 @@ local function PostUpdatePower(Power, unit, cur, max)
 	
 	if (unit == "target") then
 		local self = Power.__owner
-		self.Info:ClearAllPoints()
-		if (Power.value:GetText()) then
-			self.Info:SetPoint("TOP", 0, -3.5)
-		else
-			self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
-			self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", 0, 0)
+		if self.Info then
+			self.Info:ClearAllPoints()
+			if (Power.value:GetText()) then
+				self.Info:SetPoint("TOP", 0, -3.5)
+			else
+				self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
+				self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", 0, 0)
+			end
 		end
 	end
 end

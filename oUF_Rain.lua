@@ -1,4 +1,4 @@
-local _, ns = ...
+﻿local _, ns = ...
 
 local cfg = ns.config
 local PutFontString = ns.PutFontString
@@ -258,20 +258,19 @@ oUF:RegisterStyle("Rain", Shared)
 oUF:Factory(function(self)
 
 	local playerClass = cfg.playerClass
-	local spellName = ""
+	local spellName
 	
 	if playerClass == "HUNTER" then
 		 spellName = GetSpellInfo(34477)	-- Misdirection
-		 print(spellName)
 	elseif playerClass == "DRUID" then
-		spellName = GetSpellInfo(29166)		-- Innervate 33763 Bl�hendes Leben
+		spellName = GetSpellInfo(33763)		--  29166 Innervate 33763 Blühendes Leben
 	elseif playerClass == "PALADIN" then
 		spellName = GetSpellInfo(31789)		-- Righteous Defense
 	elseif playerClass == "WARRIOR" then
 		spellName = GetSpellInfo(3411)		-- Intervene
 	elseif playerClass == "ROGUE" then
 		spellName = GetSpellInfo(57934)		-- Tricks of the Trade
-	else
+	elseif not spellName then
 		spellName = "Misdirection"
 	end
 
@@ -285,12 +284,12 @@ oUF:Factory(function(self)
 	
 	if (cfg.showParty) then
 		local party = self:SpawnHeader(
-			"oUF_Rain_Party", nil, "party,raid",
+			"oUF_Rain_Party", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
---			"showPlayer", true,
---			"showSolo", true,
-			"maxColumns", 4,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -298,7 +297,7 @@ oUF:Factory(function(self)
 				self:SetWidth(110)
 				self:SetHeight(22)
 				self:SetAttribute("type3", "spell")
-				self:SetAttribute("spell3", %s)
+				self:SetAttribute("spell3", "%s")
 			]]):format(spellName)
 		)
 		party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 150)
@@ -307,12 +306,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyTargets) then
 		local partyTargets = self:SpawnHeader(
-			"oUF_Rain_PartyTargets", nil, "party,raid",
+			"oUF_Rain_PartyTargets", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
---			"showPlayer", true,
---			"showSolo", true,
-			"maxColumns", 4,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -328,12 +327,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyPets) then
 		local partyPets = self:SpawnHeader(
-			"oUF_Rain_PartyPets", nil, "party,raid",
+			"oUF_Rain_PartyPets", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
---			"showPlayer", true,
---			"showSolo", true,
-			"maxColumns", 4,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -342,7 +341,7 @@ oUF:Factory(function(self)
 				self:SetHeight(11)
 				self:SetAttribute("unitsuffix", "pet")
 				self:SetAttribute("type3", "spell")
-				self:SetAttribute("spell3", %s)
+				self:SetAttribute("spell3", "%s")
 			]]):format(spellName)
 		)
 		partyPets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -7.5)
@@ -355,12 +354,12 @@ oUF:Factory(function(self)
 			"showRaid", true,
 			"groupFilter", "MAINTANK",
 			"yOffset", -7.5,
-			"oUF-initialConfigFunction", [[
+			"oUF-initialConfigFunction", ([[
 				self:SetWidth(110)
 				self:SetHeight(22)
 				self:SetAttribute("type3", "spell")
-				self:SetAttribute("spell3", "Misdirection")
-			]]
+				self:SetAttribute("spell3", "%s")
+			]]):format(spellName)
 		)
 		mainTanks:SetPoint("TOPLEFT", UIParent, "LEFT", 50, -50)
 		mainTanks:Show()
