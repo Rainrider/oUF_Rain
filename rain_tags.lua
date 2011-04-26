@@ -115,7 +115,7 @@ oUF.Tags["rain:power"] = function(unit)
 end
 oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
 
-oUF.Tags["rain:name"] = function(unit, r) -- TODO: what is r supposed to be?
+oUF.Tags["rain:name"] = function(unit, r)
 	local color = oUF.Tags["rain:namecolor"](unit)
     local name = UnitName(r or unit)
     return color..(name or "").."|r"
@@ -123,13 +123,11 @@ end
 oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"
 
 oUF.Tags["rain:altpower"] = function(unit)
-	-- XXX Temp fix for vehicle
-	if unit == "vehicle" then unit = "player" end
-	-- XXX
-	if (unit ~= "player") then return end
-	
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
+	
+	if max == 0 then max = 1 end
+	
 	local perc = math.floor(cur / max * 100 + 0.5)
 	
 	return cur .. " - " .. perc .. "%"
