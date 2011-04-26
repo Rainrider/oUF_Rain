@@ -3,7 +3,7 @@
 local cfg = ns.config
 local PutFontString = ns.PutFontString
 
-local playerClass = select(2, UnitClass("player"))
+local playerClass = cfg.playerClass
 
 -- layout rules for specific unit frames (auras, combo points, totembar, runes, holy power, shards, druid mana ...)
 local UnitSpecific = {

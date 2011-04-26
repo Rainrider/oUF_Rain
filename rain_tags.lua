@@ -5,6 +5,7 @@
 
 local _, ns = ...
 local SiValue = ns.SiValue
+local playerClass = ns.config.playerClass
 
 -- local references for some Blizz functions
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
@@ -67,15 +68,34 @@ oUF.Tags["rain:health"] = function(unit)
 end
 oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
 
+oUF.Tags["rain:druidmana"] = function(unit, pType, cur)
+	if unit ~= "player" or playerClass ~= "DRUID" or pType == 0 then return end
+	
+	--if UnitPowerType(unit) == 0 then return end
+	
+	local curMana, maxMana = UnitPower(unit, 0), UnitPowerMax(unit, 0)
+	
+	if curMana == maxMana then return end
+	
+	--local cur = UnitPower(unit)
+	if cur ~= 0 then
+		return " - " .. ns.RGBtoHEX(unpack(oUF.colors.class[playerClass])) .. math.floor(curMana / maxMana * 100 + 0.5) .. "%|r"
+	else
+		return ns.RGBtoHEX(unpack(oUF.colors.class[playerClass])) .. math.floor(curMana / maxMana * 100 + 0.5) .. "%|r"
+	end
+end
+--oUF.TagEvents["rain:druidmana"] = "UNIT_POWER"
+
 oUF.Tags["rain:power"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 	
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	
-	if (cur == 0 or max == 0) then return end
+	if (max == 0) then return end
 	
 	local powerValue = ""
-	local pType = UnitPowerType(unit)
+	local pType, pName = UnitPowerType(unit)
+	local druidMana = oUF.Tags["rain:druidmana"](unit, pType, cur)
 	if (pType == 0) then
 		if (cur ~= max) then
 			powerValue = math.floor(cur / max * 100 + 0.5) .. "%"
@@ -91,7 +111,15 @@ oUF.Tags["rain:power"] = function(unit)
 		powerValue = SiValue(cur)
 	end
 	
-	return powerValue
+	powerValue = ns.RGBtoHEX(unpack(ns.colors.power[pName])) .. powerValue .. "|r"
+	
+	if druidMana and cur > 0 then
+		return powerValue .. druidMana
+	elseif druidMana and cur == 0 then
+		return druidMana
+	elseif cur > 0 then
+		return powerValue
+	end
 end
 oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
 

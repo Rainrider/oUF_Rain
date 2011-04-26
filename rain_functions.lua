@@ -259,16 +259,10 @@ end
 ns.PreUpdatePower = PreUpdatePower
 
 local function PostUpdatePower(Power, unit, cur, max)
-	if  not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
+	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
 		Power:SetValue(0)
 	end
 	if (unit ~= "player" and unit ~= "target" and unit ~= "vehicle") then return end
-	local pType, pName = UnitPowerType(unit)
-	local color = colors.power[pName]
-	
-	if color and Power.value then
-		Power.value:SetTextColor(unpack(color))
-	end
 	
 	if (unit == "target") then
 		local self = Power.__owner
