@@ -102,21 +102,6 @@ oUF.Tags["rain:name"] = function(unit, r) -- TODO: what is r supposed to be?
 end
 oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"
 
-oUF.Tags["rain:petname"] = function(unit, r)
-	local color = {0.33, 0.59, 0.33}
-	local name = UnitName(r or unit)
-	if (UnitIsDeadOrGhost(unit)) then
-		color = {0.75, 0.75, 0.75}
-	end
-	local happiness = GetPetHappiness()
-	if happiness then
-		color = ns.colors.happiness[happiness]
-	end
-	
-	return ns.RGBtoHEX(color[1], color[2], color[3]) .. (name or r) .. "|r"
-end
-oUF.TagEvents["rain:petcolor"] = "UNIT_NAME_UPDATE UNIT_POWER"
-
 oUF.Tags["rain:altpower"] = function(unit)
 	-- XXX Temp fix for vehicle
 	if unit == "vehicle" then unit = "player" end

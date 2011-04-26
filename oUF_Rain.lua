@@ -180,11 +180,7 @@ local function Shared(self, unit)
 		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("TOPLEFT", 2, -2)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		if (unit ~= "pet") then
-			self:Tag(self.Name, "[rain:name]")
-		else
-			self:Tag(self.Name, "[rain:petname]")
-		end
+		self:Tag(self.Name, "[rain:name]")
 		
 		ns.AddCastbar(self, unit)
 	end
