@@ -118,6 +118,11 @@ oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
 oUF.Tags["rain:name"] = function(unit, r)
 	local color = oUF.Tags["rain:namecolor"](unit)
     local name = UnitName(r or unit)
+	if unit == "target" then
+		name = ns.ShortenName(name, 18)
+	else
+		name = ns.ShortenName(name, 12)
+	end
     return color..(name or "").."|r"
 end
 oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"

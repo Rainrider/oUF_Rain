@@ -44,6 +44,45 @@ local SiValue = function(val)
 end
 ns.SiValue = SiValue
 
+local function ShortenName(name, shortenTo)
+	if not shortenTo then
+		shortenTo = 12
+	end
+	name = (string.len(name) > shortenTo) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
+	
+	local bytes = string.len(name)
+	if bytes <= shortenTo then
+		return name
+	else
+		local length, currentIndex = 0, 1
+
+		while currentIndex <= bytes do
+			length = length + 1
+			local char = string.byte(name, currentIndex)
+			if char > 240 then
+				currentIndex = currentIndex + 4
+			elseif char > 225 then
+				currentIndex = currentIndex + 3
+			elseif char > 192 then
+				currentIndex = currentIndex + 2
+			else
+				currentIndex = currentIndex + 1
+			end
+
+			if length == shortenTo then
+				break
+			end
+		end
+
+		if length == shortenTo and currentIndex <= bytes then
+			return string.sub(name, 1, currentIndex - 1) .. "..." -- TODO: add the dots
+		else
+			return name
+		end
+	end
+end
+ns.ShortenName = ShortenName
+
 local function RGBtoHEX(r, g, b)
 	if not r then r = 1 end
 	if not g then g = 1 end
