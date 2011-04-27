@@ -1,8 +1,9 @@
-## Interface: 40000
+## Interface: 40100
 ## Title: oUF |cff0099CCRain|r
 ## Author: Rainrider
 ## Version: pre alpha
 ## Notes: oUF layout
+## X-Credits: Caellian, HankTheTank, haste, zork, p3lim
 ## RequiredDeps: oUF
 ## OptionalDeps: oUF_CombatFeedback, oUF_Experience, oUF_Reputation, oUF_Swing, oUF_TotemBar
 
