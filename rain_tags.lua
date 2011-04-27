@@ -115,6 +115,27 @@ oUF.Tags["rain:power"] = function(unit)
 end
 oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
 
+oUF.Tags["rain:role"] = function(unit)
+	local xOffset = 0
+	local yOffset = 0
+	local dimX, dimY = 64, 64 -- dimensions of Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES.blp
+	local role = UnitGroupRolesAssigned(unit)
+	if role and role ~= "NONE" then
+		local left, right, top, bottom = GetTexCoordsForRoleSmallCircle(role) -- this returns ratios
+		local cropFromLeft = dimX * left
+		local cropFromRight = dimX * right
+		local cropFromTop = dimY * top
+		local cropFromBottom = dimY * bottom
+
+		local icon = string.format("|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:16:16:%-d:%-d:%d:%d:%d:%d:%d:%d|t", xOffset, yOffset, dimX, dimY, cropFromLeft, cropFromRight, cropFromTop, cropFromBottom)
+		return icon
+	end
+end
+oUF.TagEvents["rain:role"] = "PARTY_MEMBERS_CHANGED PLAYER_ROLES_ASSIGNED ROLE_CHANGED_INFORM"
+oUF.UnitlessTagEvents.PARTY_MEMBERS_CHANGED = true
+oUF.UnitlessTagEvents.PLAYER_ROLES_ASSIGNED = true
+oUF.UnitlessTagEvents.ROLE_CHANGED_INFORM = true
+
 oUF.Tags["rain:name"] = function(unit, r)
 	local color = oUF.Tags["rain:namecolor"](unit)
     local name = UnitName(r or unit)
