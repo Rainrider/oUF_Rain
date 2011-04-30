@@ -37,6 +37,8 @@ local UnitSpecific = {
 				PlaySound("igCreatureAggroSelect")
 			end
 		end)
+		
+		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 	end,
 	
 	target = function(self)
@@ -57,6 +59,8 @@ local UnitSpecific = {
 		
 		ns.AddDebuffs(self, "pet")
 		ns.AddBuffs(self, "pet")
+		
+		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 	end,
 }
 
@@ -188,6 +192,10 @@ local function Shared(self, unit)
 		self:Tag(self.Name, "[rain:name]")
 		
 		ns.AddCastbar(self, unit)
+		
+		if unit == "focus" then
+			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
+		end
 	end
 	
 	if((unitIsInParty or unitIsPartyTarget or unitIsMT) and not unitIsPartyPet) then
@@ -208,6 +216,10 @@ local function Shared(self, unit)
 		self.Name:SetPoint("TOPLEFT", 2, -2)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		self:Tag(self.Name, "[rain:role][rain:name]")
+		
+		if unitIsInParty then
+			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
+		end
 	end
 	
 	if(unitIsPartyPet) then
@@ -285,12 +297,12 @@ oUF:Factory(function(self)
 	
 	if (cfg.showParty) then
 		local party = self:SpawnHeader(
-			"oUF_Rain_Party", nil, "party,raid",
+			"oUF_Rain_Party", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
 			"showPlayer", true,
 			"showSolo", true,
-			"maxColumns", 4,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -307,12 +319,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyTargets) then
 		local partyTargets = self:SpawnHeader(
-			"oUF_Rain_PartyTargets", nil, "party,raid",
+			"oUF_Rain_PartyTargets", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
 			"showPlayer", true,
 			"showSolo", true,
-			"maxColumns", 4,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -328,12 +340,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyPets) then
 		local partyPets = self:SpawnHeader(
-			"oUF_Rain_PartyPets", nil, "party,raid",
+			"oUF_Rain_PartyPets", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
 			"showPlayer", true,
 			"showSolo", true,
-			"maxColumns", 4,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,

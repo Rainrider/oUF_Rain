@@ -222,6 +222,20 @@ local function Aura_OnLeave(self)
 	self.Debuffs.Magnify:Hide()
 end
 
+local function AddThreatHighlight(self)
+	local unit = self.unit
+	print(unit)
+	local status = UnitThreatSituation(unit)
+	if status and status > 0 then
+		local r, g, b = GetThreatStatusColor(status)
+	
+		self.FrameBackdrop:SetBackdropBorderColor(r, g, b)
+	else
+		self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+ns.AddThreatHighlight = AddThreatHighlight
+
 --[[PRE AND POST FUNCTIONS]]--
 
 local function PostCastStart(castbar, unit, name, rank, castid)
