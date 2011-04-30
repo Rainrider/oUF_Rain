@@ -45,6 +45,7 @@ end
 ns.SiValue = SiValue
 
 local function ShortenName(name, shortenTo)
+	if not name then return end
 	if not shortenTo then
 		shortenTo = 12
 	end

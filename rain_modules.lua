@@ -12,7 +12,6 @@ local _, ns = ...
 
 local cfg = ns.config
 local PutFontString = ns.PutFontString
-local numTotems = MAX_TOTEMS
 
 local function AddCombatFeedbackText(self)
 	if (not IsAddOnLoaded("oUF_CombatFeedback")) then return end
@@ -164,29 +163,3 @@ local function AddSwingBar(self)
 	end
 end
 ns.AddSwingBar = AddSwingBar
-
---TODO: for removal
-local function AddTotemBar(self, width, height)
-	if (not IsAddOnLoaded("oUF_TotemBar")) then return end
-
-	self.TotemBar = {}
-	self.TotemBar.Destroy = true
-	
-	for i = 1, numTotems do
-		self.TotemBar[i] = CreateFrame("StatusBar", "oUF_Rain_TotemBar"..i, self)
-		self.TotemBar[i]:SetSize((215 - numTotems - 1) / numTotems, height)
-		self.TotemBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
-		self.TotemBar[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-		self.TotemBar[i]:SetStatusBarTexture(cfg.TEXTURE)
-		self.TotemBar[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.TotemBar[i]:SetMinMaxValues(0, 1)
-		self.TotemBar[i]:SetBackdrop(cfg.BACKDROP)
-		self.TotemBar[i]:SetBackdropColor(0, 0, 0)
-
-		self.TotemBar[i].bg = self.TotemBar[i]:CreateTexture(nil, "BORDER")
-		self.TotemBar[i].bg:SetAllPoints()
-		self.TotemBar[i].bg:SetTexture(cfg.TEXTURE)
-		self.TotemBar[i].bg:SetVertexColor(0.15, 0.15, 0.15)
-	end
-end
-ns.AddTotemBar = AddTotemBar

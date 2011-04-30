@@ -21,7 +21,6 @@ local UnitSpecific = {
 		elseif (playerClass == "WARLOCK") then
 			ns.AddSoulshardsBar(self, 230, 5)
 		elseif (playerClass == "SHAMAN") then
-			--ns.AddTotemBar(self, nil, 5)
 			ns.AddTotems(self, nil, 5)
 		elseif (playerClass == "DRUID") then
 			ns.AddEclipseBar(self, 230, 7)
@@ -36,6 +35,14 @@ local UnitSpecific = {
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if UnitExists("target") then
 				PlaySound("igCreatureAggroSelect")
+				local _, race = UnitRace("target")
+				local gender = UnitSex("target")
+				if (gender and gender == 3 and (race == "Troll" or race == "Tauren")) then
+					local guid = UnitGUID("target")
+					local name = UnitName("target")
+					local link = "[|Hunit:"..guid.."|h"..name.."|h]"
+					print("KLICK KLICK KLICK", link)
+				end
 			end
 		end)
 	end,
@@ -286,12 +293,12 @@ oUF:Factory(function(self)
 	
 	if (cfg.showParty) then
 		local party = self:SpawnHeader(
-			"oUF_Rain_Party", nil, "solo,party,raid",
+			"oUF_Rain_Party", nil, "party,raid",
 			"showParty", true,
 			"showRaid", true,
 			"showPlayer", true,
 			"showSolo", true,
-			"maxColumns", 5,
+			"maxColumns", 4,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -308,12 +315,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyTargets) then
 		local partyTargets = self:SpawnHeader(
-			"oUF_Rain_PartyTargets", nil, "solo,party,raid",
+			"oUF_Rain_PartyTargets", nil, "party,raid",
 			"showParty", true,
 			"showRaid", true,
 			"showPlayer", true,
 			"showSolo", true,
-			"maxColumns", 5,
+			"maxColumns", 4,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -329,12 +336,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyPets) then
 		local partyPets = self:SpawnHeader(
-			"oUF_Rain_PartyPets", nil, "solo,party,raid",
+			"oUF_Rain_PartyPets", nil, "party,raid",
 			"showParty", true,
 			"showRaid", true,
 			"showPlayer", true,
 			"showSolo", true,
-			"maxColumns", 5,
+			"maxColumns", 4,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
