@@ -35,14 +35,6 @@ local UnitSpecific = {
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if UnitExists("target") then
 				PlaySound("igCreatureAggroSelect")
-				local _, race = UnitRace("target")
-				local gender = UnitSex("target")
-				if (gender and gender == 3 and (race == "Troll" or race == "Tauren")) then
-					local guid = UnitGUID("target")
-					local name = UnitName("target")
-					local link = "[|Hunit:"..guid.."|h"..name.."|h]"
-					print("KLICK KLICK KLICK", link)
-				end
 			end
 		end)
 	end,
