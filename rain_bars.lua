@@ -111,19 +111,12 @@ local function AddCastbar(self, unit)
 		self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
 		self.Castbar.Icon:SetSize(32, 32)
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-		--[[
-		self.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
-		self.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -2, 2)
-		self.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 2, -2)
-		self.IconOverlay:SetTexture(cfg.BTNTEXTURE)
-		self.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
-		--]]
-		self.IconBackdrop = CreateFrame("Frame", nil, self.Castbar)
-		self.IconBackdrop:SetPoint("TOPLEFT", self.Castbar.Icon, -3, 3)
-		self.IconBackdrop:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 3, -3)
-		self.IconBackdrop:SetBackdrop(cfg.BACKDROP2)
-		self.IconBackdrop:SetBackdropColor(0, 0, 0, 0)
-		self.IconBackdrop:SetBackdropBorderColor(0, 0, 0)
+		
+		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
+		self.Castbar.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -5, 5)
+		self.Castbar.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 5, -5)
+		self.Castbar.IconOverlay:SetTexture(cfg.BTNTEXTURE)
+		self.Castbar.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
 		
 		self.Castbar.PostCastStart = ns.PostCastStart
 		self.Castbar.PostChannelStart = ns.PostChannelStart
