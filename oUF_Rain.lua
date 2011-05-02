@@ -170,7 +170,7 @@ local function Shared(self, unit)
 		self:Tag(self.Status, "[pvp]")
 	end
 	
-	if(unit == "pet" or unit == "focus" or (unit:find("target") and unit ~= "target")) then
+	if(unit == "pet" or unit == "focus" or (unit:find("target") and unit ~= "target") or unit:match("boss%d")) then
 		self:SetSize(110, 22)
 		
 		self.Health:SetSize(110, 15)
@@ -196,6 +196,10 @@ local function Shared(self, unit)
 		if unit == "focus" then
 			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 		end
+	end
+	
+	if unit:match("boss%d") then
+		ns.AddBuffs(self, unit)
 	end
 	
 	if((unitIsInParty or unitIsPartyTarget or unitIsMT) and not unitIsPartyPet) then
@@ -392,5 +396,16 @@ oUF:Factory(function(self)
 		)
 		mainTankTargets:SetPoint("TOPLEFT", "oUF_Rain_MT", "TOPRIGHT", 7.5, 0)
 		mainTankTargets:Show()
+	end
+	
+	local boss = {}
+	for i = 1, MAX_BOSS_FRAMES do
+		boss[i] = self:Spawn("boss"..i, "oUF_Rain_Boss"..i)
+		
+		if i == 1 then
+			boss[i]:SetPoint("TOP", UIParent, "TOP", 0, -20)
+		else
+			boss[i]:SetPoint("TOP", boss[i-1], "BOTTOM", 0, -15)
+		end
 	end
 end)

@@ -106,9 +106,13 @@ local function AddCastbar(self, unit)
 		self.Castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
 	end
 	
-	if (unit == "target") then
+	if (unit == "target" or unit:match("boss%d")) then
 		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
-		self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
+		if unit == "target" then
+			self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
+		else
+			self.Castbar.Icon:SetPoint("BOTTOMRIGHT", self.Castbar, "BOTTOMLEFT", -7.5, 0)
+		end
 		self.Castbar.Icon:SetSize(32, 32)
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 		

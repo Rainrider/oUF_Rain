@@ -484,6 +484,14 @@ local function AddBuffs(self, unit)
 		self.Buffs["growth-x"] = "LEFT"
 	end
 	
+	if unit:match("boss%d") then
+		self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 15, 0)
+		self.Buffs.num = 6
+		self.Buffs:SetSize(self.Buffs.num * self.Buffs.size + (self.Buffs.num - 1) * self.Buffs.spacing, self.Buffs.size)
+		self.Buffs.initialAnchor = "LEFT"
+		self.Buffs["growth-x"] = "RIGHT"
+	end
+	
 	self.Buffs.Magnify = CreateFrame("Frame", nil, self)
 	self.Buffs.Magnify:SetFrameLevel(self.Buffs:GetFrameLevel() + 3)
 	
