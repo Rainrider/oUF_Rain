@@ -191,29 +191,29 @@ end
 local function Aura_OnEnter(self, icon)
 	local r, g, b = icon.overlay:GetVertexColor()
 	local iconW, iconH = icon:GetSize()
+	local button
 	
 	if icon.debuff then
-		self.Debuffs.Magnify:SetSize(iconW * 2, iconH * 2)
-		self.Debuffs.Magnify:SetPoint("CENTER", icon, "CENTER")
-		
-		self.Debuffs.Magnify.icon:SetSize(iconW * 2, iconH * 2)
-		self.Debuffs.Magnify.icon:SetTexture(icon.icon:GetTexture())
-		self.Debuffs.Magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-		
-		self.Debuffs.Magnify.border:SetVertexColor(r, g, b)
-		
-		self.Debuffs.Magnify:Show()
+		button = self.Debuffs
 	else
-		self.Buffs.Magnify:SetSize(iconW * 2, iconH * 2)
-		self.Buffs.Magnify:SetPoint("CENTER", icon, "CENTER")
-		
-		self.Buffs.Magnify.icon:SetSize(iconW * 2, iconH * 2)
-		self.Buffs.Magnify.icon:SetTexture(icon.icon:GetTexture())
-		self.Buffs.Magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-		
-		self.Buffs.Magnify.border:SetVertexColor(r, g, b)
-		
-		self.Buffs.Magnify:Show()
+		button = self.Buffs
+	end
+	
+	button.Magnify:SetSize(iconW * 2, iconH * 2)
+	button.Magnify:SetPoint("CENTER", icon, "CENTER")
+	
+	button.Magnify.icon:SetSize(iconW * 2, iconH * 2)
+	button.Magnify.icon:SetTexture(icon.icon:GetTexture())
+	button.Magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+
+	button.Magnify.border:SetVertexColor(r, g, b)
+
+	button.Magnify:Show()
+	
+	if icon.debuff then
+		self.Debuffs = button
+	else
+		self.Buffs = button
 	end
 end
 
@@ -224,7 +224,7 @@ end
 
 local function AddThreatHighlight(self)
 	local unit = self.unit
-	print(unit)
+
 	local status = UnitThreatSituation(unit)
 	if status and status > 0 then
 		local r, g, b = GetThreatStatusColor(status)
