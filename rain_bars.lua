@@ -110,10 +110,11 @@ local function AddCastbar(self, unit)
 		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
 		if unit == "target" then
 			self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
+			self.Castbar.Icon:SetSize(32, 32)
 		else
-			self.Castbar.Icon:SetPoint("BOTTOMRIGHT", self.Castbar, "BOTTOMLEFT", -7.5, 0)
+			self.Castbar.Icon:SetPoint("BOTTOMRIGHT", self, "BOTTOMLEFT", -7.5, 0)
+			self.Castbar.Icon:SetSize(22, 22)
 		end
-		self.Castbar.Icon:SetSize(32, 32)
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 		
 		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
