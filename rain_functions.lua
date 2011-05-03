@@ -194,26 +194,26 @@ local function Aura_OnEnter(self, icon)
 	local button
 	
 	if icon.debuff then
-		button = self.Debuffs
+		button = self.Debuffs.Magnify
 	else
-		button = self.Buffs
+		button = self.Buffs.Magnify
 	end
 	
-	button.Magnify:SetSize(iconW * 2, iconH * 2)
-	button.Magnify:SetPoint("CENTER", icon, "CENTER")
+	button:SetSize(iconW * 2, iconH * 2)
+	button:SetPoint("CENTER", icon, "CENTER")
 	
-	button.Magnify.icon:SetSize(iconW * 2, iconH * 2)
-	button.Magnify.icon:SetTexture(icon.icon:GetTexture())
-	button.Magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	button.icon:SetSize(iconW * 2, iconH * 2)
+	button.icon:SetTexture(icon.icon:GetTexture())
+	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
-	button.Magnify.border:SetVertexColor(r, g, b)
+	button.border:SetVertexColor(r, g, b)
 
-	button.Magnify:Show()
+	button:Show()
 	
 	if icon.debuff then
-		self.Debuffs = button
+		self.Debuffs.Magnify = button
 	else
-		self.Buffs = button
+		self.Buffs.Magnify = button
 	end
 end
 
