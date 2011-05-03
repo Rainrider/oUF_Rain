@@ -74,7 +74,7 @@ local function Shared(self, unit)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	
 	local unitIsPartyMember = self:GetParent():GetName():match("oUF_Rain_Party")
-	local unitIsPartyTarget = self:GetAttribute("unitsuffix") == "target"
+	local unitIsPartyOrMTTarget = self:GetAttribute("unitsuffix") == "target"
 	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
 	local unitIsMT = self:GetParent():GetName():match("oUF_Rain_MT")
 	local unitIsMTT = self:GetParent():GetName():match("oUF_Rain_MTT")
@@ -173,9 +173,8 @@ local function Shared(self, unit)
 	
 	if (unit == "pet" or unit == "focus"
 			or unit == "targettarget" or unit == "focustarget"
-			or unitIsPartyMember or unitIsPartyTarget 
-			or unitIsMT or unitIsMTT
-			or unitIsBoss) and not unitIsPartyPet then
+			or unitIsPartyMember or unitIsPartyOrMTTarget 
+			or unitIsMT or unitIsBoss) and not unitIsPartyPet then
 		
 		self:SetSize(110, 22)
 		
