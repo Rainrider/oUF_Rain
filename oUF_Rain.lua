@@ -59,8 +59,6 @@ local UnitSpecific = {
 		
 		ns.AddDebuffs(self, "pet")
 		ns.AddBuffs(self, "pet")
-		
-		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 	end,
 }
 
@@ -75,12 +73,12 @@ local function Shared(self, unit)
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	
-	local unitIsInParty = self:GetParent():GetName():match("oUF_Rain_Party")
-	local unitIsPartyTarget = self:GetParent():GetName():match("oUF_Rain_PartyTargets")
-	--local unitIsPartyPet = self:GetParent():GetName():match("oUF_Rain_PartyPets")
+	local unitIsPartyMember = self:GetParent():GetName():match("oUF_Rain_Party")
+	local unitIsPartyTarget = self:GetAttribute("unitsuffix") == "target"
 	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
 	local unitIsMT = self:GetParent():GetName():match("oUF_Rain_MT")
 	local unitIsMTT = self:GetParent():GetName():match("oUF_Rain_MTT")
+	local unitIsBoss = unit:match("boss%d")
 	
 	self.FrameBackdrop = CreateFrame("Frame", nil, self)
 	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
@@ -92,9 +90,8 @@ local function Shared(self, unit)
 	
 	self.Health = CreateFrame("StatusBar", self:GetName().."_Health", self)
 	self.Health:SetStatusBarTexture(cfg.TEXTURE)
-	self.Health.colorTapping = true
 	self.Health.colorDisconnected = true
-	self.Health.colorHappiness = true
+	self.Health.colorTapping = true
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	self.Health.frequentUpdates = true
@@ -108,33 +105,31 @@ local function Shared(self, unit)
 	
 	self.Health.PostUpdate = ns.PostUpdateHealth
 	
-	self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
-	self.Power:SetStatusBarTexture(cfg.TEXTURE)
-	self.Power:SetBackdrop(cfg.BACKDROP)
-	self.Power:SetBackdropColor(0, 0, 0)
+	if not unitIsPartyPet then
+		self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
+		self.Power:SetStatusBarTexture(cfg.TEXTURE)
+		self.Power:SetBackdrop(cfg.BACKDROP)
+		self.Power:SetBackdropColor(0, 0, 0)
 	
-	self.Power.colorTapping = true
-	self.Power.colorPower =  true and unit == "player" or unit == "pet"
-	self.Power.colorClass = true
-	self.Power.colorReaction = true
-	self.Power.frequentUpdates = true
+		self.Power.colorTapping = true
+		self.Power.colorPower =  true and unit == "player" or unit == "pet"
+		self.Power.colorClass = true
+		self.Power.colorReaction = true
+		self.Power.frequentUpdates = true
 	
-	self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
-	self.Power.bg:SetAllPoints()
-	self.Power.bg:SetTexture(cfg.TEXTURE)
-	self.Power.bg.multiplier = 0.5
+		self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
+		self.Power.bg:SetAllPoints()
+		self.Power.bg:SetTexture(cfg.TEXTURE)
+		self.Power.bg.multiplier = 0.5
 	
-	self.Power.PreUpdate = ns.PreUpdatePower
-	self.Power.PostUpdate = ns.PostUpdatePower
+		self.Power.PreUpdate = ns.PreUpdatePower
+		self.Power.PostUpdate = ns.PostUpdatePower
+	end
 	
 	ns.AddRaidIcon(self, unit)
-	ns.AddAssistantIcon(self, unit)
-	ns.AddLeaderIcon(self, unit)
-	ns.AddMasterLooterIcon(self, unit)
 	ns.AddPhaseIcon(self, unit)
-	ns.AddReadyCheckIcon(self, unit)
 	
-	if(unit == "player" or unit == "target") then
+	if unit == "player" or unit == "target" then
 		self:SetSize(230, 50)
 	
 		self.Health:SetSize(230, 30)
@@ -168,9 +163,20 @@ local function Shared(self, unit)
 		self.Status:SetPoint("RIGHT", -3.5, 2)
 		self.Status:SetTextColor(0.69, 0.31, 0.31, 0.6)
 		self:Tag(self.Status, "[pvp]")
+		
+		ns.AddAssistantIcon(self, unit)
+		ns.AddLeaderIcon(self, unit)
+		ns.AddMasterLooterIcon(self, unit)
+		ns.AddPhaseIcon(self, unit)
+		ns.AddReadyCheckIcon(self, unit)
 	end
 	
-	if(unit == "pet" or unit == "focus" or (unit:find("target") and unit ~= "target") or unit:match("boss%d")) then
+	if (unit == "pet" or unit == "focus"
+			or unit == "targettarget" or unit == "focustarget"
+			or unitIsPartyMember or unitIsPartyTarget 
+			or unitIsMT or unitIsMTT
+			or unitIsBoss) and not unitIsPartyPet then
+		
 		self:SetSize(110, 22)
 		
 		self.Health:SetSize(110, 15)
@@ -189,46 +195,33 @@ local function Shared(self, unit)
 		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("TOPLEFT", 2, -2)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.Name, "[rain:name]")
 		
-		ns.AddCastbar(self, unit)
+		if not unitIsPartyMember then
+			ns.AddCastbar(self, unit)
+			self:Tag(self.Name, "[rain:name]")
+		else
+			self:Tag(self.Name, "[rain:role][rain:name]")
+		end
 		
-		if unit == "focus" then
+		if unitIsPartyMember then
+			ns.AddAssistantIcon(self, unit)
+			ns.AddLeaderIcon(self, unit)
+			ns.AddMasterLooterIcon(self, unit)
+			ns.AddReadyCheckIcon(self, unit)
+		end
+		
+		if unitIsBoss then
+			ns.AddBuffs(self, unit)
+		end
+		
+		if unit == "pet" or unit == "focus"  or unitIsPartyMember then
 			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 		end
 	end
 	
-	if unit:match("boss%d") then
-		ns.AddBuffs(self, unit)
-	end
-	
-	if((unitIsInParty or unitIsPartyTarget or unitIsMT) and not unitIsPartyPet) then
-		self.Health:SetSize(110, 15)
-		self.Health:SetPoint("TOPRIGHT")
-		self.Health:SetPoint("TOPLEFT")
-		
-		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
-		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
-		self.Health.value.frequentUpdates = 1/4
-		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
-		
-		self.Power:SetSize(110, 5)
-		self.Power:SetPoint("BOTTOMRIGHT")
-		self.Power:SetPoint("BOTTOMLEFT")
-		
-		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
-		self.Name:SetPoint("TOPLEFT", 2, -2)
-		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.Name, "[rain:role][rain:name]")
-		
-		if unitIsInParty then
-			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
-		end
-	end
-	
-	if(unitIsPartyPet) then
+	if unitIsPartyPet then
 		self:SetSize(110, 10)
-		self.Health:SetSize(110, 9)
+		self.Health:SetSize(110, 10)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
 		
@@ -236,36 +229,13 @@ local function Shared(self, unit)
 		self.Health.value:SetPoint("RIGHT", -2, 0)
 		self:Tag(self.Health.value, "[perhp]")
 		
-		self.Power:Hide()
-		
 		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("LEFT", 2, 0)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		self:Tag(self.Name, "[rain:name]")
 	end
 	
-	if(unitIsMTT) then
-		self:SetSize(110, 22)
-		self.Health:SetSize(110, 15)
-		self.Health:SetPoint("TOPRIGHT")
-		self.Health:SetPoint("TOPLEFT")
-	
-		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
-		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
-		self.Health.value.frequentUpdates = 1/4
-		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
-		
-		self.Power:SetSize(110, 5)
-		self.Power:SetPoint("BOTTOMRIGHT")
-		self.Power:SetPoint("BOTTOMLEFT")
-		
-		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
-		self.Name:SetPoint("TOPLEFT", 2, -2)
-		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.Name, "[rain:name]")
-	end
-	
-	if(UnitSpecific[unit]) then
+	if UnitSpecific[unit] then
 		return UnitSpecific[unit](self)
 	end
 
@@ -280,7 +250,7 @@ oUF:Factory(function(self)
 	if playerClass == "HUNTER" then
 		 spellName = GetSpellInfo(34477)	-- Misdirection
 	elseif playerClass == "DRUID" then
-		spellName = GetSpellInfo(33763)		--  29166 Innervate 33763 Blühendes Leben
+		spellName = GetSpellInfo(33763)		-- 29166 Innervate 33763 Blühendes Leben
 	elseif playerClass == "PALADIN" then
 		spellName = GetSpellInfo(31789)		-- Righteous Defense
 	elseif playerClass == "WARRIOR" then
