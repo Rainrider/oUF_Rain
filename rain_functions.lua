@@ -241,10 +241,10 @@ ns.AddThreatHighlight = AddThreatHighlight
 local function PostCastStart(castbar, unit, name, rank, castid)
 	if castbar.interrupt and UnitCanAttack("player", unit) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
-		castbar.Icon.Overlay:SetVertexColor(0.69, 0.31, 0.31)
+		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
 		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-		castbar.Icon.Overlay:SetVertexColor(0.4, 0.4, 0.4)
+		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
 	end
 end
 ns.PostCastStart = PostCastStart
@@ -255,7 +255,7 @@ local function PostCastInterruptible(castbar, unit)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
 		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-		castbar.Icon.Overlay:SetVertexColor(0.4, 0.4, 0.4)
+		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
 	end
 end
 ns.PostCastInterruptible = PostCastInterruptible
@@ -263,10 +263,10 @@ ns.PostCastInterruptible = PostCastInterruptible
 local function PostCastNotInterruptible(castbar, unit)
 	if castbar.interrupt and UnitCanAttack("player", unit) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
-		castbar.Icon.Overlay:SetVertexColor(0.69, 0.31, 0.31)
+		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
 		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-		castbar.Icon.Overlay:SetVertexColor(0.4, 0.4, 0.4)
+		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
 	end
 end
 ns.PostCastNotInterruptible = PostCastNotInterruptible
@@ -274,10 +274,10 @@ ns.PostCastNotInterruptible = PostCastNotInterruptible
 local function PostChannelStart(castbar, unit, name)
 	if castbar.interrupt and UnitCanAttack("player", unit) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
-		castbar.Icon.Overlay:SetVertexColor(0.69, 0.31, 0.31)
+		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
 		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-		castbar.Icon.Overlay:SetVertexColor(0.4, 0.4, 0.4)
+		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
 	end
 end
 ns.PostchannelStart = PostChannelStart
