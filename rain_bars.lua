@@ -109,19 +109,19 @@ local function AddCastbar(self, unit)
 	if unit == "target" or unit:match("boss%d") or unit == "focus" then
 		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
 		
-		self.Castbar.Icon.Overlay = self.Castbar:CreateTexture(nil, "OVERLAY")
-		self.Castbar.Icon.Overlay:SetTexture(cfg.BTNTEXTURE)
-		self.Castbar.Icon.Overlay:SetVertexColor(0.84, 0.75, 0.65)
+		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
+		self.Castbar.IconOverlay:SetTexture(cfg.BTNTEXTURE)
+		self.Castbar.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
 		
 		if unit == "target" then
 			self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
 			self.Castbar.Icon:SetSize(32, 32)
-			self.Castbar.Icon.Overlay:SetPoint("TOPLEFT", self.Castbar.Icon, -5, 5)
-			self.Castbar.Icon.Overlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 5, -5)
+			self.Castbar.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -5, 5)
+			self.Castbar.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 5, -5)
 		else
 			self.Castbar.Icon:SetSize(22, 22)
-			self.Castbar.Icon.Overlay:SetPoint("TOPLEFT", self.Castbar.Icon, -3, 3)
-			self.Castbar.Icon.Overlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 3, -3)
+			self.Castbar.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -3, 3)
+			self.Castbar.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 3, -3)
 			if unit == "focus" then
 				self.Castbar.Icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
 			else
