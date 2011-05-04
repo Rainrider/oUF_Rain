@@ -87,10 +87,12 @@ end
 ns.AddExperienceBar = AddExperienceBar
 
 local function AddHunterFocusSpark(self)
+	local sparkPos = ns.GetFocusSparkPosition(self.Power:GetWidth())
+
 	self.FocusSpark = CreateFrame("Frame", "FocusSpark", self.Power)
 	self.FocusSpark:SetWidth(10)
 	self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
-	self.FocusSpark:SetPoint("LEFT", ns.GetFocusSparkXPoint(self.Power:GetWidth()) - 5, 0)
+	self.FocusSpark:SetPoint("LEFT", sparkPos - 5, 0)
 	
 	self.FocusSpark.backdrop = self.FocusSpark:CreateTexture(nil, "OVERLAY")
 	self.FocusSpark.backdrop:SetAllPoints(self.FocusSpark)
@@ -101,7 +103,12 @@ local function AddHunterFocusSpark(self)
 	self.FocusSpark:RegisterEvent("LEARNED_SPELL_IN_TAB")
 	self.FocusSpark:SetScript("OnEvent", function(frame, eventName, spellID, tabID)
 		frame:ClearAllPoints()
-		frame:SetPoint("LEFT", ns.GetFocusSparkXPoint(self.Power:GetWidth()) - 5, 0)
+		if sparkPos ~= 0 then
+			frame:Show()
+			frame:SetPoint("LEFT", sparkPos - 5, 0)
+		else
+			frame:Hide()
+		end
 	end)
 end
 ns.AddHunterFocusSpark = AddHunterFocusSpark
