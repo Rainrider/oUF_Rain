@@ -59,10 +59,8 @@ local function AddDebuffHighlight(self, unit)
 		self.DebuffHighlightIcon:SetSize(16, 16)
 	end
 	self.DebuffHighlightIcon:SetPoint("CENTER")
-	--self.DebuffHighlightIcon:SetVertexColor(0, 0, 0, 0)
-	--self.DebuffHighlightIcon:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 	self.DebuffHighlightIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	---[[
+	
 	if unit == "player" or unit == "target" then
 		self.DebuffHighlightIconOverlay = self.Overlay:CreateTexture(nil, "OVERLAY")
 		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -3.5, 3.5)
@@ -74,7 +72,7 @@ local function AddDebuffHighlight(self, unit)
 	end
 	self.DebuffHighlightIconOverlay:SetTexture(cfg.BTNTEXTURE)
 	self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
-	--]]
+	
 end
 ns.AddDebuffHighlight = AddDebuffHighlight
 
