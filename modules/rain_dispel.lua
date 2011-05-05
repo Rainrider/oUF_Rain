@@ -1,31 +1,13 @@
---[[ DISPELLS --
-	DRUID
-		2782 Remove Corruption - Poison / Curse - lvl 24
-		88423 Nature's Cure - Magic - Restoration Talent
-	MAGE
-		475 Remove Curse - Curse - lvl 30
+--[[
+		self.DebuffHightlight = Frame (to create the textures with)
+		self.DebuffHighlight.filter = boolean ( true = only debuffs player can dispell )
+		self.DebuffHighlight.whitelist = Table ( contains a list of spellIDs to always display: use spellID = true/false )
 		
-	PALADIN
-		4987 Cleanse - Poison / Desease - lvl 34
-		53551 Sacred Cleansing - Magic - Holy Talent
-	PRIEST
-		528 Cure Disease - Desease - lvl 22
-		527 Dispel Magic - Magic - lvl 26
-		64127 Body and Soul - Poison - Holy Talent (1/2 = 50% chance, 2/2 = 100%)
-	SHAMAN
-		51886 Cleanse Spirit - Curse - lvl 18
-		77130 Improved Cleanse Spirit - Magic - Restoration Talent
-		
-	WARLOCK
-		89808 Single Magic - Magic - Imp ability
---]]
-
-
---[[ EVENTS --
-	ACTIVE_TALENT_GROUP_CHANGED	-- fires when changing specs
-	LEARNED_SPELL_IN_TAB -- fires when learning talents
-	
-	what about the imp
+		self.DebuffHighlightBackdrop = Frame ( GetBackdrop() ~= nil )
+		self.DebuffHighlightBackdropBorder = boolean ( true = color backdrop border )
+		self.DebuffHighlightTexture = Texture ( GetTexture() ~= nil )
+		self.DebuffHighlightIcon = Texture
+		self.DebuffHighlightIconOverlay = Texture
 --]]
 
 local useWhitelist = false
@@ -42,90 +24,17 @@ local whitelist = {}
 local debuffTypeColor = {}
 for dispelType, color in pairs(_G["DebuffTypeColor"]) do
 	debuffTypeColor[dispelType] = color
-	print("got colors")
 end
 
 local function HasTalent(tabIndex, talentIndex, inspect, pet)
 	local rank = select(5, GetTalentInfo(tabIndex, talentIndex, inspect, pet, nil))
 	if rank > 0 then
-		print("HasTalent")
 		return true
 	end
 end
---[[
-local function UpdateDispelList()
-	if playerClass == "DRUID" then
-		if IsSpellKnown(2782) then
-			dispelList.Curse = true
-			dispelList.Poison = true
-			if HasTalent(3, 17, false, false) then
-				dispelList.Magic = true
-			else
-				dispelList.Magic = false
-			end
-		else
-			dispelList.Curse = false
-			dispelList.Poison = false
-		end
-	elseif playerClass == "MAGE" then
-		if IsSpellKnown(475) then
-			dispelList.Curse = true
-		else
-			dispelList.Curse = false
-		end
-	elseif playerClass == "PALADIN" then
-		if IsSpellKnown(4987) then
-			dispelList.Desease = true
-			dispelList.Poison = true
-			if HasTalent(1, 14, false, false) then
-				dispelList.Magic = true
-			else
-				dispelList.Magic = false
-			end
-		else
-			dispelList.Desease = false
-			dispelList.Poison = false
-		end
-	elseif playerClass == "PRIEST" then
-		if IsSpellKnown(528) then
-			dispelList.Desease = true
-			if HasTalent(2, 14, false, false) then
-				dispelList.Poison = true
-			else
-				dispelList.Poison = false
-			end
-		else
-			dispelList.Desease = false
-		end
-		if IsSpellKnown(527) then
-			dispelList.Magic = true
-		else
-			dispelList.Magic = false
-		end
-	elseif playerClass == "SHAMAN" then
-		if IsSpellKnown(51886) then
-			dispelList.Curse = true 
-			if HasTalent(3, 12, false, false) then
-				dispelList.Magic = true
-			else
-				dispelList.Magic = false
-			end
-		else
-			dispelList.Curse = false
-		end
-	elseif playerClass == "WARLOCK" then
-		if IsSpellKnown(89808, true) then
-			dispelList.Magic = true
-		else
-			dispelList.Magic = false
-		end
-	end
-	print("Dispel list populated.")
-end
---]]
+
 local UpdateDispelList = {
 	["DRUID"] = function()
-		print("druid ran")
 		if IsSpellKnown(2782) then
 			dispelList.Curse = true
 			dispelList.Poison = true
@@ -140,7 +49,6 @@ local UpdateDispelList = {
 		end
 	end,
 	["MAGE"] = function()
-		print("mage ran")
 		if IsSpellKnown(475) then
 			dispelList.Curse = true
 		else
@@ -179,7 +87,6 @@ local UpdateDispelList = {
 		end
 	end,
 	["SHAMAN"] = function()
-		print("shaman ran")
 		if IsSpellKnown(51886) then
 			dispelList.Curse = true 
 			if HasTalent(3, 12, false, false) then
@@ -198,7 +105,6 @@ local UpdateDispelList = {
 			dispelList.Magic = false
 		end
 	end,
-	--print("Dispel list populated.")
 }
 
 local function GetWhiteList(userWhitelist)
@@ -218,10 +124,9 @@ local function GetDispelType(unit, filter, useWhitelist)
 	
 	while true do
 		name, _, texture, _, dispelType, _, _, _, _, _, spellID = UnitDebuff(unit, i)
-		print("|cffff0000GetDispelType|r", name, texture, dispelType, spellID)
 		if not texture then break end
 		--if (dispelType and not filter) or (useWhitelist and whitelist[spellID]) or (filter and dispelList[dispelType]) then -- TODO:  implement whitelist
-		if (not filter) or (filter and dispelList[dispelType]) then -- TODO:  implement whitelist
+		if (not filter) or (filter and dispelList[dispelType]) then
 			return dispelType, texture
 		end
 		i = i + 1
@@ -229,24 +134,10 @@ local function GetDispelType(unit, filter, useWhitelist)
 end
 
 local function Update(self, event, unit)
-	print("|cffff0000Update units:|r", unit, self.unit)
 	if unit ~= self.unit then return end
-	--[[
-		self.DebuffHighlight.filter = boolean ( true = only debuffs player can dispell )
-		self.DebuffHighlight.whitelist = Table ( contains a list of spellIDs: use spellID = true/false )
-		
-		self.DebuffHighlightBackdrop = Frame ( GetBackdrop() ~= nil )
-		self.DebuffHighlightBackdropBorder = boolean ( true = color backdrop border )
-		self.DebuffHighlightTexture = Texture ( GetTexture() ~= nil )
-		self.DebuffHighlightIcon = Texture
-		self.DebuffHighlightIconOverlay = Texture
-	--]]
-	
 	
 	local color
-	
 	local dispelType, texture = GetDispelType(unit, self.DebuffHighlight.filter, useWhitelist)
-	print("|cffff0000Update|r", dispelType, texture)
 	
 	if not dispelType then
 		dispelType = "none"
@@ -299,7 +190,6 @@ local function Enable(self)
 	end
 	
 	-- Populate the dispelList
-	--UpdateDispelList()
 	if UpdateDispelList[playerClass] then
 		UpdateDispelList[playerClass]()
 	end
@@ -307,6 +197,7 @@ local function Enable(self)
 	self:RegisterEvent("UNIT_AURA", Update)
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", UpdateDispelList[playerClass])
 	self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass])
+	-- TODO: need events for when player learns talents that are not spells and for summoning pets cos of warlock case
 end
 
 local function Disable(self)
