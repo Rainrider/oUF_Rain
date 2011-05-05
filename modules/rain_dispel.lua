@@ -35,10 +35,10 @@ end
 
 local UpdateDispelList = {
 	["DRUID"] = function()
-		if IsSpellKnown(2782) then
+		if IsSpellKnown(2782) then					-- Remove Corruption
 			dispelList.Curse = true
 			dispelList.Poison = true
-			if HasTalent(3, 17, false, false) then
+			if HasTalent(3, 17, false, false) then	-- Nature's Cure
 				dispelList.Magic = true
 			else
 				dispelList.Magic = false
@@ -49,17 +49,17 @@ local UpdateDispelList = {
 		end
 	end,
 	["MAGE"] = function()
-		if IsSpellKnown(475) then
+		if IsSpellKnown(475) then					-- Remove Curse
 			dispelList.Curse = true
 		else
 			dispelList.Curse = false
 		end
 	end,
 	["PALADIN"] = function()
-		if IsSpellKnown(4987) then
+		if IsSpellKnown(4987) then					-- Cleanse
 			dispelList.Desease = true
 			dispelList.Poison = true
-			if HasTalent(1, 14, false, false) then
+			if HasTalent(1, 14, false, false) then	-- Sacred Cleansing
 				dispelList.Magic = true
 			else
 				dispelList.Magic = false
@@ -70,9 +70,9 @@ local UpdateDispelList = {
 		end
 	end,
 	["PRIEST"] = function()
-		if IsSpellKnown(528) then
+		if IsSpellKnown(528) then					-- Cure Desease
 			dispelList.Desease = true
-			if HasTalent(2, 14, false, false) then
+			if HasTalent(2, 14, false, false) then	-- Body and Soul
 				dispelList.Poison = true
 			else
 				dispelList.Poison = false
@@ -80,16 +80,16 @@ local UpdateDispelList = {
 		else
 			dispelList.Desease = false
 		end
-		if IsSpellKnown(527) then
+		if IsSpellKnown(527) then					-- Dispel Magic
 			dispelList.Magic = true
 		else
 			dispelList.Magic = false
 		end
 	end,
 	["SHAMAN"] = function()
-		if IsSpellKnown(51886) then
+		if IsSpellKnown(51886) then					-- Cleanse Spirit
 			dispelList.Curse = true 
-			if HasTalent(3, 12, false, false) then
+			if HasTalent(3, 12, false, false) then	-- Improved Cleanse Spirit
 				dispelList.Magic = true
 			else
 				dispelList.Magic = false
@@ -99,7 +99,7 @@ local UpdateDispelList = {
 		end
 	end,
 	["WARLOCK"] = function()
-		if IsSpellKnown(89808, true) then
+		if IsSpellKnown(89808, true) then			-- Single Magic (Imp ability)
 			dispelList.Magic = true
 		else
 			dispelList.Magic = false
