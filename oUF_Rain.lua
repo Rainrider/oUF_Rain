@@ -205,7 +205,6 @@ local function Shared(self, unit)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		
 		if not unitIsPartyMember then
-			ns.AddCastbar(self, unit)
 			self:Tag(self.Name, "[rain:name]")
 		else
 			self:Tag(self.Name, "[rain:role][rain:name]")
@@ -222,9 +221,11 @@ local function Shared(self, unit)
 		
 		if unitIsBoss then
 			ns.AddBuffs(self, unit)
+			ns.AddCastbar(self, unit)
 		end
 		
 		if unit == "pet" or unit == "focus"  or unitIsPartyMember then
+			ns.AddCastbar(self, unit)
 			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 		end
 	end
