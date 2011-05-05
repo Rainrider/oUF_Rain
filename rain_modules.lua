@@ -37,6 +37,47 @@ local function AddCombatFeedbackText(self)
 end
 ns.AddCombatFeedbackText = AddCombatFeedbackText
 
+local function AddDebuffHighlight(self, unit)
+	self.DebuffHighlight = CreateFrame("Frame", self:GetName().."_DebuffHighlight", self.Health)
+	self.DebuffHighlight:SetAllPoints()
+	self.DebuffHighlight:SetFrameLevel(self.DebuffHighlight:GetParent():GetFrameLevel() + 1)
+	
+	self.DebuffHighlight.filter = false
+	self.DebuffHighlight.whitelist = nil
+
+	self.DebuffHighlightTexture = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
+	self.DebuffHighlightTexture:SetAllPoints()
+	self.DebuffHighlightTexture:SetTexture(cfg.HIGHLIGHTTEXTURE)
+	self.DebuffHighlightTexture:SetBlendMode("ADD")
+	self.DebuffHighlightTexture:SetVertexColor(0, 0, 0, 0)
+	
+	if unit == "player" or unit == "target" then
+		self.DebuffHighlightIcon = self.Overlay:CreateTexture(nil, "OVERLAY")
+		self.DebuffHighlightIcon:SetSize(18, 18)
+	else
+		self.DebuffHighlightIcon = self.Health:CreateTexture(nil, "OVERLAY")
+		self.DebuffHighlightIcon:SetSize(16, 16)
+	end
+	self.DebuffHighlightIcon:SetPoint("CENTER")
+	--self.DebuffHighlightIcon:SetVertexColor(0, 0, 0, 0)
+	--self.DebuffHighlightIcon:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+	self.DebuffHighlightIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	---[[
+	if unit == "player" or unit == "target" then
+		self.DebuffHighlightIconOverlay = self.Overlay:CreateTexture(nil, "OVERLAY")
+		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -3.5, 3.5)
+	self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 3.5, -3.5)
+	else
+		self.DebuffHighlightIconOverlay = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
+		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -1, 1)
+	self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 1, -1)
+	end
+	self.DebuffHighlightIconOverlay:SetTexture(cfg.BTNTEXTURE)
+	self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
+	--]]
+end
+ns.AddDebuffHighlight = AddDebuffHighlight
+
 -- TODO: rested bar 
 --		math.min(curXP + rested, maxXP) -- this would be the rested bar
 local function AddExperienceBar(self)

@@ -60,6 +60,14 @@ local UnitSpecific = {
 		ns.AddDebuffs(self, "pet")
 		ns.AddBuffs(self, "pet")
 	end,
+	
+	focus = function(self)
+		ns.AddDebuffHighlight(self, "focus")
+	end,
+	
+	targettarget = function(self)
+		ns.AddDebuffHighlight(self, "targettarget")
+	end,
 }
 
 -- shared rules between more than one unit
@@ -158,6 +166,7 @@ local function Shared(self, unit)
 		
 		ns.AddBuffs(self, unit)
 		ns.AddDebuffs(self, unit)
+		ns.AddDebuffHighlight(self, unit)
 		
 		self.Status = PutFontString(self.Portrait, cfg.FONT2, 18, "OUTLINE", "RIGHT")
 		self.Status:SetPoint("RIGHT", -3.5, 2)
@@ -207,6 +216,8 @@ local function Shared(self, unit)
 			ns.AddLeaderIcon(self, unit)
 			ns.AddMasterLooterIcon(self, unit)
 			ns.AddReadyCheckIcon(self, unit)
+			
+			ns.AddDebuffHighlight(self, unit)
 		end
 		
 		if unitIsBoss then
@@ -270,10 +281,12 @@ oUF:Factory(function(self)
 	
 	if (cfg.showParty) then
 		local party = self:SpawnHeader(
-			"oUF_Rain_Party", nil, "party,raid",
+			"oUF_Rain_Party", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
-			"maxColumns", 4,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -290,10 +303,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyTargets) then
 		local partyTargets = self:SpawnHeader(
-			"oUF_Rain_PartyTargets", nil, "party,raid",
+			"oUF_Rain_PartyTargets", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
-			"maxColumns", 4,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
@@ -309,10 +324,12 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyPets) then
 		local partyPets = self:SpawnHeader(
-			"oUF_Rain_PartyPets", nil, "party,raid",
+			"oUF_Rain_PartyPets", nil, "solo,party,raid",
 			"showParty", true,
 			"showRaid", true,
-			"maxColumns", 4,
+			"showPlayer", true,
+			"showSolo", true,
+			"maxColumns", 5,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
 			"columnSpacing", 7.5,
