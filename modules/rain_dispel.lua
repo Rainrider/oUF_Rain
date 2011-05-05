@@ -170,9 +170,8 @@ local function Update(self, event, unit)
 end
 
 local function Enable(self)
-	print("Enable for unit:", self.unit)
-	
 	if not self.DebuffHighlight then return end
+	print("Enable for unit:", self.unit)
 	
 	local playerClass = select(2, UnitClass("player"))
 	
@@ -198,6 +197,8 @@ local function Enable(self)
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", UpdateDispelList[playerClass])
 	self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass])
 	-- TODO: need events for when player learns talents that are not spells and for summoning pets cos of warlock case
+	
+	return true
 end
 
 local function Disable(self)

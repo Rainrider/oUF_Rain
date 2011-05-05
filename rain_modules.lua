@@ -72,7 +72,6 @@ local function AddDebuffHighlight(self, unit)
 	end
 	self.DebuffHighlightIconOverlay:SetTexture(cfg.BTNTEXTURE)
 	self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
-	
 end
 ns.AddDebuffHighlight = AddDebuffHighlight
 
