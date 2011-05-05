@@ -2,7 +2,7 @@ local _, ns = ...
 
 local function GetShotFocusCost(talentTree)
 	local shotFocusCost = 0
-	if talentTree == 3 and IsSpellKnown(53301) then -- SURVIVAL
+	if talentTree == 3 then -- SURVIVAL
 		shotFocusCost = select(4, GetSpellInfo(53301)) -- Explosive Shot
 	elseif talentTree == 2 and IsSpellKnown(53209) then -- MARKMANSHIP
 		shotFocusCost = select(4, GetSpellInfo(53209)) -- Chimera Shot
