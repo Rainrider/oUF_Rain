@@ -9,7 +9,7 @@
 		self.DebuffHighlightIcon = Texture
 		self.DebuffHighlightIconOverlay = Texture
 --]]
-
+local playerClass = select(2, UnitClass("player"))
 local useWhitelist = false
 
 local dispelList = {
@@ -133,6 +133,20 @@ local function GetDispelType(unit, filter, useWhitelist)
 	end
 end
 
+local function CheckForPet(self, event, unit)
+	if unit ~= "player" or playerClass ~= "WARLOCK" then return end
+	
+	UpdateDispelList[playerClass]()
+end
+
+local function CheckTalentPoints(self, event, count, levels)
+	-- don't update on just a level up
+	print(event, "count:", count, "levels:", levels)
+	if levels > 0 then return end
+
+	UpdateDispelList[playerClass]()
+end
+
 local function Update(self, event, unit)
 	if unit ~= self.unit then return end
 	
@@ -171,11 +185,8 @@ end
 
 local function Enable(self)
 	if not self.DebuffHighlight then return end
-	print("Enable for unit:", self.unit)
 	
-	local playerClass = select(2, UnitClass("player"))
-	
-	-- exit if we filter and are not a dispeling class or we don't have a whitelist
+	-- exit if we filter by type and are not a dispeling class or we don't have a whitelist
 	--if (self.DebuffHighlight.filter and not UpdateDispelList[playerClass]) or not self.DebuffHighlight.whitelist then return end
 	
 	-- fetch the user's whitelist
@@ -194,9 +205,14 @@ local function Enable(self)
 	end
 
 	self:RegisterEvent("UNIT_AURA", Update)
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", UpdateDispelList[playerClass])
-	self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass])
-	-- TODO: need events for when player learns talents that are not spells and for summoning pets cos of warlock case
+	
+	-- we don't need these if we only filter by whitelist
+	if UpdateDispelList[playerClass] then
+		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", UpdateDispelList[playerClass]) -- FIXME: fails on classes not in UpdateDispelList
+		self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass])
+		self:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckTalentPoints)
+		self:RegisterEvent("UNIT_PET", CheckForPet)
+	end
 	
 	return true
 end
@@ -204,8 +220,12 @@ end
 local function Disable(self)
 	if self.DebuffHighlight then
 		self:UnregisterEvent("UNIT_AURA")
-		self:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		self:UnregisterEvent("LEARNED_SPELL_IN_TAB")
+		if UpdateDispelList[playerClass] then
+			self:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+			self:UnregisterEvent("LEARNED_SPELL_IN_TAB")
+			self:UnregisterEvent("CHARACTER_POINTS_CHANGED")
+			self:UnregisterEvent("UNIT_PET")
+		end
 	end
 end
 
