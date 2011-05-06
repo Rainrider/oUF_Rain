@@ -10,7 +10,7 @@ local UnitSpecific = {
 	player = function(self)
 		ns.AddSwingBar(self)
 		ns.AddReputationBar(self)
-		ns.AddExperienceBar(self)
+		ns.AddExperienceBar(self, "player")
 		ns.AddAltPowerBar(self)
 		
 		if (playerClass == "DEATHKNIGHT") then
@@ -54,7 +54,7 @@ local UnitSpecific = {
 	
 	pet = function(self)
 		ns.AddHealPredictionBar(self, 110, false)
-		ns.AddExperienceBar(self)
+		ns.AddExperienceBar(self, "pet")
 		ns.AddAltPowerBar(self) -- this is needed when the player is in vehicle. because the pet frame then holds the player unit
 		
 		ns.AddDebuffs(self, "pet")

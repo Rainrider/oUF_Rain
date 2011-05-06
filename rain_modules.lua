@@ -77,12 +77,12 @@ ns.AddDebuffHighlight = AddDebuffHighlight
 
 -- TODO: rested bar 
 --		math.min(curXP + rested, maxXP) -- this would be the rested bar
-local function AddExperienceBar(self)
+local function AddExperienceBar(self, unit)
 	if IsAddOnLoaded("oUF_Experience") then
-		self.Experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
+		self.Experience = CreateFrame("StatusBar", self:GetName().."_Experience", self)
 		self.Experience:SetHeight(5)
-		self.Experience:SetPoint("TOPLEFT", self.Health, "TOPLEFT", 0, 7.5)
-		self.Experience:SetPoint("TOPRIGHT", self.Health, "TOP", -2, 7.5)
+		self.Experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
+		self.Experience:SetPoint("BOTTOMRIGHT", self.Health, "TOP", -2, 2.5)
 		self.Experience:SetStatusBarTexture(cfg.TEXTURE)
 		self.Experience:SetStatusBarColor(0.67, 0.51, 1)
 		self.Experience:SetBackdrop(cfg.BACKDROP)
@@ -99,7 +99,6 @@ local function AddExperienceBar(self)
 		self.Experience.bg:SetVertexColor(0.15, 0.15, 0.15)
 		
 		self.Experience.Tooltip = function(self)
-			local unit = self:GetParent().unit
 			local curXP, maxXP
 			if (unit == "pet") then
 				curXP, maxXP = GetPetExperience()
