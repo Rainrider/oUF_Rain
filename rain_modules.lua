@@ -75,9 +75,9 @@ ns.AddDebuffHighlight = AddDebuffHighlight
 
 -- TODO: rested bar 
 --		math.min(curXP + rested, maxXP) -- this would be the rested bar
-local function AddExperienceBar(self, unit)
+local function AddExperienceBar(self)
 	if IsAddOnLoaded("oUF_Experience") then
-		self.Experience = CreateFrame("StatusBar", self:GetName().."_Experience", self)
+		self.Experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
 		self.Experience:SetHeight(5)
 		self.Experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
 		self.Experience:SetPoint("BOTTOMRIGHT", self.Health, "TOP", -2, 2.5)
@@ -91,7 +91,7 @@ local function AddExperienceBar(self, unit)
 		self.Experience:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
 		self.Experience:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
 		
-		self.Experience.Rested = CreateFrame("StatusBar", self:GetName().."_Rested", self.Experience)
+		self.Experience.Rested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", self.Experience)
 		self.Experience.Rested:SetHeight(5)
 		self.Experience.Rested:SetStatusBarTexture(cfg.TEXTURE)
 		self.Experience.Rested:SetStatusBarColor(0, 0, 1)
@@ -106,19 +106,14 @@ local function AddExperienceBar(self, unit)
 		self.Experience.bg:SetVertexColor(0.15, 0.15, 0.15)
 
 		self.Experience.Tooltip = function(self)
-			local curXP, maxXP
-			if (unit == "pet") then
-				curXP, maxXP = GetPetExperience()
-			else
-				curXP, maxXP = UnitXP(unit), UnitXPMax(unit)
-			end
-			local bars = unit == "pet" and 6 or 20
+			local curXP, maxXP = UnitXP("player"), UnitXPMax("player")
+			local bars = 20
 			local rested = GetXPExhaustion()
 	 		
 			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT", 0, 5)
 			GameTooltip:AddLine(string.format("XP: %d / %d (%d%% - %d bars)", curXP, maxXP, curXP/maxXP * 100, bars * curXP / maxXP))
 			GameTooltip:AddLine(string.format("Remaining: %d (%d%% - %d bars)", maxXP - curXP, (maxXP - curXP) / maxXP * 100, bars * (maxXP - curXP) / maxXP))
-			if (unit == "player" and rested and rested > 0) then
+			if (rested and rested > 0) then
 				GameTooltip:AddLine(string.format("|cff0090ffRested: +%d (%d%%)", rested, rested / maxXP * 100))
 			end
 			GameTooltip:Show()
