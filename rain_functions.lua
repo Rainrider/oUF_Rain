@@ -130,7 +130,7 @@ local CustomCastDelayText = function(self, duration)
 end
 ns.CustomCastDelayText = CustomCastDelayText
 
-local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, expiration, caster)
+local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 	if UnitCanAttack("player", unit) then
 		local casterClass
 

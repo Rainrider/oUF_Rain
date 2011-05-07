@@ -42,7 +42,7 @@ local function AddDebuffHighlight(self, unit)
 	self.DebuffHighlight:SetAllPoints()
 	self.DebuffHighlight:SetFrameLevel(self.DebuffHighlight:GetParent():GetFrameLevel() + 1)
 	
-	self.DebuffHighlight.filter = false
+	self.DebuffHighlightFilter = false
 	self.DebuffHighlight.whitelist = nil
 
 	self.DebuffHighlightTexture = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
@@ -54,22 +54,20 @@ local function AddDebuffHighlight(self, unit)
 	if unit == "player" or unit == "target" then
 		self.DebuffHighlightIcon = self.Overlay:CreateTexture(nil, "OVERLAY")
 		self.DebuffHighlightIcon:SetSize(18, 18)
+		
+		self.DebuffHighlightIconOverlay = self.Overlay:CreateTexture(nil, "OVERLAY")
+		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -3.5, 3.5)
+		self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 3.5, -3.5)
 	else
 		self.DebuffHighlightIcon = self.Health:CreateTexture(nil, "OVERLAY")
 		self.DebuffHighlightIcon:SetSize(16, 16)
+		
+		self.DebuffHighlightIconOverlay = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
+		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -1, 1)
+		self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 1, -1)
 	end
 	self.DebuffHighlightIcon:SetPoint("CENTER")
 	self.DebuffHighlightIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	
-	if unit == "player" or unit == "target" then
-		self.DebuffHighlightIconOverlay = self.Overlay:CreateTexture(nil, "OVERLAY")
-		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -3.5, 3.5)
-	self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 3.5, -3.5)
-	else
-		self.DebuffHighlightIconOverlay = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
-		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -1, 1)
-	self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 1, -1)
-	end
 	self.DebuffHighlightIconOverlay:SetTexture(cfg.BTNTEXTURE)
 	self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
 end
@@ -92,12 +90,21 @@ local function AddExperienceBar(self, unit)
 		self.Experience:EnableMouse()
 		self.Experience:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
 		self.Experience:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
+		
+		self.Experience.Rested = CreateFrame("StatusBar", self:GetName().."_Rested", self.Experience)
+		self.Experience.Rested:SetHeight(5)
+		self.Experience.Rested:SetStatusBarTexture(cfg.TEXTURE)
+		self.Experience.Rested:SetStatusBarColor(0, 0, 1)
+		self.Experience.Rested:SetBackdrop(cfg.BACKDROP)
+		self.Experience.Rested:SetBackdropColor(0, 0, 0)
+		self.Experience.Rested:SetPoint("LEFT", self.Experience:GetStatusBarTexture(), "RIGHT", 0, 0)
+		self.Experience.Rested:SetPoint("RIGHT", self.Experience, "RIGHT", 0, 0)
 
 		self.Experience.bg = self.Experience:CreateTexture(nil, "BORDER")
 		self.Experience.bg:SetAllPoints(self.Experience)
 		self.Experience.bg:SetTexture(cfg.TEXTURE)
 		self.Experience.bg:SetVertexColor(0.15, 0.15, 0.15)
-		
+
 		self.Experience.Tooltip = function(self)
 			local curXP, maxXP
 			if (unit == "pet") then

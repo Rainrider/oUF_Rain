@@ -1,16 +1,14 @@
 --[[
 		self.DebuffHightlight = Frame (to create the textures with)
-		self.DebuffHighlight.filter = boolean ( true = only debuffs player can dispell )
-		self.DebuffHighlight.whitelist = Table ( contains a list of spellIDs to always display: use spellID = true/false )
+		self.DebuffHighlightFilter = boolean ( true = only debuffs player can dispell )
 		
-		self.DebuffHighlightBackdrop = Frame ( GetBackdrop() ~= nil )
-		self.DebuffHighlightBackdropBorder = boolean ( true = color backdrop border )
+		self.DebuffHighlightBackdrop = Frame ( GetBackdrop() ~= nil ) - NYI
+		self.DebuffHighlightBackdropBorder = boolean ( true = color backdrop border ) - NYI
 		self.DebuffHighlightTexture = Texture ( GetTexture() ~= nil )
-		self.DebuffHighlightIcon = Texture
-		self.DebuffHighlightIconOverlay = Texture
+		self.DebuffHighlightIcon = Texture ( for the debuff icon )
+		self.DebuffHighlightIconOverlay = Texture ( for icon border )
 --]]
 local playerClass = select(2, UnitClass("player"))
-local useWhitelist = false
 
 local dispelList = {
 	Curse = false,
@@ -18,8 +16,6 @@ local dispelList = {
 	Magic = false,
 	Poison = false,
 }
-
-local whitelist = {}
 
 local debuffTypeColor = {}
 for dispelType, color in pairs(_G["DebuffTypeColor"]) do
@@ -107,42 +103,38 @@ local UpdateDispelList = {
 	end,
 }
 
-local function GetWhiteList(userWhitelist)
-	for k, v in pairs(userWhitelist) do
-		if v then
-			whitelist[k] = v -- TODO: maybe make it an array if they are faster
-		end
-	end
+-- Populate the dispelList
+if UpdateDispelList[playerClass] then
+	UpdateDispelList[playerClass]()
 end
 
-local function GetDispelType(unit, filter, useWhitelist)
+local function GetDebuffInfo(unit, filter)
 	if not UnitCanAssist("player", unit) then return end
 
 	-- name, rank, texture, stackCount, dispelType, duration, expireTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff
-	local name, _, texture, _, dispelType, _, _, _, _, _, spellID
+	local name, texture, dispelType, isBossDebuff
 	local i = 1
 	
 	while true do
-		name, _, texture, _, dispelType, _, _, _, _, _, spellID = UnitDebuff(unit, i)
+		name, _, texture, _, dispelType, _, _, _, _, _, _, _, isBossDebuff = UnitDebuff(unit, i)
 		if not texture then break end
-		--if (dispelType and not filter) or (useWhitelist and whitelist[spellID]) or (filter and dispelList[dispelType]) then -- TODO:  implement whitelist
-		if (not filter) or (filter and dispelList[dispelType]) then
-			return dispelType, texture
+		if (not filter and isBossDebuff) or (filter and dispelList[dispelType]) then
+			return dispelType, texture, isBossDebuff
 		end
 		i = i + 1
 	end
 end
 
 local function CheckForPet(self, event, unit)
+	print(event, unit)
 	if unit ~= "player" or playerClass ~= "WARLOCK" then return end
 	
 	UpdateDispelList[playerClass]()
 end
 
-local function CheckTalentPoints(self, event, count, levels)
-	-- don't update on just a level up
-	print(event, "count:", count, "levels:", levels)
-	if levels > 0 then return end
+local function CheckTalentPoints(self, event, count)
+	-- not interested in gained talent points
+	if count > 0 then return end
 
 	UpdateDispelList[playerClass]()
 end
@@ -151,13 +143,9 @@ local function Update(self, event, unit)
 	if unit ~= self.unit then return end
 	
 	local color
-	local dispelType, texture = GetDispelType(unit, self.DebuffHighlight.filter, useWhitelist)
+	local dispelType, texture, isBossDebuff = GetDebuffInfo(unit, self.DebuffHighlightFilter)
 	
-	if not dispelType then
-		dispelType = "none"
-	end
-	
-	color = debuffTypeColor[dispelType]
+	color = debuffTypeColor[dispelType] or debuffTypeColor["none"]
 	
 	if self.DebuffHighlightTexture then
 		if texture then
@@ -167,7 +155,7 @@ local function Update(self, event, unit)
 		end
 	end
 	
-	if self.DebuffHighlightIcon then
+	if self.DebuffHighlightIcon and isBossDebuff then
 		if texture then
 			self.DebuffHighlightIcon:SetTexture(texture)
 		else
@@ -186,30 +174,15 @@ end
 local function Enable(self)
 	if not self.DebuffHighlight then return end
 	
-	-- exit if we filter by type and are not a dispeling class or we don't have a whitelist
-	--if (self.DebuffHighlight.filter and not UpdateDispelList[playerClass]) or not self.DebuffHighlight.whitelist then return end
-	
-	-- fetch the user's whitelist
-	if self.DebuffHighlight.whitelist then
-		if type(self.DebuffHighlight.whitelist) ~= "table" then
-			error("Whitelist must be a table.")
-		else
-			GetWhiteList(self.DebuffHighlight.whitelist)
-			useWhitelist = true
-		end
-	end
-	
-	-- Populate the dispelList
-	if UpdateDispelList[playerClass] then
-		UpdateDispelList[playerClass]()
-	end
+	-- exit if we filter by type and are not a dispeling class
+	if (self.DebuffHighlightFilter and not UpdateDispelList[playerClass]) then return end
 
 	self:RegisterEvent("UNIT_AURA", Update)
 	
-	-- we don't need these if we only filter by whitelist
+	-- we don't need these if we only filter for boss debuffs
 	if UpdateDispelList[playerClass] then
-		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", UpdateDispelList[playerClass]) -- FIXME: fails on classes not in UpdateDispelList
-		self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass])
+		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", UpdateDispelList[playerClass]) -- we probably don't need this as LEARNED_SPELL_IN_TAB fires a lot upon it
+		self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass]) -- we maybe should throttle this
 		self:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckTalentPoints)
 		self:RegisterEvent("UNIT_PET", CheckForPet)
 	end
