@@ -72,11 +72,13 @@ local function AddDebuffHighlight(self, unit)
 	self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
 end
 ns.AddDebuffHighlight = AddDebuffHighlight
-
--- TODO: rested bar 
---		math.min(curXP + rested, maxXP) -- this would be the rested bar
+	
 local function AddExperienceBar(self)
 	if IsAddOnLoaded("oUF_Experience") then
+		local curXP, maxXP = UnitXP("player"), UnitXPMax("player")
+		local bars = 20
+		local rested = GetXPExhaustion()
+	
 		self.Experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
 		self.Experience:SetHeight(5)
 		self.Experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
@@ -91,30 +93,27 @@ local function AddExperienceBar(self)
 		self.Experience:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
 		self.Experience:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
 		
-		self.Experience.Rested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", self.Experience)
-		self.Experience.Rested:SetHeight(5)
-		self.Experience.Rested:SetStatusBarTexture(cfg.TEXTURE)
-		self.Experience.Rested:SetStatusBarColor(0, 0, 1)
-		self.Experience.Rested:SetBackdrop(cfg.BACKDROP)
-		self.Experience.Rested:SetBackdropColor(0, 0, 0)
-		self.Experience.Rested:SetPoint("LEFT", self.Experience:GetStatusBarTexture(), "RIGHT", 0, 0)
-		self.Experience.Rested:SetPoint("RIGHT", self.Experience, "RIGHT", 0, 0)
-
+		self.ExperienceRested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", self.Experience)
+		self.ExperienceRested:SetPoint("TOPLEFT", self.Experience:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		self.ExperienceRested:SetPoint("BOTTOMRIGHT", self.Experience, 0, 0)
+		self.ExperienceRested:SetStatusBarTexture(cfg.TEXTURE)
+		self.ExperienceRested:SetStatusBarColor(0, 0.56, 1)
+		self.ExperienceRested:SetMinMaxValues(curXP, maxXP - curXP)
+		self.ExperienceRested:SetValue(math.min(curXP + rested, maxXP)) -- or maxXP - curXP ??
+		self.ExperienceRested:SetBackdrop(cfg.BACKDROP)
+		self.ExperienceRested:SetBackdropColor(0, 0, 0)
+--[[
 		self.Experience.bg = self.Experience:CreateTexture(nil, "BORDER")
 		self.Experience.bg:SetAllPoints(self.Experience)
 		self.Experience.bg:SetTexture(cfg.TEXTURE)
 		self.Experience.bg:SetVertexColor(0.15, 0.15, 0.15)
-
+--]]
 		self.Experience.Tooltip = function(self)
-			local curXP, maxXP = UnitXP("player"), UnitXPMax("player")
-			local bars = 20
-			local rested = GetXPExhaustion()
-	 		
 			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT", 0, 5)
-			GameTooltip:AddLine(string.format("XP: %d / %d (%d%% - %d bars)", curXP, maxXP, curXP/maxXP * 100, bars * curXP / maxXP))
-			GameTooltip:AddLine(string.format("Remaining: %d (%d%% - %d bars)", maxXP - curXP, (maxXP - curXP) / maxXP * 100, bars * (maxXP - curXP) / maxXP))
+			GameTooltip:AddLine(string.format("XP: %d / %d (%d%% - %.1f bars)", curXP, maxXP, curXP/maxXP * 100 + 0.5, bars * curXP / maxXP))
+			GameTooltip:AddLine(string.format("Remaining: %d (%d%% - %.1f bars)", maxXP - curXP, (maxXP - curXP) / maxXP * 100 + 0.5, bars * (maxXP - curXP) / maxXP))
 			if (rested and rested > 0) then
-				GameTooltip:AddLine(string.format("|cff0090ffRested: +%d (%d%%)", rested, rested / maxXP * 100))
+				GameTooltip:AddLine(string.format("|cff0090ffRested: +%d (%d%%)", rested, rested / maxXP * 100 + 0.5))
 			end
 			GameTooltip:Show()
 		end
