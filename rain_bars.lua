@@ -302,14 +302,11 @@ local function AddTotems(self, width, height)
 	for i = 1, numTotems do
 		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self)
 		self.Totems[i]:SetStatusBarTexture(cfg.TEXTURE)
-		self.Totems[i]:SetBackdrop(cfg.BACKDROP)
-		self.Totems[i]:SetBackdropColor(0, 0, 0)
 		self.Totems[i]:SetMinMaxValues(0, 1)
 		
 		if playerClass == "SHAMAN" then
 			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
 			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
-			self.Totems[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[i]))
 		elseif playerClass == "DRUID" then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
@@ -326,6 +323,10 @@ local function AddTotems(self, width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.class[playerClass]))
 			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 		end
+		
+		self.Totems[i]:SetBackdrop(cfg.BACKDROP)
+		self.Totems[i]:SetBackdropColor(0, 0, 0)
+		self.Totems[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		
 		self.Totems[i].Destroy = CreateFrame("Button", nil, self.Totems[i])
 		self.Totems[i].Destroy:SetAllPoints()
