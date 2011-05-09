@@ -6,7 +6,7 @@ local GetSpellFocusCost = function(talentTree, focusSpark)
 	local bmSpell = focusSpark.bmSpell and focusSpark.bmSpell or 34026	-- Kill Command
 	local mmSpell = focusSpark.mmSpell and focusSpark.mmSpell or 53209	-- Chimera Shot
 	local svSpell = focusSpark.svSpell and focusSpark.svSpell or 53301	-- Explosive Shot
-	print(focusSpark.bmSpell, focusSpark.mmSpell, focusSpark.svSpell)
+
 	if (talentTree == 3 and IsSpellKnown(svSpell)) then		-- SURVIVAL
 		spellFocusCost = select(4, GetSpellInfo(svSpell))
 	elseif (talentTree == 2 and IsSpellKnown(mmSpell)) then	-- MARKMANSHIP
