@@ -114,32 +114,21 @@ local function AddExperienceBar(self)
 end
 ns.AddExperienceBar = AddExperienceBar
 
-local function AddHunterFocusSpark(self)
-	local sparkPos = ns.GetFocusSparkPosition(self.Power:GetWidth())
-
-	self.FocusSpark = CreateFrame("Frame", "FocusSpark", self.Power)
+local function AddFocusHelper(self)
+	self.FocusSpark = self.Power:CreateTexture(nil, "OVERLAY")
 	self.FocusSpark:SetWidth(10)
 	self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
-	self.FocusSpark:SetPoint("LEFT", sparkPos - 5, 0)
 	
-	self.FocusSpark.backdrop = self.FocusSpark:CreateTexture(nil, "OVERLAY")
-	self.FocusSpark.backdrop:SetAllPoints(self.FocusSpark)
-	self.FocusSpark.backdrop:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-	self.FocusSpark.backdrop:SetBlendMode("ADD")
+	self.FocusSpark.bmSpell = 34026 -- Kill Command
+	self.FocusSpark.mmSpell = 53209 -- Chimera Shot
+	self.FocusSpark.svSpell = 53301 -- Explosive Shot
 	
-	self.FocusSpark:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	self.FocusSpark:RegisterEvent("LEARNED_SPELL_IN_TAB")
-	self.FocusSpark:SetScript("OnEvent", function(frame, eventName, spellID, tabID)
-		frame:ClearAllPoints()
-		if sparkPos ~= 0 then
-			frame:Show()
-			frame:SetPoint("LEFT", sparkPos - 5, 0)
-		else
-			frame:Hide()
-		end
-	end)
+	self.FocusGain = self.Power:CreateTexture(nil, "OVERLAY")
+	self.FocusGain:SetHeight(self.Power:GetHeight())
+	self.FocusGain:SetTexture(cfg.TEXTURE)
+	self.FocusGain:SetVertexColor(0, 1, 0, 0.3)
 end
-ns.AddHunterFocusSpark = AddHunterFocusSpark
+ns.AddFocusHelper = AddFocusHelper
 
 local function AddReputationBar(self)
 	if IsAddOnLoaded("oUF_Reputation") then

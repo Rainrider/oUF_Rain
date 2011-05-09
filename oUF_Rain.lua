@@ -26,7 +26,7 @@ local UnitSpecific = {
 			ns.AddEclipseBar(self, 230, 7)
 			ns.AddTotems(self, 30, 5)
 		elseif (playerClass == "HUNTER") then
-			ns.AddHunterFocusSpark(self)
+			ns.AddFocusHelper(self)
 		end
 		
 		ns.AddCombatIcon(self)
