@@ -17,22 +17,7 @@ local function AddCombatFeedbackText(self)
 
 	self.CombatFeedbackText = PutFontString(self.Overlay, ns.media.FONT, 14, "OUTLINE", "LEFT")
 	self.CombatFeedbackText:SetPoint("CENTER", 0, 5)
-	self.CombatFeedbackText.colors = {
-		DAMAGE = {0.69, 0.31, 0.31},
-		CRUSHING = {0.69, 0.31, 0.31},
-		CRITICAL = {0.69, 0.31, 0.31},
-		GLANCING = {0.69, 0.31, 0.31},
-		STANDARD = {0.84, 0.75, 0.65},
-		IMMUNE = {0.84, 0.75, 0.65},
-		ABSORB = {0.84, 0.75, 0.65},
-		BLOCK = {0.84, 0.75, 0.65},
-		RESIST = {0.84, 0.75, 0.65},
-		MISS = {0.84, 0.75, 0.65},
-		HEAL = {0.33, 0.59, 0.33},
-		CRITHEAL = {0.33, 0.59, 0.33},
-		ENERGIZE = {0.31, 0.45, 0.63},
-		CRITENERGIZE = {0.31, 0.45, 0.63},
-	}
+	self.CombatFeedbackText.colors = ns.combatFeedbackColors
 end
 ns.AddCombatFeedbackText = AddCombatFeedbackText
 
@@ -150,7 +135,7 @@ local function AddReputationBar(self)
 
 		self.Reputation.PostUpdate = function(bar, unit, min, max)
 			local name, id = GetWatchedFactionInfo()
-			bar:SetStatusBarColor(unpack(oUF.colors.reaction[id]))
+			bar:SetStatusBarColor(unpack(ns.colors.reaction[id]))
 		end
 		
 		self.Reputation.Tooltip = function(self)

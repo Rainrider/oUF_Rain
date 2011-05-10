@@ -13,23 +13,6 @@ local numShards = SHARD_BAR_NUM_SHARDS
 local numCPoints = MAX_COMBO_POINTS
 local playerClass = cfg.playerClass
 
-local runecolors = {
-	[1] = {0.69, 0.31, 0.31},
-	[2] = {0.69, 0.31, 0.31},
-	[3] = {0.33, 0.59, 0.33},
-	[4] = {0.33, 0.59, 0.33},
-	[5] = {0.31, 0.45, 0.63},
-	[6] = {0.31, 0.45, 0.63},
-}
-
-local combocolors = {
-	[1] = {1, 0.68, 0.35},
-	[2] = {254/255, 154/255, 46/255},
-	[3] = {1, 128/255, 0},
-	[4] = {223/255, 116/255, 1/255},
-	[5] = {180/255, 95/255, 4/255},
-}
-
 local function AddAltPowerBar(self)
 	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
 	self.AltPowerBar:SetHeight(3)
@@ -148,7 +131,7 @@ local function AddComboPointsBar(self, width, height)
 		self.CPoints[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.CPoints[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.CPoints[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.CPoints[i]:SetStatusBarColor(unpack(combocolors[i]))
+		self.CPoints[i]:SetStatusBarColor(unpack(ns.colors.cpoints[i]))
 		self.CPoints[i]:SetBackdrop(ns.media.BACKDROP)
 		self.CPoints[i]:SetBackdropColor(0, 0, 0)
 	end
@@ -224,7 +207,8 @@ local function AddHolyPowerBar(self, width, height)
 		self.HolyPower[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.HolyPower[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.HolyPower[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.HolyPower[i]:SetStatusBarColor(0.95, 0.9, 0.6) -- TODO: oUF_colors.power.HOLY_POWER
+		--self.HolyPower[i]:SetStatusBarColor(0.95, 0.9, 0.6) -- TODO: oUF_colors.power.HOLY_POWER
+		self.HolyPower[i]:SetStatusBarColor(unpack(ns.colors.power["HOLY_POWER"]))
 		self.HolyPower[i]:SetBackdrop(ns.media.BACKDROP)
 		self.HolyPower[i]:SetBackdropColor(0, 0, 0)
 	end
@@ -268,7 +252,6 @@ local function AddRuneBar(self, width, height)
 		self.Runes[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Runes[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.Runes[i]:SetStatusBarColor(unpack(runecolors[i]))
 		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
 	end
@@ -288,7 +271,7 @@ local function AddSoulShardsBar(self, width, height)
 		self.SoulShards[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.SoulShards[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.SoulShards[i]:GetStatusBarTexture():SetHorizTile(false)
-		self.SoulShards[i]:SetStatusBarColor(0.50, 0.32, 0.55) -- TODO: oUF.colors.power.SOUL_SHARDS
+		self.SoulShards[i]:SetStatusBarColor(unpack(ns.colors.power["SOUL_SHARDS"]))
 		self.SoulShards[i]:SetBackdrop(ns.media.BACKDROP)
 		self.SoulShards[i]:SetBackdropColor(0, 0, 0)
 	end
@@ -309,10 +292,10 @@ local function AddTotems(self, width, height)
 		if playerClass == "SHAMAN" then
 			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
 			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
-			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.totems[i]))
+			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[i]))
 		elseif playerClass == "DRUID" then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
-			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.class[playerClass]))
+			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 				if i == 1 then
 					self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 				elseif i == 2 then
@@ -322,7 +305,7 @@ local function AddTotems(self, width, height)
 				end
 		elseif playerClass == "DEATHKNIGHT" then -- Death knight's ghoul
 			self.Totems[i]:SetSize(width, height)
-			self.Totems[i]:SetStatusBarColor(unpack(oUF.colors.class[playerClass]))
+			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 		end
 		
