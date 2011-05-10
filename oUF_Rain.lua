@@ -42,7 +42,7 @@ local UnitSpecific = {
 	end,
 	
 	target = function(self)
-		self.Info = PutFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
+		self.Info = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
 		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", 0, -5)
 		self:Tag(self.Info, "[rain:role][rain:name] [difficulty][level] [shortclassification]|r")
@@ -91,31 +91,31 @@ local function Shared(self, unit)
 	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
 	self.FrameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
 	self.FrameBackdrop:SetPoint("BOTTOMRIGHT", self, 5, -5)
-	self.FrameBackdrop:SetBackdrop(cfg.BACKDROP2)
+	self.FrameBackdrop:SetBackdrop(ns.media.BACKDROP2)
 	self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
 	self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
 	
 	self.Health = CreateFrame("StatusBar", self:GetName().."_Health", self)
-	self.Health:SetStatusBarTexture(cfg.TEXTURE)
+	self.Health:SetStatusBarTexture(ns.media.TEXTURE)
 	self.Health.colorDisconnected = true
 	self.Health.colorTapping = true
 	self.Health.colorClass = true
 	self.Health.colorReaction = true
 	self.Health.frequentUpdates = true
-	self.Health:SetBackdrop(cfg.BACKDROP)
+	self.Health:SetBackdrop(ns.media.BACKDROP)
 	self.Health:SetBackdropColor(0, 0, 0)
 	
 	self.Health.bg = self.Health:CreateTexture(nil, "BORDER")
 	self.Health.bg:SetAllPoints()
-	self.Health.bg:SetTexture(cfg.TEXTURE)
+	self.Health.bg:SetTexture(ns.media.TEXTURE)
 	self.Health.bg.multiplier = 0.5
 	
 	self.Health.PostUpdate = ns.PostUpdateHealth
 	
 	if not unitIsPartyPet then
 		self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
-		self.Power:SetStatusBarTexture(cfg.TEXTURE)
-		self.Power:SetBackdrop(cfg.BACKDROP)
+		self.Power:SetStatusBarTexture(ns.media.TEXTURE)
+		self.Power:SetBackdrop(ns.media.BACKDROP)
 		self.Power:SetBackdropColor(0, 0, 0)
 	
 		self.Power.colorTapping = true
@@ -126,7 +126,7 @@ local function Shared(self, unit)
 	
 		self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
 		self.Power.bg:SetAllPoints()
-		self.Power.bg:SetTexture(cfg.TEXTURE)
+		self.Power.bg:SetTexture(ns.media.TEXTURE)
 		self.Power.bg.multiplier = 0.5
 	
 		self.Power.PreUpdate = ns.PreUpdatePower
@@ -143,7 +143,7 @@ local function Shared(self, unit)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
 		
-		self.Health.value = PutFontString(self.Health, cfg.FONT2, 12, nil, "RIGHT")
+		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
 		self.Health.value.frequentUpdates = 1/4
 		self:Tag(self.Health.value, "[dead][offline][rain:health]")
@@ -152,7 +152,7 @@ local function Shared(self, unit)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
 		
-		self.Power.value = PutFontString(self.Health, cfg.FONT2, 12, nil, "LEFT")
+		self.Power.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
 		self.Power.value.frequentUpdates = 1/4
 		self:Tag(self.Power.value, "[rain:power]")
@@ -167,7 +167,7 @@ local function Shared(self, unit)
 		ns.AddDebuffs(self, unit)
 		ns.AddDebuffHighlight(self, unit)
 		
-		self.Status = PutFontString(self.Portrait, cfg.FONT2, 18, "OUTLINE", "RIGHT")
+		self.Status = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
 		self.Status:SetPoint("RIGHT", -3.5, 2)
 		self.Status:SetTextColor(0.69, 0.31, 0.31, 0.6)
 		self:Tag(self.Status, "[pvp]")
@@ -190,7 +190,7 @@ local function Shared(self, unit)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
 		
-		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
+		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
 		self.Health.value.frequentUpdates = 1/4
 		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
@@ -199,7 +199,7 @@ local function Shared(self, unit)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
 		
-		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.Name = PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("TOPLEFT", 2, -2)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		
@@ -235,11 +235,11 @@ local function Shared(self, unit)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
 		
-		self.Health.value = PutFontString(self.Health, cfg.FONT2, 9, nil, "RIGHT")
+		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("RIGHT", -2, 0)
 		self:Tag(self.Health.value, "[perhp]")
 		
-		self.Name = PutFontString(self.Health, cfg.FONT2, 9, nil, "LEFT")
+		self.Name = PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("LEFT", 2, 0)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		self:Tag(self.Name, "[rain:name]")
@@ -254,7 +254,7 @@ end
 oUF:RegisterStyle("Rain", Shared)
 oUF:Factory(function(self)
 
-	local playerClass = cfg.playerClass
+	-- local playerClass = cfg.playerClass -- TODO: this is upvalue. remove
 	local spellName
 	
 	if playerClass == "HUNTER" then

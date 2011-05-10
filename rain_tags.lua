@@ -6,6 +6,7 @@
 local _, ns = ...
 local SiValue = ns.SiValue
 local playerClass = ns.config.playerClass
+local RGBtoHEX = ns.RGBtoHEX
 
 -- local references for some Blizz functions
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
@@ -30,7 +31,7 @@ oUF.Tags["rain:namecolor"] = function(unit)
 		color = oUF.colors.reaction[reaction or 4]
 	end
 	
-	return ns.RGBtoHEX(color[1], color[2], color[3])
+	return RGBtoHEX(color[1], color[2], color[3])
 end
 
 oUF.Tags["rain:healthSmall"] = function(unit)
@@ -75,7 +76,7 @@ oUF.Tags["rain:druidmana"] = function(unit, pType)
 	
 	if curMana == maxMana then return end
 	
-	return ns.RGBtoHEX(unpack(oUF.colors.class[playerClass])) .. math.floor(curMana / maxMana * 100 + 0.5) .. "%|r"
+	return RGBtoHEX(unpack(oUF.colors.class[playerClass])) .. math.floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
 
 oUF.Tags["rain:power"] = function(unit)
@@ -103,7 +104,7 @@ oUF.Tags["rain:power"] = function(unit)
 		powerValue = SiValue(cur)
 	end
 	
-	powerValue = ns.RGBtoHEX(unpack(ns.colors.power[pName])) .. powerValue .. "|r"
+	powerValue = RGBtoHEX(unpack(ns.colors.power[pName])) .. powerValue .. "|r"
 	
 	if druidMana and cur > 0 then
 		return powerValue .. " - " .. druidMana

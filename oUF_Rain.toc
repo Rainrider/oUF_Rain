@@ -8,6 +8,7 @@
 ## OptionalDeps: oUF_CombatFeedback, oUF_Reputation, oUF_Swing
 
 rain_config.lua
+rain_media.lua
 rain_functions.lua
 rain_modules.lua
 modules\rain_dispel.lua

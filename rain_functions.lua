@@ -5,6 +5,7 @@
 
 local _, ns = ...
 local cfg = ns.config
+local playerClass = cfg.playerClass
 
 local colors = setmetatable({
 	power = setmetatable({
@@ -137,7 +138,7 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 		if caster then
 			_, casterClass = UnitClass(caster)
 		end
-		if not icon.debuff or (casterClass and casterClass == cfg.playerClass) then	-- return all buffs and only debuffs cast by the players class
+		if not icon.debuff or (casterClass and casterClass == playerClass) then	-- return all buffs and only debuffs cast by the players class
 			return true
 		end
 	else
@@ -357,19 +358,19 @@ local function PostCreateIcon(Icons, icon)
 	icon.cd.noCooldownCount = true
 	
 	icon.count:SetPoint("BOTTOMRIGHT", 1, 1.5)
-	icon.count:SetFont(cfg.FONT, 8, "OUTLINE")
+	icon.count:SetFont(ns.media.FONT, 8, "OUTLINE")
 	icon.count:SetTextColor(0.84, 0.75, 0.65)
 	icon.count:SetJustifyH("RIGHT")
 	
 	icon.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
-	icon.overlay:SetTexture(cfg.BTNTEXTURE)
+	icon.overlay:SetTexture(ns.media.BTNTEXTURE)
 	icon.overlay:SetPoint("TOPLEFT", -3.5, 3.5)
 	icon.overlay:SetPoint("BOTTOMRIGHT", 3.5, -3.5)
 	icon.overlay:SetTexCoord(0, 1, 0, 1)
 	--icon.overlay.Hide = function(self) end -- TODO unneeded?
 	
-	icon.remaining = PutFontString(icon, cfg.FONT, 8, "OUTLINE", "LEFT")
+	icon.remaining = PutFontString(icon, ns.media.FONT, 8, "OUTLINE", "LEFT")
 	icon.remaining:SetPoint("TOP", 0, 1)
 	
 	icon:HookScript("OnEnter", function() Aura_OnEnter(Icons.__owner, icon) end)
@@ -439,6 +440,19 @@ local function PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, 
 	end
 end
 ns.PostUpdateTotems = PostUpdateTotems
+
+local function PostUpdateClassBar(classBar, unit)
+	if (UnitHasVehicleUI("player")) then
+		for i, bar in ipairs(classBar) do
+			bar:Hide()
+		end
+	else
+		for i, bar in ipairs(classBar) do
+			bar:Show()
+		end
+	end
+end
+ns.PostUpdateClassBar = PostUpdateClassBar
 --[[END OF PRE AND POST FUNCTIONS]]--
 
 local function AddAuras(self, unit)
@@ -507,7 +521,7 @@ local function AddBuffs(self, unit)
 	self.Buffs.Magnify.icon:SetPoint("CENTER")
 	
 	self.Buffs.Magnify.border = self.Buffs.Magnify:CreateTexture(nil, "OVERLAY")
-	self.Buffs.Magnify.border:SetTexture(cfg.BTNTEXTURE)
+	self.Buffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
 	self.Buffs.Magnify.border:SetPoint("TOPLEFT", self.Buffs.Magnify.icon, -5, 5)
 	self.Buffs.Magnify.border:SetPoint("BOTTOMRIGHT", self.Buffs.Magnify.icon, 5, -5)
 end
@@ -563,7 +577,7 @@ local function AddDebuffs(self, unit)
 	self.Debuffs.Magnify.icon:SetPoint("CENTER")
 	
 	self.Debuffs.Magnify.border = self.Debuffs.Magnify:CreateTexture(nil, "OVERLAY")
-	self.Debuffs.Magnify.border:SetTexture(cfg.BTNTEXTURE)
+	self.Debuffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
 	self.Debuffs.Magnify.border:SetPoint("TOPLEFT", self.Debuffs.Magnify.icon, -5, 5)
 	self.Debuffs.Magnify.border:SetPoint("BOTTOMRIGHT", self.Debuffs.Magnify.icon, 5, -5)
 end

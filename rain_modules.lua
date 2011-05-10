@@ -4,7 +4,6 @@
 	====================================================================================--]]
 
 --[[ TODO:	WeaponEnchant
-			DebuffHighlight
 			AuraWatch
 ]]
 
@@ -16,7 +15,7 @@ local PutFontString = ns.PutFontString
 local function AddCombatFeedbackText(self)
 	if (not IsAddOnLoaded("oUF_CombatFeedback")) then return end
 
-	self.CombatFeedbackText = PutFontString(self.Overlay, cfg.FONT, 14, "OUTLINE", "LEFT")
+	self.CombatFeedbackText = PutFontString(self.Overlay, ns.media.FONT, 14, "OUTLINE", "LEFT")
 	self.CombatFeedbackText:SetPoint("CENTER", 0, 5)
 	self.CombatFeedbackText.colors = {
 		DAMAGE = {0.69, 0.31, 0.31},
@@ -46,7 +45,7 @@ local function AddDebuffHighlight(self, unit)
 
 	self.DebuffHighlightTexture = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
 	self.DebuffHighlightTexture:SetAllPoints()
-	self.DebuffHighlightTexture:SetTexture(cfg.HIGHLIGHTTEXTURE)
+	self.DebuffHighlightTexture:SetTexture(ns.media.HIGHLIGHTTEXTURE)
 	self.DebuffHighlightTexture:SetBlendMode("ADD")
 	self.DebuffHighlightTexture:SetVertexColor(0, 0, 0, 0)
 	
@@ -67,7 +66,7 @@ local function AddDebuffHighlight(self, unit)
 	end
 	self.DebuffHighlightIcon:SetPoint("CENTER")
 	self.DebuffHighlightIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	self.DebuffHighlightIconOverlay:SetTexture(cfg.BTNTEXTURE)
+	self.DebuffHighlightIconOverlay:SetTexture(ns.media.BTNTEXTURE)
 	self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
 end
 ns.AddDebuffHighlight = AddDebuffHighlight
@@ -77,9 +76,9 @@ local function AddExperienceBar(self)
 	self.Experience:SetHeight(5)
 	self.Experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
 	self.Experience:SetPoint("BOTTOMRIGHT", self.Health, "TOP", -2, 2.5)
-	self.Experience:SetStatusBarTexture(cfg.TEXTURE)
+	self.Experience:SetStatusBarTexture(ns.media.TEXTURE)
 	self.Experience:SetStatusBarColor(0.67, 0.51, 1)
-	self.Experience:SetBackdrop(cfg.BACKDROP)
+	self.Experience:SetBackdrop(ns.media.BACKDROP)
 	self.Experience:SetBackdropColor(0, 0, 0)
 	self.Experience:SetAlpha(0)
 		
@@ -90,9 +89,9 @@ local function AddExperienceBar(self)
 	self.Experience.Rested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", self.Experience)
 	self.Experience.Rested:SetPoint("TOPLEFT", self.Experience:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	self.Experience.Rested:SetPoint("BOTTOMRIGHT", self.Experience, 0, 0)
-	self.Experience.Rested:SetStatusBarTexture(cfg.TEXTURE)
+	self.Experience.Rested:SetStatusBarTexture(ns.media.TEXTURE)
 	self.Experience.Rested:SetStatusBarColor(0, 0.56, 1)
-	self.Experience.Rested:SetBackdrop(cfg.BACKDROP)
+	self.Experience.Rested:SetBackdrop(ns.media.BACKDROP)
 	self.Experience.Rested:SetBackdropColor(0, 0, 0)
 
 	self.Experience.Tooltip = function(self)
@@ -124,7 +123,7 @@ local function AddFocusHelper(self)
 	
 	self.FocusGain = self.Power:CreateTexture(nil, "OVERLAY")
 	self.FocusGain:SetHeight(self.Power:GetHeight())
-	self.FocusGain:SetTexture(cfg.TEXTURE)
+	self.FocusGain:SetTexture(ns.media.TEXTURE)
 	self.FocusGain:SetVertexColor(0, 1, 0, 0.3)
 end
 ns.AddFocusHelper = AddFocusHelper
@@ -135,8 +134,8 @@ local function AddReputationBar(self)
 		self.Reputation:SetHeight(5)
 		self.Reputation:SetPoint("TOPLEFT", self.Health, "TOP", 2, 7.5)
 		self.Reputation:SetPoint("TOPRIGHT", self.Health, "TOPRIGHT", 0, 7.5)
-		self.Reputation:SetStatusBarTexture(cfg.TEXTURE)
-		self.Reputation:SetBackdrop(cfg.BACKDROP)
+		self.Reputation:SetStatusBarTexture(ns.media.TEXTURE)
+		self.Reputation:SetBackdrop(ns.media.BACKDROP)
 		self.Reputation:SetBackdropColor(0, 0, 0)
 		self.Reputation:SetAlpha(0)
 		
@@ -146,7 +145,7 @@ local function AddReputationBar(self)
 
 		self.Reputation.bg = self.Reputation:CreateTexture(nil, "BORDER")
 		self.Reputation.bg:SetAllPoints(self.Reputation)
-		self.Reputation.bg:SetTexture(cfg.TEXTURE)
+		self.Reputation.bg:SetTexture(ns.media.TEXTURE)
 		self.Reputation.bg:SetVertexColor(0.15, 0.15, 0.15)
 
 		self.Reputation.PostUpdate = function(bar, unit, min, max)
@@ -175,11 +174,11 @@ local function AddSwingBar(self)
 		self.Swing:SetHeight(3)
 		self.Swing:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 7)
 		self.Swing:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 7)
-		--self.Swing:SetBackdrop(cfg.BACKDROP)
+		--self.Swing:SetBackdrop(ns.media.BACKDROP)
 		--self.Swing:SetBackdropColor(0, 0, 0)
-		self.Swing.texture = cfg.TEXTURE
+		self.Swing.texture = ns.media.TEXTURE
 		self.Swing.color = {0.55, 0.57, 0.61, 1}
-		self.Swing.textureBG = cfg.TEXTURE
+		self.Swing.textureBG = ns.media.TEXTURE
 		self.Swing.colorBG = {0, 0, 0, 0.6}
 			
 		self.Swing.hideOoc = true
