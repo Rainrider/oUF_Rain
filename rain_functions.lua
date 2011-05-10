@@ -435,7 +435,7 @@ local function AddAuras(self, unit)
 	self.Auras:SetSize(12 * self.Auras.size + 11 * self.Auras.spacing, self.Auras.size)
 	self.Auras.disableCooldown = true
 	self.Auras.showType = true
-	self.Auras.onlyShowPlayer = false
+	self.Auras.onlyShowPlayer = true
 	self.Auras.PreSetPosition = PreSetPosition
 	self.Auras.PostCreateIcon = PostCreateIcon
 	self.Auras.PostUpdateIcon = PostUpdateIcon
@@ -448,7 +448,7 @@ local function AddBuffs(self, unit)
 	self.Buffs.size = (230 - 9 * self.Buffs.spacing) / 10
 	self.Buffs.disableCooldown = true
 	self.Buffs.showType = true
-	self.Buffs.onlyShowPlayer = false
+	self.Buffs.onlyShowPlayer = cfg.onlyShowPlayerBuffs
 	self.Buffs.PreSetPosition = PreSetPosition
 	self.Buffs.PostCreateIcon = PostCreateIcon
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
@@ -503,7 +503,7 @@ local function AddDebuffs(self, unit)
 	self.Debuffs.size = (230 - 9 * self.Debuffs.spacing) / 10
 	self.Debuffs.showType = true
 	self.Debuffs.disableCooldown = true
-	self.Debuffs.onlyShowPlayer = false
+	self.Debuffs.onlyShowPlayer = cfg.onlyShowPlayerDebuffs
 	self.Debuffs.PreSetPosition = PreSetPosition
 	self.Debuffs.PostCreateIcon = PostCreateIcon
 	self.Debuffs.PostUpdateIcon = PostUpdateIcon
@@ -518,7 +518,7 @@ local function AddDebuffs(self, unit)
 		self.Debuffs["growth-y"] = "DOWN"
 		
 		if (unit == "target") then
-			self.Debuffs.CustomFilter = CustomFilter
+			self.Debuffs.CustomFilter = (not cfg.onlyShowPlayerDebuffs and CustomFilter) or nil
 		end
 	end
 	

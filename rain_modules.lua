@@ -26,7 +26,7 @@ local function AddDebuffHighlight(self, unit)
 	self.DebuffHighlight:SetAllPoints()
 	self.DebuffHighlight:SetFrameLevel(self.DebuffHighlight:GetParent():GetFrameLevel() + 1)
 	
-	self.DebuffHighlightFilter = true
+	self.DebuffHighlightFilter = cfg.dispelTypeFilter
 
 	self.DebuffHighlightTexture = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
 	self.DebuffHighlightTexture:SetAllPoints()
@@ -102,9 +102,9 @@ local function AddFocusHelper(self)
 	self.FocusSpark:SetWidth(10)
 	self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
 	
-	self.FocusSpark.bmSpell = 34026 -- Kill Command
-	self.FocusSpark.mmSpell = 53209 -- Chimera Shot
-	self.FocusSpark.svSpell = 53301 -- Explosive Shot
+	self.FocusSpark.bmSpell = cfg.bmSpell -- Kill Command
+	self.FocusSpark.mmSpell = cfg.mmSpell -- Chimera Shot
+	self.FocusSpark.svSpell = cfg.svSpell -- Explosive Shot
 	
 	self.FocusGain = self.Power:CreateTexture(nil, "OVERLAY")
 	self.FocusGain:SetHeight(self.Power:GetHeight())

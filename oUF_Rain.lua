@@ -254,21 +254,9 @@ end
 oUF:RegisterStyle("Rain", Shared)
 oUF:Factory(function(self)
 
-	-- local playerClass = cfg.playerClass -- TODO: this is upvalue. remove
-	local spellName
-	
-	if playerClass == "HUNTER" then
-		 spellName = GetSpellInfo(34477)	-- Misdirection
-	elseif playerClass == "DRUID" then
-		spellName = GetSpellInfo(29166)		-- 29166 Innervate 33763 Blühendes Leben
-	elseif playerClass == "PALADIN" then
-		spellName = GetSpellInfo(31789)		-- Righteous Defense
-	elseif playerClass == "WARRIOR" then
-		spellName = GetSpellInfo(3411)		-- Intervene
-	elseif playerClass == "ROGUE" then
-		spellName = GetSpellInfo(57934)		-- Tricks of the Trade
-	elseif not spellName then
-		spellName = "Misdirection"
+	local spellName = GetSpellInfo(cfg.clickSpell[playerClass] and cfg.clickSpell[playerClass] or 6603)	-- 6603 Auto Attack
+	if not spellName then
+		spellName = GetSpellInfo(6603)
 	end
 
 	self:SetActiveStyle("Rain")
