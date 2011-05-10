@@ -193,13 +193,15 @@ end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
 local function AddHolyPowerBar(self, width, height)
-	self.HolyPower = {}
+	self.HolyPower = CreateFrame("Frame", "oUF_Rain_HolyPower", self.Overlay)
+	self.HolyPower:SetHeight(height)
+	self.HolyPower:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
+	self.HolyPower:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
 
 	for i = 1, numHoly do
-		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self)
+		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self.HolyPower)
 		self.HolyPower[i]:SetSize((215 - numHoly - 1) / numHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numHoly) + 1, 1)
-		self.HolyPower[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.HolyPower, (i - 1) * (214 / numHoly) + 1, 0)
 		self.HolyPower[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.HolyPower[i]:SetStatusBarColor(unpack(ns.colors.power["HOLY_POWER"]))
 		self.HolyPower[i]:SetBackdrop(ns.media.BACKDROP)
@@ -214,7 +216,7 @@ local function AddOverlay(self, unit)
 	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self.Portrait)
 	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
 	self.Overlay:SetPoint("TOPLEFT", self.Portrait, 0, 0)
-	self.Overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 0, -1)
+	self.Overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 1, -1)
 	self.Overlay:SetStatusBarTexture(ns.media.OVERLAY)
 	self.Overlay:SetStatusBarColor(0.1, 0.1, 0.1, 0.75)
 end
@@ -231,36 +233,44 @@ end
 ns.AddPortrait = AddPortrait
 
 local function AddRuneBar(self, width, height)
-	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self)
-	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
-	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
+	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self.Overlay)
+	self.Runes:SetHeight(height)
+	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
+	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
 	self.Runes:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-	self.Runes:SetBackdrop(ns.media.BACKDROP)
-	self.Runes:SetBackdropColor(0, 0, 0)
 
 	for i = 1, numRunes do
 		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Runes)
 		self.Runes[i]:SetSize((215 - numRunes - 1) / numRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numRunes) + 1, 1)
-		self.Runes[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Runes, (i - 1) * (214 / numRunes) + 1, 0)
 		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
+		
+		self.Runes[i].bg = self.Runes[i]:CreateTexture(nil, "BORDER")
+		self.Runes[i].bg:SetTexture(ns.media.TEXTURE)
+		self.Runes[i].bg:SetAllPoints()
+		self.Runes[i].bg.multiplier = 0.5
 	end
 	
-	self.Runes:RegisterEvent("UNIT_ENTERED_VEHICLE", ns.PostUpdateClassBar)
-	self.Runes:RegisterEvent("UNIT_EXITED_VEHICLE", ns.PostUpdateClassBar)
+	self.Runes:RegisterEvent("UNIT_ENTERED_VEHICLE")
+	self.Runes:RegisterEvent("UNIT_EXITED_VEHICLE")
+	self.Runes:SetScript("OnEvent", function(element, event, unit, ...)
+		return ns.PostUpdateClassBar(element, event, unit, ...)
+	end)
 end
 ns.AddRuneBar = AddRuneBar
 
 local function AddSoulShardsBar(self, width, height)
-	self.SoulShards = {}
+	self.SoulShards = CreateFrame("Frame", "oUF_Rain_SoulShards", self.Overlay)
+	self.SoulShards:SetHeight(height)
+	self.SoulShards:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
+	self.SoulShards:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
 
 	for i = 1, numShards do
-		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self)
+		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self.SoulShards)
 		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
-		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numShards) + 1, 1)
-		self.SoulShards[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.SoulShards, (i - 1) * (214 / numShards) + 1, 0)
 		self.SoulShards[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.SoulShards[i]:SetStatusBarColor(unpack(ns.colors.power["SOUL_SHARDS"]))
 		self.SoulShards[i]:SetBackdrop(ns.media.BACKDROP)
@@ -272,17 +282,21 @@ end
 ns.AddSoulshardsBar = AddSoulShardsBar
 
 local function AddTotems(self, width, height)
-	self.Totems = {}
 	local numTotems = MAX_TOTEMS
+
+	self.Totems = CreateFrame("Frame", "oUF_Rain_Totems", self.Overlay)
+	self.Totems:SetHeight(height)
+	self.Totems:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
+	self.Totems:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
 	
 	for i = 1, numTotems do
-		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self)
+		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Totems)
 		self.Totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Totems[i]:SetMinMaxValues(0, 1)
 		
 		if playerClass == "SHAMAN" then
 			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
-			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 1)
+			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Totems, (i - 1) * (214 / numTotems) + 1, 0)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[i]))
 		elseif playerClass == "DRUID" then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
@@ -302,7 +316,6 @@ local function AddTotems(self, width, height)
 		
 		self.Totems[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Totems[i]:SetBackdropColor(0, 0, 0)
-		self.Totems[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		
 		self.Totems[i].Destroy = CreateFrame("Button", nil, self.Totems[i])
 		self.Totems[i].Destroy:SetAllPoints()

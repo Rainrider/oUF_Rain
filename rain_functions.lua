@@ -343,7 +343,6 @@ local function PostCreateIcon(Icons, icon)
 	icon.overlay:SetPoint("TOPLEFT", -3.5, 3.5)
 	icon.overlay:SetPoint("BOTTOMRIGHT", 3.5, -3.5)
 	icon.overlay:SetTexCoord(0, 1, 0, 1)
-	--icon.overlay.Hide = function(self) end -- TODO unneeded?
 	
 	icon.remaining = PutFontString(icon, ns.media.FONT, 8, "OUTLINE", "LEFT")
 	icon.remaining:SetPoint("TOP", 0, 1)
@@ -399,7 +398,7 @@ end
 local function PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, icon)
 	local delay = 0.5
 	local total = 0
-
+	
 	if duration > 0 then
 		local current = GetTime() - start
 		if current > 0 then
@@ -418,13 +417,9 @@ ns.PostUpdateTotems = PostUpdateTotems
 
 local function PostUpdateClassBar(classBar, unit)
 	if (UnitHasVehicleUI("player")) then
-		for i, bar in ipairs(classBar) do
-			bar:Hide()
-		end
+		classBar:Hide()
 	else
-		for i, bar in ipairs(classBar) do
-			bar:Show()
-		end
+		classBar:Show()
 	end
 end
 ns.PostUpdateClassBar = PostUpdateClassBar
