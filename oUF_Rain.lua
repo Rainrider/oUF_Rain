@@ -260,7 +260,7 @@ oUF:Factory(function(self)
 	if playerClass == "HUNTER" then
 		 spellName = GetSpellInfo(34477)	-- Misdirection
 	elseif playerClass == "DRUID" then
-		spellName = GetSpellInfo(33763)		-- 29166 Innervate 33763 Blühendes Leben
+		spellName = GetSpellInfo(29166)		-- 29166 Innervate 33763 Blühendes Leben
 	elseif playerClass == "PALADIN" then
 		spellName = GetSpellInfo(31789)		-- Righteous Defense
 	elseif playerClass == "WARRIOR" then
@@ -281,9 +281,9 @@ oUF:Factory(function(self)
 	
 	if (cfg.showParty) then
 		local party = self:SpawnHeader(
-			"oUF_Rain_Party", nil, "party,raid",
+			"oUF_Rain_Party", nil, "party",
 			"showParty", true,
-			"showRaid", true,
+			"showRaid", false,
 			"maxColumns", 4,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
@@ -301,9 +301,9 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyTargets) then
 		local partyTargets = self:SpawnHeader(
-			"oUF_Rain_PartyTargets", nil, "party,raid",
+			"oUF_Rain_PartyTargets", nil, "party",
 			"showParty", true,
-			"showRaid", true,
+			"showRaid", false,
 			"maxColumns", 4,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",
@@ -320,9 +320,9 @@ oUF:Factory(function(self)
 
 	if (cfg.showParty and cfg.showPartyPets) then
 		local partyPets = self:SpawnHeader(
-			"oUF_Rain_PartyPets", nil, "party,raid",
+			"oUF_Rain_PartyPets", nil, "party",
 			"showParty", true,
-			"showRaid", true,
+			"showRaid", false,
 			"maxColumns", 4,
 			"unitsPerColumn", 1,
 			"columnAnchorPoint", "LEFT",

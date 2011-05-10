@@ -126,7 +126,6 @@ local function GetDebuffInfo(unit, filter)
 end
 
 local function CheckForPet(self, event, unit)
-	print(event, unit)
 	if unit ~= "player" or playerClass ~= "WARLOCK" then return end
 	
 	UpdateDispelList[playerClass]()

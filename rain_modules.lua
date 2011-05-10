@@ -42,8 +42,7 @@ local function AddDebuffHighlight(self, unit)
 	self.DebuffHighlight:SetAllPoints()
 	self.DebuffHighlight:SetFrameLevel(self.DebuffHighlight:GetParent():GetFrameLevel() + 1)
 	
-	self.DebuffHighlightFilter = false
-	self.DebuffHighlight.whitelist = nil
+	self.DebuffHighlightFilter = true
 
 	self.DebuffHighlightTexture = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
 	self.DebuffHighlightTexture:SetAllPoints()
