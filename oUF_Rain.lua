@@ -267,42 +267,75 @@ oUF:Factory(function(self)
 	self:Spawn("targettarget", "oUF_Rain_TargetTarget"):SetPoint("BOTTOMRIGHT", oUF_Rain_Target, "TOPRIGHT", 0, 10)
 	self:Spawn("focustarget", "oUF_Rain_FocusTarget"):SetPoint("BOTTOMLEFT", oUF_Rain_Target, "TOPLEFT", 0 , 10)
 	
+	local party
 	if (cfg.showParty) then
-		local party = self:SpawnHeader(
-			"oUF_Rain_Party", nil, "party",
-			"showParty", true,
-			"showRaid", false,
-			"maxColumns", 4,
-			"unitsPerColumn", 1,
-			"columnAnchorPoint", "LEFT",
-			"columnSpacing", 7.5,
-			"oUF-initialConfigFunction", ([[
-				self:SetWidth(110)
-				self:SetHeight(22)
-				self:SetAttribute("type3", "spell")
-				self:SetAttribute("spell3", "%s")
-			]]):format(spellName)
-		)
-		party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 150)
+		if (cfg.horizParty) then
+			party = self:SpawnHeader(
+				"oUF_Rain_Party", nil, "party",
+				"showParty", true,
+				"showRaid", false,
+				"maxColumns", 4,
+				"unitsPerColumn", 1,
+				"columnAnchorPoint", "LEFT",
+				"columnSpacing", 7.5,
+				"oUF-initialConfigFunction", ([[
+					self:SetWidth(110)
+					self:SetHeight(22)
+					self:SetAttribute("type3", "spell")
+					self:SetAttribute("spell3", "%s")
+				]]):format(spellName)
+			)
+			party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 150)
+		else
+			party = self:SpawnHeader(
+				"oUF_Rain_Party", nil, "party",
+				"showParty", true,
+				"showRaid", false,
+				"yOffset", -27.5,
+				"oUF-initialConfigFunction", ([[
+					self:SetWidth(110)
+					self:SetHeight(22)
+					self:SetAttribute("type3", "spell")
+					self:SetAttribute("spell3", "%s")
+				]]):format(spellName)
+			)
+			party:SetPoint("TOPLEFT", UIParent, 25, -25)
+		end
 		party:Show()
 	end
 
+	local partyTargets
 	if (cfg.showParty and cfg.showPartyTargets) then
-		local partyTargets = self:SpawnHeader(
-			"oUF_Rain_PartyTargets", nil, "party",
-			"showParty", true,
-			"showRaid", false,
-			"maxColumns", 4,
-			"unitsPerColumn", 1,
-			"columnAnchorPoint", "LEFT",
-			"columnSpacing", 7.5,
-			"oUF-initialConfigFunction", [[
-				self:SetWidth(110)
-				self:SetHeight(22)
-				self:SetAttribute("unitsuffix", "target")
-			]]
-		)
-		partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -27.5)
+		if (cfg.horizParty) then
+			partyTargets = self:SpawnHeader(
+				"oUF_Rain_PartyTargets", nil, "party",
+				"showParty", true,
+				"showRaid", false,
+				"maxColumns", 4,
+				"unitsPerColumn", 1,
+				"columnAnchorPoint", "LEFT",
+				"columnSpacing", 7.5,
+				"oUF-initialConfigFunction", [[
+					self:SetWidth(110)
+					self:SetHeight(22)
+					self:SetAttribute("unitsuffix", "target")
+				]]
+			)
+			partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -27.5)
+		else
+			partyTargets = self:SpawnHeader(
+				"oUF_Rain_PartyTargets", nil, "party",
+				"showParty", true,
+				"showRaid", false,
+				"yOffset", -27.5,
+				"oUF-initialConfigFunction", [[
+					self:SetWidth(110)
+					self:SetHeight(22)
+					self:SetAttribute("unitsuffix", "target")
+				]]
+			)
+			partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "TOPRIGHT", 7.5, 0)
+		end
 		partyTargets:Show()
 	end
 
