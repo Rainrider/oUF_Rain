@@ -8,6 +8,10 @@ local SiValue = ns.SiValue
 local playerClass = ns.config.playerClass
 local RGBtoHEX = ns.RGBtoHEX
 
+-- local references for some lua function
+local floor = math.floor
+local format = string.format
+
 -- local references for some Blizz functions
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitHealth = UnitHealth
@@ -21,14 +25,15 @@ local UnitIsFriend = UnitIsFriend
 local UnitName = UnitName
 
 oUF.Tags["rain:namecolor"] = function(unit)
+	if not unit then print("omfg, unit is nil") end
 	local color
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		color = {0.75, 0.75, 0.75}
 	elseif (UnitIsPlayer(unit)) then
-		color = oUF.colors.class[select(2, UnitClass(unit))]
+		color = ns.colors.class[select(2, UnitClass(unit))]
 	else
 		local reaction = UnitReaction(unit, "player")
-		color = oUF.colors.reaction[reaction and reaction or 4]
+		color = ns.colors.reaction[reaction or 4]
 	end
 	
 	return RGBtoHEX(color[1], color[2], color[3])
@@ -47,7 +52,7 @@ oUF.Tags["rain:healthSmall"] = function(unit)
 		return "-" .. SiValue(max - cur)
 	end
 	
-	return math.floor(cur / max * 100 + 0.5) .. "%"
+	return floor(cur / max * 100 + 0.5) .. "%"
 end
 oUF.TagEvents["rain:healthSmall"] = oUF.TagEvents.perhp
 
@@ -62,10 +67,10 @@ oUF.Tags["rain:health"] = function(unit)
 	end
 	
 	if (UnitIsFriend("player", unit)) then
-		return "-" .. SiValue(max - cur) .. " - " .. math.floor(cur / max * 100 + 0.5) .. "%"
+		return "-" .. SiValue(max - cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
 	end
 	
-	return SiValue(cur) .. " - " .. math.floor(cur / max * 100 + 0.5) .. "%"
+	return SiValue(cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
 end
 oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
 
@@ -76,7 +81,7 @@ oUF.Tags["rain:druidmana"] = function(unit, pType)
 	
 	if curMana == maxMana then return end
 	
-	return RGBtoHEX(unpack(oUF.colors.class[playerClass])) .. math.floor(curMana / maxMana * 100 + 0.5) .. "%|r"
+	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
 
 oUF.Tags["rain:power"] = function(unit)
@@ -91,7 +96,7 @@ oUF.Tags["rain:power"] = function(unit)
 	local druidMana = oUF.Tags["rain:druidmana"](unit, pType)
 	if (pType == 0) then
 		if (cur ~= max) then
-			powerValue = math.floor(cur / max * 100 + 0.5) .. "%"
+			powerValue = floor(cur / max * 100 + 0.5) .. "%"
 		end
 	end
 	if (UnitIsPlayer(unit) or UnitIsUnit(unit, "pet")) then
@@ -128,7 +133,7 @@ oUF.Tags["rain:role"] = function(unit)
 		local cropFromTop = dimY * top
 		local cropFromBottom = dimY * bottom
 
-		local icon = string.format("|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:16:16:%-d:%-d:%d:%d:%d:%d:%d:%d|t", xOffset, yOffset, dimX, dimY, cropFromLeft, cropFromRight, cropFromTop, cropFromBottom)
+		local icon = format("|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:14:14:%-d:%-d:%d:%d:%d:%d:%d:%d|t", xOffset, yOffset, dimX, dimY, cropFromLeft, cropFromRight, cropFromTop, cropFromBottom)
 		return icon
 	end
 end
@@ -155,7 +160,7 @@ oUF.Tags["rain:altpower"] = function(unit)
 	
 	if max == 0 then max = 1 end
 	
-	local perc = math.floor(cur / max * 100 + 0.5)
+	local perc = floor(cur / max * 100 + 0.5)
 	
 	return cur .. " - " .. perc .. "%"
 end
