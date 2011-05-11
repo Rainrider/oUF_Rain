@@ -7,12 +7,12 @@ local _, ns = ...
 ns.config = {
 	-- true to show; false to hide
 	showParty = true,
-	horizParty = false,				-- true for horizontal party layout, false for vertical
+	horizParty = true,				-- true for horizontal party layout, false for vertical
 	showPartyTargets = true,
 	showPartyPets = true,
 	showRaid = true,				-- NYI
-	showMT = true,
-	showMTT = true,
+	showMT = true,					-- true to show maintanks; false to hide them
+	showMTT = true,					-- true to show maintanks' targets; false to hide them
 	
 	-- aura filtering
 	onlyShowPlayerBuffs = false,	-- true to show only player buffs; false to show all buffs (for friendly targets only)
