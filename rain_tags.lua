@@ -28,7 +28,7 @@ oUF.Tags["rain:namecolor"] = function(unit)
 		color = oUF.colors.class[select(2, UnitClass(unit))]
 	else
 		local reaction = UnitReaction(unit, "player")
-		color = oUF.colors.reaction[reaction or 4]
+		color = oUF.colors.reaction[reaction and reaction or 4]
 	end
 	
 	return RGBtoHEX(color[1], color[2], color[3])

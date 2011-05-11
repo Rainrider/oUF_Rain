@@ -271,9 +271,9 @@ oUF:Factory(function(self)
 	if (cfg.showParty) then
 		if (cfg.horizParty) then
 			party = self:SpawnHeader(
-				"oUF_Rain_Party", nil, "party",
+				"oUF_Rain_Party", nil, "party, raid",
 				"showParty", true,
-				"showRaid", false,
+				"showRaid", true,
 				"maxColumns", 4,
 				"unitsPerColumn", 1,
 				"columnAnchorPoint", "LEFT",
@@ -288,9 +288,9 @@ oUF:Factory(function(self)
 			party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 150)
 		else
 			party = self:SpawnHeader(
-				"oUF_Rain_Party", nil, "party",
+				"oUF_Rain_Party", nil, "party, raid",
 				"showParty", true,
-				"showRaid", false,
+				"showRaid", true,
 				"yOffset", -27.5,
 				"oUF-initialConfigFunction", ([[
 					self:SetWidth(110)
@@ -308,9 +308,9 @@ oUF:Factory(function(self)
 	if (cfg.showParty and cfg.showPartyTargets) then
 		if (cfg.horizParty) then
 			partyTargets = self:SpawnHeader(
-				"oUF_Rain_PartyTargets", nil, "party",
+				"oUF_Rain_PartyTargets", nil, "party,raid",
 				"showParty", true,
-				"showRaid", false,
+				"showRaid", true,
 				"maxColumns", 4,
 				"unitsPerColumn", 1,
 				"columnAnchorPoint", "LEFT",
@@ -324,9 +324,9 @@ oUF:Factory(function(self)
 			partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -27.5)
 		else
 			partyTargets = self:SpawnHeader(
-				"oUF_Rain_PartyTargets", nil, "party",
+				"oUF_Rain_PartyTargets", nil, "party,raid",
 				"showParty", true,
-				"showRaid", false,
+				"showRaid", true,
 				"yOffset", -27.5,
 				"oUF-initialConfigFunction", [[
 					self:SetWidth(110)
@@ -339,23 +339,40 @@ oUF:Factory(function(self)
 		partyTargets:Show()
 	end
 
+	local partyPets
 	if (cfg.showParty and cfg.showPartyPets) then
-		local partyPets = self:SpawnHeader(
-			"oUF_Rain_PartyPets", nil, "party",
-			"showParty", true,
-			"showRaid", false,
-			"maxColumns", 4,
-			"unitsPerColumn", 1,
-			"columnAnchorPoint", "LEFT",
-			"columnSpacing", 7.5,
-			"oUF-initialConfigFunction", ([[
-				self:SetWidth(110)
-				self:SetHeight(11)
-				self:SetAttribute("unitsuffix", "pet")
-				self:SetAttribute("type3", "spell")
-				self:SetAttribute("spell3", "%s")
-			]]):format(spellName)
-		)
+		if (cfg.horizParty) then
+			partyPets = self:SpawnHeader(
+				"oUF_Rain_PartyPets", nil, "party,raid",
+				"showParty", true,
+				"showRaid", true,
+				"maxColumns", 4,
+				"unitsPerColumn", 1,
+				"columnAnchorPoint", "LEFT",
+				"columnSpacing", 7.5,
+				"oUF-initialConfigFunction", ([[
+					self:SetWidth(110)
+					self:SetHeight(11)
+					self:SetAttribute("unitsuffix", "pet")
+					self:SetAttribute("type3", "spell")
+					self:SetAttribute("spell3", "%s")
+				]]):format(spellName)
+			)
+		else
+			partyPets = self:SpawnHeader(
+				"oUF_Rain_PartyPets", nil, "party,raid",
+				"showParty", true,
+				"showRaid", true,
+				"yOffset", -27.5,
+				"oUF-initialConfigFunction", ([[
+					self:SetWidth(110)
+					self:SetHeight(11)
+					self:SetAttribute("unitsuffix", "pet")
+					self:SetAttribute("type3", "spell")
+					self:SetAttribute("spell3", "%s")
+				]]):format(spellName)
+			)
+		end
 		partyPets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -7.5)
 		partyPets:Show()
 	end

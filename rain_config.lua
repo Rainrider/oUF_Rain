@@ -7,7 +7,7 @@ local _, ns = ...
 ns.config = {
 	-- true to show; false to hide
 	showParty = true,
-	horizParty = true,				-- true for horizontal party layout, false for vertical
+	horizParty = false,				-- true for horizontal party layout, false for vertical
 	showPartyTargets = true,
 	showPartyPets = true,
 	showRaid = true,				-- NYI
