@@ -89,7 +89,7 @@ oUF.Tags["rain:level"] = function(unit)
 	if (c == "worldboss") then return end
 	local level = UnitLevel(unit)
 	if (level == UnitLevel("player")) then return end
-	if (level > 0) then return "??" end
+	if (level < 0) then return "??" end
 	return level
 end
 oUF.TagEvents["rain:level"] = "UNIT_LEVEL"
