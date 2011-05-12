@@ -84,6 +84,16 @@ oUF.Tags["rain:druidmana"] = function(unit, pType)
 	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
 
+oUF.Tags["rain:level"] = function(unit)
+	local c = UnitClassification(unit)
+	if (c == "worldboss") then return end
+	local level = UnitLevel(unit)
+	if (level == UnitLevel("player")) then return end
+	if (level > 0) then return "??" end
+	return level
+end
+oUF.TagEvents["rain:level"] = "UNIT_LEVEL"
+
 oUF.Tags["rain:power"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 	

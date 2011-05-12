@@ -45,7 +45,7 @@ local UnitSpecific = {
 		self.Info = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
 		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", 0, -5)
-		self:Tag(self.Info, "[rain:role][rain:name] [difficulty][level] [shortclassification]|r")
+		self:Tag(self.Info, "[rain:role][rain:name] [difficulty][rain:level] [shortclassification]|r")
 		
 		ns.AddComboPointsBar(self, nil, 5)
 		
@@ -277,7 +277,7 @@ oUF:Factory(function(self)
 				"maxColumns", 4,
 				"unitsPerColumn", 1,
 				"columnAnchorPoint", "LEFT",
-				"columnSpacing", 7.5,
+				"columnSpacing", 9.5,
 				"oUF-initialConfigFunction", ([[
 					self:SetWidth(110)
 					self:SetHeight(22)
@@ -314,7 +314,7 @@ oUF:Factory(function(self)
 				"maxColumns", 4,
 				"unitsPerColumn", 1,
 				"columnAnchorPoint", "LEFT",
-				"columnSpacing", 7.5,
+				"columnSpacing", 9.5,
 				"oUF-initialConfigFunction", [[
 					self:SetWidth(110)
 					self:SetHeight(22)
@@ -349,7 +349,7 @@ oUF:Factory(function(self)
 				"maxColumns", 4,
 				"unitsPerColumn", 1,
 				"columnAnchorPoint", "LEFT",
-				"columnSpacing", 7.5,
+				"columnSpacing", 9.5,
 				"oUF-initialConfigFunction", ([[
 					self:SetWidth(110)
 					self:SetHeight(11)
@@ -373,7 +373,7 @@ oUF:Factory(function(self)
 				]]):format(spellName)
 			)
 		end
-		partyPets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -7.5)
+		partyPets:SetPoint("TOPLEFT", "oUF_Rain_Party", 0, -29.5)
 		partyPets:Show()
 	end
 	
