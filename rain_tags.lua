@@ -32,7 +32,6 @@ oUF.Tags["rain:namecolor"] = function(unit)
 		color = ns.colors.class[select(2, UnitClass(unit))]
 	else
 		local reaction = UnitReaction(unit, "player")
-		print(date("%X"),"Reaction of:", unit, "is", reaction)
 		color = ns.colors.reaction[reaction or 4]
 	end
 	
@@ -168,7 +167,7 @@ oUF.Tags["rain:altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
 	
-	if (max == 0 then max = 1) end
+	if (max == 0) then max = 1 end
 	
 	local perc = floor(cur / max * 100 + 0.5)
 	
