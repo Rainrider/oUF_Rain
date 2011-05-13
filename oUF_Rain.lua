@@ -118,7 +118,6 @@ local function Shared(self, unit)
 		self.Power:SetBackdrop(ns.media.BACKDROP)
 		self.Power:SetBackdropColor(0, 0, 0)
 	
-		self.Power.colorTapping = true
 		self.Power.colorPower = unit == "player" or unit == "pet"
 		self.Power.colorClass = true
 		self.Power.colorReaction = true
