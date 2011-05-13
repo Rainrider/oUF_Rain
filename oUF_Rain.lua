@@ -33,7 +33,7 @@ local UnitSpecific = {
 		ns.AddRestingIcon(self)
 		
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
-			if UnitExists("target") then
+			if (UnitExists("target")) then
 				PlaySound("igCreatureAggroSelect")
 			end
 		end)
@@ -71,7 +71,7 @@ local UnitSpecific = {
 
 -- shared rules between more than one unit
 -- pet, focus, tot and focustarget would be basicaly the same
-local function Shared(self, unit)
+local Shared = function(self, unit)
 
 	self.menu = ns.menu
 	self.colors = ns.colors
@@ -112,7 +112,7 @@ local function Shared(self, unit)
 	
 	self.Health.PostUpdate = ns.PostUpdateHealth
 	
-	if not unitIsPartyPet then
+	if (not unitIsPartyPet) then
 		self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
 		self.Power:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Power:SetBackdrop(ns.media.BACKDROP)
@@ -135,7 +135,7 @@ local function Shared(self, unit)
 	ns.AddRaidIcon(self, unit)
 	ns.AddPhaseIcon(self, unit)
 	
-	if unit == "player" or unit == "target" then
+	if (unit == "player" or unit == "target") then
 		self:SetSize(230, 50)
 	
 		self.Health:SetSize(230, 30)
@@ -178,10 +178,10 @@ local function Shared(self, unit)
 		ns.AddReadyCheckIcon(self, unit)
 	end
 	
-	if (unit == "pet" or unit == "focus"
+	if ((unit == "pet" or unit == "focus"
 			or unit == "targettarget" or unit == "focustarget"
 			or unitIsPartyMember or unitIsPartyOrMTTarget 
-			or unitIsMT or unitIsBoss) and not unitIsPartyPet then
+			or unitIsMT or unitIsBoss) and not unitIsPartyPet) then
 		
 		self:SetSize(110, 22)
 		
@@ -202,13 +202,13 @@ local function Shared(self, unit)
 		self.Name:SetPoint("TOPLEFT", 2, -2)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		
-		if not unitIsPartyMember then
+		if (not unitIsPartyMember) then
 			self:Tag(self.Name, "[rain:name]")
 		else
 			self:Tag(self.Name, "[rain:role][rain:name]")
 		end
 		
-		if unitIsPartyMember then
+		if (unitIsPartyMember) then
 			ns.AddAssistantIcon(self, unit)
 			ns.AddLeaderIcon(self, unit)
 			ns.AddMasterLooterIcon(self, unit)
@@ -217,18 +217,18 @@ local function Shared(self, unit)
 			ns.AddDebuffHighlight(self, unit)
 		end
 		
-		if unitIsBoss then
+		if (unitIsBoss) then
 			ns.AddBuffs(self, unit)
 			ns.AddCastbar(self, unit)
 		end
 		
-		if unit == "pet" or unit == "focus"  or unitIsPartyMember then
+		if (unit == "pet" or unit == "focus"  or unitIsPartyMember) then
 			ns.AddCastbar(self, unit)
 			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 		end
 	end
 	
-	if unitIsPartyPet then
+	if (unitIsPartyPet) then
 		self:SetSize(110, 10)
 		self.Health:SetSize(110, 10)
 		self.Health:SetPoint("TOPRIGHT")
@@ -244,7 +244,7 @@ local function Shared(self, unit)
 		self:Tag(self.Name, "[rain:name]")
 	end
 	
-	if UnitSpecific[unit] then
+	if (UnitSpecific[unit]) then
 		return UnitSpecific[unit](self)
 	end
 
@@ -254,7 +254,7 @@ oUF:RegisterStyle("Rain", Shared)
 oUF:Factory(function(self)
 
 	local spellName = GetSpellInfo(cfg.clickSpell[playerClass] or 6603)	-- 6603 Auto Attack
-	if not spellName then
+	if (not spellName) then
 		spellName = GetSpellInfo(6603)
 	end
 
@@ -413,7 +413,7 @@ oUF:Factory(function(self)
 	for i = 1, MAX_BOSS_FRAMES do
 		boss[i] = self:Spawn("boss"..i, "oUF_Rain_Boss"..i)
 		
-		if i == 1 then
+		if (i == 1) then
 			boss[i]:SetPoint("TOP", UIParent, "TOP", 0, -20)
 		else
 			boss[i]:SetPoint("TOP", boss[i-1], "BOTTOM", 0, -15)

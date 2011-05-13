@@ -1,4 +1,4 @@
---[[====================================================================================
+﻿--[[====================================================================================
 	DESCRIPTION:
 	Contains functions for additing functionality through modules not part of oUF itself
 	====================================================================================--]]
@@ -12,7 +12,7 @@ local _, ns = ...
 local cfg = ns.config
 local PutFontString = ns.PutFontString
 
-local function AddCombatFeedbackText(self)
+local AddCombatFeedbackText = function(self)
 	if (not IsAddOnLoaded("oUF_CombatFeedback")) then return end
 
 	self.CombatFeedbackText = PutFontString(self.Overlay, ns.media.FONT, 14, "OUTLINE", "LEFT")
@@ -21,7 +21,7 @@ local function AddCombatFeedbackText(self)
 end
 ns.AddCombatFeedbackText = AddCombatFeedbackText
 
-local function AddDebuffHighlight(self, unit)
+local AddDebuffHighlight = function(self, unit)
 	self.DebuffHighlight = CreateFrame("Frame", self:GetName().."_DebuffHighlight", self.Health)
 	self.DebuffHighlight:SetAllPoints()
 	self.DebuffHighlight:SetFrameLevel(self.DebuffHighlight:GetParent():GetFrameLevel() + 1)
@@ -34,7 +34,7 @@ local function AddDebuffHighlight(self, unit)
 	self.DebuffHighlightTexture:SetBlendMode("ADD")
 	self.DebuffHighlightTexture:SetVertexColor(0, 0, 0, 0)
 	
-	if unit == "player" or unit == "target" then
+	if (unit == "player" or unit == "target") then
 		self.DebuffHighlightIcon = self.Overlay:CreateTexture(nil, "OVERLAY")
 		self.DebuffHighlightIcon:SetSize(18, 18)
 		
@@ -56,7 +56,7 @@ local function AddDebuffHighlight(self, unit)
 end
 ns.AddDebuffHighlight = AddDebuffHighlight
 	
-local function AddExperienceBar(self)
+local AddExperienceBar = function(self)
 	self.Experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
 	self.Experience:SetHeight(5)
 	self.Experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
@@ -97,7 +97,7 @@ local function AddExperienceBar(self)
 end
 ns.AddExperienceBar = AddExperienceBar
 
-local function AddFocusHelper(self)
+local AddFocusHelper = function(self)
 	self.FocusSpark = self.Power:CreateTexture(nil, "OVERLAY")
 	self.FocusSpark:SetWidth(10)
 	self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
@@ -113,60 +113,57 @@ local function AddFocusHelper(self)
 end
 ns.AddFocusHelper = AddFocusHelper
 
-local function AddReputationBar(self)
-	if IsAddOnLoaded("oUF_Reputation") then
-		self.Reputation = CreateFrame("StatusBar", "oUF_Rain_Reputation", self)
-		self.Reputation:SetHeight(5)
-		self.Reputation:SetPoint("TOPLEFT", self.Health, "TOP", 2, 7.5)
-		self.Reputation:SetPoint("TOPRIGHT", self.Health, "TOPRIGHT", 0, 7.5)
-		self.Reputation:SetStatusBarTexture(ns.media.TEXTURE)
-		self.Reputation:SetBackdrop(ns.media.BACKDROP)
-		self.Reputation:SetBackdropColor(0, 0, 0)
-		self.Reputation:SetAlpha(0)
-		
-		self.Reputation:EnableMouse()
-		self.Reputation:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
-		self.Reputation:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
+local AddReputationBar = function(self)
+	if (not IsAddOnLoaded("oUF_Reputation")) then return end
+	
+	self.Reputation = CreateFrame("StatusBar", "oUF_Rain_Reputation", self)
+	self.Reputation:SetHeight(5)
+	self.Reputation:SetPoint("TOPLEFT", self.Health, "TOP", 2, 7.5)
+	self.Reputation:SetPoint("TOPRIGHT", self.Health, "TOPRIGHT", 0, 7.5)
+	self.Reputation:SetStatusBarTexture(ns.media.TEXTURE)
+	self.Reputation:SetBackdrop(ns.media.BACKDROP)
+	self.Reputation:SetBackdropColor(0, 0, 0)
+	self.Reputation:SetAlpha(0)
+	
+	self.Reputation:EnableMouse()
+	self.Reputation:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
+	self.Reputation:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
 
-		self.Reputation.bg = self.Reputation:CreateTexture(nil, "BORDER")
-		self.Reputation.bg:SetAllPoints(self.Reputation)
-		self.Reputation.bg:SetTexture(ns.media.TEXTURE)
-		self.Reputation.bg:SetVertexColor(0.15, 0.15, 0.15)
+	self.Reputation.bg = self.Reputation:CreateTexture(nil, "BORDER")
+	self.Reputation.bg:SetAllPoints(self.Reputation)
+	self.Reputation.bg:SetTexture(ns.media.TEXTURE)
+	self.Reputation.bg:SetVertexColor(0.15, 0.15, 0.15)
 
-		self.Reputation.PostUpdate = function(bar, unit, min, max)
-			local name, id = GetWatchedFactionInfo()
-			bar:SetStatusBarColor(unpack(ns.colors.reaction[id]))
-		end
-		
-		self.Reputation.Tooltip = function(self)
-			local name, id, min, max, value = GetWatchedFactionInfo()
-	 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
-			GameTooltip:AddLine(string.format("%s (%s)", name, _G["FACTION_STANDING_LABEL"..id]))
-			GameTooltip:AddLine(string.format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100))
-			GameTooltip:Show()
-		end
-		
-		self.Reputation:HookScript("OnLeave", GameTooltip_Hide)
-		self.Reputation:HookScript("OnEnter", self.Reputation.Tooltip)
+	self.Reputation.PostUpdate = function(bar, unit, min, max)
+		local name, id = GetWatchedFactionInfo()
+		bar:SetStatusBarColor(unpack(ns.colors.reaction[id]))
 	end
+		
+	self.Reputation.Tooltip = function(self)
+		local name, id, min, max, value = GetWatchedFactionInfo()
+		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
+		GameTooltip:AddLine(string.format("%s (%s)", name, _G["FACTION_STANDING_LABEL"..id]))
+		GameTooltip:AddLine(string.format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100))
+		GameTooltip:Show()
+	end
+	
+	self.Reputation:HookScript("OnLeave", GameTooltip_Hide)
+	self.Reputation:HookScript("OnEnter", self.Reputation.Tooltip)
 end
 ns.AddReputationBar = AddReputationBar
 
-local function AddSwingBar(self)
-	if IsAddOnLoaded("oUF_Swing") then
+local AddSwingBar = function(self)
+	if (not IsAddOnLoaded("oUF_Swing")) then return end
 		
-		self.Swing = CreateFrame("Frame", self:GetName().."_Swing", self)
-		self.Swing:SetHeight(3)
-		self.Swing:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 7)
-		self.Swing:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 7)
-		--self.Swing:SetBackdrop(ns.media.BACKDROP)
-		--self.Swing:SetBackdropColor(0, 0, 0)
-		self.Swing.texture = ns.media.TEXTURE
-		self.Swing.color = {0.55, 0.57, 0.61, 1}
-		self.Swing.textureBG = ns.media.TEXTURE
-		self.Swing.colorBG = {0, 0, 0, 0.6}
-			
-		self.Swing.hideOoc = true
-	end
+	self.Swing = CreateFrame("Frame", self:GetName().."_Swing", self)
+	self.Swing:SetHeight(3)
+	self.Swing:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 7)
+	self.Swing:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 7)
+	self.Swing.texture = ns.media.TEXTURE
+	self.Swing.color = {0.55, 0.57, 0.61, 1}
+	self.Swing.textureBG = ns.media.TEXTURE
+	self.Swing.colorBG = {0, 0, 0, 0.6}
+	
+	self.Swing.hideOoc = true
 end
 ns.AddSwingBar = AddSwingBar

@@ -1,4 +1,4 @@
-local parentBarWidth
+﻿local parentBarWidth
 local parentBarTex
 
 local GetSpellFocusCost = function(talentTree, focusSpark)
@@ -11,7 +11,7 @@ local GetSpellFocusCost = function(talentTree, focusSpark)
 		spellFocusCost = select(4, GetSpellInfo(svSpell))
 	elseif (talentTree == 2 and IsSpellKnown(mmSpell)) then	-- MARKMANSHIP
 		spellFocusCost = select(4, GetSpellInfo(mmSpell))
-	elseif IsSpellKnown(bmSpell) then
+	elseif (IsSpellKnown(bmSpell)) then
 		spellFocusCost = select(4, GetSpellInfo(bmSpell))
 	end
 	
@@ -73,7 +73,7 @@ end
 
 local Enable = function(self)
 	local _, playerClass = UnitClass("player")
-	if playerClass ~= "HUNTER" then return end
+	if (playerClass ~= "HUNTER") then return end
 
 	local focusSpark = self.FocusSpark
 	local focusGain = self.FocusGain

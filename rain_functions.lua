@@ -1,4 +1,4 @@
---[[========================================================================
+﻿--[[========================================================================
 	DESCRIPTION:
 	Contrains the pre and post update and some helper functions for oUF_Rain
 	========================================================================--]]
@@ -10,9 +10,9 @@ local playerClass = cfg.playerClass
 --[[ HELPER FUNCTIONS ]]--
 
 local SiValue = function(val)
-	if(val >= 1e6) then
+	if (val >= 1e6) then
 		return ("%.1f".."m"):format(val / 1e6)--:gsub('%.', 'm')
-	elseif(val >= 1e4) then
+	elseif (val >= 1e4) then
 		return ("%.1f".."k"):format(val / 1e3)--:gsub('%.', 'k')
 	else
 		return val
@@ -20,39 +20,39 @@ local SiValue = function(val)
 end
 ns.SiValue = SiValue
 
-local function ShortenName(name, shortenTo)
-	if not name then return end
-	if not shortenTo then
+local ShortenName = function(name, shortenTo)
+	if (not name) then return end
+	if (not shortenTo) then
 		shortenTo = 12
 	end
 	name = (string.len(name) > shortenTo) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
 	
 	local bytes = string.len(name)
-	if bytes <= shortenTo then
+	if (bytes <= shortenTo) then
 		return name
 	else
 		local length, currentIndex = 0, 1
 
-		while currentIndex <= bytes do
+		while (currentIndex <= bytes) do
 			length = length + 1
 			local char = string.byte(name, currentIndex)
-			if char > 240 then
+			if (char > 240) then
 				currentIndex = currentIndex + 4
-			elseif char > 225 then
+			elseif (char > 225) then
 				currentIndex = currentIndex + 3
-			elseif char > 192 then
+			elseif (char > 192) then
 				currentIndex = currentIndex + 2
 			else
 				currentIndex = currentIndex + 1
 			end
 
-			if length == shortenTo then
+			if (length == shortenTo) then
 				break
 			end
 		end
 
-		if length == shortenTo and currentIndex <= bytes then
-			return string.sub(name, 1, currentIndex - 1) .. "..." -- TODO: add the dots
+		if (length == shortenTo and currentIndex <= bytes) then
+			return string.sub(name, 1, currentIndex - 1) .. "..."
 		else
 			return name
 		end
@@ -60,32 +60,32 @@ local function ShortenName(name, shortenTo)
 end
 ns.ShortenName = ShortenName
 
-local function RGBtoHEX(r, g, b)
-	if not r then r = 1 end
-	if not g then g = 1 end
-	if not b then b = 1 end
+local RGBtoHEX = function(r, g, b)
+	if (not r) then r = 1 end
+	if (not g) then g = 1 end
+	if (not b) then b = 1 end
 	return string.format("|cff%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 ns.RGBtoHEX = RGBtoHEX
 
-local function FormatTime(s)
+local FormatTime = function(seconds)
 	local day, hour, minute = 86400, 3600, 60
-	if s >= day then
-		return format("%dd", floor(s/day + 0.5)), s % day
-	elseif s >= hour then
-		return format("%dh", floor(s/hour + 0.5)), s % hour
-	elseif s >= minute then
-		if s <= minute * 5 then
-			return format("%d:%02d", floor(s/60), s % minute), s - floor(s)
+	if (seconds >= day) then
+		return format("%dd", floor(seconds/day + 0.5)), seconds % day
+	elseif (seconds >= hour) then
+		return format("%dh", floor(seconds/hour + 0.5)), seconds % hour
+	elseif (seconds >= minute) then
+		if (seconds <= minute * 5) then
+			return format("%d:%02d", floor(seconds/60), seconds % minute), seconds - floor(seconds)
 		end
-		return format("%dm", floor(s/minute + 0.5)), s % minute
-	elseif s >= minute / 12 then
-		return floor(s + 0.5), (s * 100 - floor(s * 100))/100
+		return format("%dm", floor(seconds/minute + 0.5)), seconds % minute
+	elseif (seconds >= minute / 12) then
+		return floor(seconds + 0.5), (seconds * 100 - floor(seconds * 100)) / 100
 	end
-	return format("%.1f", s), (s * 100 - floor(s * 100))/100
+	return format("%.1f", seconds), (seconds * 100 - floor(seconds * 100)) / 100
 end
 
-local function PutFontString(parent, fontName, fontHeight, fontStyle, justifyH)
+local PutFontString = function(parent, fontName, fontHeight, fontStyle, justifyH)
 	local fontString = parent:CreateFontString(nil, "OVERLAY")
 	fontString:SetFont(fontName, fontHeight, fontStyle)
 	fontString:SetJustifyH(justifyH or "LEFT")
@@ -107,23 +107,23 @@ end
 ns.CustomCastDelayText = CustomCastDelayText
 
 local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
-	if UnitCanAttack("player", unit) then
+	if (UnitCanAttack("player", unit)) then
 		local casterClass
 
-		if caster then
+		if (caster) then
 			_, casterClass = UnitClass(caster)
 		end
-		if not icon.debuff or (casterClass and casterClass == playerClass) then	-- return all buffs and only debuffs cast by the players class
+		if (not icon.debuff or (casterClass and casterClass == playerClass)) then	-- return all buffs and only debuffs cast by the players class
 			return true
 		end
 	else
 		local isPlayer
 
-		if caster == "player" or caster == "pet" or caster == "vehicle" then
+		if (caster == "player" or caster == "pet" or caster == "vehicle") then
 			isPlayer = true
 		end
 		
-		if((icons.onlyShowPlayer and isPlayer) or (not icons.onlyShowPlayer and name)) then -- onlyShowPlayer or everything?
+		if ((icons.onlyShowPlayer and isPlayer) or (not icons.onlyShowPlayer and name)) then -- onlyShowPlayer or everything?
 			icon.isPlayer = isPlayer
 			icon.owner = caster
 			return true
@@ -131,20 +131,20 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 	end
 end
 
-local function CreateAuraTimer(self, elapsed)
-	if self.timeLeft then
+local CreateAuraTimer = function(self, elapsed)
+	if (self.timeLeft) then
 		self.elapsed = (self.elapsed or 0) + elapsed
-		if self.elapsed >= 0.1 then
-			if not self.first then
+		if (self.elapsed >= 0.1) then
+			if (not self.first) then
 				self.timeLeft = self.timeLeft - self.elapsed
 			else
 				self.timeLeft = self.timeLeft - GetTime()
 				self.first = false
 			end
-			if self.timeLeft > 0 then
+			if (self.timeLeft > 0) then
 				local time = FormatTime(self.timeLeft)
 					self.remaining:SetText(time)
-				if self.timeLeft < 5 then
+				if (self.timeLeft < 5) then
 					self.remaining:SetTextColor(0.69, 0.31, 0.31)
 				else
 					self.remaining:SetTextColor(0.84, 0.75, 0.65)
@@ -158,18 +158,18 @@ local function CreateAuraTimer(self, elapsed)
 	end
 end
 
-local function SortAuras(a, b)
+local SortAuras = function(a, b)
 	if (a and b) then
 		return (a.timeLeft and a.timeLeft) > (b.timeLeft and b.timeLeft)
 	end
 end
 
-local function Aura_OnEnter(self, icon)
+local Aura_OnEnter = function(self, icon)
 	local r, g, b = icon.overlay:GetVertexColor()
 	local iconW, iconH = icon:GetSize()
 	local button
 	
-	if icon.debuff then
+	if (icon.debuff) then
 		button = self.Debuffs.Magnify
 	else
 		button = self.Buffs.Magnify
@@ -186,36 +186,22 @@ local function Aura_OnEnter(self, icon)
 
 	button:Show()
 	
-	if icon.debuff then
+	if (icon.debuff) then
 		self.Debuffs.Magnify = button
 	else
 		self.Buffs.Magnify = button
 	end
 end
 
-local function Aura_OnLeave(self)
+local Aura_OnLeave = function(self)
 	self.Buffs.Magnify:Hide()
 	self.Debuffs.Magnify:Hide()
 end
 
-local function AddThreatHighlight(self)
-	local unit = self.unit
-
-	local status = UnitThreatSituation(unit)
-	if status and status > 0 then
-		local r, g, b = GetThreatStatusColor(status)
-	
-		self.FrameBackdrop:SetBackdropBorderColor(r, g, b)
-	else
-		self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-ns.AddThreatHighlight = AddThreatHighlight
-
 --[[PRE AND POST FUNCTIONS]]--
 
-local function PostCastStart(castbar, unit, name, rank, castid)
-	if castbar.interrupt and UnitCanAttack("player", unit) then
+local PostCastStart = function(castbar, unit, name, rank, castid)
+	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
@@ -225,8 +211,8 @@ local function PostCastStart(castbar, unit, name, rank, castid)
 end
 ns.PostCastStart = PostCastStart
 
-local function PostCastInterruptible(castbar, unit)
-	if castbar.interrupt and UnitCanAttack("player", unit) then
+local PostCastInterruptible = function(castbar, unit)
+	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
@@ -236,8 +222,8 @@ local function PostCastInterruptible(castbar, unit)
 end
 ns.PostCastInterruptible = PostCastInterruptible
 
-local function PostCastNotInterruptible(castbar, unit)
-	if castbar.interrupt and UnitCanAttack("player", unit) then
+local PostCastNotInterruptible = function(castbar, unit)
+	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
@@ -247,8 +233,8 @@ local function PostCastNotInterruptible(castbar, unit)
 end
 ns.PostCastNotInterruptible = PostCastNotInterruptible
 
-local function PostChannelStart(castbar, unit, name)
-	if castbar.interrupt and UnitCanAttack("player", unit) then
+local PostChannelStart = function(castbar, unit, name)
+	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	else
@@ -258,15 +244,15 @@ local function PostChannelStart(castbar, unit, name)
 end
 ns.PostchannelStart = PostChannelStart
 
-local function PostUpdateHealth(health, unit, cur, max)
-	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
+local PostUpdateHealth = function(health, unit, cur, max)
+	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		local class = select(2, UnitClass(unit))
 		local color = UnitIsPlayer(unit) and ns.colors.class[class] or {0.84, 0.75, 0.65}
 
 		health:SetValue(0)
 		health.bg:SetVertexColor(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
 		health.value:SetTextColor(0.75, 0.75, 0.75)
-	elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
+	elseif (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
 		health:SetStatusBarColor(unpack(ns.colors.tapped))
 		health.bg:SetVertexColor(0.15, 0.15, 0,15)
 	else
@@ -277,7 +263,7 @@ local function PostUpdateHealth(health, unit, cur, max)
 		health.bg:SetVertexColor(0.15, 0.15, 0.15)
 		
 		r, g, b = oUF.ColorGradient(cur/max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
-		if cur ~= max then
+		if (cur ~= max) then
 			health.value:SetTextColor(r, g, b)
 		else
 			health.value:SetTextColor(r, g, b)
@@ -286,24 +272,24 @@ local function PostUpdateHealth(health, unit, cur, max)
 end
 ns.PostUpdateHealth = PostUpdateHealth
 
-local function PreUpdatePower(power, unit)
+local PreUpdatePower = function(power, unit)
 	local _, pName = UnitPowerType(unit)
 	
 	local color = ns.colors.power[pName]
-	if color then
+	if (color) then
 		power:SetStatusBarColor(unpack(color))
 	end
 end
 ns.PreUpdatePower = PreUpdatePower
 
-local function PostUpdatePower(Power, unit, cur, max)
-	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
+local PostUpdatePower = function(Power, unit, cur, max)
+	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)
 	end
 	
 	if (unit == "target") then
 		local self = Power.__owner
-		if self.Info then
+		if (self.Info) then
 			self.Info:ClearAllPoints()
 			if (Power.value:GetText()) then
 				self.Info:SetPoint("LEFT", self.Power.value, "RIGHT", 5, 0)
@@ -319,17 +305,17 @@ local function PostUpdatePower(Power, unit, cur, max)
 end
 ns.PostUpdatePower = PostUpdatePower
 
-local function PostUpdateAltPower(AltPower, min, cur, max)
+local PostUpdateAltPower = function(AltPower, min, cur, max)
 	local unit = AltPower.__owner.unit
 
 	local _, r, g, b = UnitAlternatePowerTextureInfo(unit, 2) -- 2 is statusbar index
-	if(r) then
+	if (r) then
 		AltPower:SetStatusBarColor(r, g, b)
 	end
 end
 ns.PostUpdateAltPower = PostUpdateAltPower
 
-local function PostCreateIcon(Icons, icon)
+local PostCreateIcon = function(Icons, icon)
 	-- remove OmniCC and CooldownCount timers
 	icon.cd.noOCC = true
 	icon.cd.noCooldownCount = true
@@ -353,7 +339,7 @@ local function PostCreateIcon(Icons, icon)
 	icon:HookScript("OnLeave", function() Aura_OnLeave(Icons.__owner) end)
 end
 
-local function PreSetPosition(Auras)
+local PreSetPosition = function(Auras)
 	table.sort(Auras, SortAuras)
 end
 
@@ -368,22 +354,22 @@ do
 	PostUpdateIcon = function(icons, unit, icon, index, offset)
 		local _, _, _, _, _, duration, expirationTime, unitCaster, _ = UnitAura(unit, index, icon.filter)
 		
-		if playerUnits[unitCaster] then
-			if icon.debuff then
+		if (playerUnits[unitCaster]) then
+			if (icon.debuff) then
 				icon.overlay:SetVertexColor(0.69, 0.31, 0.31)
 			else
 				icon.overlay:SetVertexColor(0.33, 0.59, 0.33)
 			end
 		else
 			if UnitIsEnemy("player", unit) then
-				if icon.debuff then
+				if (icon.debuff) then
 					icon.icon:SetDesaturated(true)
 				end
 			end
 			icon.overlay:SetVertexColor(0.5, 0.5, 0.5)
 		end
 		
-		if duration and duration > 0 then
+		if (duration and duration > 0) then
 			icon.remaining:Show()
 			icon.timeLeft = expirationTime
 			icon:SetScript("OnUpdate", CreateAuraTimer)
@@ -397,17 +383,17 @@ do
 	end
 end
 
-local function PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, icon)
+local PostUpdateTotems = function(Totems, slot, haveTotem, name, start, duration, icon)
 	local delay = 0.5
 	local total = 0
 	
-	if duration > 0 then
+	if (duration > 0) then
 		local current = GetTime() - start
-		if current > 0 then
+		if (current > 0) then
 			Totems[slot]:SetValue(1 - (current / duration))
 			Totems[slot]:SetScript("OnUpdate", function(self, elapsed)
 				total = total + elapsed
-				if total >= delay then
+				if (total >= delay) then
 					total = 0
 					self:SetValue(1 - ((GetTime() - start) / duration))
 				end
@@ -417,7 +403,7 @@ local function PostUpdateTotems(Totems, slot, haveTotem, name, start, duration, 
 end
 ns.PostUpdateTotems = PostUpdateTotems
 
-local function PostUpdateClassBar(classBar, unit)
+local PostUpdateClassBar = function(classBar, unit)
 	if (UnitHasVehicleUI("player")) then
 		classBar:Hide()
 	else
@@ -427,7 +413,7 @@ end
 ns.PostUpdateClassBar = PostUpdateClassBar
 --[[END OF PRE AND POST FUNCTIONS]]--
 
-local function AddAuras(self, unit)
+local AddAuras = function(self, unit)
 	self.Auras = CreateFrame("Frame", self:GetName().."_Auras", self)
 	self.Auras:SetPoint("RIGHT", self, "LEFT", -9, 0)
 	self.Auras.numBuffs = 6
@@ -444,7 +430,7 @@ local function AddAuras(self, unit)
 end
 ns.AddAuras = AddAuras
 
-local function AddBuffs(self, unit)
+local AddBuffs = function(self, unit)
 	self.Buffs = CreateFrame("Frame", self:GetName().."_Buffs", self)
 	self.Buffs.spacing = 6
 	self.Buffs.size = (230 - 9 * self.Buffs.spacing) / 10
@@ -478,7 +464,7 @@ local function AddBuffs(self, unit)
 		self.Buffs["growth-x"] = "LEFT"
 	end
 	
-	if unit:match("boss%d") then
+	if (unit:match("boss%d")) then
 		self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 15, 0)
 		self.Buffs.num = 6
 		self.Buffs:SetSize(self.Buffs.num * self.Buffs.size + (self.Buffs.num - 1) * self.Buffs.spacing, self.Buffs.size)
@@ -499,7 +485,7 @@ local function AddBuffs(self, unit)
 end
 ns.AddBuffs = AddBuffs
 
-local function AddDebuffs(self, unit)
+local AddDebuffs = function(self, unit)
 	self.Debuffs = CreateFrame("Frame", self:GetName().."_Debuffs", self)
 	self.Debuffs.spacing = 6
 	self.Debuffs.size = (230 - 9 * self.Debuffs.spacing) / 10
@@ -554,3 +540,17 @@ local function AddDebuffs(self, unit)
 	self.Debuffs.Magnify.border:SetPoint("BOTTOMRIGHT", self.Debuffs.Magnify.icon, 5, -5)
 end
 ns.AddDebuffs = AddDebuffs
+
+local AddThreatHighlight = function(self)
+	local unit = self.unit
+
+	local status = UnitThreatSituation(unit)
+	if (status and status > 0) then
+		local r, g, b = GetThreatStatusColor(status)
+	
+		self.FrameBackdrop:SetBackdropBorderColor(r, g, b)
+	else
+		self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+ns.AddThreatHighlight = AddThreatHighlight

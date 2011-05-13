@@ -1,4 +1,4 @@
---[[===================================
+﻿--[[===================================
 	DESCRIPTION:
 	Contrains the tags used in oUF_Rain
 	===================================--]]
@@ -32,6 +32,7 @@ oUF.Tags["rain:namecolor"] = function(unit)
 		color = ns.colors.class[select(2, UnitClass(unit))]
 	else
 		local reaction = UnitReaction(unit, "player")
+		print(date("%X"),"Reaction of:", unit, "is", reaction)
 		color = ns.colors.reaction[reaction or 4]
 	end
 	
@@ -78,7 +79,7 @@ oUF.Tags["rain:druidmana"] = function(unit, pName)
 	
 	local curMana, maxMana = UnitPower(unit, 0), UnitPowerMax(unit, 0)
 	
-	if curMana == maxMana then return end
+	if (curMana == maxMana) then return end
 	
 	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
@@ -120,11 +121,11 @@ oUF.Tags["rain:power"] = function(unit)
 	
 	powerValue = RGBtoHEX(unpack(ns.colors.power[pName])) .. powerValue .. "|r"
 	
-	if druidMana and cur > 0 then
+	if (druidMana and cur > 0) then
 		return powerValue .. " - " .. druidMana
-	elseif druidMana and cur == 0 then
+	elseif (druidMana and cur == 0) then
 		return druidMana
-	elseif cur > 0 then
+	elseif (cur > 0) then
 		return powerValue
 	end
 end
@@ -135,7 +136,7 @@ oUF.Tags["rain:role"] = function(unit)
 	local yOffset = 0
 	local dimX, dimY = 64, 64 -- dimensions of Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES.blp
 	local role = UnitGroupRolesAssigned(unit)
-	if role and role ~= "NONE" then
+	if (role and role ~= "NONE") then
 		local left, right, top, bottom = GetTexCoordsForRoleSmallCircle(role) -- this returns ratios
 		local cropFromLeft = dimX * left
 		local cropFromRight = dimX * right
@@ -154,7 +155,7 @@ oUF.UnitlessTagEvents.ROLE_CHANGED_INFORM = true
 oUF.Tags["rain:name"] = function(unit, r)
 	local color = oUF.Tags["rain:namecolor"](unit)
     local name = UnitName(r or unit)
-	if unit == "target" then
+	if (unit == "target") then
 		name = ns.ShortenName(name, 18)
 	else
 		name = ns.ShortenName(name, 12)
@@ -167,7 +168,7 @@ oUF.Tags["rain:altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
 	
-	if max == 0 then max = 1 end
+	if (max == 0 then max = 1) end
 	
 	local perc = floor(cur / max * 100 + 0.5)
 	

@@ -1,4 +1,4 @@
---[[================================================================
+﻿--[[================================================================
 	DESCRIPTION:
 	Contrains functions for adding bars for the default oUF elements
 	================================================================--]]
@@ -13,7 +13,7 @@ local numShards = SHARD_BAR_NUM_SHARDS
 local numCPoints = MAX_COMBO_POINTS
 local playerClass = cfg.playerClass
 
-local function AddAltPowerBar(self)
+local AddAltPowerBar = function(self)
 	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
 	self.AltPowerBar:SetHeight(3)
 	self.AltPowerBar:SetPoint("TOPLEFT", "oUF_Rain_Player_Overlay", 0, 0)
@@ -31,15 +31,15 @@ local function AddAltPowerBar(self)
 	self.AltPowerBar.Tooltip = function(self)
 		local unit = self.__owner.unit
 		-- XXX Temp fix for vehicle
-		if unit == "vehicle" or unit == "pet" then unit = "player" end
+		if (unit == "vehicle" or unit == "pet") then unit = "player" end
 		-- XXX
 		local powerName = select(10, UnitAlternatePowerInfo(unit))
 		local powerTooltip = select(11, UnitAlternatePowerInfo(unit))
 		
-		if powerName then
+		if (powerName) then
 			GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
 			GameTooltip:AddLine(powerName)
-			if powerTooltip and powerTooltip ~= "" then
+			if (powerTooltip and powerTooltip ~= "") then
 				GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
 			end
 			GameTooltip:Show()
@@ -54,7 +54,7 @@ local function AddAltPowerBar(self)
 end
 ns.AddAltPowerBar = AddAltPowerBar
 
-local function AddCastbar(self, unit)
+local AddCastbar = function(self, unit)
 	self.Castbar = CreateFrame("StatusBar", self:GetName().."_Castbar", (unit == "player" or unit == "target") and self.Portrait or self.Power)
 	self.Castbar:SetStatusBarTexture(ns.media.TEXTURE)
 	self.Castbar:SetStatusBarColor(0.55, 0.57, 0.61)
@@ -88,14 +88,14 @@ local function AddCastbar(self, unit)
 		self.Castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
 	end
 	
-	if unit == "target" or unit:match("boss%d") or unit == "focus" then
+	if (unit == "target" or unit:match("boss%d") or unit == "focus") then
 		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
 		
 		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
 		self.Castbar.IconOverlay:SetTexture(ns.media.BTNTEXTURE)
 		self.Castbar.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
 		
-		if unit == "target" then
+		if (unit == "target") then
 			self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
 			self.Castbar.Icon:SetSize(32, 32)
 			self.Castbar.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -5, 5)
@@ -104,7 +104,7 @@ local function AddCastbar(self, unit)
 			self.Castbar.Icon:SetSize(22, 22)
 			self.Castbar.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -3, 3)
 			self.Castbar.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 3, -3)
-			if unit == "focus" then
+			if (unit == "focus") then
 				self.Castbar.Icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
 			else
 				self.Castbar.Icon:SetPoint("BOTTOMRIGHT", self, "BOTTOMLEFT", -7.5, 0)
@@ -120,7 +120,7 @@ local function AddCastbar(self, unit)
 end
 ns.AddCastbar = AddCastbar
 
-local function AddComboPointsBar(self, width, height)
+local AddComboPointsBar = function(self, width, height)
 	self.CPoints = {}
 	
 	for i = 1, numCPoints do
@@ -136,7 +136,7 @@ local function AddComboPointsBar(self, width, height)
 end
 ns.AddComboPointsBar = AddComboPointsBar
 
-local function AddEclipseBar(self, width, height)
+local AddEclipseBar = function(self, width, height)
 	local eclipseBar = CreateFrame("Frame", "oUF_Rain_EclipseBar", self)
 	eclipseBar:SetHeight(5)
 	eclipseBar:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
@@ -169,7 +169,7 @@ local function AddEclipseBar(self, width, height)
 end
 ns.AddEclipseBar = AddEclipseBar
 
-local function AddHealPredictionBar(self, unit)
+local AddHealPredictionBar = function(self, unit)
 	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
 	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
@@ -192,7 +192,7 @@ local function AddHealPredictionBar(self, unit)
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
-local function AddHolyPowerBar(self, width, height)
+local AddHolyPowerBar = function(self, width, height)
 	self.HolyPower = CreateFrame("Frame", "oUF_Rain_HolyPower", self.Overlay)
 	self.HolyPower:SetHeight(height)
 	self.HolyPower:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
@@ -212,7 +212,7 @@ local function AddHolyPowerBar(self, width, height)
 end
 ns.AddHolyPowerBar = AddHolyPowerBar
 
-local function AddOverlay(self, unit)
+local AddOverlay = function(self, unit)
 	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self.Portrait)
 	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
 	self.Overlay:SetPoint("TOPLEFT", self.Portrait, 0, 0)
@@ -222,7 +222,7 @@ local function AddOverlay(self, unit)
 end
 ns.AddOverlay = AddOverlay
 
-local function AddPortrait(self, unit)
+local AddPortrait = function(self, unit)
 	self.Portrait = CreateFrame("PlayerModel", self:GetName().."_Portrait", self)
 	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
 	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
@@ -232,7 +232,7 @@ local function AddPortrait(self, unit)
 end
 ns.AddPortrait = AddPortrait
 
-local function AddRuneBar(self, width, height)
+local AddRuneBar = function(self, width, height)
 	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self.Overlay)
 	self.Runes:SetHeight(height)
 	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
@@ -261,7 +261,7 @@ local function AddRuneBar(self, width, height)
 end
 ns.AddRuneBar = AddRuneBar
 
-local function AddSoulShardsBar(self, width, height)
+local AddSoulShardsBar = function(self, width, height)
 	self.SoulShards = CreateFrame("Frame", "oUF_Rain_SoulShards", self.Overlay)
 	self.SoulShards:SetHeight(height)
 	self.SoulShards:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
@@ -281,7 +281,7 @@ local function AddSoulShardsBar(self, width, height)
 end
 ns.AddSoulshardsBar = AddSoulShardsBar
 
-local function AddTotems(self, width, height)
+local AddTotems = function(self, width, height)
 	local numTotems = MAX_TOTEMS
 
 	self.Totems = CreateFrame("Frame", "oUF_Rain_Totems", self.Overlay)
@@ -294,21 +294,21 @@ local function AddTotems(self, width, height)
 		self.Totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Totems[i]:SetMinMaxValues(0, 1)
 		
-		if playerClass == "SHAMAN" then
+		if (playerClass == "SHAMAN") then
 			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
 			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Totems, (i - 1) * (214 / numTotems) + 1, 0)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[i]))
-		elseif playerClass == "DRUID" then -- Druid's mushrooms
+		elseif (playerClass == "DRUID") then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
-				if i == 1 then
+				if (i == 1) then
 					self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
-				elseif i == 2 then
+				elseif (i == 2) then
 					self.Totems[i]:SetPoint("RIGHT", self.Totems[1], "LEFT", -1, 0)
 				else
 					self.Totems[i]:SetPoint("LEFT", self.Totems[1], "RIGHT", 1, 0)
 				end
-		elseif playerClass == "DEATHKNIGHT" then -- Death knight's ghoul
+		elseif (playerClass) == "DEATHKNIGHT" then -- Death knight's ghoul
 			self.Totems[i]:SetSize(width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
@@ -321,7 +321,7 @@ local function AddTotems(self, width, height)
 		self.Totems[i].Destroy:SetAllPoints()
 		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
 		self.Totems[i].Destroy:SetScript("OnClick", function()
-			if IsShiftKeyDown() then
+			if (IsShiftKeyDown()) then
 				DestroyTotem(i)
 			end
 		end)

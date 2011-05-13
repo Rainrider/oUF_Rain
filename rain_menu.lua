@@ -1,4 +1,4 @@
---[[===============================
+﻿--[[===============================
 	DESCRIPTION:
 	Contains the menus for oUF_Rain
 	===============================--]]
@@ -12,28 +12,28 @@ function ns:menu()
 	return ToggleDropDownMenu(1, nil, dropdown, "cursor", 0, 0)
 end
 
-local function init(self)
+local init = function(self)
 	local unit = self:GetParent().unit
 	local menu, name, id
 
-	if(not unit) then
+	if (not unit) then
 		return
 	end
 
-	if(UnitIsUnit(unit, "player")) then
+	if (UnitIsUnit(unit, "player")) then
 		menu = "SELF"
-	elseif(UnitIsUnit(unit, "vehicle")) then
+	elseif (UnitIsUnit(unit, "vehicle")) then
 		-- NOTE: vehicle check must come before pet check for accuracy's sake because
 		-- a vehicle may also be considered your pet
 		menu = "VEHICLE"
-	elseif(UnitIsUnit(unit, "pet")) then
+	elseif (UnitIsUnit(unit, "pet")) then
 		menu = "PET"
-	elseif(UnitIsPlayer(unit)) then
+	elseif (UnitIsPlayer(unit)) then
 		id = UnitInRaid(unit)
-		if(id) then
+		if (id) then
 			menu = "RAID_PLAYER"
 			name = GetRaidRosterInfo(id)
-		elseif(UnitInParty(unit)) then
+		elseif (UnitInParty(unit)) then
 			menu = "PARTY"
 		else
 			menu = "PLAYER"
@@ -43,7 +43,7 @@ local function init(self)
 		name = RAID_TARGET_ICON
 	end
 
-	if(menu) then
+	if (menu) then
 		UnitPopup_ShowMenu(self, menu, unit, name, id)
 	end
 end
