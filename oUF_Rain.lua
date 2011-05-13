@@ -119,7 +119,7 @@ local function Shared(self, unit)
 		self.Power:SetBackdropColor(0, 0, 0)
 	
 		self.Power.colorTapping = true
-		self.Power.colorPower =  true and unit == "player" or unit == "pet"
+		self.Power.colorPower = unit == "player" or unit == "pet"
 		self.Power.colorClass = true
 		self.Power.colorReaction = true
 		self.Power.frequentUpdates = true
@@ -254,7 +254,7 @@ end
 oUF:RegisterStyle("Rain", Shared)
 oUF:Factory(function(self)
 
-	local spellName = GetSpellInfo(cfg.clickSpell[playerClass] and cfg.clickSpell[playerClass] or 6603)	-- 6603 Auto Attack
+	local spellName = GetSpellInfo(cfg.clickSpell[playerClass] or 6603)	-- 6603 Auto Attack
 	if not spellName then
 		spellName = GetSpellInfo(6603)
 	end

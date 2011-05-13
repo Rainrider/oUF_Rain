@@ -3,9 +3,9 @@ local parentBarTex
 
 local GetSpellFocusCost = function(talentTree, focusSpark)
 	local spellFocusCost
-	local bmSpell = focusSpark.bmSpell and focusSpark.bmSpell or 34026	-- Kill Command
-	local mmSpell = focusSpark.mmSpell and focusSpark.mmSpell or 53209	-- Chimera Shot
-	local svSpell = focusSpark.svSpell and focusSpark.svSpell or 53301	-- Explosive Shot
+	local bmSpell = focusSpark.bmSpell or 34026	-- Kill Command
+	local mmSpell = focusSpark.mmSpell or 53209	-- Chimera Shot
+	local svSpell = focusSpark.svSpell or 53301	-- Explosive Shot
 
 	if (talentTree == 3 and IsSpellKnown(svSpell)) then		-- SURVIVAL
 		spellFocusCost = select(4, GetSpellInfo(svSpell))

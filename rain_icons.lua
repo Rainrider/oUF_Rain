@@ -3,8 +3,6 @@
 	Contains functions for adding icons to oUF_Rain
 	===============================================--]]
 
--- TODO: LFD role -- maybe through a tag
-
 local _, ns = ...
 local cfg = ns.config
 

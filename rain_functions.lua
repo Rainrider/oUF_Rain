@@ -88,7 +88,7 @@ end
 local function PutFontString(parent, fontName, fontHeight, fontStyle, justifyH)
 	local fontString = parent:CreateFontString(nil, "OVERLAY")
 	fontString:SetFont(fontName, fontHeight, fontStyle)
-	fontString:SetJustifyH(justifyH and justifyH or "LEFT")
+	fontString:SetJustifyH(justifyH or "LEFT")
 	fontString:SetShadowColor(0, 0, 0)
 	fontString:SetShadowOffset(0.75, -0.75)
 	
