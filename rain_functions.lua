@@ -300,17 +300,19 @@ local function PostUpdatePower(Power, unit, cur, max)
 	if not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit) then
 		Power:SetValue(0)
 	end
-	if (unit ~= "player" and unit ~= "target" and unit ~= "vehicle") then return end
 	
 	if (unit == "target") then
 		local self = Power.__owner
 		if self.Info then
 			self.Info:ClearAllPoints()
 			if (Power.value:GetText()) then
-				self.Info:SetPoint("TOP", 0, -3.5)
+				self.Info:SetPoint("LEFT", self.Power.value, "RIGHT", 5, 0)
+				self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
+				self.Info:SetJustifyH("CENTER")
 			else
 				self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
-				self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", 0, 0)
+				self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
+				self.Info:SetJustifyH("LEFT")
 			end
 		end
 	end

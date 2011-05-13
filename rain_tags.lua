@@ -25,7 +25,6 @@ local UnitIsFriend = UnitIsFriend
 local UnitName = UnitName
 
 oUF.Tags["rain:namecolor"] = function(unit)
-	if not unit then print("omfg, unit is nil") end
 	local color
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		color = {0.75, 0.75, 0.75}
@@ -74,8 +73,8 @@ oUF.Tags["rain:health"] = function(unit)
 end
 oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
 
-oUF.Tags["rain:druidmana"] = function(unit, pType)
-	if unit ~= "player" or playerClass ~= "DRUID" or pType == 0 then return end
+oUF.Tags["rain:druidmana"] = function(unit, pName)
+	if (unit ~= "player" or playerClass ~= "DRUID" or pName == "MANA") then return end
 	
 	local curMana, maxMana = UnitPower(unit, 0), UnitPowerMax(unit, 0)
 	
@@ -102,20 +101,20 @@ oUF.Tags["rain:power"] = function(unit)
 	if (max == 0) then return end
 	
 	local powerValue = ""
-	local pType, pName = UnitPowerType(unit)
-	local druidMana = oUF.Tags["rain:druidmana"](unit, pType)
-	if (pType == 0) then
-		if (cur ~= max) then
-			powerValue = floor(cur / max * 100 + 0.5) .. "%"
-		end
+	local _, pName = UnitPowerType(unit)
+	local druidMana = oUF.Tags["rain:druidmana"](unit, pName)
+	
+	if (pName == "MANA" and cur ~= max) then
+		powerValue = floor(cur / max * 100 + 0.5) .. "%"
 	end
-	if (UnitIsPlayer(unit) or UnitIsUnit(unit, "pet")) then
-		if (powerValue ~= "") then
+	
+	if (unit == "player") then
+		if (powerValue ~= "") then -- player's mana not full
 			powerValue = powerValue .." - " .. SiValue(cur)
-		else
+		else -- player's mana full or other power type
 			powerValue = SiValue(cur)
 		end
-	else
+	elseif (powerValue == "") then -- unit's power type is not mana
 		powerValue = SiValue(cur)
 	end
 	

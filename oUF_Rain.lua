@@ -44,8 +44,8 @@ local UnitSpecific = {
 	target = function(self)
 		self.Info = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
-		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", 0, -5)
-		self:Tag(self.Info, "[rain:role][rain:name] [difficulty][rain:level] [shortclassification]|r")
+		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
+		self:Tag(self.Info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
 		
 		ns.AddComboPointsBar(self, nil, 5)
 		
