@@ -1,5 +1,14 @@
 ﻿local _, ns = ...
 
+local oUFversion = GetAddOnMetadata("oUF", "version")
+local _, _, oUFmajor, oUFminor, oUFrevision = oUFversion:find("(%d+)%.*(%d*)%.*(%d*)")
+oUFmajor = tonumber(oUFmajor)
+oUFminor = tonumber(oUFminor)
+oUFrevision = tonumber(oUFrevision)
+if ((oUFmajor < 1) or (oUFmajor == 1 and oUFminor < 5)) then
+	error("Consider updating your version of oUF to at least 1.5")
+end
+
 local cfg = ns.config
 local PutFontString = ns.PutFontString
 
@@ -50,6 +59,10 @@ local UnitSpecific = {
 		ns.AddComboPointsBar(self, nil, 5)
 		
 		ns.AddQuestIcon(self, "target")
+		
+		if ((oUFminor == 5 and oUFrevision > 11) or oUFminor > 5) then
+			ns.AddRangeCheck(self)
+		end
 	end,
 	
 	pet = function(self)
@@ -58,6 +71,7 @@ local UnitSpecific = {
 		
 		ns.AddDebuffs(self, "pet")
 		ns.AddBuffs(self, "pet")
+		ns.AddRangeCheck(self)
 	end,
 	
 	focus = function(self)
@@ -215,6 +229,11 @@ local Shared = function(self, unit)
 			ns.AddReadyCheckIcon(self, unit)
 			
 			ns.AddDebuffHighlight(self, unit)
+			ns.AddRangeCheck(self)
+		end
+		
+		if (unitIsMT) then
+			ns.AddRangeCheck(self)
 		end
 		
 		if (unitIsBoss) then
@@ -242,6 +261,8 @@ local Shared = function(self, unit)
 		self.Name:SetPoint("LEFT", 2, 0)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		self:Tag(self.Name, "[rain:name]")
+		
+		ns.AddRangeCheck(self)
 	end
 	
 	if (UnitSpecific[unit]) then

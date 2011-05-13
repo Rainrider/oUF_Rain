@@ -541,6 +541,14 @@ local AddDebuffs = function(self, unit)
 end
 ns.AddDebuffs = AddDebuffs
 
+local AddRangeCheck = function(self, unit)
+	self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = 0.5,
+	}
+end
+ns.AddRangeCheck = AddRangeCheck
+
 local AddThreatHighlight = function(self)
 	local unit = self.unit
 
