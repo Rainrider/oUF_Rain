@@ -152,7 +152,7 @@ oUF.UnitlessTagEvents.PLAYER_ROLES_ASSIGNED = true
 oUF.UnitlessTagEvents.ROLE_CHANGED_INFORM = true
 
 oUF.Tags["rain:name"] = function(unit, r)
-	local color = oUF.Tags["rain:namecolor"](unit)
+	local color = oUF.Tags["rain:namecolor"](r or unit)
     local name = UnitName(r or unit)
 	if (unit == "target") then
 		name = ns.ShortenName(name, 18)
