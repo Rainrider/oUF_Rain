@@ -194,13 +194,17 @@ local Aura_OnEnter = function(self, icon)
 end
 
 local Aura_OnLeave = function(self)
-	self.Buffs.Magnify:Hide()
-	self.Debuffs.Magnify:Hide()
+	if (self.Buffs) then
+		self.Buffs.Magnify:Hide()
+	end
+	if (self.Debuffs) then
+		self.Debuffs.Magnify:Hide()
+	end
 end
 
 --[[PRE AND POST FUNCTIONS]]--
 
-local PostCastStart = function(castbar, unit, name, rank, castid)
+local PostCastStart = function(castbar, unit, name, rank, castid, spellid)
 	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
