@@ -176,7 +176,9 @@ local Shared = function(self, unit)
 		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, unit)
 		
-		ns.AddBuffs(self, unit)
+		if (unit == "player" and cfg.showPlayerBuffs or unit == "target") then
+			ns.AddBuffs(self, unit)
+		end
 		ns.AddDebuffs(self, unit)
 		ns.AddDebuffHighlight(self, unit)
 		
@@ -341,7 +343,7 @@ oUF:Factory(function(self)
 					self:SetAttribute("unitsuffix", "target")
 				]]
 			)
-			partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "BOTTOMLEFT", 0, -27.5)
+			partyTargets:SetPoint("TOPLEFT", oUF_Rain_Party, "BOTTOMLEFT", 0, -27.5)
 		else
 			partyTargets = self:SpawnHeader(
 				"oUF_Rain_PartyTargets", nil, "party",
@@ -354,7 +356,7 @@ oUF:Factory(function(self)
 					self:SetAttribute("unitsuffix", "target")
 				]]
 			)
-			partyTargets:SetPoint("TOPLEFT", "oUF_Rain_Party", "TOPRIGHT", 7.5, 0)
+			partyTargets:SetPoint("TOPLEFT", oUF_Rain_Party, "TOPRIGHT", 7.5, 0)
 		end
 		partyTargets:Show()
 	end
@@ -393,7 +395,7 @@ oUF:Factory(function(self)
 				]]):format(spellName)
 			)
 		end
-		partyPets:SetPoint("TOPLEFT", "oUF_Rain_Party", 0, -29.5)
+		partyPets:SetPoint("TOPLEFT", oUF_Rain_Party, 0, -29.5)
 		partyPets:Show()
 	end
 	
@@ -426,7 +428,7 @@ oUF:Factory(function(self)
 				self:SetAttribute("unitsuffix", "target")
 			]]
 		)
-		mainTankTargets:SetPoint("TOPLEFT", "oUF_Rain_MT", "TOPRIGHT", 7.5, 0)
+		mainTankTargets:SetPoint("TOPLEFT", oUF_Rain_MT, "TOPRIGHT", 7.5, 0)
 		mainTankTargets:Show()
 	end
 	

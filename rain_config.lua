@@ -5,6 +5,8 @@
 local _, ns = ...
 
 ns.config = {
+	showPlayerBuffs = true,
+
 	-- true to show; false to hide
 	showParty = true,
 	horizParty = true,				-- true for horizontal party layout, false for vertical
