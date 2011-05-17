@@ -5,20 +5,20 @@
 local _, ns = ...
 
 ns.config = {
-	showPlayerBuffs = true,
+	showPlayerBuffs = true,			-- true to enable the display of player buffs left to the player frame; false to disable them
 
 	-- true to show; false to hide
 	showParty = true,
-	horizParty = true,				-- true for horizontal party layout, false for vertical
+	horizParty = true,				-- true for horizontal party layout; false for vertical
 	showPartyTargets = true,
 	showPartyPets = true,
 	showRaid = true,				-- NYI
-	showMT = true,					-- true to show maintanks; false to hide them
-	showMTT = true,					-- true to show maintanks' targets; false to hide them
+	showMT = true,					-- maintanks
+	showMTT = true,					-- maintanks' targets
 	
 	-- aura filtering
 	onlyShowPlayerBuffs = false,	-- true to show only player buffs; false to show all buffs (for friendly targets only)
-	onlyShowPlayerDebuffs = false,	-- true to show only player debuffs; false to show only player class debuffs
+	onlyShowPlayerDebuffs = false,	-- true to show only player debuffs; false to show only player class debuffs (for enemies only)
 	
 	-- debuff highlightingt
 	dispelTypeFilter = true, -- true to highlight only debuffs the player can dispel; false to only highlight boss debuffs
