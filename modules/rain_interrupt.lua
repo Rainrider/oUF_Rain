@@ -4,7 +4,7 @@ ns.interruptSpellNames = {}
 
 local interruptZones = {
 	-- Blackwing Descent
-	754 = {
+	[754] = {
 		-- Halfus
 		83703, -- Shadow Nova
 		-- Ascendant Council
@@ -19,7 +19,7 @@ local interruptZones = {
 		92947, -- Unleash Essence
 	},
 	-- Bastion of Twilight
-	758 = {
+	[758] = {
 		-- Omnotron
 		79710, -- Arcane Annihilator (Arcanotron)
 		-- Maloriak
@@ -28,20 +28,39 @@ local interruptZones = {
 		-- Nefarian
 		80734, -- Blast Nova (Chromatic Prototypes)
 	},
+	-- Zul'Gurub
+	[793] = {
+		-- Venoxis
+		96466, -- Whispers of Hethiss
+		-- Kilnara
+		96435, -- Tears of Blood -- TODO: test channeling
+		-- Zanzil
+		96347, -- Voodoo Bolt
+	},
 }
 
 local rainInterrupt = CreateFrame("Frame", nil, UIParent)
 rainInterrupt:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)
+rainInterrupt:RegisterEvent("PLAYER_ENTERING_WORLD")
 rainInterrupt:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
-rainInterrupt:ZONE_CHANGED_NEW_AREA = function(...)
+local populateInterrupts = function()
 	local areaID = GetCurrentMapAreaID()
 	
 	if (interruptZones[areaID]) then
-		for i, v in ipairs(interruptZones[areaID]) do
-			ns.interruptSpellNames[i] = GetSpellInfo(interruptZones.areaID[i])
+		for i, spellid in ipairs(interruptZones[areaID]) do
+			ns.interruptSpellNames[GetSpellInfo(spellid)] = true
 		end
 	else
 		table.wipe(ns.interruptSpellNames)
 	end
+end
+
+function rainInterrupt:PLAYER_ENTERING_WORLD(event)
+	populateInterrupts()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+end
+
+function rainInterrupt:ZONE_CHANGED_NEW_AREA(event)
+	populateInterrupts()
 end

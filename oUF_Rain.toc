@@ -1,4 +1,4 @@
-﻿## Interface: 40100
+## Interface: 40100
 ## Title: oUF |cff0099CCRain|r
 ## Author: Rainrider
 ## Version: pre alpha
@@ -7,6 +7,7 @@
 ## RequiredDeps: oUF
 ## OptionalDeps: oUF_CombatFeedback, oUF_Reputation, oUF_Swing
 
+modules\rain_interrupt.lua
 rain_config.lua
 rain_media.lua
 rain_colors.lua

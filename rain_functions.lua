@@ -204,10 +204,13 @@ end
 
 --[[PRE AND POST FUNCTIONS]]--
 
-local PostCastStart = function(castbar, unit, name, rank, castid, spellid)
+local PostCastStart = function(castbar, unit, name, rank, castid)
 	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
+	elseif (ns.interruptSpellNames[name]) then
+		castbar:SetStatusBarColor(0, 0, 1)
+		castbar.IconOverlay:SetVertexColor(0, 0, 1)
 	else
 		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
 		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
@@ -241,6 +244,9 @@ local PostChannelStart = function(castbar, unit, name)
 	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
+	elseif (ns.interruptSpellNames[name]) then
+		castbar:SetStatusBarColor(0, 0, 1)
+		castbar.IconOverlay:SetVertexColor(0, 0, 1)
 	else
 		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
 		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
