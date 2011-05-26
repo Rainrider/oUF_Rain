@@ -556,8 +556,8 @@ local AddRangeCheck = function(self, unit)
 end
 ns.AddRangeCheck = AddRangeCheck
 
-local AddThreatHighlight = function(self)
-	local unit = self.unit
+local AddThreatHighlight = function(self, event, unit)
+	if (unit ~= self.unit) then return end
 
 	local status = UnitThreatSituation(unit)
 	if (status and status > 0) then
