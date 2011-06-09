@@ -445,11 +445,9 @@ oUF:Factory(function(self)
 end)
 
 oUF:RegisterInitCallback(function(self)
-	if (self:IsElementEnabled("FocusHelper")) then
-		self:DisableElement("FocusHelper")
+	if (self:IsElementEnabled("DebuffHighlight")) then
+		self:DisableElement("DebuffHighlight")
 	end
-	-- if (self:IsElementEnabled("Aura")) then
-		-- self:DisableElement("Aura")
-	-- end
+	
 	return true
 end)
