@@ -1,11 +1,12 @@
 ﻿local _, ns = ...
 
-local oUFversion = GetAddOnMetadata("oUF", "version")
-local _, _, oUFmajor, oUFminor, oUFrevision = oUFversion:find("(%d+)%.*(%d*)%.*(%d*)")
-oUFmajor = tonumber(oUFmajor)
-oUFminor = tonumber(oUFminor)
-oUFrevision = tonumber(oUFrevision)
-if ((oUFmajor < 1) or (oUFmajor == 1 and oUFminor < 5)) then
+local major, minor, rev = strsplit(".", GetAddOnMetadata("oUF", "version"))
+if not minor then minor = 0 end
+if not rev then rev = 0 end
+local oUFversion = major * 1000 + minor * 100 + rev
+print("oUF version:", oUFversion)
+
+if (oUFversion < 1500) then
 	error("Consider updating your version of oUF to at least 1.5")
 end
 
@@ -60,7 +61,7 @@ local UnitSpecific = {
 		
 		ns.AddQuestIcon(self, "target")
 		
-		if ((oUFminor == 5 and oUFrevision > 11) or oUFminor > 5) then
+		if (oUFversion > 1511) then
 			ns.AddRangeCheck(self)
 		end
 	end,
@@ -270,7 +271,6 @@ local Shared = function(self, unit)
 	if (UnitSpecific[unit]) then
 		return UnitSpecific[unit](self)
 	end
-
 end
 
 oUF:RegisterStyle("Rain", Shared)
@@ -442,4 +442,14 @@ oUF:Factory(function(self)
 			boss[i]:SetPoint("TOP", boss[i-1], "BOTTOM", 0, -15)
 		end
 	end
+end)
+
+oUF:RegisterInitCallback(function(self)
+	if (self:IsElementEnabled("FocusHelper")) then
+		self:DisableElement("FocusHelper")
+	end
+	-- if (self:IsElementEnabled("Aura")) then
+		-- self:DisableElement("Aura")
+	-- end
+	return true
 end)
