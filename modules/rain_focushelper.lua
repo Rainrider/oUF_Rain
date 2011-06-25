@@ -60,6 +60,7 @@ local UpdateFocusSpark = function(self, event, ...)
 end
 
 local Update = function(self, event, ...)
+	if (self.unit ~= "player") then return end
 	if (event:match("UNIT_SPELLCAST_")) then
 		UpdateFocusGain(self, event, ...)
 	else
@@ -78,41 +79,39 @@ local Enable = function(self)
 	local focusSpark = self.FocusSpark
 	local focusGain = self.FocusGain
 	
-	if (focusSpark or focusGain) then
-		if (focusSpark) then
-			focusSpark.__owner = self
-			focusSpark.ForceUpdate = ForceUpdate
-		
-			parentBarWidth = focusSpark:GetParent():GetWidth()
-	
-			if (focusSpark:IsObjectType("Texture") and not focusSpark:GetTexture()) then
-				focusSpark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-				focusSpark:SetBlendMode("ADD")
-			end
-		
-			self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", Update)
-			self:RegisterEvent("LEARNED_SPELL_IN_TAB", Update)
+	if (focusSpark) then
+		focusSpark.__owner = self
+		focusSpark.ForceUpdate = ForceUpdate
+
+		parentBarWidth = focusSpark:GetParent():GetWidth()
+
+		if (focusSpark:IsObjectType("Texture") and not focusSpark:GetTexture()) then
+			focusSpark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+			focusSpark:SetBlendMode("ADD")
 		end
-	
-		if (focusGain) then
-			focusGain.__owner = self
-			focusGain.ForceUpdate = ForceUpdate
-		
-			parentBarWidth = focusGain:GetParent():GetWidth()
-			parentBarTex = focusGain:GetParent():GetStatusBarTexture()
-	
-			if (focusGain:IsObjectType("Texture") and not focusGain:GetTexture()) then
-				focusGain:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
-			end
-	
-			self:RegisterEvent("UNIT_SPELLCAST_START", Update)
-			self:RegisterEvent("UNIT_SPELLCAST_STOP", Update)
-			self:RegisterEvent("UNIT_SPELLCAST_FAILED", Update)
-			self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED", Update)
-		end
-	
-		return true
+
+		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", Update)
+		self:RegisterEvent("LEARNED_SPELL_IN_TAB", Update)
 	end
+
+	if (focusGain) then
+		focusGain.__owner = self
+		focusGain.ForceUpdate = ForceUpdate
+		
+		parentBarWidth = focusGain:GetParent():GetWidth()
+		parentBarTex = focusGain:GetParent():GetStatusBarTexture()
+
+		if (focusGain:IsObjectType("Texture") and not focusGain:GetTexture()) then
+			focusGain:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
+		end
+
+		self:RegisterEvent("UNIT_SPELLCAST_START", Update)
+		self:RegisterEvent("UNIT_SPELLCAST_STOP", Update)
+		self:RegisterEvent("UNIT_SPELLCAST_FAILED", Update)
+		self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED", Update)
+	end
+
+	return true
 end
 
 local Disable = function(self)
