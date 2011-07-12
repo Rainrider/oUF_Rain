@@ -45,6 +45,8 @@ local UnitSpecific = {
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if (UnitExists("target")) then
 				PlaySound("igCreatureAggroSelect")
+			else
+				PlaySound("igCreatureAggroDeselect")
 			end
 		end)
 		
