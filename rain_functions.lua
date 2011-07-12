@@ -94,7 +94,7 @@ end
 ns.PutFontString = PutFontString
 
 local CustomCastTimeText = function(self, duration)
-	self.Time:SetText(("%.1f / %.1f"):format(self.channeling and duration or self.max - duration, self.max))
+	self.Time:SetText(("%.1f / %.2f"):format(self.channeling and duration or self.max - duration, self.max))
 end
 ns.CustomCastTimeText = CustomCastTimeText
 
