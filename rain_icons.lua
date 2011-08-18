@@ -50,7 +50,7 @@ ns.AddQuestIcon = AddQuestIcon
 
 local AddRaidIcon = function(self, unit)
 	self.RaidIcon = self.Health:CreateTexture(nil, "OVERLAY")
-	self.RaidIcon:SetTexture(cfg.RAIDICONS)
+	self.RaidIcon:SetTexture([=[Interface\AddOns\oUF_Rain\media\icons\raidicons]=])
 	if (unit ~= "player" and unit ~= "target") then
 		self.RaidIcon:SetSize(14, 14)
 		self.RaidIcon:SetPoint("TOP", 0, 10)
