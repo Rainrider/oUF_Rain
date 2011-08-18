@@ -62,6 +62,7 @@ local UnitSpecific = {
 		ns.AddComboPointsBar(self, nil, 5)
 		
 		ns.AddQuestIcon(self, "target")
+		ns.AddResurrectIcon(self, "target")
 		
 		if (oUFversion > 1511) then
 			ns.AddRangeCheck(self)
@@ -231,12 +232,14 @@ local Shared = function(self, unit)
 			ns.AddLeaderIcon(self, unit)
 			ns.AddMasterLooterIcon(self, unit)
 			ns.AddReadyCheckIcon(self, unit)
+			ns.AddResurrectIcon(self, unit)
 			
 			ns.AddDebuffHighlight(self, unit)
 			ns.AddRangeCheck(self)
 		end
 		
 		if (unitIsMT) then
+			ns.AddResurrectIcon(self, unit)
 			ns.AddRangeCheck(self)
 		end
 		

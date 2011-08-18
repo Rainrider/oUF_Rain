@@ -78,3 +78,10 @@ local AddRestingIcon = function(self)
 	self.Resting:SetPoint("BOTTOMLEFT", -8.5, -8.5)
 end
 ns.AddRestingIcon = AddRestingIcon
+
+local AddResurrectIcon = function(self, unit)
+	self.ResurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	self.ResurrectIcon:SetSize(16, 16)
+	self.ResurrectIcon:SetPoint("CENTER")
+end
+ns.AddResurrectIcon = AddResurrectIcon
