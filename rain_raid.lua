@@ -67,7 +67,7 @@ local raidStyle = function(self, unit)
 	ns.AddPhaseIcon(self, unit)
 	ns.AddRaidIcon(self, unit) -- TODO: placement for raid frames
 	ns.AddReadyCheckIcon(self, unit)
-	AddResurrectIcon(self, unit)
+	ns.AddResurrectIcon(self, unit)
 	
 	--[[ BARS ]]--
 	ns.AddHealPredictionBar(self, unit)
