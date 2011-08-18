@@ -253,7 +253,7 @@ ns.PostchannelStart = PostChannelStart
 
 local PostUpdateHealth = function(health, unit, cur, max)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
-		local class = select(2, UnitClass(unit))
+		local _, class = UnitClass(unit)
 		local color = UnitIsPlayer(unit) and ns.colors.class[class] or {0.84, 0.75, 0.65}
 
 		health:SetValue(0)

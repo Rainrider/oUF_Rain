@@ -20,4 +20,5 @@ rain_menu.lua
 rain_tags.lua
 rain_icons.lua
 rain_bars.lua
+rain_raid.lua
 oUF_Rain.lua

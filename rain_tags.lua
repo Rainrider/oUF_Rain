@@ -25,11 +25,12 @@ local UnitIsFriend = UnitIsFriend
 local UnitName = UnitName
 
 oUF.Tags["rain:namecolor"] = function(unit)
-	local color
+	local color = {1, 1, 1}
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		color = {0.75, 0.75, 0.75}
 	elseif (UnitIsPlayer(unit)) then
-		color = ns.colors.class[select(2, UnitClass(unit))]
+		local _, unitClass = UnitClass(unit)
+		color = ns.colors.class[unitClass]
 	else
 		local reaction = UnitReaction(unit, "player")
 		color = ns.colors.reaction[reaction or 4]
@@ -72,6 +73,16 @@ oUF.Tags["rain:health"] = function(unit)
 	return SiValue(cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
 end
 oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
+
+oUF.Tags["rain:raidhp"] = function(unit)
+	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
+
+	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	if (cur == 0 or max == 0 or cur == max) then return end
+	
+	return "|cffff0000-" .. SiValue(max - cur) .. "|r"
+end
+oUF.TagEvents["rain:raidhp"] = oUF.TagEvents.missinghp
 
 oUF.Tags["rain:druidmana"] = function(unit, pName)
 	if (unit ~= "player" or playerClass ~= "DRUID" or pName == "MANA") then return end

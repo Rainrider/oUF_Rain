@@ -193,7 +193,6 @@ local Shared = function(self, unit)
 		ns.AddAssistantIcon(self, unit)
 		ns.AddLeaderIcon(self, unit)
 		ns.AddMasterLooterIcon(self, unit)
-		ns.AddPhaseIcon(self, unit)
 		ns.AddReadyCheckIcon(self, unit)
 	end
 	
@@ -276,6 +275,7 @@ local Shared = function(self, unit)
 end
 
 oUF:RegisterStyle("Rain", Shared)
+oUF:RegisterStyle("RainRaid", ns.raidStyle)
 oUF:Factory(function(self)
 
 	local spellName = GetSpellInfo(cfg.clickSpell[playerClass] or 6603)	-- 6603 Auto Attack
@@ -442,6 +442,41 @@ oUF:Factory(function(self)
 			boss[i]:SetPoint("TOP", UIParent, "TOP", 0, -20)
 		else
 			boss[i]:SetPoint("TOP", boss[i-1], "BOTTOM", 0, -15)
+		end
+	end
+	
+	self:SetActiveStyle("RainRaid")
+	-- TODO: add options for horizontal grow / filtering
+	if (cfg.showRaid) then
+		CompactRaidFrameManager:UnregisterAllEvents()
+		CompactRaidFrameManager:Hide()
+		CompactRaidFrameContainer:UnregisterAllEvents()
+		CompactRaidFrameContainer:Hide()
+		
+		local raid = {} -- need that for positioning the groups
+		
+		for i = 1, NUM_RAID_GROUPS do
+			local raidGroup = self:SpawnHeader(
+				"oUF_Rain_RaidGroup" .. i, nil, "solo,raid",
+				"showSolo", true,
+				--"showPlayer", true,
+				"showRaid", true,
+				"groupFilter", i,
+				"yOffset", -7.5,
+				"oUF-initialConfigFunction", ([[
+					self:SetWidth(64)
+					self:SetHeight(30)
+					self:SetAttribute("type3", "spell")
+					self:SetAttribute("spell3", "%s")
+				]]):format(spellName)
+			)
+			table.insert(raid, raidGroup)
+			
+			if (i == 1) then
+				raidGroup:SetPoint("TOPLEFT", UIParent, 15, -15)
+			else
+				raidGroup:SetPoint("TOPLEFT", raid[i - 1], "TOPRIGHT", 7.5, 0)
+			end
 		end
 	end
 end)

@@ -12,7 +12,8 @@ ns.config = {
 	horizParty = true,				-- true for horizontal party layout; false for vertical
 	showPartyTargets = true,
 	showPartyPets = true,
-	showRaid = true,				-- NYI
+	showRaid = true,
+	raidHealth = 1,					-- 0 - none; 1 - deficit; 2 - percent
 	showMT = true,					-- maintanks
 	showMTT = true,					-- maintanks' targets
 	
