@@ -451,8 +451,8 @@ oUF:Factory(function(self)
 	self:SetActiveStyle("RainRaid")
 	-- TODO: add options for horizontal grow / filtering
 	if (cfg.showRaid) then
-		CompactRaidFrameManager:UnregisterAllEvents()
-		CompactRaidFrameManager:Hide()
+		--CompactRaidFrameManager:UnregisterAllEvents()
+		--CompactRaidFrameManager:Hide()
 		CompactRaidFrameContainer:UnregisterAllEvents()
 		CompactRaidFrameContainer:Hide()
 		
@@ -460,9 +460,7 @@ oUF:Factory(function(self)
 		
 		for i = 1, NUM_RAID_GROUPS do
 			local raidGroup = self:SpawnHeader(
-				"oUF_Rain_RaidGroup" .. i, nil, "solo,raid",
-				"showSolo", true,
-				--"showPlayer", true,
+				"oUF_Rain_RaidGroup" .. i, nil, "raid",
 				"showRaid", true,
 				"groupFilter", i,
 				"yOffset", -7.5,
