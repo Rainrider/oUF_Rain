@@ -30,7 +30,9 @@ oUF.Tags["rain:namecolor"] = function(unit)
 		color = {0.75, 0.75, 0.75}
 	elseif (UnitIsPlayer(unit)) then
 		local _, unitClass = UnitClass(unit)
-		color = ns.colors.class[unitClass]
+		if (unitClass) then
+			color = ns.colors.class[unitClass]
+		end
 	else
 		local reaction = UnitReaction(unit, "player")
 		color = ns.colors.reaction[reaction or 4]
