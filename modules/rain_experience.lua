@@ -43,7 +43,8 @@ local Update = function(self, event, unit)
 	if (experience.PreUpdate) then experience:PreUpdate(unit) end
 
 	if (Unbeneficial(self, unit)) then
-		return experience:Hide()
+		experience:Hide()
+		return
 	else
 		experience:Show()
 	end
@@ -55,6 +56,7 @@ local Update = function(self, event, unit)
 
 	if (experience.Rested) then
 		local exhaustion = GetXPExhaustion()
+		if not exhaustion then exhaustion = 0 end
 		experience.Rested:SetMinMaxValues(min, max)
 		experience.Rested:SetValue(math.min(min + exhaustion, max))
 	end
