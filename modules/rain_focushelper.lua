@@ -45,7 +45,7 @@ local UpdateFocusSpark = function(self, event, ...)
 	
 	local spellFocusCost = GetSpellFocusCost(GetPrimaryTalentTree(), focusSpark)
 	
-	if (spellFocusCost) then
+	if (spellFocusCost and self.unit ~= "vehicle") then
 		local sparkXPos = spellFocusCost * parentBarWidth / UnitPowerMax("player", 2)
 		local xOffset = focusSpark:GetWidth() / 2
 		focusSpark:SetPoint("LEFT", sparkXPos - xOffset, 0)
@@ -60,7 +60,9 @@ local UpdateFocusSpark = function(self, event, ...)
 end
 
 local Update = function(self, event, ...)
-	if (self.unit ~= "player") then return end
+	if (self.realUnit and self.realUnit ~= "player") then return end -- update the player frame when in vehicle
+	if (not self.realUnit and self.unit ~= "player") then return end
+
 	if (event:match("UNIT_SPELLCAST_")) then
 		UpdateFocusGain(self, event, ...)
 	else
@@ -74,7 +76,7 @@ end
 
 local Enable = function(self)
 	local _, playerClass = UnitClass("player")
-	if (playerClass ~= "HUNTER") then return end
+	if (playerClass ~= "HUNTER" or self.unit ~= "player") then return end
 
 	local focusSpark = self.FocusSpark
 	local focusGain = self.FocusGain
