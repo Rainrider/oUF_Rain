@@ -487,5 +487,9 @@ oUF:RegisterInitCallback(function(self)
 		self:DisableElement("DebuffHighlight")
 	end
 	
+	if (self:IsElementEnabled("Experience")) then
+		self:DisableElement("Experience")
+	end
+	
 	return true
 end)
