@@ -134,10 +134,7 @@ local AddReputationBar = function(self)
 	self.Reputation.bg:SetTexture(ns.media.TEXTURE)
 	self.Reputation.bg:SetVertexColor(0.15, 0.15, 0.15)
 
-	self.Reputation.PostUpdate = function(bar, unit, min, max)
-		local name, id = GetWatchedFactionInfo()
-		bar:SetStatusBarColor(unpack(ns.colors.reaction[id]))
-	end
+	self.Reputation.colorStanding = true
 		
 	self.Reputation.Tooltip = function(self)
 		local name, id, min, max, value = GetWatchedFactionInfo()
