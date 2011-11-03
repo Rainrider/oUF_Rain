@@ -1,5 +1,21 @@
 ﻿local parentBarWidth
 local parentBarTex
+local terminationPoints = select(5, GetTalentInfo(2, 12)) -- (http://www.wowhead.com/spell=83490)
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitPowerMax = UnitPowerMax
+
+local GetFocusPrediction = function()
+	local focusPrediction = 9
+ 
+	if terminationPoints then
+		if (UnitHealth("target") / UnitHealthMax("target") <= 0.25) then
+			focusPrediction = focusPrediction + terminationPoints * 3 -- +3 focus per talent point
+		end
+	end
+	
+	return focusPrediction
+end
 
 local GetSpellFocusCost = function(talentTree, focusSpark)
 	local spellFocusCost
@@ -24,7 +40,7 @@ local UpdateFocusGain = function(self, event, unit, spellName, spellRank, seqID,
 		focusGain = self.FocusGain
 	
 		if (event == "UNIT_SPELLCAST_START") then
-			focusGain:SetWidth(9 * parentBarWidth / UnitPowerMax("player", 2))
+			focusGain:SetWidth(GetFocusPrediction() * parentBarWidth / UnitPowerMax("player", 2))
 			focusGain:SetPoint("LEFT", parentBarTex, "RIGHT", 0, 0)
 			focusGain:Show()
 		else
