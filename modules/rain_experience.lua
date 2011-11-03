@@ -1,6 +1,6 @@
 ﻿local _, ns = ...
 local oUF = ns.oUF or oUF
-assert(oUF, "oUF Experience was unable to locate oUF install")
+assert(oUF, "Rain_Experience was unable to locate oUF install")
 
 for tag, func in pairs({
 	["curxp"] = function(unit)
@@ -16,24 +16,12 @@ for tag, func in pairs({
 		return GetXPExhaustion()
 	end,
 	["perrested"] = function(unit)
-		local rested = GetXPExhaustion()
-		if (rested and rested > 0) then
-			return math.floor(rested / UnitXPMax(unit) * 100 + 0.5)
-		end
+		local rested = GetXPExhaustion() or 0
+		return math.floor(rested / UnitXPMax(unit) * 100 + 0.5)
 	end,
 }) do
 	oUF.Tags[tag] = func
 	oUF.TagEvents[tag] = "PLAYER_XP_UPDATE PLAYER_LEVEL_UP UPDATE_EXHAUSTION"
-end
-
-local Unbeneficial = function(self, unit)
-	if (UnitHasVehicleUI("player")) then
-		return true
-	end
-
-	if (UnitLevel("player") == MAX_PLAYER_LEVEL) then
-		return true
-	end
 end
 
 local Update = function(self, event, unit)
@@ -42,7 +30,7 @@ local Update = function(self, event, unit)
 	local experience = self.Experience
 	if (experience.PreUpdate) then experience:PreUpdate(unit) end
 
-	if (Unbeneficial(self, unit)) then
+	if (UnitLevel("player") == MAX_PLAYER_LEVEL or UnitHasVehicleUI("player")) then
 		experience:Hide()
 		return
 	else
@@ -55,8 +43,7 @@ local Update = function(self, event, unit)
 	experience:SetValue(min)
 
 	if (experience.Rested) then
-		local exhaustion = GetXPExhaustion()
-		if not exhaustion then exhaustion = 0 end
+		local exhaustion = GetXPExhaustion() or 0
 		experience.Rested:SetMinMaxValues(min, max)
 		experience.Rested:SetValue(math.min(min + exhaustion, max))
 	end
