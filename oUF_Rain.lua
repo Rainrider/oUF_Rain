@@ -70,7 +70,6 @@ local UnitSpecific = {
 	end,
 	
 	pet = function(self)
-		ns.AddHealPredictionBar(self, 110, false)
 		ns.AddAltPowerBar(self) -- this is needed when the player is in vehicle. because the pet frame then holds the player unit
 		
 		ns.AddDebuffs(self, "pet")
@@ -250,6 +249,7 @@ local Shared = function(self, unit)
 		
 		if (unit == "pet" or unit == "focus"  or unitIsPartyMember) then
 			ns.AddCastbar(self, unit)
+			ns.AddHealPredictionBar(self, unit)
 			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 		end
 	end
@@ -293,7 +293,7 @@ oUF:Factory(function(self)
 	self:Spawn("target", "oUF_Rain_Target"):SetPoint("CENTER", 210, -215)
 	self:Spawn("targettarget", "oUF_Rain_TargetTarget"):SetPoint("BOTTOMRIGHT", oUF_Rain_Target, "TOPRIGHT", 0, 10)
 	self:Spawn("focustarget", "oUF_Rain_FocusTarget"):SetPoint("BOTTOMLEFT", oUF_Rain_Target, "TOPLEFT", 0 , 10)
-	
+
 	local party
 	if (cfg.showParty) then
 		if (cfg.horizParty) then

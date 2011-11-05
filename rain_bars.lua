@@ -175,14 +175,14 @@ local AddHealPredictionBar = function(self, unit)
 	mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	mhpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
 	mhpb:SetStatusBarTexture(ns.media.TEXTURE)
-	mhpb:SetStatusBarColor(0.5, 0.5, 0, 0.25)
+	mhpb:SetStatusBarColor(0, 0.5, 0.5, 0.5)
 
 	local ohpb = CreateFrame("StatusBar", self:GetName().."OthersHealBar", self.Health)
 	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 	ohpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
 	ohpb:SetStatusBarTexture(ns.media.TEXTURE)
-	ohpb:SetStatusBarColor(0, 1, 0, 0.25)
+	ohpb:SetStatusBarColor(0, 1, 0, 0.5)
 
 	self.HealPrediction = {
 		myBar = mhpb,
