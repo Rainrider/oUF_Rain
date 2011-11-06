@@ -103,6 +103,10 @@ local CustomCastDelayText = function(self, duration)
 end
 ns.CustomCastDelayText = CustomCastDelayText
 
+local CustomPlayerFilter = function()
+	return true
+end
+
 local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 	if (UnitCanAttack("player", unit)) then
 		local casterClass
@@ -110,7 +114,7 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 		if (caster) then
 			_, casterClass = UnitClass(caster)
 		end
-		if (not icon.debuff or (casterClass and casterClass == playerClass)) then	-- return all buffs and only debuffs cast by the players class
+		if (not icon.debuff or (casterClass and casterClass == playerClass)) then	-- return all buffs and only debuffs cast by the player's class
 			return true
 		end
 	else
@@ -156,8 +160,8 @@ local CreateAuraTimer = function(self, elapsed)
 end
 
 local SortAuras = function(a, b)
-	if (a and b) then
-		return (a.timeLeft and a.timeLeft) > (b.timeLeft and b.timeLeft)
+	if (a and b and a.timeLeft and b.timeLeft) then
+		return a.timeLeft > b.timeLeft
 	end
 end
 
@@ -269,6 +273,7 @@ local PostUpdateHealth = function(health, unit, cur, max)
 		health:SetStatusBarColor(r, g, b)
 		health.bg:SetVertexColor(0.15, 0.15, 0.15)
 		
+		-- TODO: changed in oUF 1.6 to ColorGradient(cur, max, ...)
 		r, g, b = oUF.ColorGradient(cur/max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 		if (cur ~= max) then
 			health.value:SetTextColor(r, g, b)
@@ -451,6 +456,7 @@ local AddBuffs = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		self.Buffs:SetSize(self.Buffs.size * 10 + 9 * self.Buffs.spacing, 4 * self.Buffs.size + 3 * self.Buffs.spacing)
 		self.Buffs["growth-y"] = "DOWN"
+		self.Buffs.CustomFilter = CustomFilter
 		
 		if (unit == "player") then
 			self.Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, -1)
@@ -513,7 +519,9 @@ local AddDebuffs = function(self, unit)
 		self.Debuffs["growth-y"] = "DOWN"
 		
 		if (unit == "target") then
-			self.Debuffs.CustomFilter = (not cfg.onlyShowPlayerDebuffs and CustomFilter) or nil
+			self.Debuffs.CustomFilter = CustomFilter
+		else
+			self.Debuffs.CustomFilter = CustomPlayerFilter
 		end
 	end
 	
