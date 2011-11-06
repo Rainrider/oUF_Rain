@@ -364,21 +364,14 @@ do
 	}
 
 	PostUpdateIcon = function(icons, unit, icon, index, offset)
-		local _, _, _, _, _, duration, expirationTime, unitCaster, _ = UnitAura(unit, index, icon.filter)
+		local _, _, _, _, _, duration, expirationTime, caster, _ = UnitAura(unit, index, icon.filter)
 		
-		if (playerUnits[unitCaster]) then
-			if (icon.debuff) then
-				icon.overlay:SetVertexColor(0.69, 0.31, 0.31)
-			else
-				icon.overlay:SetVertexColor(0.33, 0.59, 0.33)
+		if (not playerUnits[caster]) then
+			if ((UnitCanAttack("player", unit) and icon.debuff)
+					or (UnitIsFriend("player", unit) and not icon.debuff)) then
+				icon.icon:SetDesaturated(true)
+				icon.overlay:SetVertexColor(0.5, 0.5, 0.5)
 			end
-		else
-			if UnitIsEnemy("player", unit) then
-				if (icon.debuff) then
-					icon.icon:SetDesaturated(true)
-				end
-			end
-			icon.overlay:SetVertexColor(0.5, 0.5, 0.5)
 		end
 		
 		if (duration and duration > 0) then
