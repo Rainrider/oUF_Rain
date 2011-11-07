@@ -100,8 +100,7 @@ local Shared = function(self, unit)
 	local unitIsPartyMember = self:GetParent():GetName():match("oUF_Rain_Party")
 	local unitIsPartyOrMTTarget = self:GetAttribute("unitsuffix") == "target"
 	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
-	local unitIsMT = self:GetParent():GetName():match("oUF_Rain_MT")
-	local unitIsMTT = self:GetParent():GetName():match("oUF_Rain_MTT")
+	local unitIsMT = self:GetParent():GetName():match("^oUF_Rain_MT$")
 	local unitIsBoss = unit:match("boss%d")
 	
 	self.FrameBackdrop = CreateFrame("Frame", nil, self)
