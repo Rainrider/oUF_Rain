@@ -21,6 +21,31 @@ ns.config = {
 	onlyShowPlayerBuffs = false,	-- true to show only player buffs; false to show all buffs (for friendly targets only)
 	onlyShowPlayerDebuffs = false,	-- true to show only player debuffs; false to show only player class debuffs (for enemies only)
 	
+	-- A value of 1 behind the spell means the buff/debuff should be applied by the player in order to be shown
+	-- A maximum of 3 buffs and 3 debuffs per class allowed
+	buffTable = {
+		["DRUID"] = {
+			[GetSpellInfo(33763)] = 2,	-- Life Bloom
+		},
+		["PRIEST"] = {
+			[GetSpellInfo(17)] = 2,		-- Power Word: Shield
+			[GetSpellInfo(139)] = 1,	-- Renew
+			[GetSpellInfo(33076)] = 2,	-- Prayer of Mending
+		},
+		["SHAMAN"] = {
+			[GetSpellInfo(974)] = 2,	-- Earth Shield
+		},
+	},
+
+	debuffTable = {
+		["PALADIN"] = {
+			[GetSpellInfo(25771)] = 2,	-- Forbearance
+		},
+		["PRIEST"] = {
+			[GetSpellInfo(6788)] = 2,	-- Weakened Soul
+		},
+	},
+
 	-- debuff highlightingt
 	dispelTypeFilter = true, -- true to highlight only debuffs the player can dispel; false to only highlight boss debuffs
 	

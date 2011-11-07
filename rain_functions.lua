@@ -7,6 +7,21 @@ local _, ns = ...
 local cfg = ns.config
 local playerClass = cfg.playerClass
 
+local prioTable = {}
+
+if (cfg.buffTable[playerClass]) then
+	for k, v in pairs(cfg.buffTable[playerClass]) do
+		prioTable[k] = v
+	end
+end
+
+if (cfg.debuffTable[playerClass]) then
+	for k, v in pairs(cfg.debuffTable[playerClass]) do
+		prioTable[k] = v
+	end
+end
+
+
 --[[ HELPER FUNCTIONS ]]--
 
 local SiValue = function(val)
@@ -132,6 +147,14 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 	end
 end
 
+local CustomPartyFilter = function(icons, unit, icon, name, _, _, _, _, _, _, caster)
+	if (prioTable[name]) then
+		if ((prioTable[name] == 1 and caster == "player") or prioTable[name] == 2) then
+			return true
+		end
+	end
+end
+
 local CreateAuraTimer = function(self, elapsed)
 	if (self.timeLeft) then
 		self.elapsed = (self.elapsed or 0) + elapsed
@@ -165,16 +188,10 @@ local SortAuras = function(a, b)
 	end
 end
 
-local Aura_OnEnter = function(self, icon)
+local Aura_OnEnter = function(Icons, icon)
 	local r, g, b = icon.overlay:GetVertexColor()
 	local iconW, iconH = icon:GetSize()
-	local button
-	
-	if (icon.debuff) then
-		button = self.Debuffs.Magnify
-	else
-		button = self.Buffs.Magnify
-	end
+	local button = Icons.Magnify
 	
 	button:SetSize(iconW * 2, iconH * 2)
 	button:SetPoint("CENTER", icon, "CENTER")
@@ -187,20 +204,11 @@ local Aura_OnEnter = function(self, icon)
 
 	button:Show()
 	
-	if (icon.debuff) then
-		self.Debuffs.Magnify = button
-	else
-		self.Buffs.Magnify = button
-	end
+	Icons.Magnify = button
 end
 
-local Aura_OnLeave = function(self)
-	if (self.Buffs) then
-		self.Buffs.Magnify:Hide()
-	end
-	if (self.Debuffs) then
-		self.Debuffs.Magnify:Hide()
-	end
+local Aura_OnLeave = function(Icons)
+	Icons.Magnify:Hide()
 end
 
 --[[PRE AND POST FUNCTIONS]]--
@@ -347,8 +355,8 @@ local PostCreateIcon = function(Icons, icon)
 	icon.remaining = PutFontString(icon, ns.media.FONT, 8, "OUTLINE", "LEFT")
 	icon.remaining:SetPoint("TOP", 0, 1)
 	
-	icon:HookScript("OnEnter", function() Aura_OnEnter(Icons.__owner, icon) end)
-	icon:HookScript("OnLeave", function() Aura_OnLeave(Icons.__owner) end)
+	icon:HookScript("OnEnter", function() Aura_OnEnter(Icons, icon) end)
+	icon:HookScript("OnLeave", function() Aura_OnLeave(Icons) end)
 end
 
 local PreSetPosition = function(Auras)
@@ -419,19 +427,43 @@ ns.PostUpdateClassBar = PostUpdateClassBar
 --[[END OF PRE AND POST FUNCTIONS]]--
 
 local AddAuras = function(self, unit)
+	if (not next(prioTable)) then return end
+
 	self.Auras = CreateFrame("Frame", self:GetName().."_Auras", self)
-	self.Auras:SetPoint("RIGHT", self, "LEFT", -9, 0)
-	self.Auras.numBuffs = 6
-	self.Auras.numDebuffs = 6
+	if (cfg.horizParty) then
+		self.Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 9)
+		self.Auras.initialAnchor = "LEFT"
+		self.Auras["growth-x"] = "RIGHT"
+		self.Auras["growth-y"] = "UP"
+	else
+		self.Auras:SetPoint("RIGHT", self, "LEFT", -9, 0)
+		self.Auras.initialAnchor = "RIGHT"
+		self.Auras["growth-x"] = "LEFT"
+		self.Auras["growth-y"] = "DOWN"
+	end
+	self.Auras.numBuffs = 3
+	self.Auras.numDebuffs = 3
 	self.Auras.spacing = 6
 	self.Auras.size = (230 - 9 * self.Auras.spacing) / 10
 	self.Auras:SetSize(12 * self.Auras.size + 11 * self.Auras.spacing, self.Auras.size)
 	self.Auras.disableCooldown = true
 	self.Auras.showType = true
-	self.Auras.onlyShowPlayer = true
+	self.Auras.onlyShowPlayer = false
 	self.Auras.PreSetPosition = PreSetPosition
 	self.Auras.PostCreateIcon = PostCreateIcon
 	self.Auras.PostUpdateIcon = PostUpdateIcon
+	self.Auras.CustomFilter = CustomPartyFilter
+
+	self.Auras.Magnify = CreateFrame("Frame", nil, self)
+	self.Auras.Magnify:SetFrameLevel(self.Auras:GetFrameLevel() + 3)
+
+	self.Auras.Magnify.icon = self.Auras.Magnify:CreateTexture(nil, "ARTWORK")
+	self.Auras.Magnify.icon:SetPoint("CENTER")
+
+	self.Auras.Magnify.border = self.Auras.Magnify:CreateTexture(nil, "OVERLAY")
+	self.Auras.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
+	self.Auras.Magnify.border:SetPoint("TOPLEFT", self.Auras.Magnify.icon, -5, 5)
+	self.Auras.Magnify.border:SetPoint("BOTTOMRIGHT", self.Auras.Magnify.icon, 5, -5)
 end
 ns.AddAuras = AddAuras
 

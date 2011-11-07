@@ -233,6 +233,7 @@ local Shared = function(self, unit)
 			ns.AddReadyCheckIcon(self, unit)
 			ns.AddResurrectIcon(self, unit)
 			
+			ns.AddAuras(self, unit)
 			ns.AddDebuffHighlight(self, unit)
 			ns.AddRangeCheck(self)
 		end
@@ -312,7 +313,7 @@ oUF:Factory(function(self)
 					self:SetAttribute("spell3", "%s")
 				]]):format(spellName)
 			)
-			party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 150)
+			party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 130)
 		else
 			party = self:SpawnHeader(
 				"oUF_Rain_Party", nil, "party, raid",
@@ -326,7 +327,7 @@ oUF:Factory(function(self)
 					self:SetAttribute("spell3", "%s")
 				]]):format(spellName)
 			)
-			party:SetPoint("TOPLEFT", UIParent, 25, -25)
+			party:SetPoint("TOPLEFT", UIParent, 125, -25)
 		end
 		party:Show()
 	end
