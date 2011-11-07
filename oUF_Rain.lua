@@ -97,7 +97,7 @@ local Shared = function(self, unit)
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	
-	local unitIsPartyMember = self:GetParent():GetName():match("oUF_Rain_Party")
+	local unitIsPartyMember = self:GetParent():GetName():match("^oUF_Rain_Party$")
 	local unitIsPartyOrMTTarget = self:GetAttribute("unitsuffix") == "target"
 	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
 	local unitIsMT = self:GetParent():GetName():match("^oUF_Rain_MT$")
