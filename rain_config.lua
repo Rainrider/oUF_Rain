@@ -25,12 +25,11 @@ ns.config = {
 	-- A maximum of 3 buffs and 3 debuffs per class allowed
 	buffTable = {
 		["DRUID"] = {
-			[GetSpellInfo(33763)] = 2,	-- Life Bloom
+			[GetSpellInfo(33763)] = 1,	-- Life Bloom
 		},
 		["PRIEST"] = {
-			[GetSpellInfo(17)] = 2,		-- Power Word: Shield
 			[GetSpellInfo(139)] = 1,	-- Renew
-			[GetSpellInfo(33076)] = 2,	-- Prayer of Mending
+			[GetSpellInfo(33076)] = 1,	-- Prayer of Mending
 		},
 		["SHAMAN"] = {
 			[GetSpellInfo(974)] = 2,	-- Earth Shield
