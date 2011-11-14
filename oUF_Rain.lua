@@ -223,9 +223,7 @@ local Shared = function(self, unit)
 			self:Tag(self.Name, "[rain:name]")
 		else
 			self:Tag(self.Name, "[rain:role][rain:name]")
-		end
-		
-		if (unitIsPartyMember) then
+
 			ns.AddAssistantIcon(self, unit)
 			ns.AddLeaderIcon(self, unit)
 			ns.AddMasterLooterIcon(self, unit)
