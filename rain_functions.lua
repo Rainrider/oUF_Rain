@@ -7,7 +7,7 @@ local _, ns = ...
 local playerClass = ns.playerClass
 
 local prioTable = {}
-
+--[[
 if (ns.cfg.buffTable[playerClass]) then
 	for k, v in pairs(ns.cfg.buffTable[playerClass]) do
 		prioTable[k] = v
@@ -19,7 +19,7 @@ if (ns.cfg.debuffTable[playerClass]) then
 		prioTable[k] = v
 	end
 end
-
+--]]
 --[[ HELPER FUNCTIONS ]]--
 
 local SiValue = function(val)
