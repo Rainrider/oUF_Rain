@@ -453,6 +453,7 @@ oUF:Factory(function(self)
 		--CompactRaidFrameManager:Hide()
 		CompactRaidFrameContainer:UnregisterAllEvents()
 		CompactRaidFrameContainer:Hide()
+		CompactRaidFrameContainer.Show = function() end
 		
 		local raid = {} -- need that for positioning the groups
 		
