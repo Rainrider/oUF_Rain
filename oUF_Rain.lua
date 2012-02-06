@@ -1,14 +1,11 @@
 ﻿local _, ns = ...
 
 local major, minor, rev = strsplit(".", GetAddOnMetadata("oUF", "version"))
-if not minor then minor = 0 end
-if not rev then rev = 0 end
+minor = minor or 0
+rev = rev or 0
 local oUFversion = major * 1000 + minor * 100 + rev
-print("oUF version:", oUFversion)
 
-if (oUFversion < 1500) then
-	error("Consider updating your version of oUF to at least 1.5")
-end
+assert(oUFversion >= 1500, "Consider updating your version of oUF to at least 1.5")
 
 local PutFontString = ns.PutFontString
 
