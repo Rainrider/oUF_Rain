@@ -4,7 +4,7 @@
 	==========================--]]
 local _, ns = ...
 
-ns.config = {
+ns.cfg = {
 -- frame visibility
 	-- true to show; false to hide
 	showParty = true,
