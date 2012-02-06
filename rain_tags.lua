@@ -114,7 +114,7 @@ oUF.Tags["rain:power"] = function(unit)
 	if (max == 0) then return end
 	
 	local powerValue = ""
-	local _, pName = UnitPowerType(unit)
+	local pType, pName = UnitPowerType(unit)
 	local druidMana = oUF.Tags["rain:druidmana"](unit, pName)
 	
 	if (pName == "MANA" and cur ~= max) then
@@ -131,7 +131,8 @@ oUF.Tags["rain:power"] = function(unit)
 		powerValue = SiValue(cur)
 	end
 	
-	powerValue = RGBtoHEX(unpack(ns.colors.power[pName])) .. powerValue .. "|r"
+	local textColor = ns.colors.power[pName] or ns.colors.power[pType]
+	powerValue = RGBtoHEX(unpack(textColor)) .. powerValue .. "|r"
 	
 	if (druidMana and cur > 0) then
 		return powerValue .. " - " .. druidMana
