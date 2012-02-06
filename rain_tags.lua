@@ -5,7 +5,7 @@
 
 local _, ns = ...
 local SiValue = ns.SiValue
-local playerClass = ns.config.playerClass
+local playerClass = ns.playerClass
 local RGBtoHEX = ns.RGBtoHEX
 
 -- local references for some lua function

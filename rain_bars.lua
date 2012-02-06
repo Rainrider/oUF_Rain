@@ -11,7 +11,7 @@ local numRunes = 6 -- MAX_RUNES does not function any more
 local numHoly = MAX_HOLY_POWER
 local numShards = SHARD_BAR_NUM_SHARDS
 local numCPoints = MAX_COMBO_POINTS
-local playerClass = cfg.playerClass
+local playerClass = ns.playerClass
 
 local AddAltPowerBar = function(self)
 	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)

@@ -4,23 +4,21 @@
 	========================================================================--]]
 
 local _, ns = ...
-local cfg = ns.config
-local playerClass = cfg.playerClass
+local playerClass = ns.playerClass
 
 local prioTable = {}
 
-if (cfg.buffTable[playerClass]) then
-	for k, v in pairs(cfg.buffTable[playerClass]) do
+if (ns.cfg.buffTable[playerClass]) then
+	for k, v in pairs(ns.cfg.buffTable[playerClass]) do
 		prioTable[k] = v
 	end
 end
 
-if (cfg.debuffTable[playerClass]) then
-	for k, v in pairs(cfg.debuffTable[playerClass]) do
+if (ns.cfg.debuffTable[playerClass]) then
+	for k, v in pairs(ns.cfg.debuffTable[playerClass]) do
 		prioTable[k] = v
 	end
 end
-
 
 --[[ HELPER FUNCTIONS ]]--
 
@@ -430,7 +428,7 @@ local AddAuras = function(self, unit)
 	if (not next(prioTable)) then return end
 
 	self.Auras = CreateFrame("Frame", self:GetName().."_Auras", self)
-	if (cfg.horizParty) then
+	if (ns.cfg.horizParty) then
 		self.Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 9)
 		self.Auras.initialAnchor = "LEFT"
 		self.Auras["growth-x"] = "RIGHT"
@@ -473,7 +471,7 @@ local AddBuffs = function(self, unit)
 	self.Buffs.size = (230 - 9 * self.Buffs.spacing) / 10
 	self.Buffs.disableCooldown = true
 	self.Buffs.showType = true
-	self.Buffs.onlyShowPlayer = cfg.onlyShowPlayerBuffs
+	self.Buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
 	self.Buffs.PreSetPosition = PreSetPosition
 	self.Buffs.PostCreateIcon = PostCreateIcon
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
@@ -529,7 +527,7 @@ local AddDebuffs = function(self, unit)
 	self.Debuffs.size = (230 - 9 * self.Debuffs.spacing) / 10
 	self.Debuffs.showType = true
 	self.Debuffs.disableCooldown = true
-	self.Debuffs.onlyShowPlayer = cfg.onlyShowPlayerDebuffs
+	self.Debuffs.onlyShowPlayer = ns.cfg.onlyShowPlayerDebuffs
 	self.Debuffs.PreSetPosition = PreSetPosition
 	self.Debuffs.PostCreateIcon = PostCreateIcon
 	self.Debuffs.PostUpdateIcon = PostUpdateIcon

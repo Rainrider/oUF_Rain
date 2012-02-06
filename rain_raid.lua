@@ -1,5 +1,4 @@
 local _, ns = ...
-local cfg = ns.config
 
 local raidStyle = function(self, unit)
 	
@@ -39,10 +38,10 @@ local raidStyle = function(self, unit)
 	self.Health.value = ns.PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
 	self.Health.value:SetPoint("RIGHT", -2, 0)
 	--self.Health.value.frequentUpdates = true
-	if (cfg.raidHealth > 0) then
-		if (cfg.raidHealth == 1) then
+	if (ns.cfg.raidHealth > 0) then
+		if (ns.cfg.raidHealth == 1) then
 			self:Tag(self.Health.value, "[dead][offline][rain:raidhp]") -- TODO: coloring
-		elseif (cfg.raidHealth == 2) then
+		elseif (ns.cfg.raidHealth == 2) then
 			self:Tag(self.Health.value, "[dead][offline][perhp<%]")
 		end
 	end

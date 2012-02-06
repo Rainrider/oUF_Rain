@@ -8,8 +8,6 @@
 ]]
 
 local _, ns = ...
-
-local cfg = ns.config
 local PutFontString = ns.PutFontString
 
 local AddCombatFeedbackText = function(self)
@@ -26,7 +24,7 @@ local AddDebuffHighlight = function(self, unit)
 	self.DebuffHighlight:SetAllPoints()
 	self.DebuffHighlight:SetFrameLevel(self.DebuffHighlight:GetParent():GetFrameLevel() + 1)
 	
-	self.DebuffHighlightFilter = cfg.dispelTypeFilter
+	self.DebuffHighlightFilter = ns.cfg.dispelTypeFilter
 
 	self.DebuffHighlightTexture = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
 	self.DebuffHighlightTexture:SetAllPoints()
@@ -102,9 +100,9 @@ local AddFocusHelper = function(self)
 	self.FocusSpark:SetWidth(10)
 	self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
 	
-	self.FocusSpark.bmSpell = cfg.bmSpell -- Kill Command
-	self.FocusSpark.mmSpell = cfg.mmSpell -- Chimera Shot
-	self.FocusSpark.svSpell = cfg.svSpell -- Explosive Shot
+	self.FocusSpark.bmSpell = ns.cfg.bmSpell -- Kill Command
+	self.FocusSpark.mmSpell = ns.cfg.mmSpell -- Chimera Shot
+	self.FocusSpark.svSpell = ns.cfg.svSpell -- Explosive Shot
 	
 	self.FocusGain = self.Power:CreateTexture(nil, "OVERLAY")
 	self.FocusGain:SetHeight(self.Power:GetHeight())

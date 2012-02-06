@@ -4,7 +4,6 @@
 	===============================================--]]
 
 local _, ns = ...
-local cfg = ns.config
 
 local AddAssistantIcon = function(self, unit)
 	self.Assistant = self.Health:CreateTexture(nil, "OVERLAY")
