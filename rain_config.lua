@@ -5,56 +5,53 @@
 local _, ns = ...
 
 ns.config = {
-	showPlayerBuffs = true,			-- true to enable the display of player buffs left to the player frame; false to disable them
-
+-- frame visibility
 	-- true to show; false to hide
 	showParty = true,
-	horizParty = true,				-- true for horizontal party layout; false for vertical
 	showPartyTargets = true,
 	showPartyPets = true,
 	showRaid = true,
-	raidHealth = 1,					-- 0 - none; 1 - deficit; 2 - percent
 	showMT = true,					-- maintanks
 	showMTT = true,					-- maintanks' targets
 	
-	-- aura filtering
-	onlyShowPlayerBuffs = false,	-- true to show only player buffs; false to show all buffs (for friendly targets only)
+-- layout
+	horizParty = true,				-- true for horizontal party layout; false for vertical
+	
+-- auras
+	-- filtering
+	showPlayerBuffs = true,			-- true to enable the display of player buffs left to the player frame; false to disable them
+	onlyShowPlayerBuffs = true,	-- true to show only player buffs; false to show all buffs (for friendly targets only)
 	onlyShowPlayerDebuffs = false,	-- true to show only player debuffs; false to show only player class debuffs (for enemies only)
 	
+	-- debuff highlightingt
+	dispelTypeFilter = true, -- true to highlight only debuffs the player can dispel; false to only highlight boss debuffs
+	
+-- class specific
 	-- A value of 1 behind the spell means the buff/debuff should be applied by the player in order to be shown
 	-- A maximum of 3 buffs and 3 debuffs per class allowed
 	buffTable = {
 		["DRUID"] = {
-			[GetSpellInfo(33763)] = 1,	-- Life Bloom
+			[33763] = 1,	-- Life Bloom
 		},
 		["PRIEST"] = {
-			[GetSpellInfo(139)] = 1,	-- Renew
-			[GetSpellInfo(33076)] = 1,	-- Prayer of Mending
+			[139] = 1,	-- Renew
+			[33076] = 1,	-- Prayer of Mending
 		},
 		["SHAMAN"] = {
-			[GetSpellInfo(974)] = 2,	-- Earth Shield
+			[974] = 2,	-- Earth Shield
 		},
 	},
 
 	debuffTable = {
 		["PALADIN"] = {
-			[GetSpellInfo(25771)] = 2,	-- Forbearance
+			[25771] = 2,	-- Forbearance
 		},
 		["PRIEST"] = {
-			[GetSpellInfo(6788)] = 2,	-- Weakened Soul
+			[6788] = 2,	-- Weakened Soul
 		},
 	},
-
-	-- debuff highlightingt
-	dispelTypeFilter = true, -- true to highlight only debuffs the player can dispel; false to only highlight boss debuffs
 	
-	-- focus helper spells
-	-- use i.e. bmSpell = spellID,
-	bmSpell = 34026,	-- Kill Command (34026)
-	mmSpell = 53209,	-- Chimera Shot (53209)
-	svSpell = 53301,	-- Explosive Shot (53301)
-	
-	-- click casting spell
+-- click casting spell
 	-- use i.e. ["ENGLISH_CLASS_NAME"] = spellID,
 	clickSpell = {
 		["DEADKNIGHT"] = 61999,	-- Raise Ally (61999)
@@ -69,6 +66,15 @@ ns.config = {
 		["WARLOCK"] = 80398,	-- Dark Intent (80398)
 	},
 	
-	-- do not touch anything below
-	playerClass = select(2, UnitClass("player")),
+-- focus helper spells
+	-- use i.e. bmSpell = spellID,
+	bmSpell = 34026,	-- Kill Command (34026)
+	mmSpell = 53209,	-- Chimera Shot (53209)
+	svSpell = 53301,	-- Explosive Shot (53301)
+	
+-- other
+	raidHealth = 1,					-- 0 - none; 1 - deficit; 2 - percent
 }
+
+-- do not touch anything below
+ns.playerClass = select(2, UnitClass("player"))
