@@ -10,10 +10,9 @@ if (oUFversion < 1500) then
 	error("Consider updating your version of oUF to at least 1.5")
 end
 
-local cfg = ns.config
 local PutFontString = ns.PutFontString
 
-local playerClass = cfg.playerClass
+local playerClass = ns.playerClass
 
 -- layout rules for specific unit frames (auras, combo points, totembar, runes, holy power, shards, druid mana ...)
 local UnitSpecific = {
@@ -178,7 +177,7 @@ local Shared = function(self, unit)
 		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, unit)
 		
-		if (unit == "player" and cfg.showPlayerBuffs or unit == "target") then
+		if (unit == "player" and ns.cfg.showPlayerBuffs or unit == "target") then
 			ns.AddBuffs(self, unit)
 		end
 		ns.AddDebuffs(self, unit)
@@ -278,6 +277,7 @@ end
 oUF:RegisterStyle("Rain", Shared)
 oUF:RegisterStyle("RainRaid", ns.raidStyle)
 oUF:Factory(function(self)
+	local cfg = ns.cfg
 
 	local spellName = GetSpellInfo(cfg.clickSpell[playerClass] or 6603)	-- 6603 Auto Attack
 	if (not spellName) then
