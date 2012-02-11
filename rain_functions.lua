@@ -127,7 +127,7 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 		if (caster) then
 			_, casterClass = UnitClass(caster)
 		end
-		if (not icon.debuff or (casterClass and casterClass == playerClass)) then	-- return all buffs and only debuffs cast by the player's class
+		if (not icon.isDebuff or (casterClass and casterClass == playerClass)) then	-- return all buffs and only debuffs cast by the player's class
 			return true
 		end
 	else
@@ -372,8 +372,8 @@ do
 		local _, _, _, _, _, duration, expirationTime, caster, _ = UnitAura(unit, index, icon.filter)
 		
 		if (not playerUnits[caster]) then
-			if ((UnitCanAttack("player", unit) and icon.debuff)
-					or (UnitIsFriend("player", unit) and not icon.debuff)) then
+			if ((UnitCanAttack("player", unit) and icon.isDebuff)
+					or (UnitIsFriend("player", unit) and not icon.isDebuff)) then
 				icon.icon:SetDesaturated(true)
 				icon.overlay:SetVertexColor(0.5, 0.5, 0.5)
 			end
