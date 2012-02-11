@@ -274,13 +274,12 @@ local PostUpdateHealth = function(health, unit, cur, max)
 		health.bg:SetVertexColor(0.15, 0.15, 0,15)
 	else
 		local r, g, b
-		r, g, b = oUF.ColorGradient(cur/max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
+		r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
 
 		health:SetStatusBarColor(r, g, b)
 		health.bg:SetVertexColor(0.15, 0.15, 0.15)
 		
-		-- TODO: changed in oUF 1.6 to ColorGradient(cur, max, ...)
-		r, g, b = oUF.ColorGradient(cur/max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+		r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 		if (cur ~= max) then
 			health.value:SetTextColor(r, g, b)
 		else
