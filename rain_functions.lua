@@ -131,15 +131,11 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 			return true
 		end
 	else
-		local isPlayer
-
 		if (caster == "player" or caster == "pet" or caster == "vehicle") then
-			isPlayer = true
+			icon.isPlayer = true
 		end
 		
-		if ((icons.onlyShowPlayer and isPlayer) or (not icons.onlyShowPlayer and name)) then -- onlyShowPlayer or everything?
-			icon.isPlayer = isPlayer
-			icon.owner = caster
+		if ((icons.onlyShowPlayer and icon.isPlayer) or (not icons.onlyShowPlayer and name)) then -- onlyShowPlayer or everything?
 			return true
 		end
 	end
