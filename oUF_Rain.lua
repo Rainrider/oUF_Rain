@@ -446,11 +446,11 @@ oUF:Factory(function(self)
 	self:SetActiveStyle("RainRaid")
 	-- TODO: add options for horizontal grow / filtering
 	if (cfg.showRaid) then
-		--CompactRaidFrameManager:UnregisterAllEvents()
-		--CompactRaidFrameManager:Hide()
+		local hiddenParent = CreateFrame("Frame")
+		hiddenParent:Hide()
 		CompactRaidFrameContainer:UnregisterAllEvents()
 		CompactRaidFrameContainer:Hide()
-		CompactRaidFrameContainer.Show = function() end
+		CompactRaidFrameContainer:SetParent(hiddenParent)
 		
 		local raid = {} -- need that for positioning the groups
 		
