@@ -20,8 +20,8 @@ for tag, func in pairs({
 		return math.floor(rested / UnitXPMax(unit) * 100 + 0.5)
 	end,
 }) do
-	oUF.Tags[tag] = func
-	oUF.TagEvents[tag] = "PLAYER_XP_UPDATE PLAYER_LEVEL_UP UPDATE_EXHAUSTION"
+	oUF.Tags.Methods[tag] = func
+	oUF.Tags.Events[tag] = "PLAYER_XP_UPDATE PLAYER_LEVEL_UP UPDATE_EXHAUSTION"
 end
 
 local Update = function(self, event, unit)
