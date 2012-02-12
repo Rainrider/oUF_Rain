@@ -297,7 +297,7 @@ local AddTotems = function(self, width, height)
 		if (playerClass == "SHAMAN") then
 			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
 			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Totems, (i - 1) * (214 / numTotems) + 1, 0)
-			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[i]))
+			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
@@ -322,7 +322,7 @@ local AddTotems = function(self, width, height)
 		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
 		self.Totems[i].Destroy:SetScript("OnClick", function()
 			if (IsShiftKeyDown()) then
-				DestroyTotem(i)
+				DestroyTotem(self.Totems[i]:GetID())
 			end
 		end)
 		
@@ -346,7 +346,7 @@ ns.AddTotems = AddTotems
 --[[
 	NOTES: Just an example for icons with cooldowns
 local function AddTotems(self, width, height)
-	Totems = {}
+	local Totems = {}
 
 	for i = 1, MAX_TOTEMS do
 		Totems[i] = CreateFrame("Botton", "Totem"..i, self)
