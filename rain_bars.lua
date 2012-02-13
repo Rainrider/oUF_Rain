@@ -112,10 +112,10 @@ local AddCastbar = function(self, unit)
 		end
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 		
-		self.Castbar.PostCastStart = ns.PostCastStart
-		self.Castbar.PostChannelStart = ns.PostChannelStart
-		--self.Castbar.PostCastInterruptible = ns.PostCastInterruptible
-		--self.Castbar.PostCastNotInterruptible = ns.PostCastNotInterruptible
+		self.Castbar.PostCastStart = ns.PostUpdateCast
+		self.Castbar.PostChannelStart = ns.PostUpdateCast
+		self.Castbar.PostCastInterruptible = ns.PostUpdateCast
+		self.Castbar.PostCastNotInterruptible = ns.PostUpdateCast
 	end
 end
 ns.AddCastbar = AddCastbar

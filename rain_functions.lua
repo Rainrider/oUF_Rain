@@ -207,7 +207,7 @@ end
 
 --[[PRE AND POST FUNCTIONS]]--
 
-local PostCastStart = function(castbar, unit, name, rank, castid)
+local PostUpdateCast = function(castbar, unit, name)
 	if (castbar.interrupt and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
@@ -219,43 +219,7 @@ local PostCastStart = function(castbar, unit, name, rank, castid)
 		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
 	end
 end
-ns.PostCastStart = PostCastStart
-
-local PostCastInterruptible = function(castbar, unit)
-	if (castbar.interrupt and UnitCanAttack("player", unit)) then
-		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
-		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
-	else
-		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
-	end
-end
-ns.PostCastInterruptible = PostCastInterruptible
-
-local PostCastNotInterruptible = function(castbar, unit)
-	if (castbar.interrupt and UnitCanAttack("player", unit)) then
-		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
-		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
-	else
-		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
-	end
-end
-ns.PostCastNotInterruptible = PostCastNotInterruptible
-
-local PostChannelStart = function(castbar, unit, name)
-	if (castbar.interrupt and UnitCanAttack("player", unit)) then
-		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
-		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
-	elseif (ns.interruptSpellNames[name]) then
-		castbar:SetStatusBarColor(0, 0, 1)
-		castbar.IconOverlay:SetVertexColor(0, 0, 1)
-	else
-		castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-		castbar.IconOverlay:SetVertexColor(0.4, 0.4, 0.4)
-	end
-end
-ns.PostchannelStart = PostChannelStart
+ns.PostUpdateCast = PostUpdateCast
 
 local PostUpdateHealth = function(health, unit, cur, max)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
