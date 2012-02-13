@@ -402,7 +402,7 @@ local AddAuras = function(self, unit)
 	self.Auras.numDebuffs = 3
 	self.Auras.spacing = 6
 	self.Auras.size = (230 - 9 * self.Auras.spacing) / 10
-	self.Auras:SetSize(12 * self.Auras.size + 11 * self.Auras.spacing, self.Auras.size)
+	self.Auras:SetSize(12 * (self.Auras.size + self.Auras.spacing), self.Auras.size + self.Auras.spacing)
 	self.Auras.disableCooldown = true
 	self.Auras.showType = true
 	self.Auras.onlyShowPlayer = false
@@ -436,7 +436,7 @@ local AddBuffs = function(self, unit)
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
 	
 	if (unit == "player" or unit == "target") then
-		self.Buffs:SetSize(self.Buffs.size * 10 + 9 * self.Buffs.spacing, 4 * self.Buffs.size + 3 * self.Buffs.spacing)
+		self.Buffs:SetSize(10 * (self.Buffs.size + self.Buffs.spacing), 4 * (self.Buffs.size + self.Buffs.spacing))
 		self.Buffs["growth-y"] = "DOWN"
 		self.Buffs.CustomFilter = CustomFilter
 		
@@ -454,7 +454,7 @@ local AddBuffs = function(self, unit)
 	if (unit == "pet") then
 		self.Buffs:SetPoint("RIGHT", self.Debuffs, "LEFT", -5, 0)
 		self.Buffs.num = 6
-		self.Buffs:SetSize(self.Buffs.num * self.Buffs.size + (self.Buffs.num - 1) * self.Buffs.spacing, self.Buffs.size)
+		self.Buffs:SetSize(self.Buffs.num * (self.Buffs.size + self.Buffs.spacing), self.Buffs.size + self.Buffs.spacing)
 		self.Buffs.initialAnchor = "RIGHT"
 		self.Buffs["growth-x"] = "LEFT"
 	end
@@ -462,7 +462,7 @@ local AddBuffs = function(self, unit)
 	if (unit:match("boss%d")) then
 		self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 15, 0)
 		self.Buffs.num = 6
-		self.Buffs:SetSize(self.Buffs.num * self.Buffs.size + (self.Buffs.num - 1) * self.Buffs.spacing, self.Buffs.size)
+		self.Buffs:SetSize(self.Buffs.num * (self.Buffs.size + self.Buffs.spacing), self.Buffs.size + self.Buffs.spacing)
 		self.Buffs.initialAnchor = "LEFT"
 		self.Buffs["growth-x"] = "RIGHT"
 	end
@@ -494,7 +494,7 @@ local AddDebuffs = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		self.Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -7.5)
 		self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -7.5)
-		self.Debuffs:SetSize(self:GetWidth(), self.Debuffs.size * 4 + self.Debuffs.spacing * 3)
+		self.Debuffs:SetSize(self:GetWidth(), 4 * (self.Debuffs.size + self.Debuffs.spacing))
 		
 		self.Debuffs.initialAnchor = "TOPLEFT"
 		self.Debuffs["growth-x"] = "RIGHT"
@@ -510,7 +510,7 @@ local AddDebuffs = function(self, unit)
 	if (unit == "pet") then
 		self.Debuffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -15, 0)
 		self.Debuffs.num = 6
-		self.Debuffs:SetSize(self.Debuffs.num * self.Debuffs.size + (self.Debuffs.num - 1) * self.Debuffs.spacing, self.Debuffs.size)
+		self.Debuffs:SetSize(self.Debuffs.num * (self.Debuffs.size + self.Debuffs.spacing), self.Debuffs.size + self.Debuffs.spacing)
 		
 		self.Debuffs.initialAnchor = "RIGHT"
 		self.Debuffs["growth-x"] = "LEFT"
