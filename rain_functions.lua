@@ -318,6 +318,7 @@ end
 
 local PreSetPosition = function(Auras)
 	table.sort(Auras, SortAuras)
+	return 1, Auras.createdIcons
 end
 
 local PostUpdateIcon
