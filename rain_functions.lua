@@ -295,8 +295,8 @@ local PostCreateIcon = function(Icons, icon)
 	icon.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
 	icon.overlay:SetTexture(ns.media.BTNTEXTURE)
-	icon.overlay:SetPoint("TOPLEFT", -3.5, 3.5)
-	icon.overlay:SetPoint("BOTTOMRIGHT", 3.5, -3.5)
+	icon.overlay:SetPoint("TOPLEFT", -4.5, 4.5)
+	icon.overlay:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
 	icon.overlay:SetTexCoord(0, 1, 0, 1)
 	
 	icon.remaining = PutFontString(icon, ns.media.FONT, 8, "OUTLINE", "LEFT")
