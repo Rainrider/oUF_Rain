@@ -282,16 +282,6 @@ local PostUpdatePower = function(Power, unit, cur, max)
 end
 ns.PostUpdatePower = PostUpdatePower
 
-local PostUpdateAltPower = function(AltPower, min, cur, max)
-	local unit = AltPower.__owner.unit
-
-	local _, r, g, b = UnitAlternatePowerTextureInfo(unit, 2) -- 2 is statusbar index
-	if (r) then
-		AltPower:SetStatusBarColor(r, g, b)
-	end
-end
-ns.PostUpdateAltPower = PostUpdateAltPower
-
 local PostCreateIcon = function(Icons, icon)
 	-- remove OmniCC and CooldownCount timers
 	icon.cd.noOCC = true

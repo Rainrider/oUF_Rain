@@ -49,8 +49,6 @@ local AddAltPowerBar = function(self)
 	self.AltPowerBar:EnableMouse()
 	self.AltPowerBar:HookScript("OnLeave", GameTooltip_Hide)
 	self.AltPowerBar:HookScript("OnEnter", self.AltPowerBar.Tooltip)
-	
-	self.AltPowerBar.PostUpdate = ns.PostUpdateAltPower
 end
 ns.AddAltPowerBar = AddAltPowerBar
 
