@@ -418,7 +418,7 @@ ns.AddAuras = AddAuras
 local AddBuffs = function(self, unit)
 	self.Buffs = CreateFrame("Frame", self:GetName().."_Buffs", self)
 	self.Buffs.spacing = 6
-	self.Buffs.size = (230 - 9 * self.Buffs.spacing) / 10
+	self.Buffs.size = (230 - 7 * self.Buffs.spacing) / 8
 	self.Buffs.disableCooldown = true
 	self.Buffs.showType = true
 	self.Buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
@@ -427,7 +427,7 @@ local AddBuffs = function(self, unit)
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
 	
 	if (unit == "player" or unit == "target") then
-		self.Buffs:SetSize(10 * (self.Buffs.size + self.Buffs.spacing), 4 * (self.Buffs.size + self.Buffs.spacing))
+		self.Buffs:SetSize(8 * (self.Buffs.size + self.Buffs.spacing), 4 * (self.Buffs.size + self.Buffs.spacing))
 		self.Buffs["growth-y"] = "DOWN"
 		self.Buffs.CustomFilter = CustomFilter
 		
@@ -474,7 +474,7 @@ ns.AddBuffs = AddBuffs
 local AddDebuffs = function(self, unit)
 	self.Debuffs = CreateFrame("Frame", self:GetName().."_Debuffs", self)
 	self.Debuffs.spacing = 6
-	self.Debuffs.size = (230 - 9 * self.Debuffs.spacing) / 10
+	self.Debuffs.size = (230 - 7 * self.Debuffs.spacing) / 8
 	self.Debuffs.showType = true
 	self.Debuffs.disableCooldown = true
 	self.Debuffs.onlyShowPlayer = ns.cfg.onlyShowPlayerDebuffs
@@ -485,7 +485,7 @@ local AddDebuffs = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		self.Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -7.5)
 		self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -7.5)
-		self.Debuffs:SetSize(self:GetWidth(), 4 * (self.Debuffs.size + self.Debuffs.spacing))
+		self.Debuffs:SetHeight(5 * (self.Debuffs.size + self.Debuffs.spacing))
 		
 		self.Debuffs.initialAnchor = "TOPLEFT"
 		self.Debuffs["growth-x"] = "RIGHT"
