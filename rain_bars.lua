@@ -86,7 +86,7 @@ local AddCastbar = function(self, unit)
 		self.Castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
 	end
 	
-	if (unit == "target" or unit:match("boss%d") or unit == "focus") then
+	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
 		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
 		
 		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
@@ -105,7 +105,7 @@ local AddCastbar = function(self, unit)
 			if (unit == "focus") then
 				self.Castbar.Icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
 			else
-				self.Castbar.Icon:SetPoint("BOTTOMRIGHT", self, "BOTTOMLEFT", -7.5, 0)
+				self.Castbar.Icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
 			end
 		end
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)

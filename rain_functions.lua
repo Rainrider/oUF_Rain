@@ -435,11 +435,11 @@ local AddBuffs = function(self, unit)
 		self.Buffs.CustomFilter = CustomFilter
 		
 		if (unit == "player") then
-			self.Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, -1)
+			self.Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, 1)
 			self.Buffs.initialAnchor = "TOPRIGHT"
 			self.Buffs["growth-x"] = "LEFT"
 		else
-			self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 9, -1)
+			self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 9, 1)
 			self.Buffs.initialAnchor = "TOPLEFT"
 			self.Buffs["growth-x"] = "RIGHT"
 		end
@@ -453,12 +453,12 @@ local AddBuffs = function(self, unit)
 		self.Buffs["growth-x"] = "LEFT"
 	end
 	
-	if (unit:match("boss%d")) then
-		self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 15, 0)
+	if (unit:match("^boss%d$")) then
+		self.Buffs:SetPoint("RIGHT", self, "LEFT", -15, 0)
 		self.Buffs.num = 6
 		self.Buffs:SetSize(self.Buffs.num * (self.Buffs.size + self.Buffs.spacing), self.Buffs.size + self.Buffs.spacing)
-		self.Buffs.initialAnchor = "LEFT"
-		self.Buffs["growth-x"] = "RIGHT"
+		self.Buffs.initialAnchor = "RIGHT"
+		self.Buffs["growth-x"] = "LEFT"
 	end
 	
 	self.Buffs.Magnify = CreateFrame("Frame", nil, self)
