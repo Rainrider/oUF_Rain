@@ -138,7 +138,7 @@ local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dty
 		if (icon.isDebuff) then
 			return true
 		else
-			return cfg.onlyShowPlayerBuffs
+			return (icons.onlyShowPlayer and icon.isPlayer) or (not icons.onlyShowPlayer and name)
 		end
 	end
 end
