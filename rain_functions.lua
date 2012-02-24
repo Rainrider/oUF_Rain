@@ -5,6 +5,7 @@
 
 local _, ns = ...
 local playerClass = ns.playerClass
+local UnitIsFriend = UnitIsFriend
 
 local prioTable = {}
 --[[
@@ -121,22 +122,23 @@ local CustomPlayerFilter = function()
 end
 
 local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
-	if (UnitCanAttack("player", unit)) then
-		local casterClass
+	if (caster == "player" or caster == "pet" or caster == "vehicle") then
+		icon.isPlayer = true
+	end
 
-		if (caster) then
-			_, casterClass = UnitClass(caster)
-		end
-		if (not icon.isDebuff or (casterClass and casterClass == playerClass)) then	-- return all buffs and only debuffs cast by the player's class
+	if (not UnitIsFriend("player", unit)) then
+		if (icon.isDebuff) then
+			if(icon.isPlayer or ns.debuffIDs[spellID]) then
+				return true
+			end
+		else
 			return true
 		end
 	else
-		if (caster == "player" or caster == "pet" or caster == "vehicle") then
-			icon.isPlayer = true
-		end
-		
-		if ((icons.onlyShowPlayer and icon.isPlayer) or (not icons.onlyShowPlayer and name)) then -- onlyShowPlayer or everything?
+		if (icon.isDebuff) then
 			return true
+		else
+			return cfg.onlyShowPlayerBuffs
 		end
 	end
 end
@@ -320,11 +322,12 @@ do
 	}
 
 	PostUpdateIcon = function(icons, unit, icon, index, offset)
-		local _, _, _, _, _, duration, expirationTime, caster, _ = UnitAura(unit, index, icon.filter)
+		local _, _, _, _, _, duration, expirationTime, caster = UnitAura(unit, index, icon.filter)
 		
 		if (not playerUnits[caster]) then
-			if ((UnitCanAttack("player", unit) and icon.isDebuff)
-					or (UnitIsFriend("player", unit) and not icon.isDebuff)) then
+			local friend = UnitIsFriend("player", unit)
+			if ((not friend and icon.isDebuff)
+					or (friend and not icon.isDebuff)) then
 				icon.icon:SetDesaturated(true)
 				icon.overlay:SetVertexColor(0.5, 0.5, 0.5)
 			end
