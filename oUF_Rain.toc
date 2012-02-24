@@ -11,6 +11,7 @@ modules\rain_interrupt.lua
 rain_config.lua
 rain_media.lua
 rain_colors.lua
+rain_auraFilter.lua
 rain_functions.lua
 rain_modules.lua
 modules\rain_dispel.lua
