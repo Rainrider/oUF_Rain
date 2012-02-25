@@ -184,27 +184,37 @@ local SortAuras = function(a, b)
 	end
 end
 
-local Aura_OnEnter = function(Icons, icon)
-	local r, g, b = icon.overlay:GetVertexColor()
-	local iconW, iconH = icon:GetSize()
-	local button = Icons.Magnify
-	
-	button:SetSize(iconW * 2, iconH * 2)
-	button:SetPoint("CENTER", icon, "CENTER")
-	
-	button.icon:SetSize(iconW * 2, iconH * 2)
-	button.icon:SetTexture(icon.icon:GetTexture())
-	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-
-	button.border:SetVertexColor(r, g, b)
-
-	button:Show()
-	
-	Icons.Magnify = button
+local UpdateAuraTooltip = function(button)
+	GameTooltip:SetUnitAura(button:GetParent().__owner.unit, button:GetID(), button.filter)
 end
 
-local Aura_OnLeave = function(Icons)
-	Icons.Magnify:Hide()
+local AuraOnEnter = function(button)
+	if(not button:IsVisible()) then return end
+
+	GameTooltip:SetOwner(button, "ANCHOR_BOTTOMRIGHT")
+	button:UpdateTooltip()
+
+	local r, g, b = button.overlay:GetVertexColor()
+	local iconW, iconH = button:GetSize()
+	local magnify = button:GetParent().Magnify
+	
+	magnify:SetSize(iconW * 2, iconH * 2)
+	magnify:SetPoint("CENTER", button, "CENTER")
+	
+	magnify.icon:SetSize(iconW * 2, iconH * 2)
+	magnify.icon:SetTexture(button.icon:GetTexture())
+	magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+
+	magnify.border:SetVertexColor(r, g, b)
+
+	magnify:Show()
+	
+	button:GetParent().Magnify = magnify
+end
+
+local AuraOnLeave = function(button)
+	GameTooltip:Hide()
+	button:GetParent().Magnify:Hide()
 end
 
 --[[PRE AND POST FUNCTIONS]]--
@@ -284,28 +294,39 @@ local PostUpdatePower = function(Power, unit, cur, max)
 end
 ns.PostUpdatePower = PostUpdatePower
 
-local PostCreateIcon = function(Icons, icon)
-	-- remove OmniCC and CooldownCount timers
-	icon.cd.noOCC = true
-	icon.cd.noCooldownCount = true
-	
-	icon.count:SetPoint("BOTTOMRIGHT", 1, 1.5)
-	icon.count:SetFont(ns.media.FONT, 8, "OUTLINE")
-	icon.count:SetTextColor(0.84, 0.75, 0.65)
-	icon.count:SetJustifyH("RIGHT")
-	
-	icon.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+local CreateAuraIcon = function(Icons, index)
+	Icons.createdIcons = Icons.createdIcons + 1 -- need to do this
 
-	icon.overlay:SetTexture(ns.media.BTNTEXTURE)
-	icon.overlay:SetPoint("TOPLEFT", -4.5, 4.5)
-	icon.overlay:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
-	icon.overlay:SetTexCoord(0, 1, 0, 1)
+	local button = CreateFrame("Button", nil, Icons)
+
+	button.icon = button:CreateTexture(nil, "BORDER")
+	button.icon:SetAllPoints(button)
+	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	
-	icon.remaining = PutFontString(icon, ns.media.FONT, 8, "OUTLINE", "LEFT")
-	icon.remaining:SetPoint("TOP", 0, 1)
-	
-	icon:HookScript("OnEnter", function() Aura_OnEnter(Icons, icon) end)
-	icon:HookScript("OnLeave", function() Aura_OnLeave(Icons) end)
+	button.count = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "RIGHT")
+	button.count:SetPoint("BOTTOMRIGHT", 1, 1.5)
+	button.count:SetTextColor(0.84, 0.75, 0.65)
+	-- aura border
+	button.overlay = button:CreateTexture("AuraOverlay", "OVERLAY")
+	button.overlay:SetTexture(ns.media.BTNTEXTURE)
+	button.overlay:SetPoint("TOPLEFT", -4.5, 4.5)
+	button.overlay:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
+	button.overlay:SetTexCoord(0, 1, 0, 1)
+	-- timer text
+	button.remaining = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "LEFT")
+	button.remaining:SetPoint("TOP", 0, 1)
+
+	button.UpdateTooltip = UpdateAuraTooltip
+	button:SetScript("OnEnter", AuraOnEnter)
+	button:SetScript("OnLeave", AuraOnLeave)
+
+	table.insert(Icons, button)
+
+	if (Icons.PostCreateIcon) then
+		Icons:PostCreateIcon(button)
+	end
+
+	return button
 end
 
 local PreSetPosition = function(Auras)
@@ -400,8 +421,8 @@ local AddAuras = function(self, unit)
 	self.Auras.disableCooldown = true
 	self.Auras.showType = true
 	self.Auras.onlyShowPlayer = false
+	self.Auras.CreateIcon = CreateAuraIcon
 	self.Auras.PreSetPosition = PreSetPosition
-	self.Auras.PostCreateIcon = PostCreateIcon
 	self.Auras.PostUpdateIcon = PostUpdateIcon
 	self.Auras.CustomFilter = CustomPartyFilter
 
@@ -425,8 +446,8 @@ local AddBuffs = function(self, unit)
 	self.Buffs.disableCooldown = true
 	self.Buffs.showType = true
 	self.Buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
+	self.Buffs.CreateIcon = CreateAuraIcon
 	self.Buffs.PreSetPosition = PreSetPosition
-	self.Buffs.PostCreateIcon = PostCreateIcon
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
 	
 	if (unit == "player" or unit == "target") then
@@ -481,8 +502,8 @@ local AddDebuffs = function(self, unit)
 	self.Debuffs.showType = true
 	self.Debuffs.disableCooldown = true
 	self.Debuffs.onlyShowPlayer = ns.cfg.onlyShowPlayerDebuffs
+	self.Debuffs.CreateIcon = CreateAuraIcon
 	self.Debuffs.PreSetPosition = PreSetPosition
-	self.Debuffs.PostCreateIcon = PostCreateIcon
 	self.Debuffs.PostUpdateIcon = PostUpdateIcon
 	
 	if (unit == "player" or unit == "target") then
