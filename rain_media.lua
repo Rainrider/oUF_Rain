@@ -12,6 +12,7 @@ ns.media = {
 	BTNTEXTURE = [=[Interface\AddOns\oUF_Rain\media\textures\buttonnormal]=],
 	HIGHLIGHTTEXTURE = [=[Interface\AddOns\oUF_Rain\media\textures\highlighttex]=],
 	BORDER = [=[Interface\AddOns\oUF_Rain\media\textures\glowTex3]=],
+	STEALABLETEX = [=[Interface\AddOns\oUF_Rain\media\textures\stealableTex]=],
 	OVERLAY = [=[Interface\AddOns\oUF_Rain\media\textures\smallshadertex]=],
 	RAIDICONS = [=[Interface\AddOns\oUF_Rain\media\icons\raidicons]=],
 	BACKDROP = {

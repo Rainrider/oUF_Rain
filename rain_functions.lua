@@ -302,16 +302,24 @@ local CreateAuraIcon = function(Icons, index)
 	button.icon = button:CreateTexture(nil, "BORDER")
 	button.icon:SetAllPoints(button)
 	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	
+
 	button.count = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "RIGHT")
 	button.count:SetPoint("BOTTOMRIGHT", 1, 1.5)
 	button.count:SetTextColor(0.84, 0.75, 0.65)
 	-- aura border
-	button.overlay = button:CreateTexture("AuraOverlay", "OVERLAY")
+	button.overlay = button:CreateTexture(nil, "OVERLAY")
 	button.overlay:SetTexture(ns.media.BTNTEXTURE)
 	button.overlay:SetPoint("TOPLEFT", -4.5, 4.5)
 	button.overlay:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
 	button.overlay:SetTexCoord(0, 1, 0, 1)
+
+	button.stealable = button:CreateTexture(nil, "OVERLAY")
+	button.stealable:SetTexture(ns.media.STEALABLETEX)
+	button.stealable:SetPoint("TOPLEFT", -4.5, 4.5)
+	button.stealable:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
+	button.stealable:SetTexCoord(0, 1, 0, 1)
+	button.stealable:SetBlendMode("DISABLE")
+	button.stealable:SetVertexColor(unpack(oUF.colors.class["MAGE"]))
 	-- timer text
 	button.remaining = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "LEFT")
 	button.remaining:SetPoint("TOP", 0, 1)
@@ -427,7 +435,7 @@ local AddAuras = function(self, unit)
 	self.Auras.CustomFilter = CustomPartyFilter
 
 	self.Auras.Magnify = CreateFrame("Frame", nil, self)
-	self.Auras.Magnify:SetFrameLevel(self.Auras:GetFrameLevel() + 3)
+	self.Auras.Magnify:SetFrameLevel(self.Auras:GetFrameLevel() + 2)
 
 	self.Auras.Magnify.icon = self.Auras.Magnify:CreateTexture(nil, "ARTWORK")
 	self.Auras.Magnify.icon:SetPoint("CENTER")
@@ -446,6 +454,7 @@ local AddBuffs = function(self, unit)
 	self.Buffs.disableCooldown = true
 	self.Buffs.showType = true
 	self.Buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
+	self.Buffs.showStealableBuffs = true
 	self.Buffs.CreateIcon = CreateAuraIcon
 	self.Buffs.PreSetPosition = PreSetPosition
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
@@ -483,7 +492,7 @@ local AddBuffs = function(self, unit)
 	end
 	
 	self.Buffs.Magnify = CreateFrame("Frame", nil, self)
-	self.Buffs.Magnify:SetFrameLevel(self.Buffs:GetFrameLevel() + 3)
+	self.Buffs.Magnify:SetFrameLevel(self.Buffs:GetFrameLevel() + 2)
 	
 	self.Buffs.Magnify.icon = self.Buffs.Magnify:CreateTexture(nil, "ARTWORK")
 	self.Buffs.Magnify.icon:SetPoint("CENTER")
@@ -541,7 +550,7 @@ local AddDebuffs = function(self, unit)
 	end
 	
 	self.Debuffs.Magnify = CreateFrame("Frame", nil, self)
-	self.Debuffs.Magnify:SetFrameLevel(self.Debuffs:GetFrameLevel() + 3)
+	self.Debuffs.Magnify:SetFrameLevel(self.Debuffs:GetFrameLevel() + 2)
 	
 	self.Debuffs.Magnify.icon = self.Debuffs.Magnify:CreateTexture(nil, "ARTWORK")
 	self.Debuffs.Magnify.icon:SetPoint("CENTER")
