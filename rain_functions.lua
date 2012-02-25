@@ -121,7 +121,7 @@ local CustomPlayerFilter = function()
 	return true
 end
 
-local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 	if (caster == "player" or caster == "pet" or caster == "vehicle") then
 		icon.isPlayer = true
 	end
@@ -319,7 +319,7 @@ local CreateAuraIcon = function(Icons, index)
 	button.stealable:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
 	button.stealable:SetTexCoord(0, 1, 0, 1)
 	button.stealable:SetBlendMode("DISABLE")
-	button.stealable:SetVertexColor(unpack(oUF.colors.class["MAGE"]))
+	button.stealable:SetVertexColor(unpack(oUF.colors.class[playerClass]))
 	-- timer text
 	button.remaining = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "LEFT")
 	button.remaining:SetPoint("TOP", 0, 1)

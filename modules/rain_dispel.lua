@@ -111,7 +111,7 @@ end
 local GetDebuffInfo = function(unit, filter)
 	if (not UnitCanAssist("player", unit)) then return end
 
-	-- name, rank, texture, stackCount, dispelType, duration, expireTime, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff
+	-- name, rank, texture, stackCount, dispelType, duration, expireTime, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff
 	local name, texture, dispelType, isBossDebuff
 	local i = 1
 	
