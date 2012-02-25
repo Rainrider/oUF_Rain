@@ -179,11 +179,24 @@ local Shared = function(self, unit)
 		end
 		ns.AddDebuffs(self, unit)
 		ns.AddDebuffHighlight(self, unit)
-		
+
 		self.Status = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
 		self.Status:SetPoint("RIGHT", -3.5, 2)
 		self.Status:SetTextColor(0.69, 0.31, 0.31, 0.6)
 		self:Tag(self.Status, "[pvp]")
+
+		self:HookScript("OnEnter", function(self)
+			if (UnitIsUnit("player", unit) and UnitIsPVP(unit)) then
+				local pvpTimer = GetPVPTimer() / 1000 -- remaining seconds
+				if (pvpTimer < 300 and pvpTimer > 0) then
+					self.Status:SetText(format("%d:%02d", floor(pvpTimer / 60), pvpTimer % 60))
+				end
+			end
+		end)
+
+		self:HookScript("OnLeave", function(self)
+			self.Status:UpdateTag()
+		end)
 		
 		ns.AddAssistantIcon(self, unit)
 		ns.AddLeaderIcon(self, unit)
