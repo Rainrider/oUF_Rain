@@ -61,21 +61,17 @@ local AddCastbar = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		self.Castbar:SetAllPoints(self.Overlay)
 		
-		self.Castbar.Time = PutFontString(self.Overlay, ns.media.FONT2, 12, nil, "RIGHT")
+		self.Castbar.Time = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "RIGHT")
 		self.Castbar.Time:SetPoint("RIGHT", -3.5, 3)
 		self.Castbar.Time:SetTextColor(0.84, 0.75, 0.65)
 		
 		self.Castbar.CustomTimeText = ns.CustomCastTimeText
 		self.Castbar.CustomDelayText = ns.CustomCastDelayText
 		
-		self.Castbar.Text = PutFontString(self.Overlay, ns.media.FONT2, 12, nil, "LEFT")
+		self.Castbar.Text = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "LEFT")
 		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
 		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
 		self.Castbar.Text:SetTextColor(0.84, 0.75, 0.65)
-		
-		self.Castbar:HookScript("OnShow", function() self.Castbar.Text:Show(); self.Castbar.Time:Show() end)
-		self.Castbar:HookScript("OnHide", function() self.Castbar.Text:Hide(); self.Castbar.Time:Hide() end)
-		
 	else
 		self.Castbar:SetAllPoints(self.Power)
 	end
@@ -250,12 +246,12 @@ local AddRuneBar = function(self, width, height)
 		self.Runes[i].bg:SetAllPoints()
 		self.Runes[i].bg.multiplier = 0.5
 	end
-	
+	---[[
 	self.Runes:RegisterEvent("UNIT_ENTERED_VEHICLE")
 	self.Runes:RegisterEvent("UNIT_EXITED_VEHICLE")
 	self.Runes:SetScript("OnEvent", function(element, event, unit, ...)
 		return ns.PostUpdateClassBar(element, event, unit, ...)
-	end)
+	end)--]]
 end
 ns.AddRuneBar = AddRuneBar
 
@@ -275,7 +271,7 @@ local AddSoulShardsBar = function(self, width, height)
 		self.SoulShards[i]:SetBackdropColor(0, 0, 0)
 	end
 	
-	self.SoulShards.PostUpdate = ns.PostUpdateClassBar
+	--self.SoulShards.PostUpdate = ns.PostUpdateClassBar
 end
 ns.AddSoulshardsBar = AddSoulShardsBar
 
