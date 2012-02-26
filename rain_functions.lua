@@ -107,13 +107,13 @@ local PutFontString = function(parent, fontName, fontHeight, fontStyle, justifyH
 end
 ns.PutFontString = PutFontString
 
-local CustomCastTimeText = function(self, duration)
-	self.Time:SetText(("%.1f / %.2f"):format(self.channeling and duration or self.max - duration, self.max))
+local CustomCastTimeText = function(Castbar, duration)
+	Castbar.Time:SetText(("%.1f / %.2f"):format(Castbar.channeling and duration or Castbar.max - duration, Castbar.max))
 end
 ns.CustomCastTimeText = CustomCastTimeText
 
 local CustomCastDelayText = function(self, duration)
-	self.Time:SetText(("%.1f |cffaf5050%s %.1f|r"):format(self.channeling and duration or self.max - duration, self.channeling and "- " or "+", self.delay))
+	Castbar.Time:SetText(("%.1f |cffaf5050%s %.1f|r"):format(Castbar.channeling and duration or Castbar.max - duration, Castbar.channeling and "- " or "+", Castbar.delay))
 end
 ns.CustomCastDelayText = CustomCastDelayText
 
@@ -121,29 +121,29 @@ local CustomPlayerFilter = function()
 	return true
 end
 
-local CustomFilter = function(icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+local CustomFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 	if (caster == "player" or caster == "pet" or caster == "vehicle") then
-		icon.isPlayer = true
+		aura.isPlayer = true
 	end
 
 	if (not UnitIsFriend("player", unit)) then
-		if (icon.isDebuff) then
-			if(icon.isPlayer or ns.debuffIDs[spellID]) then
+		if (aura.isDebuff) then
+			if(aura.isPlayer or ns.debuffIDs[spellID]) then
 				return true
 			end
 		else
 			return true
 		end
 	else
-		if (icon.isDebuff) then
+		if (aura.isDebuff) then
 			return true
 		else
-			return (icons.onlyShowPlayer and icon.isPlayer) or (not icons.onlyShowPlayer and name)
+			return (Auras.onlyShowPlayer and Auras.isPlayer) or (not Auras.onlyShowPlayer and name)
 		end
 	end
 end
 
-local CustomPartyFilter = function(icons, unit, icon, name, _, _, _, _, _, _, caster)
+local CustomPartyFilter = function(Auras, unit, aura, name, _, _, _, _, _, _, caster)
 	if (prioTable[name]) then
 		if ((prioTable[name] == 1 and caster == "player") or prioTable[name] == 2) then
 			return true
@@ -151,29 +151,29 @@ local CustomPartyFilter = function(icons, unit, icon, name, _, _, _, _, _, _, ca
 	end
 end
 
-local CreateAuraTimer = function(self, elapsed)
-	if (self.timeLeft) then
-		self.elapsed = (self.elapsed or 0) + elapsed
-		if (self.elapsed >= 0.1) then
-			if (not self.first) then
-				self.timeLeft = self.timeLeft - self.elapsed
+local CreateAuraTimer = function(aura, elapsed)
+	if (aura.timeLeft) then
+		aura.elapsed = (aura.elapsed or 0) + elapsed
+		if (aura.elapsed >= 0.1) then
+			if (not aura.first) then
+				aura.timeLeft = aura.timeLeft - aura.elapsed
 			else
-				self.timeLeft = self.timeLeft - GetTime()
-				self.first = false
+				aura.timeLeft = aura.timeLeft - GetTime()
+				aura.first = false
 			end
-			if (self.timeLeft > 0) then
-				local time = FormatTime(self.timeLeft)
-					self.remaining:SetText(time)
-				if (self.timeLeft < 5) then
-					self.remaining:SetTextColor(0.69, 0.31, 0.31)
+			if (aura.timeLeft > 0) then
+				local time = FormatTime(aura.timeLeft)
+					aura.remaining:SetText(time)
+				if (aura.timeLeft < 5) then
+					aura.remaining:SetTextColor(0.69, 0.31, 0.31)
 				else
-					self.remaining:SetTextColor(0.84, 0.75, 0.65)
+					aura.remaining:SetTextColor(0.84, 0.75, 0.65)
 				end
 			else
-				self.remaining:Hide()
-				self:SetScript("OnUpdate", nil)
+				aura.remaining:Hide()
+				aura:SetScript("OnUpdate", nil)
 			end
-			self.elapsed = 0
+			aura.elapsed = 0
 		end
 	end
 end
@@ -294,10 +294,10 @@ local PostUpdatePower = function(Power, unit, cur, max)
 end
 ns.PostUpdatePower = PostUpdatePower
 
-local CreateAuraIcon = function(Icons, index)
-	Icons.createdIcons = Icons.createdIcons + 1 -- need to do this
+local CreateAuraIcon = function(Auras, index)
+	Auras.createdIcons = Auras.createdIcons + 1 -- need to do this
 
-	local button = CreateFrame("Button", nil, Icons)
+	local button = CreateFrame("Button", nil, Auras)
 
 	button.icon = button:CreateTexture(nil, "BORDER")
 	button.icon:SetAllPoints(button)
@@ -328,10 +328,10 @@ local CreateAuraIcon = function(Icons, index)
 	button:SetScript("OnEnter", AuraOnEnter)
 	button:SetScript("OnLeave", AuraOnLeave)
 
-	table.insert(Icons, button)
+	table.insert(Auras, button)
 
-	if (Icons.PostCreateIcon) then
-		Icons:PostCreateIcon(button)
+	if (Auras.PostCreateIcon) then
+		Auras:PostCreateIcon(button)
 	end
 
 	return button
@@ -350,29 +350,29 @@ do
 		vehicle = true,
 	}
 
-	PostUpdateIcon = function(icons, unit, icon, index, offset)
-		local _, _, _, _, _, duration, expirationTime, caster = UnitAura(unit, index, icon.filter)
+	PostUpdateIcon = function(Auras, unit, aura, index, offset)
+		local _, _, _, _, _, duration, expirationTime, caster = UnitAura(unit, index, aura.filter)
 		
 		if (not playerUnits[caster]) then
 			local friend = UnitIsFriend("player", unit)
-			if ((not friend and icon.isDebuff)
-					or (friend and not icon.isDebuff)) then
-				icon.icon:SetDesaturated(true)
-				icon.overlay:SetVertexColor(0.5, 0.5, 0.5)
+			if ((not friend and aura.isDebuff)
+					or (friend and not aura.isDebuff)) then
+				aura.icon:SetDesaturated(true)
+				aura.overlay:SetVertexColor(0.5, 0.5, 0.5)
 			end
 		end
 		
 		if (duration and duration > 0) then
-			icon.remaining:Show()
-			icon.timeLeft = expirationTime
-			icon:SetScript("OnUpdate", CreateAuraTimer)
+			aura.remaining:Show()
+			aura.timeLeft = expirationTime
+			aura:SetScript("OnUpdate", CreateAuraTimer)
 		else
-			icon.remaining:Hide()
-			icon.timeLeft = math.huge
-			icon:SetScript("OnUpdate", nil)
+			aura.remaining:Hide()
+			aura.timeLeft = math.huge
+			aura:SetScript("OnUpdate", nil)
 		end
 
-		icon.first = true
+		aura.first = true
 	end
 end
 
