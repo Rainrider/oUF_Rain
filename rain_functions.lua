@@ -122,7 +122,7 @@ local CustomPlayerFilter = function()
 end
 
 local CustomFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
-	if (caster == "player" or caster == "pet" or caster == "vehicle") then
+	if (caster == "pet") then
 		aura.isPlayer = true
 	end
 
