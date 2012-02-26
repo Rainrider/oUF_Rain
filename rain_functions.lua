@@ -342,38 +342,33 @@ local PreSetPosition = function(Auras)
 	return 1, Auras.createdIcons
 end
 
-local PostUpdateIcon
-do
-	local playerUnits = {
-		player = true,
-		pet = true,
-		vehicle = true,
-	}
+local PostUpdateIcon = function(Auras, unit, aura, index, offset)
+	local _, _, _, _, _, duration, expirationTime, caster = UnitAura(unit, index, aura.filter)
 
-	PostUpdateIcon = function(Auras, unit, aura, index, offset)
-		local _, _, _, _, _, duration, expirationTime, caster = UnitAura(unit, index, aura.filter)
-		
-		if (not playerUnits[caster]) then
-			local friend = UnitIsFriend("player", unit)
-			if ((not friend and aura.isDebuff)
-					or (friend and not aura.isDebuff)) then
-				aura.icon:SetDesaturated(true)
-				aura.overlay:SetVertexColor(0.5, 0.5, 0.5)
-			end
-		end
-		
-		if (duration and duration > 0) then
-			aura.remaining:Show()
-			aura.timeLeft = expirationTime
-			aura:SetScript("OnUpdate", CreateAuraTimer)
-		else
-			aura.remaining:Hide()
-			aura.timeLeft = math.huge
-			aura:SetScript("OnUpdate", nil)
-		end
-
-		aura.first = true
+	if (caster == "pet") then
+		aura.isPlayer = true
 	end
+
+	if (not aura.isPlayer) then
+		local friend = UnitIsFriend("player", unit)
+		if ((not friend and aura.isDebuff)
+				or (friend and not aura.isDebuff)) then
+			aura.icon:SetDesaturated(true)
+			aura.overlay:SetVertexColor(0.5, 0.5, 0.5)
+		end
+	end
+
+	if (duration and duration > 0) then
+		aura.remaining:Show()
+		aura.timeLeft = expirationTime
+		aura:SetScript("OnUpdate", CreateAuraTimer)
+	else
+		aura.remaining:Hide()
+		aura.timeLeft = math.huge
+		aura:SetScript("OnUpdate", nil)
+	end
+
+	aura.first = true
 end
 
 local PostUpdateTotems = function(Totems, slot, haveTotem, name, start, duration, icon)
