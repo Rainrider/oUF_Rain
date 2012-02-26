@@ -313,7 +313,7 @@ local CreateAuraIcon = function(Icons, index)
 	button.overlay:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
 	button.overlay:SetTexCoord(0, 1, 0, 1)
 
-	button.stealable = button:CreateTexture(nil, "OVERLAY")
+	button.stealable = button:CreateTexture(nil, "OVERLAY", nil, 1)
 	button.stealable:SetTexture(ns.media.STEALABLETEX)
 	button.stealable:SetPoint("TOPLEFT", -4.5, 4.5)
 	button.stealable:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
