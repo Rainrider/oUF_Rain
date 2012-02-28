@@ -112,7 +112,7 @@ local CustomCastTimeText = function(Castbar, duration)
 end
 ns.CustomCastTimeText = CustomCastTimeText
 
-local CustomCastDelayText = function(self, duration)
+local CustomCastDelayText = function(Castbar, duration)
 	Castbar.Time:SetText(("%.1f |cffaf5050%s %.1f|r"):format(Castbar.channeling and duration or Castbar.max - duration, Castbar.channeling and "- " or "+", Castbar.delay))
 end
 ns.CustomCastDelayText = CustomCastDelayText
