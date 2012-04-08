@@ -11,6 +11,7 @@ local numRunes = 6 -- MAX_RUNES does not function any more
 local numHoly = MAX_HOLY_POWER
 local numShards = SHARD_BAR_NUM_SHARDS
 local numCPoints = MAX_COMBO_POINTS
+local numTotems = MAX_TOTEMS
 local playerClass = ns.playerClass
 
 local AddAltPowerBar = function(self)
@@ -131,11 +132,10 @@ end
 ns.AddComboPointsBar = AddComboPointsBar
 
 local AddEclipseBar = function(self, width, height)
-	local eclipseBar = CreateFrame("Frame", "oUF_Rain_EclipseBar", self)
+	local eclipseBar = CreateFrame("Frame", "oUF_Rain_EclipseBar", self.Overlay)
 	eclipseBar:SetHeight(5)
 	eclipseBar:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
 	eclipseBar:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
-	eclipseBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 	eclipseBar:SetBackdrop(ns.media.BACKDROP)
 	eclipseBar:SetBackdropColor(0, 0, 0)
 	
@@ -187,22 +187,17 @@ end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
 local AddHolyPowerBar = function(self, width, height)
-	self.HolyPower = CreateFrame("Frame", "oUF_Rain_HolyPower", self.Overlay)
-	self.HolyPower:SetHeight(height)
-	self.HolyPower:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.HolyPower:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
+	self.HolyPower = {}
 
 	for i = 1, numHoly do
-		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self.HolyPower)
+		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self.Overlay)
 		self.HolyPower[i]:SetSize((215 - numHoly - 1) / numHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.HolyPower, (i - 1) * (214 / numHoly) + 1, 0)
+		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numHoly) + 1, 1)
 		self.HolyPower[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.HolyPower[i]:SetStatusBarColor(unpack(ns.colors.power["HOLY_POWER"]))
 		self.HolyPower[i]:SetBackdrop(ns.media.BACKDROP)
 		self.HolyPower[i]:SetBackdropColor(0, 0, 0)
 	end
-	
-	self.HolyPower.PostUpdate = ns.PostUpdateClassBar
 end
 ns.AddHolyPowerBar = AddHolyPowerBar
 
@@ -227,16 +222,12 @@ end
 ns.AddPortrait = AddPortrait
 
 local AddRuneBar = function(self, width, height)
-	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self.Overlay)
-	self.Runes:SetHeight(height)
-	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
-	self.Runes:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+	self.Runes = {}
 
 	for i = 1, numRunes do
-		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Runes)
+		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
 		self.Runes[i]:SetSize((215 - numRunes - 1) / numRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Runes, (i - 1) * (214 / numRunes) + 1, 0)
+		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numRunes) + 1, 1)
 		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
@@ -246,51 +237,35 @@ local AddRuneBar = function(self, width, height)
 		self.Runes[i].bg:SetAllPoints()
 		self.Runes[i].bg.multiplier = 0.5
 	end
-	---[[
-	self.Runes:RegisterEvent("UNIT_ENTERED_VEHICLE")
-	self.Runes:RegisterEvent("UNIT_EXITED_VEHICLE")
-	self.Runes:SetScript("OnEvent", function(element, event, unit, ...)
-		return ns.PostUpdateClassBar(element, event, unit, ...)
-	end)--]]
 end
 ns.AddRuneBar = AddRuneBar
 
 local AddSoulShardsBar = function(self, width, height)
-	self.SoulShards = CreateFrame("Frame", "oUF_Rain_SoulShards", self.Overlay)
-	self.SoulShards:SetHeight(height)
-	self.SoulShards:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.SoulShards:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
+	self.SoulShards = {}
 
 	for i = 1, numShards do
-		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self.SoulShards)
+		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self.Overlay)
 		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
-		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.SoulShards, (i - 1) * (214 / numShards) + 1, 0)
+		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numShards) + 1, 1)
 		self.SoulShards[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.SoulShards[i]:SetStatusBarColor(unpack(ns.colors.power["SOUL_SHARDS"]))
 		self.SoulShards[i]:SetBackdrop(ns.media.BACKDROP)
 		self.SoulShards[i]:SetBackdropColor(0, 0, 0)
 	end
-	
-	--self.SoulShards.PostUpdate = ns.PostUpdateClassBar
 end
 ns.AddSoulshardsBar = AddSoulShardsBar
 
 local AddTotems = function(self, width, height)
-	local numTotems = MAX_TOTEMS
+	self.Totems = {}
 
-	self.Totems = CreateFrame("Frame", "oUF_Rain_Totems", self.Overlay)
-	self.Totems:SetHeight(height)
-	self.Totems:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.Totems:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
-	
 	for i = 1, numTotems do
-		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Totems)
+		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
 		self.Totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Totems[i]:SetMinMaxValues(0, 1)
-		
+
 		if (playerClass == "SHAMAN") then
 			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
-			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Totems, (i - 1) * (214 / numTotems) + 1, 0)
+			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 0)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
@@ -307,10 +282,10 @@ local AddTotems = function(self, width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 		end
-		
+
 		self.Totems[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Totems[i]:SetBackdropColor(0, 0, 0)
-		
+
 		self.Totems[i].Destroy = CreateFrame("Button", nil, self.Totems[i])
 		self.Totems[i].Destroy:SetAllPoints()
 		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
@@ -319,7 +294,7 @@ local AddTotems = function(self, width, height)
 				DestroyTotem(self.Totems[i]:GetID())
 			end
 		end)
-		
+
 		self.Totems[i].Destroy:EnableMouse()
 		self.Totems[i].Destroy:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
@@ -332,20 +307,20 @@ local AddTotems = function(self, width, height)
 			GameTooltip:Hide()
 		end)
 	end
-	
+
 	self.Totems.PostUpdate = ns.PostUpdateTotems
 end
 ns.AddTotems = AddTotems
-
 --[[
-	NOTES: Just an example for icons with cooldowns
+	NOTES: Just an example for icons with cooldowns --]]
+--[[
 local function AddTotems(self, width, height)
 	local Totems = {}
 
 	for i = 1, MAX_TOTEMS do
-		Totems[i] = CreateFrame("Botton", "Totem"..i, self)
+		Totems[i] = CreateFrame("Button", "Totem"..i, self)
 		Totems[i]:SetSize(40, 40)
-		Totems[i]:SetPoint(anchor whereever you want)
+		Totems[i]:SetPoint("BOTTOMLEFT", self, "TOPLEFT", (i - 1) * 42, 10)
 
 		Totems[i].Icon = Totems[i]:CreateTexture(nil, "OVERLAY")
 		Totems[i].Icon:SetAllPoints()
@@ -359,4 +334,5 @@ local function AddTotems(self, width, height)
 
 	self.Totems = Totems
 end
+ns.AddTotems = AddTotems
 --]]
