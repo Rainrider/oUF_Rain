@@ -31,6 +31,12 @@ ns.colors = setmetatable({
 		{0.31, 0.45, 0.63},	-- frost
 		{0.84, 0.75, 0.75},	-- death
 	}, {__index = oUF.colors.runes}),
+	totems = {
+		[FIRE_TOTEM_SLOT] = { 181/255, 073/255, 033/255 },
+		[EARTH_TOTEM_SLOT] = { 074/255, 142/255, 041/255 },
+		[WATER_TOTEM_SLOT] = { 057/255, 146/255, 181/255 },
+		[AIR_TOTEM_SLOT] = { 132/255, 056/255, 231/255 },
+	},
 }, {__index = oUF.colors})
 
 ns.colors.power[0] = ns.colors.power["MANA"]

@@ -371,25 +371,28 @@ local PostUpdateIcon = function(Auras, unit, aura, index, offset)
 	aura.first = true
 end
 
-local PostUpdateTotems = function(Totems, slot, haveTotem, name, start, duration, icon)
-	local delay = 0.5
+local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or STANDARD_TOTEM_PRIORITIES
+
+local UpdateTotem = function(self, event, slot)
 	local total = 0
+	local totem = self.Totems[totemPriorities[slot]]
+	local haveTotem, name, start, duration, icon = GetTotemInfo(slot)
 	
 	if (duration > 0) then
-		local current = GetTime() - start
-		if (current > 0) then
-			Totems[slot]:SetValue(1 - (current / duration))
-			Totems[slot]:SetScript("OnUpdate", function(self, elapsed)
-				total = total + elapsed
-				if (total >= delay) then
-					total = 0
-					self:SetValue(1 - ((GetTime() - start) / duration))
-				end
-			end)
-		end
+		totem:SetValue(1 - (GetTime() - start) / duration)
+		totem:SetScript("OnUpdate", function(self, elapsed)
+			total = total + elapsed
+			if (total >= 0.9) then
+				total = 0
+				self:SetValue(1 - (GetTime() - start) / duration)
+			end
+		end)
+		totem:Show()
+	else
+		totem:Hide()
 	end
 end
-ns.PostUpdateTotems = PostUpdateTotems
+ns.UpdateTotem = UpdateTotem
 
 local PostUpdateClassBar = function(classBar, unit)
 	if (UnitHasVehicleUI("player")) then

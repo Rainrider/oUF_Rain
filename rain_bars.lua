@@ -298,8 +298,7 @@ local AddTotems = function(self, width, height)
 		self.Totems[i].Destroy:EnableMouse()
 		self.Totems[i].Destroy:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-			local totem = self:GetParent()
-			GameTooltip:SetTotem(totem:GetID())
+			GameTooltip:SetTotem(self:GetParent():GetID())
 			GameTooltip:AddLine("|cffff0000"..GLYPH_SLOT_REMOVE_TOOLTIP.."|r") -- <Shift Right Click to Remove>
 			GameTooltip:Show()
 		end)
@@ -308,7 +307,7 @@ local AddTotems = function(self, width, height)
 		end)
 	end
 
-	self.Totems.PostUpdate = ns.PostUpdateTotems
+	self.Totems.Override = ns.UpdateTotem
 end
 ns.AddTotems = AddTotems
 --[[
