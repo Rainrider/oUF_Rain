@@ -59,7 +59,7 @@ local UpdateFocusSpark = function(self, event, ...)
 		focusSpark:PreUpdate()
 	end
 	
-	local spellFocusCost = GetSpellFocusCost(GetPrimaryTalentTree(), focusSpark)
+	local spellFocusCost = GetSpellFocusCost(GetSpecialization(), focusSpark)
 	
 	if (spellFocusCost and self.unit ~= "vehicle") then
 		local sparkXPos = spellFocusCost * parentBarWidth / UnitPowerMax("player", 2)
