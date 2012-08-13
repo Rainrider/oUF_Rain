@@ -6,7 +6,7 @@ local UnitHealthMax = UnitHealthMax
 local UnitPowerMax = UnitPowerMax
 
 local GetFocusPrediction = function()
-	local focusPrediction = 9
+	local focusPrediction = 14
  
 	if terminationPoints then
 		if (UnitHealth("target") / UnitHealthMax("target") <= 0.25) then
