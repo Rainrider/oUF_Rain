@@ -164,8 +164,8 @@ tags["rain:role"] = function(unit)
 		return icon
 	end
 end
-tagEvents["rain:role"] = "PARTY_MEMBERS_CHANGED PLAYER_ROLES_ASSIGNED ROLE_CHANGED_INFORM"
-tagSharedEvents.PARTY_MEMBERS_CHANGED = true
+tagEvents["rain:role"] = "GROUP_ROSTER_UPDATE PLAYER_ROLES_ASSIGNED ROLE_CHANGED_INFORM"
+tagSharedEvents.GROUP_ROSTER_UPDATE = true
 tagSharedEvents.PLAYER_ROLES_ASSIGNED = true
 tagSharedEvents.ROLE_CHANGED_INFORM = true
 
