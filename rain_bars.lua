@@ -236,6 +236,20 @@ local AddRuneBar = function(self, width, height)
 end
 ns.AddRuneBar = AddRuneBar
 
+local AddShadowOrbsBar = function(self, width, height)
+	self.ShadowOrbs = {}
+	local maxOrbs = PRIEST_BAR_NUM_ORBS
+
+	for i = 1, maxOrbs do
+		self.ShadowOrbs[i] = self.Overlay:CreateTexture("oUF_Rain_ShadowOrb_"..i, "OVERLAY")
+		self.ShadowOrbs[i]:SetSize((215 - maxOrbs - 1) / maxOrbs, height)
+		self.ShadowOrbs[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxOrbs) + 1, 1)
+		self.ShadowOrbs[i]:SetTexture(ns.media.TEXTURE)
+		self.ShadowOrbs[i]:SetVertexColor(unpack(ns.colors.power["SOUL_SHARDS"]))
+	end
+end
+ns.AddShadowOrbsBar = AddShadowOrbsBar
+
 local AddSoulShardsBar = function(self, width, height)
 	self.SoulShards = {}
 	local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
