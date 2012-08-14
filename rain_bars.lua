@@ -239,7 +239,7 @@ ns.AddRuneBar = AddRuneBar
 
 local AddSoulShardsBar = function(self, width, height)
 	self.SoulShards = {}
-	local maxShards = SHARD_BAR_NUM_SHARDS
+	local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
 
 	for i = 1, maxShards do
 		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self.Overlay)
