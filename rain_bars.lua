@@ -109,14 +109,14 @@ local AddCastbar = function(self, unit)
 end
 ns.AddCastbar = AddCastbar
 
-local AddComboPointsBar = function(self, width, height)
+local AddComboPointsBar = function(self, width, height, spacing)
 	self.CPoints = {}
 	local maxCPoints = MAX_COMBO_POINTS
 
 	for i = 1, maxCPoints do
 		self.CPoints[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
-		self.CPoints[i]:SetSize((215 - maxCPoints - 1) / maxCPoints, height)
-		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxCPoints) + 1, 1)
+		self.CPoints[i]:SetSize((width - maxCPoints * spacing - spacing) / maxCPoints, height)
+		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.CPoints[i]:GetWidth() + i * spacing, 1)
 		self.CPoints[i]:SetTexture(unpack(ns.colors.cpoints[i]))
 	end
 end
