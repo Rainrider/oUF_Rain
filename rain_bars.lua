@@ -8,7 +8,6 @@ local cfg = ns.config
 local PutFontString = ns.PutFontString
 
 local numRunes = 6 -- MAX_RUNES does not function any more
-local numHoly = MAX_HOLY_POWER
 local numShards = SHARD_BAR_NUM_SHARDS
 local numCPoints = MAX_COMBO_POINTS
 local numTotems = MAX_TOTEMS
@@ -188,11 +187,12 @@ ns.AddHealPredictionBar = AddHealPredictionBar
 
 local AddHolyPowerBar = function(self, width, height)
 	self.HolyPower = {}
+	local maxHoly = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
 
-	for i = 1, numHoly do
+	for i = 1, maxHoly do
 		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self.Overlay)
-		self.HolyPower[i]:SetSize((215 - numHoly - 1) / numHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numHoly) + 1, 1)
+		self.HolyPower[i]:SetSize((215 - maxHoly - 1) / maxHoly, height)
+		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxHoly) + 1, 1)
 		self.HolyPower[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.HolyPower[i]:SetStatusBarColor(unpack(ns.colors.power["HOLY_POWER"]))
 		self.HolyPower[i]:SetBackdrop(ns.media.BACKDROP)
