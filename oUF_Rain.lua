@@ -34,7 +34,7 @@ local UnitSpecific = {
 		elseif (playerClass == "HUNTER") then
 			ns.AddFocusHelper(self)
 		elseif (playerClass == "PRIEST") then
-			ns.AddShadowOrbsBar(self, 230, 5)
+			ns.AddShadowOrbsBar(self, 215, 5, 1)
 		end
 		
 		ns.AddCombatIcon(self)
