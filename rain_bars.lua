@@ -6,11 +6,6 @@
 local _, ns = ...
 local cfg = ns.config
 local PutFontString = ns.PutFontString
-
-local numRunes = 6 -- MAX_RUNES does not function any more
-local numShards = SHARD_BAR_NUM_SHARDS
-local numCPoints = MAX_COMBO_POINTS
-local numTotems = MAX_TOTEMS
 local playerClass = ns.playerClass
 
 local AddAltPowerBar = function(self)
@@ -116,11 +111,12 @@ ns.AddCastbar = AddCastbar
 
 local AddComboPointsBar = function(self, width, height)
 	self.CPoints = {}
+	local maxCPoints = MAX_COMBO_POINTS
 	
 	for i = 1, numCPoints do
 		self.CPoints[i] = CreateFrame("StatusBar", "oUF_Rain_CPoint_"..i, self)
-		self.CPoints[i]:SetSize((215 - numCPoints - 1) / numCPoints, height) -- frame width=230 ; Overlay width=215 ; 5 cp + 6 * 1 px = 215 => 1cp = 209/5
-		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numCPoints) + 1, 1)
+		self.CPoints[i]:SetSize((215 - maxCPoints - 1) / maxCPoints, height) -- frame width=230 ; Overlay width=215 ; 5 cp + 6 * 1 px = 215 => 1cp = 209/5
+		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxCPoints) + 1, 1)
 		self.CPoints[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 		self.CPoints[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.CPoints[i]:SetStatusBarColor(unpack(ns.colors.cpoints[i]))
@@ -223,11 +219,12 @@ ns.AddPortrait = AddPortrait
 
 local AddRuneBar = function(self, width, height)
 	self.Runes = {}
+	local maxRunes = 6
 
-	for i = 1, numRunes do
+	for i = 1, maxRunes do
 		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
-		self.Runes[i]:SetSize((215 - numRunes - 1) / numRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numRunes) + 1, 1)
+		self.Runes[i]:SetSize((215 - maxRunes - 1) / maxRunes, height)
+		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxRunes) + 1, 1)
 		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
@@ -242,11 +239,12 @@ ns.AddRuneBar = AddRuneBar
 
 local AddSoulShardsBar = function(self, width, height)
 	self.SoulShards = {}
+	local maxShards = SHARD_BAR_NUM_SHARDS
 
-	for i = 1, numShards do
+	for i = 1, maxShards do
 		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self.Overlay)
-		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
-		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numShards) + 1, 1)
+		self.SoulShards[i]:SetSize((215 - maxShards - 1) / maxShards, height)
+		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxShards) + 1, 1)
 		self.SoulShards[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.SoulShards[i]:SetStatusBarColor(unpack(ns.colors.power["SOUL_SHARDS"]))
 		self.SoulShards[i]:SetBackdrop(ns.media.BACKDROP)
@@ -257,15 +255,16 @@ ns.AddSoulshardsBar = AddSoulShardsBar
 
 local AddTotems = function(self, width, height)
 	self.Totems = {}
+	local maxTotems = MAX_TOTEMS
 
-	for i = 1, numTotems do
+	for i = 1, maxTotems do
 		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
 		self.Totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Totems[i]:SetMinMaxValues(0, 1)
 
 		if (playerClass == "SHAMAN") then
-			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
-			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numTotems) + 1, 0)
+			self.Totems[i]:SetSize((215 - maxTotems - 1) / maxTotems, height)
+			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxTotems) + 1, 0)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
