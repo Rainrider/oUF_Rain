@@ -112,15 +112,12 @@ ns.AddCastbar = AddCastbar
 local AddComboPointsBar = function(self, width, height)
 	self.CPoints = {}
 	local maxCPoints = MAX_COMBO_POINTS
-	
+
 	for i = 1, maxCPoints do
-		self.CPoints[i] = CreateFrame("StatusBar", "oUF_Rain_CPoint_"..i, self.Overlay)
-		self.CPoints[i]:SetSize((215 - maxCPoints - 1) / maxCPoints, height) -- frame width=230 ; Overlay width=215 ; 5 cp + 6 * 1 px = 215 => 1cp = 209/5
+		self.CPoints[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
+		self.CPoints[i]:SetSize((215 - maxCPoints - 1) / maxCPoints, height)
 		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxCPoints) + 1, 1)
-		self.CPoints[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.CPoints[i]:SetStatusBarColor(unpack(ns.colors.cpoints[i]))
-		self.CPoints[i]:SetBackdrop(ns.media.BACKDROP)
-		self.CPoints[i]:SetBackdropColor(0, 0, 0)
+		self.CPoints[i]:SetTexture(unpack(ns.colors.cpoints[i]))
 	end
 end
 ns.AddComboPointsBar = AddComboPointsBar
