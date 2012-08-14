@@ -177,18 +177,15 @@ local AddHealPredictionBar = function(self, unit)
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
-local AddHolyPowerBar = function(self, width, height)
+local AddHolyPowerBar = function(self, width, height, spacing)
 	self.HolyPower = {}
 	local maxHoly = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
 
 	for i = 1, maxHoly do
-		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self.Overlay)
-		self.HolyPower[i]:SetSize((215 - maxHoly - 1) / maxHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxHoly) + 1, 1)
-		self.HolyPower[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.HolyPower[i]:SetStatusBarColor(unpack(ns.colors.power["HOLY_POWER"]))
-		self.HolyPower[i]:SetBackdrop(ns.media.BACKDROP)
-		self.HolyPower[i]:SetBackdropColor(0, 0, 0)
+		self.HolyPower[i] = self.Overlay:CreateTexture("oUF_Rain_HolyPower_"..i, "OVERLAY")
+		self.HolyPower[i]:SetSize((width - maxHoly * spacing - spacing) / maxHoly, height)
+		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.HolyPower[i]:GetWidth() + i * spacing, 1)
+		self.HolyPower[i]:SetTexture(unpack(ns.colors.power["HOLY_POWER"]))
 	end
 end
 ns.AddHolyPowerBar = AddHolyPowerBar

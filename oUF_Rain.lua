@@ -23,7 +23,7 @@ local UnitSpecific = {
 			ns.AddRuneBar(self, 215, 5, 1)
 			ns.AddTotems(self, 60, 5)
 		elseif (playerClass == "PALADIN") then
-			ns.AddHolyPowerBar(self, nil, 5)
+			ns.AddHolyPowerBar(self, 215, 5, 1)
 		elseif (playerClass == "WARLOCK") then
 			ns.AddSoulshardsBar(self, 230, 5)
 		elseif (playerClass == "SHAMAN") then
