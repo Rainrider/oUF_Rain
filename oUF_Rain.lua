@@ -20,7 +20,7 @@ local UnitSpecific = {
 		ns.AddAltPowerBar(self)
 		
 		if (playerClass == "DEATHKNIGHT") then
-			ns.AddRuneBar(self, 230, 5)
+			ns.AddRuneBar(self, 215, 5, 1)
 			ns.AddTotems(self, 60, 5)
 		elseif (playerClass == "PALADIN") then
 			ns.AddHolyPowerBar(self, nil, 5)

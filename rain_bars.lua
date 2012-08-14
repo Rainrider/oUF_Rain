@@ -213,14 +213,14 @@ local AddPortrait = function(self, unit)
 end
 ns.AddPortrait = AddPortrait
 
-local AddRuneBar = function(self, width, height)
+local AddRuneBar = function(self, width, height, spacing)
 	self.Runes = {}
 	local maxRunes = 6
 
 	for i = 1, maxRunes do
 		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
-		self.Runes[i]:SetSize((215 - maxRunes - 1) / maxRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxRunes) + 1, 1)
+		self.Runes[i]:SetSize((width - maxRunes * spacing - spacing) / maxRunes, height)
+		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.Runes[i]:GetWidth() + i * spacing, 1)
 		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
