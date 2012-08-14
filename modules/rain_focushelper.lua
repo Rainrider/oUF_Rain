@@ -95,8 +95,8 @@ local Enable = function(self)
 			focusSpark:SetBlendMode("ADD")
 		end
 
-		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", Update)
-		self:RegisterEvent("LEARNED_SPELL_IN_TAB", Update)
+		self:RegisterEvent("PLAYER_TALENT_UPDATE", Update)
+		self:RegisterEvent("SPELLS_CHANGED", Update)
 	end
 
 	if (focusGain) then
@@ -121,8 +121,8 @@ end
 
 local Disable = function(self)
 	if (self.FocusSpark) then
-		self:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		self:UnregisterEvent("LEARNED_SPELL_IN_TAB")
+		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Update)
+		self:UnregisterEvent("SPELLS_CHANGED", Update)
 	end
 	
 	if (self.FocusGain) then
