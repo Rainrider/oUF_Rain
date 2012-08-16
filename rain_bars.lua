@@ -154,6 +154,19 @@ local AddEclipseBar = function(self, width, height)
 end
 ns.AddEclipseBar = AddEclipseBar
 
+local AddHarmonyOrbsBar = function(self, width, height, spacing)
+	self.Harmony = {}
+	local maxOrbs = UnitPowerMax("player", SPELL_POWER_LIGHT_FORCE)
+
+	for i = 1, maxOrbs do
+		self.Harmony[i] = self.Overlay:CreateTexture("oUF_Rain_ChiOrb_"..i, "OVERLAY")
+		self.Harmony[i]:SetSize((width - maxOrbs * spacing - spacing) / maxOrbs, height)
+		self.Harmony[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.Harmony[i]:GetWidth() + i * spacing, 1)
+		self.Harmony[i]:SetTexture(unpack(ns.colors.class["MONK"]))
+	end
+end
+ns.AddHarmonyOrbsBar = AddHarmonyOrbsBar
+
 local AddHealPredictionBar = function(self, unit)
 	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
 	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
