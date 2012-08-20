@@ -14,7 +14,7 @@ rain_colors.lua
 # rain_auraFilter.lua
 rain_functions.lua
 rain_modules.lua
-# modules\rain_dispel.lua
+modules\rain_dispel.lua
 modules\rain_experience.lua
 modules\rain_focushelper.lua
 rain_menu.lua
