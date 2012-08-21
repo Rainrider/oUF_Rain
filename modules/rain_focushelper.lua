@@ -47,9 +47,10 @@ local UpdateFocusSpark = function(self, event, ...)
 	end
 	
 	local spellFocusCost = GetSpellFocusCost(GetSpecialization(), focusSpark)
+	local maxFocus = UnitPowerMax("player")
 	
-	if (spellFocusCost and self.unit ~= "vehicle") then
-		local sparkXPos = spellFocusCost * parentBarWidth / UnitPowerMax("player", 2)
+	if (spellFocusCost and maxFocus and self.unit ~= "vehicle") then
+		local sparkXPos = spellFocusCost * parentBarWidth / maxFocus
 		local xOffset = focusSpark:GetWidth() / 2
 		focusSpark:SetPoint("LEFT", sparkXPos - xOffset, 0)
 		focusSpark:Show()
