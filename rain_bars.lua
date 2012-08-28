@@ -353,3 +353,27 @@ local function AddTotems(self, width, height)
 end
 ns.AddTotems = AddTotems
 --]]
+
+local AddWarlockPowerBar = function(self, width, height, spacing)
+	self.WarlockPowerBar = {}
+	self.WarlockPowerBar.width = width
+	self.WarlockPowerBar.height = height
+	self.WarlockPowerBar.spacing = spacing
+
+	for i = 1, 4 do
+		self.WarlockPowerBar[i] = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
+		self.WarlockPowerBar[i]:SetSize((width - 4 * spacing - spacing) / 4, height)
+		self.WarlockPowerBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.WarlockPowerBar[i]:GetWidth() + i * spacing, 1)
+		self.WarlockPowerBar[i]:SetStatusBarTexture(ns.media.TEXTURE)
+		self.WarlockPowerBar[i]:SetBackdrop(ns.media.BACKDROP)
+		self.WarlockPowerBar[i]:SetBackdropColor(0, 0, 0)
+
+		self.WarlockPowerBar[i].bg = self.WarlockPowerBar[i]:CreateTexture(nil, "BORDER")
+		self.WarlockPowerBar[i].bg:SetTexture(ns.media.TEXTURE)
+		self.WarlockPowerBar[i].bg:SetAllPoints()
+		self.WarlockPowerBar[i].bg.multiplier = 0.3
+	end
+
+	self.WarlockPowerBar.PostUpdateVisibility = ns.WarlockPowerPostUpdateVisibility
+end
+ns.AddWarlockPowerBar = AddWarlockPowerBar

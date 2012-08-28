@@ -403,6 +403,27 @@ local PostUpdateClassBar = function(classBar, unit)
 	end
 end
 ns.PostUpdateClassBar = PostUpdateClassBar
+
+local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower)
+	local self = element.__owner
+	local width = element.width
+	local height = element.height
+	local spacing = element.spacing
+
+	if spec then
+		if spec == 1 or spec == 3 then -- Affliction or Destruction
+			for i = 1, maxPower do
+				element[i]:SetSize((width - maxPower * spacing - spacing) / maxPower, height)
+				element[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * element[i]:GetWidth() + i * spacing, 1)
+			end
+		else -- Demonology
+			element[1]:SetSize(width - 2 * spacing, height)
+			element[1]:SetPoint("BOTTOMLEFT", self.Overlay, spacing, 1)
+			--element[1]:SetPoint("BOTTOMRIGHT", self.Overlay, -spacing, 1) -- we have to use SetSize lol?
+		end
+	end
+end
+ns.WarlockPowerPostUpdateVisibility = WarlockPowerPostUpdateVisibility
 --[[END OF PRE AND POST FUNCTIONS]]--
 
 local AddAuras = function(self, unit)
