@@ -264,22 +264,6 @@ local AddShadowOrbsBar = function(self, width, height, spacing)
 end
 ns.AddShadowOrbsBar = AddShadowOrbsBar
 
-local AddSoulShardsBar = function(self, width, height)
-	self.SoulShards = {}
-	local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
-
-	for i = 1, maxShards do
-		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self.Overlay)
-		self.SoulShards[i]:SetSize((215 - maxShards - 1) / maxShards, height)
-		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxShards) + 1, 1)
-		self.SoulShards[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.SoulShards[i]:SetStatusBarColor(unpack(ns.colors.power["SOUL_SHARDS"]))
-		self.SoulShards[i]:SetBackdrop(ns.media.BACKDROP)
-		self.SoulShards[i]:SetBackdropColor(0, 0, 0)
-	end
-end
-ns.AddSoulshardsBar = AddSoulShardsBar
-
 local AddTotems = function(self, width, height)
 	self.Totems = {}
 	local maxTotems = MAX_TOTEMS
