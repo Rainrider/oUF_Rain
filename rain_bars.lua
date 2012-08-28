@@ -156,7 +156,13 @@ ns.AddEclipseBar = AddEclipseBar
 
 local AddHarmonyOrbsBar = function(self, width, height, spacing)
 	self.Harmony = {}
-	local maxOrbs = UnitPowerMax("player", SPELL_POWER_LIGHT_FORCE)
+
+	local maxOrbs = 5
+
+	self.Harmony.maxChi = maxOrbs
+	self.Harmony.width = width
+	self.Harmony.height = height
+	self.Harmony.spacing = spacing
 
 	for i = 1, maxOrbs do
 		self.Harmony[i] = self.Overlay:CreateTexture("oUF_Rain_ChiOrb_"..i, "OVERLAY")
@@ -164,6 +170,8 @@ local AddHarmonyOrbsBar = function(self, width, height, spacing)
 		self.Harmony[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.Harmony[i]:GetWidth() + i * spacing, 1)
 		self.Harmony[i]:SetTexture(unpack(ns.colors.class["MONK"]))
 	end
+
+	self.Harmony.PostUpdate = ns.PostUpdateChi
 end
 ns.AddHarmonyOrbsBar = AddHarmonyOrbsBar
 
