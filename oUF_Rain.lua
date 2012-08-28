@@ -51,6 +51,8 @@ local UnitSpecific = {
 		end)
 		
 		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
+		
+		self:Tag(self.Power.value, "[rain:power][ - >rain:altmana]")
 	end,
 	
 	target = function(self)
@@ -67,6 +69,8 @@ local UnitSpecific = {
 		if (oUFversion > 1511) then
 			ns.AddRangeCheck(self)
 		end
+		
+		self:Tag(self.Power.value, "[rain:power]")
 	end,
 	
 	pet = function(self)
@@ -170,7 +174,6 @@ local Shared = function(self, unit)
 		self.Power.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
 		self.Power.value.frequentUpdates = 1/4
-		self:Tag(self.Power.value, "[rain:power]")
 		
 		ns.AddPortrait(self, unit)
 		ns.AddOverlay(self, unit)

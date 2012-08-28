@@ -90,8 +90,9 @@ tags["rain:raidhp"] = function(unit)
 end
 tagEvents["rain:raidhp"] = tagEvents.missinghp
 
-tags["rain:druidmana"] = function(unit, pName)
-	if (unit ~= "player" or playerClass ~= "DRUID" or pName == "MANA") then return end
+tags["rain:altmana"] = function(unit, ...)
+	local pType = UnitPowerType(unit)
+	if (unit ~= "player" or pType == 0) then return end
 	
 	local curMana, maxMana = UnitPower(unit, 0), UnitPowerMax(unit, 0)
 	
@@ -99,6 +100,7 @@ tags["rain:druidmana"] = function(unit, pName)
 	
 	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
+tagEvents["rain:altmana"] = tagEvents.missingpp
 
 tags["rain:level"] = function(unit)
 	local c = UnitClassification(unit)
@@ -112,19 +114,18 @@ tagEvents["rain:level"] = "UNIT_LEVEL"
 
 tags["rain:power"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
-	
+
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
-	
+
 	if (max == 0) then return end
-	
+
 	local powerValue = ""
 	local pType, pName = UnitPowerType(unit)
-	local druidMana = tags["rain:druidmana"](unit, pName)
-	
+
 	if (pName == "MANA" and cur ~= max) then
 		powerValue = floor(cur / max * 100 + 0.5) .. "%"
 	end
-	
+
 	if (unit == "player") then
 		if (powerValue ~= "") then -- player's mana not full
 			powerValue = powerValue .." - " .. SiValue(cur)
@@ -134,17 +135,10 @@ tags["rain:power"] = function(unit)
 	elseif (powerValue == "") then -- unit's power type is not mana
 		powerValue = SiValue(cur)
 	end
-	
+
 	local textColor = ns.colors.power[pName] or ns.colors.power[pType]
-	powerValue = RGBtoHEX(unpack(textColor)) .. powerValue .. "|r"
-	
-	if (druidMana and cur > 0) then
-		return powerValue .. " - " .. druidMana
-	elseif (druidMana and cur == 0) then
-		return druidMana
-	elseif (cur > 0) then
-		return powerValue
-	end
+
+	return RGBtoHEX(unpack(textColor)) .. powerValue .. "|r"
 end
 tagEvents["rain:power"] = tagEvents.missingpp
 
