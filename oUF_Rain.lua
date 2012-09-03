@@ -5,7 +5,7 @@ minor = minor or 0
 rev = rev or 0
 local oUFversion = major * 1000 + minor * 100 + rev
 
-assert(oUFversion >= 1500, "Consider updating your version of oUF to at least 1.5")
+assert(oUFversion >= 1600, "Consider updating your version of oUF to at least 1.6")
 
 local PutFontString = ns.PutFontString
 
