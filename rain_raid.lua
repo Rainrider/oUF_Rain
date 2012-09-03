@@ -65,6 +65,7 @@ local raidStyle = function(self, unit)
 	ns.AddMasterLooterIcon(self, unit)
 	ns.AddPhaseIcon(self, unit)
 	ns.AddRaidIcon(self, unit) -- TODO: placement for raid frames
+	ns.AddRaidRoleIcon(self, unit)
 	ns.AddReadyCheckIcon(self, unit)
 	ns.AddResurrectIcon(self, unit)
 	

@@ -24,7 +24,11 @@ local UnitIsUnit = UnitIsUnit
 local UnitIsFriend = UnitIsFriend
 local UnitName = UnitName
 
-oUF.Tags["rain:namecolor"] = function(unit)
+local tags = oUF.Tags.Methods
+local tagEvents = oUF.Tags.Events
+local tagSharedEvents = oUF.Tags.SharedEvents
+
+tags["rain:namecolor"] = function(unit)
 	local color = {1, 1, 1}
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		color = {0.75, 0.75, 0.75}
@@ -41,7 +45,7 @@ oUF.Tags["rain:namecolor"] = function(unit)
 	return RGBtoHEX(color[1], color[2], color[3])
 end
 
-oUF.Tags["rain:healthSmall"] = function(unit)
+tags["rain:healthSmall"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 	
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
@@ -56,9 +60,9 @@ oUF.Tags["rain:healthSmall"] = function(unit)
 	
 	return floor(cur / max * 100 + 0.5) .. "%"
 end
-oUF.TagEvents["rain:healthSmall"] = oUF.TagEvents.perhp
+tagEvents["rain:healthSmall"] = tagEvents.perhp
 
-oUF.Tags["rain:health"] = function(unit)
+tags["rain:health"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
@@ -74,9 +78,9 @@ oUF.Tags["rain:health"] = function(unit)
 	
 	return SiValue(cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
 end
-oUF.TagEvents["rain:health"] = oUF.TagEvents.missinghp
+tagEvents["rain:health"] = tagEvents.missinghp
 
-oUF.Tags["rain:raidhp"] = function(unit)
+tags["rain:raidhp"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
@@ -84,10 +88,11 @@ oUF.Tags["rain:raidhp"] = function(unit)
 	
 	return "|cffff0000-" .. SiValue(max - cur) .. "|r"
 end
-oUF.TagEvents["rain:raidhp"] = oUF.TagEvents.missinghp
+tagEvents["rain:raidhp"] = tagEvents.missinghp
 
-oUF.Tags["rain:druidmana"] = function(unit, pName)
-	if (unit ~= "player" or playerClass ~= "DRUID" or pName == "MANA") then return end
+tags["rain:altmana"] = function(unit, ...)
+	local pType = UnitPowerType(unit)
+	if (unit ~= "player" or pType == 0) then return end
 	
 	local curMana, maxMana = UnitPower(unit, 0), UnitPowerMax(unit, 0)
 	
@@ -95,8 +100,9 @@ oUF.Tags["rain:druidmana"] = function(unit, pName)
 	
 	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
+tagEvents["rain:altmana"] = tagEvents.missingpp
 
-oUF.Tags["rain:level"] = function(unit)
+tags["rain:level"] = function(unit)
 	local c = UnitClassification(unit)
 	if (c == "worldboss") then return end
 	local level = UnitLevel(unit)
@@ -104,23 +110,22 @@ oUF.Tags["rain:level"] = function(unit)
 	if (level < 0) then return "??" end
 	return level
 end
-oUF.TagEvents["rain:level"] = "UNIT_LEVEL"
+tagEvents["rain:level"] = "UNIT_LEVEL"
 
-oUF.Tags["rain:power"] = function(unit)
+tags["rain:power"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
-	
+
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
-	
+
 	if (max == 0) then return end
-	
+
 	local powerValue = ""
 	local pType, pName = UnitPowerType(unit)
-	local druidMana = oUF.Tags["rain:druidmana"](unit, pName)
-	
+
 	if (pName == "MANA" and cur ~= max) then
 		powerValue = floor(cur / max * 100 + 0.5) .. "%"
 	end
-	
+
 	if (unit == "player") then
 		if (powerValue ~= "") then -- player's mana not full
 			powerValue = powerValue .." - " .. SiValue(cur)
@@ -130,21 +135,14 @@ oUF.Tags["rain:power"] = function(unit)
 	elseif (powerValue == "") then -- unit's power type is not mana
 		powerValue = SiValue(cur)
 	end
-	
-	local textColor = ns.colors.power[pName] or ns.colors.power[pType]
-	powerValue = RGBtoHEX(unpack(textColor)) .. powerValue .. "|r"
-	
-	if (druidMana and cur > 0) then
-		return powerValue .. " - " .. druidMana
-	elseif (druidMana and cur == 0) then
-		return druidMana
-	elseif (cur > 0) then
-		return powerValue
-	end
-end
-oUF.TagEvents["rain:power"] = oUF.TagEvents.missingpp
 
-oUF.Tags["rain:role"] = function(unit)
+	local textColor = ns.colors.power[pName] or ns.colors.power[pType]
+
+	return RGBtoHEX(unpack(textColor)) .. powerValue .. "|r"
+end
+tagEvents["rain:power"] = tagEvents.missingpp
+
+tags["rain:role"] = function(unit)
 	local xOffset = 0
 	local yOffset = 0
 	local dimX, dimY = 64, 64 -- dimensions of Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES.blp
@@ -160,13 +158,13 @@ oUF.Tags["rain:role"] = function(unit)
 		return icon
 	end
 end
-oUF.TagEvents["rain:role"] = "PARTY_MEMBERS_CHANGED PLAYER_ROLES_ASSIGNED ROLE_CHANGED_INFORM"
-oUF.UnitlessTagEvents.PARTY_MEMBERS_CHANGED = true
-oUF.UnitlessTagEvents.PLAYER_ROLES_ASSIGNED = true
-oUF.UnitlessTagEvents.ROLE_CHANGED_INFORM = true
+tagEvents["rain:role"] = "GROUP_ROSTER_UPDATE PLAYER_ROLES_ASSIGNED ROLE_CHANGED_INFORM"
+tagSharedEvents.GROUP_ROSTER_UPDATE = true
+tagSharedEvents.PLAYER_ROLES_ASSIGNED = true
+tagSharedEvents.ROLE_CHANGED_INFORM = true
 
-oUF.Tags["rain:name"] = function(unit, r)
-	local color = oUF.Tags["rain:namecolor"](r or unit)
+tags["rain:name"] = function(unit, r)
+	local color = tags["rain:namecolor"](r or unit)
     local name = UnitName(r or unit)
 	if (unit == "target") then
 		name = ns.ShortenName(name, 18)
@@ -175,9 +173,9 @@ oUF.Tags["rain:name"] = function(unit, r)
 	end
     return color..(name or "").."|r"
 end
-oUF.TagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"
+tagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"
 
-oUF.Tags["rain:altpower"] = function(unit)
+tags["rain:altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
 	
@@ -187,4 +185,4 @@ oUF.Tags["rain:altpower"] = function(unit)
 	
 	return cur .. " - " .. perc .. "%"
 end
-oUF.TagEvents["rain:altpower"] = "UNIT_POWER UNIT_MAXPOWER"
+tagEvents["rain:altpower"] = "UNIT_POWER UNIT_MAXPOWER"

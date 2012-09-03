@@ -6,11 +6,6 @@
 local _, ns = ...
 local cfg = ns.config
 local PutFontString = ns.PutFontString
-
-local numRunes = 6 -- MAX_RUNES does not function any more
-local numHoly = MAX_HOLY_POWER
-local numShards = SHARD_BAR_NUM_SHARDS
-local numCPoints = MAX_COMBO_POINTS
 local playerClass = ns.playerClass
 
 local AddAltPowerBar = function(self)
@@ -61,21 +56,17 @@ local AddCastbar = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		self.Castbar:SetAllPoints(self.Overlay)
 		
-		self.Castbar.Time = PutFontString(self.Overlay, ns.media.FONT2, 12, nil, "RIGHT")
+		self.Castbar.Time = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "RIGHT")
 		self.Castbar.Time:SetPoint("RIGHT", -3.5, 3)
 		self.Castbar.Time:SetTextColor(0.84, 0.75, 0.65)
 		
 		self.Castbar.CustomTimeText = ns.CustomCastTimeText
 		self.Castbar.CustomDelayText = ns.CustomCastDelayText
 		
-		self.Castbar.Text = PutFontString(self.Overlay, ns.media.FONT2, 12, nil, "LEFT")
+		self.Castbar.Text = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "LEFT")
 		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
 		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
 		self.Castbar.Text:SetTextColor(0.84, 0.75, 0.65)
-		
-		self.Castbar:HookScript("OnShow", function() self.Castbar.Text:Show(); self.Castbar.Time:Show() end)
-		self.Castbar:HookScript("OnHide", function() self.Castbar.Text:Hide(); self.Castbar.Time:Hide() end)
-		
 	else
 		self.Castbar:SetAllPoints(self.Power)
 	end
@@ -86,7 +77,7 @@ local AddCastbar = function(self, unit)
 		self.Castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
 	end
 	
-	if (unit == "target" or unit:match("boss%d") or unit == "focus") then
+	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
 		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
 		
 		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
@@ -105,41 +96,37 @@ local AddCastbar = function(self, unit)
 			if (unit == "focus") then
 				self.Castbar.Icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
 			else
-				self.Castbar.Icon:SetPoint("BOTTOMRIGHT", self, "BOTTOMLEFT", -7.5, 0)
+				self.Castbar.Icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
 			end
 		end
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 		
-		self.Castbar.PostCastStart = ns.PostCastStart
-		self.Castbar.PostChannelStart = ns.PostChannelStart
-		--self.Castbar.PostCastInterruptible = ns.PostCastInterruptible
-		--self.Castbar.PostCastNotInterruptible = ns.PostCastNotInterruptible
+		self.Castbar.PostCastStart = ns.PostUpdateCast
+		self.Castbar.PostChannelStart = ns.PostUpdateCast
+		self.Castbar.PostCastInterruptible = ns.PostUpdateCast
+		self.Castbar.PostCastNotInterruptible = ns.PostUpdateCast
 	end
 end
 ns.AddCastbar = AddCastbar
 
-local AddComboPointsBar = function(self, width, height)
+local AddComboPointsBar = function(self, width, height, spacing)
 	self.CPoints = {}
-	
-	for i = 1, numCPoints do
-		self.CPoints[i] = CreateFrame("StatusBar", "oUF_Rain_CPoint_"..i, self)
-		self.CPoints[i]:SetSize((215 - numCPoints - 1) / numCPoints, height) -- frame width=230 ; Overlay width=215 ; 5 cp + 6 * 1 px = 215 => 1cp = 209/5
-		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / numCPoints) + 1, 1)
-		self.CPoints[i]:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-		self.CPoints[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.CPoints[i]:SetStatusBarColor(unpack(ns.colors.cpoints[i]))
-		self.CPoints[i]:SetBackdrop(ns.media.BACKDROP)
-		self.CPoints[i]:SetBackdropColor(0, 0, 0)
+	local maxCPoints = MAX_COMBO_POINTS
+
+	for i = 1, maxCPoints do
+		self.CPoints[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
+		self.CPoints[i]:SetSize((width - maxCPoints * spacing - spacing) / maxCPoints, height)
+		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.CPoints[i]:GetWidth() + i * spacing, 1)
+		self.CPoints[i]:SetTexture(unpack(ns.colors.cpoints[i]))
 	end
 end
 ns.AddComboPointsBar = AddComboPointsBar
 
 local AddEclipseBar = function(self, width, height)
-	local eclipseBar = CreateFrame("Frame", "oUF_Rain_EclipseBar", self)
+	local eclipseBar = CreateFrame("Frame", "oUF_Rain_EclipseBar", self.Overlay)
 	eclipseBar:SetHeight(5)
 	eclipseBar:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
 	eclipseBar:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
-	eclipseBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
 	eclipseBar:SetBackdrop(ns.media.BACKDROP)
 	eclipseBar:SetBackdropColor(0, 0, 0)
 	
@@ -167,6 +154,27 @@ local AddEclipseBar = function(self, width, height)
 end
 ns.AddEclipseBar = AddEclipseBar
 
+local AddHarmonyOrbsBar = function(self, width, height, spacing)
+	self.Harmony = {}
+
+	local maxOrbs = 5
+
+	self.Harmony.maxChi = maxOrbs
+	self.Harmony.width = width
+	self.Harmony.height = height
+	self.Harmony.spacing = spacing
+
+	for i = 1, maxOrbs do
+		self.Harmony[i] = self.Overlay:CreateTexture("oUF_Rain_ChiOrb_"..i, "OVERLAY")
+		self.Harmony[i]:SetSize((width - maxOrbs * spacing - spacing) / maxOrbs, height)
+		self.Harmony[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.Harmony[i]:GetWidth() + i * spacing, 1)
+		self.Harmony[i]:SetTexture(unpack(ns.colors.class["MONK"]))
+	end
+
+	self.Harmony.PostUpdate = ns.PostUpdateChi
+end
+ns.AddHarmonyOrbsBar = AddHarmonyOrbsBar
+
 local AddHealPredictionBar = function(self, unit)
 	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
 	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -190,23 +198,16 @@ local AddHealPredictionBar = function(self, unit)
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
-local AddHolyPowerBar = function(self, width, height)
-	self.HolyPower = CreateFrame("Frame", "oUF_Rain_HolyPower", self.Overlay)
-	self.HolyPower:SetHeight(height)
-	self.HolyPower:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.HolyPower:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
+local AddHolyPowerBar = function(self, width, height, spacing)
+	self.HolyPower = {}
+	local maxHoly = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
 
-	for i = 1, numHoly do
-		self.HolyPower[i] = CreateFrame("StatusBar", "oUF_Rain_HolyPower"..i, self.HolyPower)
-		self.HolyPower[i]:SetSize((215 - numHoly - 1) / numHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.HolyPower, (i - 1) * (214 / numHoly) + 1, 0)
-		self.HolyPower[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.HolyPower[i]:SetStatusBarColor(unpack(ns.colors.power["HOLY_POWER"]))
-		self.HolyPower[i]:SetBackdrop(ns.media.BACKDROP)
-		self.HolyPower[i]:SetBackdropColor(0, 0, 0)
+	for i = 1, maxHoly do
+		self.HolyPower[i] = self.Overlay:CreateTexture("oUF_Rain_HolyPower_"..i, "OVERLAY")
+		self.HolyPower[i]:SetSize((width - maxHoly * spacing - spacing) / maxHoly, height)
+		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.HolyPower[i]:GetWidth() + i * spacing, 1)
+		self.HolyPower[i]:SetTexture(unpack(ns.colors.power["HOLY_POWER"]))
 	end
-	
-	self.HolyPower.PostUpdate = ns.PostUpdateClassBar
 end
 ns.AddHolyPowerBar = AddHolyPowerBar
 
@@ -230,17 +231,14 @@ local AddPortrait = function(self, unit)
 end
 ns.AddPortrait = AddPortrait
 
-local AddRuneBar = function(self, width, height)
-	self.Runes = CreateFrame("Frame", "oUF_Rain_Runebar", self.Overlay)
-	self.Runes:SetHeight(height)
-	self.Runes:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.Runes:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
-	self.Runes:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
+local AddRuneBar = function(self, width, height, spacing)
+	self.Runes = {}
+	local maxRunes = 6
 
-	for i = 1, numRunes do
-		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Runes)
-		self.Runes[i]:SetSize((215 - numRunes - 1) / numRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Runes, (i - 1) * (214 / numRunes) + 1, 0)
+	for i = 1, maxRunes do
+		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
+		self.Runes[i]:SetSize((width - maxRunes * spacing - spacing) / maxRunes, height)
+		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.Runes[i]:GetWidth() + i * spacing, 1)
 		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
@@ -250,52 +248,35 @@ local AddRuneBar = function(self, width, height)
 		self.Runes[i].bg:SetAllPoints()
 		self.Runes[i].bg.multiplier = 0.5
 	end
-	
-	self.Runes:RegisterEvent("UNIT_ENTERED_VEHICLE")
-	self.Runes:RegisterEvent("UNIT_EXITED_VEHICLE")
-	self.Runes:SetScript("OnEvent", function(element, event, unit, ...)
-		return ns.PostUpdateClassBar(element, event, unit, ...)
-	end)
 end
 ns.AddRuneBar = AddRuneBar
 
-local AddSoulShardsBar = function(self, width, height)
-	self.SoulShards = CreateFrame("Frame", "oUF_Rain_SoulShards", self.Overlay)
-	self.SoulShards:SetHeight(height)
-	self.SoulShards:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.SoulShards:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
+local AddShadowOrbsBar = function(self, width, height, spacing)
+	self.ShadowOrbs = {}
+	local maxOrbs = PRIEST_BAR_NUM_ORBS
 
-	for i = 1, numShards do
-		self.SoulShards[i] = CreateFrame("StatusBar", "oUF_Rain_SoulShard"..i, self.SoulShards)
-		self.SoulShards[i]:SetSize((215 - numShards - 1) / numShards, height)
-		self.SoulShards[i]:SetPoint("BOTTOMLEFT", self.SoulShards, (i - 1) * (214 / numShards) + 1, 0)
-		self.SoulShards[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.SoulShards[i]:SetStatusBarColor(unpack(ns.colors.power["SOUL_SHARDS"]))
-		self.SoulShards[i]:SetBackdrop(ns.media.BACKDROP)
-		self.SoulShards[i]:SetBackdropColor(0, 0, 0)
+	for i = 1, maxOrbs do
+		self.ShadowOrbs[i] = self.Overlay:CreateTexture("oUF_Rain_ShadowOrb_"..i, "OVERLAY")
+		self.ShadowOrbs[i]:SetSize((width - maxOrbs * spacing - spacing) / maxOrbs, height)
+		self.ShadowOrbs[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.ShadowOrbs[i]:GetWidth() + i * spacing, 1)
+		self.ShadowOrbs[i]:SetTexture(unpack(ns.colors.power["SOUL_SHARDS"]))
 	end
-	
-	self.SoulShards.PostUpdate = ns.PostUpdateClassBar
 end
-ns.AddSoulshardsBar = AddSoulShardsBar
+ns.AddShadowOrbsBar = AddShadowOrbsBar
 
 local AddTotems = function(self, width, height)
-	local numTotems = MAX_TOTEMS
+	self.Totems = {}
+	local maxTotems = MAX_TOTEMS
 
-	self.Totems = CreateFrame("Frame", "oUF_Rain_Totems", self.Overlay)
-	self.Totems:SetHeight(height)
-	self.Totems:SetPoint("BOTTOMLEFT", self.Overlay, 0, 1)
-	self.Totems:SetPoint("BOTTOMRIGHT", self.Overlay, 0, 1)
-	
-	for i = 1, numTotems do
-		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Totems)
+	for i = 1, maxTotems do
+		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
 		self.Totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Totems[i]:SetMinMaxValues(0, 1)
-		
+
 		if (playerClass == "SHAMAN") then
-			self.Totems[i]:SetSize((215 - numTotems - 1) / numTotems, height)
-			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Totems, (i - 1) * (214 / numTotems) + 1, 0)
-			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[i]))
+			self.Totems[i]:SetSize((215 - maxTotems - 1) / maxTotems, height)
+			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxTotems) + 1, 0)
+			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
 			self.Totems[i]:SetSize(width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
@@ -311,24 +292,23 @@ local AddTotems = function(self, width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 		end
-		
+
 		self.Totems[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Totems[i]:SetBackdropColor(0, 0, 0)
-		
+
 		self.Totems[i].Destroy = CreateFrame("Button", nil, self.Totems[i])
 		self.Totems[i].Destroy:SetAllPoints()
 		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
 		self.Totems[i].Destroy:SetScript("OnClick", function()
 			if (IsShiftKeyDown()) then
-				DestroyTotem(i)
+				DestroyTotem(self.Totems[i]:GetID())
 			end
 		end)
-		
+
 		self.Totems[i].Destroy:EnableMouse()
 		self.Totems[i].Destroy:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-			local totem = self:GetParent()
-			GameTooltip:SetTotem(totem:GetID())
+			GameTooltip:SetTotem(self:GetParent():GetID())
 			GameTooltip:AddLine("|cffff0000"..GLYPH_SLOT_REMOVE_TOOLTIP.."|r") -- <Shift Right Click to Remove>
 			GameTooltip:Show()
 		end)
@@ -336,20 +316,20 @@ local AddTotems = function(self, width, height)
 			GameTooltip:Hide()
 		end)
 	end
-	
-	self.Totems.PostUpdate = ns.PostUpdateTotems
+
+	self.Totems.Override = ns.UpdateTotem
 end
 ns.AddTotems = AddTotems
-
 --[[
-	NOTES: Just an example for icons with cooldowns
+	NOTES: Just an example for icons with cooldowns --]]
+--[[
 local function AddTotems(self, width, height)
-	Totems = {}
+	local Totems = {}
 
 	for i = 1, MAX_TOTEMS do
-		Totems[i] = CreateFrame("Botton", "Totem"..i, self)
+		Totems[i] = CreateFrame("Button", "Totem"..i, self)
 		Totems[i]:SetSize(40, 40)
-		Totems[i]:SetPoint(anchor whereever you want)
+		Totems[i]:SetPoint("BOTTOMLEFT", self, "TOPLEFT", (i - 1) * 42, 10)
 
 		Totems[i].Icon = Totems[i]:CreateTexture(nil, "OVERLAY")
 		Totems[i].Icon:SetAllPoints()
@@ -363,4 +343,29 @@ local function AddTotems(self, width, height)
 
 	self.Totems = Totems
 end
+ns.AddTotems = AddTotems
 --]]
+
+local AddWarlockPowerBar = function(self, width, height, spacing)
+	self.WarlockPowerBar = {}
+	self.WarlockPowerBar.width = width
+	self.WarlockPowerBar.height = height
+	self.WarlockPowerBar.spacing = spacing
+
+	for i = 1, 4 do
+		self.WarlockPowerBar[i] = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
+		self.WarlockPowerBar[i]:SetSize((width - 4 * spacing - spacing) / 4, height)
+		self.WarlockPowerBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.WarlockPowerBar[i]:GetWidth() + i * spacing, 1)
+		self.WarlockPowerBar[i]:SetStatusBarTexture(ns.media.TEXTURE)
+		self.WarlockPowerBar[i]:SetBackdrop(ns.media.BACKDROP)
+		self.WarlockPowerBar[i]:SetBackdropColor(0, 0, 0)
+
+		self.WarlockPowerBar[i].bg = self.WarlockPowerBar[i]:CreateTexture(nil, "BORDER")
+		self.WarlockPowerBar[i].bg:SetTexture(ns.media.TEXTURE)
+		self.WarlockPowerBar[i].bg:SetAllPoints()
+		self.WarlockPowerBar[i].bg.multiplier = 0.3
+	end
+
+	self.WarlockPowerBar.PostUpdateVisibility = ns.WarlockPowerPostUpdateVisibility
+end
+ns.AddWarlockPowerBar = AddWarlockPowerBar

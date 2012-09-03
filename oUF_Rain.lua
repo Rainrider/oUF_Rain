@@ -20,12 +20,12 @@ local UnitSpecific = {
 		ns.AddAltPowerBar(self)
 		
 		if (playerClass == "DEATHKNIGHT") then
-			ns.AddRuneBar(self, 230, 5)
+			ns.AddRuneBar(self, 215, 5, 1)
 			ns.AddTotems(self, 60, 5)
 		elseif (playerClass == "PALADIN") then
-			ns.AddHolyPowerBar(self, nil, 5)
+			ns.AddHolyPowerBar(self, 215, 5, 1)
 		elseif (playerClass == "WARLOCK") then
-			ns.AddSoulshardsBar(self, 230, 5)
+			ns.AddWarlockPowerBar(self, 215, 5, 1)
 		elseif (playerClass == "SHAMAN") then
 			ns.AddTotems(self, nil, 5)
 		elseif (playerClass == "DRUID") then
@@ -33,6 +33,10 @@ local UnitSpecific = {
 			ns.AddTotems(self, 30, 5)
 		elseif (playerClass == "HUNTER") then
 			ns.AddFocusHelper(self)
+		elseif (playerClass == "PRIEST") then
+			ns.AddShadowOrbsBar(self, 215, 5, 1)
+		elseif (playerClass == "MONK") then
+			ns.AddHarmonyOrbsBar(self, 215, 5, 1)
 		end
 		
 		ns.AddCombatIcon(self)
@@ -47,6 +51,8 @@ local UnitSpecific = {
 		end)
 		
 		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
+		
+		self:Tag(self.Power.value, "[rain:power][ - >rain:altmana]")
 	end,
 	
 	target = function(self)
@@ -55,11 +61,13 @@ local UnitSpecific = {
 		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
 		self:Tag(self.Info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
 		
-		ns.AddComboPointsBar(self, nil, 5)
+		ns.AddComboPointsBar(self, 215, 5, 1)
 		
 		ns.AddQuestIcon(self, "target")
 		ns.AddResurrectIcon(self, "target")
 		ns.AddRangeCheck(self)
+
+		self:Tag(self.Power.value, "[rain:power]")
 	end,
 	
 	pet = function(self)
@@ -94,7 +102,7 @@ local Shared = function(self, unit)
 	local unitIsPartyOrMTTarget = self:GetAttribute("unitsuffix") == "target"
 	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
 	local unitIsMT = self:GetParent():GetName():match("^oUF_Rain_MT$")
-	local unitIsBoss = unit:match("boss%d")
+	local unitIsBoss = unit:match("^boss%d$")
 	
 	self.FrameBackdrop = CreateFrame("Frame", nil, self)
 	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
@@ -162,7 +170,6 @@ local Shared = function(self, unit)
 		self.Power.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
 		self.Power.value.frequentUpdates = 1/4
-		self:Tag(self.Power.value, "[rain:power]")
 		
 		ns.AddPortrait(self, unit)
 		ns.AddOverlay(self, unit)
@@ -175,11 +182,24 @@ local Shared = function(self, unit)
 		end
 		ns.AddDebuffs(self, unit)
 		ns.AddDebuffHighlight(self, unit)
-		
+
 		self.Status = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
 		self.Status:SetPoint("RIGHT", -3.5, 2)
 		self.Status:SetTextColor(0.69, 0.31, 0.31, 0.6)
 		self:Tag(self.Status, "[pvp]")
+
+		self:HookScript("OnEnter", function(self)
+			if (UnitIsUnit("player", unit) and UnitIsPVP(unit)) then
+				local pvpTimer = GetPVPTimer() / 1000 -- remaining seconds
+				if (pvpTimer < 300 and pvpTimer > 0) then
+					self.Status:SetText(format("%d:%02d", floor(pvpTimer / 60), pvpTimer % 60))
+				end
+			end
+		end)
+
+		self:HookScript("OnLeave", function(self)
+			self.Status:UpdateTag()
+		end)
 		
 		ns.AddAssistantIcon(self, unit)
 		ns.AddLeaderIcon(self, unit)
@@ -442,11 +462,11 @@ oUF:Factory(function(self)
 	self:SetActiveStyle("RainRaid")
 	-- TODO: add options for horizontal grow / filtering
 	if (cfg.showRaid) then
-		--CompactRaidFrameManager:UnregisterAllEvents()
-		--CompactRaidFrameManager:Hide()
+		local hiddenParent = CreateFrame("Frame")
+		hiddenParent:Hide()
 		CompactRaidFrameContainer:UnregisterAllEvents()
 		CompactRaidFrameContainer:Hide()
-		CompactRaidFrameContainer.Show = function() end
+		CompactRaidFrameContainer:SetParent(hiddenParent)
 		
 		local raid = {} -- need that for positioning the groups
 		

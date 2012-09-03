@@ -60,6 +60,13 @@ local AddRaidIcon = function(self, unit)
 end
 ns.AddRaidIcon = AddRaidIcon
 
+local AddRaidRoleIcon = function(self, unit)
+	self.RaidRole = self:CreateTexture(nil, "OVERLAY")
+	self.RaidRole:SetSize(16, 16)
+	self.RaidRole:SetPoint("BOTTOMRIGHT", -8.5, 8.5)
+end
+ns.AddRaidRoleIcon = AddRaidRoleIcon
+
 -- oUF checks ready status only for raid and party
 local AddReadyCheckIcon = function(self, unit)
 	self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")

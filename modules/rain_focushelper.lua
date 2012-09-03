@@ -1,21 +1,8 @@
 ﻿local parentBarWidth
 local parentBarTex
-local terminationPoints = select(5, GetTalentInfo(2, 12)) -- (http://www.wowhead.com/spell=83490)
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local UnitPowerMax = UnitPowerMax
-
-local GetFocusPrediction = function()
-	local focusPrediction = 9
- 
-	if terminationPoints then
-		if (UnitHealth("target") / UnitHealthMax("target") <= 0.25) then
-			focusPrediction = focusPrediction + terminationPoints * 3 -- +3 focus per talent point
-		end
-	end
-	
-	return focusPrediction
-end
 
 local GetSpellFocusCost = function(talentTree, focusSpark)
 	local spellFocusCost
@@ -40,7 +27,7 @@ local UpdateFocusGain = function(self, event, unit, spellName, spellRank, seqID,
 		focusGain = self.FocusGain
 	
 		if (event == "UNIT_SPELLCAST_START") then
-			focusGain:SetWidth(GetFocusPrediction() * parentBarWidth / UnitPowerMax("player", 2))
+			focusGain:SetWidth(14 * parentBarWidth / UnitPowerMax("player", 2))
 			focusGain:SetPoint("LEFT", parentBarTex, "RIGHT", 0, 0)
 			focusGain:Show()
 		else
@@ -59,10 +46,11 @@ local UpdateFocusSpark = function(self, event, ...)
 		focusSpark:PreUpdate()
 	end
 	
-	local spellFocusCost = GetSpellFocusCost(GetPrimaryTalentTree(), focusSpark)
+	local spellFocusCost = GetSpellFocusCost(GetSpecialization(), focusSpark)
+	local maxFocus = UnitPowerMax("player")
 	
-	if (spellFocusCost and self.unit ~= "vehicle") then
-		local sparkXPos = spellFocusCost * parentBarWidth / UnitPowerMax("player", 2)
+	if (spellFocusCost and maxFocus and self.unit ~= "vehicle") then
+		local sparkXPos = spellFocusCost * parentBarWidth / maxFocus
 		local xOffset = focusSpark:GetWidth() / 2
 		focusSpark:SetPoint("LEFT", sparkXPos - xOffset, 0)
 		focusSpark:Show()
@@ -108,8 +96,8 @@ local Enable = function(self)
 			focusSpark:SetBlendMode("ADD")
 		end
 
-		self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", Update)
-		self:RegisterEvent("LEARNED_SPELL_IN_TAB", Update)
+		self:RegisterEvent("PLAYER_TALENT_UPDATE", Update)
+		self:RegisterEvent("SPELLS_CHANGED", Update)
 	end
 
 	if (focusGain) then
@@ -134,8 +122,8 @@ end
 
 local Disable = function(self)
 	if (self.FocusSpark) then
-		self:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-		self:UnregisterEvent("LEARNED_SPELL_IN_TAB")
+		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Update)
+		self:UnregisterEvent("SPELLS_CHANGED", Update)
 	end
 	
 	if (self.FocusGain) then
