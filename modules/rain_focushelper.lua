@@ -17,7 +17,7 @@ local GetSpellFocusCost = function(talentTree, focusSpark)
 	elseif (IsSpellKnown(bmSpell)) then
 		spellFocusCost = select(4, GetSpellInfo(bmSpell))
 	end
-	
+
 	return spellFocusCost
 end
 
@@ -25,7 +25,7 @@ local UpdateFocusGain = function(self, event, unit, spellName, spellRank, seqID,
 	if (unit ~= "player") then return end
 	if (spellID == 77767 or spellID == 56641) then
 		focusGain = self.FocusGain
-	
+
 		if (event == "UNIT_SPELLCAST_START") then
 			focusGain:SetWidth(14 * parentBarWidth / UnitPowerMax("player", 2))
 			focusGain:SetPoint("LEFT", parentBarTex, "RIGHT", 0, 0)
@@ -33,7 +33,7 @@ local UpdateFocusGain = function(self, event, unit, spellName, spellRank, seqID,
 		else
 			focusGain:Hide()
 		end
-		
+
 		if (focusGain.PostUpdate) then
 			return focusGain:PostUpdate(event, unit, spellName, spellID)
 		end
@@ -45,10 +45,10 @@ local UpdateFocusSpark = function(self, event, ...)
 	if (focusSpark.PreUpdate) then
 		focusSpark:PreUpdate()
 	end
-	
+
 	local spellFocusCost = GetSpellFocusCost(GetSpecialization(), focusSpark)
 	local maxFocus = UnitPowerMax("player")
-	
+
 	if (spellFocusCost and maxFocus and self.unit ~= "vehicle") then
 		local sparkXPos = spellFocusCost * parentBarWidth / maxFocus
 		local xOffset = focusSpark:GetWidth() / 2
@@ -84,7 +84,7 @@ local Enable = function(self)
 
 	local focusSpark = self.FocusSpark
 	local focusGain = self.FocusGain
-	
+
 	if (focusSpark) then
 		focusSpark.__owner = self
 		focusSpark.ForceUpdate = ForceUpdate
@@ -103,7 +103,7 @@ local Enable = function(self)
 	if (focusGain) then
 		focusGain.__owner = self
 		focusGain.ForceUpdate = ForceUpdate
-		
+
 		parentBarWidth = focusGain:GetParent():GetWidth()
 		parentBarTex = focusGain:GetParent():GetStatusBarTexture()
 
@@ -125,7 +125,7 @@ local Disable = function(self)
 		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Update)
 		self:UnregisterEvent("SPELLS_CHANGED", Update)
 	end
-	
+
 	if (self.FocusGain) then
 		self:UnregisterEvent("UNIT_SPELLCAST_START")
 		self:UnregisterEvent("UNIT_SPELLCAST_STOP")

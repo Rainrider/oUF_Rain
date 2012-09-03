@@ -209,7 +209,7 @@ local crowdControl = {
 	},
 	["MAGE"] = {
 		118, -- Polymorph
-		61305, -- Polymorph (Black Cat)	
+		61305, -- Polymorph (Black Cat)
 		28272, -- Polymorph (Pig)
 		61721, -- Polymorph (Rabbit)
 		61780, -- Polymorph (Turkey)
@@ -259,10 +259,10 @@ local disarm = {
 --[[
 	The idea it to check for class and spec which are the interesting {de}buffs and throw their ids into a table
 	which is then checked against in a custom aura filter
-	
+
 	GetPrimaryTalentTree returns 1, 2 or 3, so a call to debuffs[playerClass][primaryTalentTree] should return
 	the debuff groups of interest for the player.
-	
+
 	I.e. debuffs["DRUID"][2] shall return 1, 3 and 6 which are then looked up in sharedDebuffs
 --]]
 
@@ -327,7 +327,7 @@ local Update = function(self, event, ...)
 	GetCC()
 	GetDisarm()
 	if event == "PLAYER_TALENT_UPDATE" then
-		
+
 	end
 end
 

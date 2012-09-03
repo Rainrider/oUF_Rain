@@ -18,7 +18,7 @@ local UnitSpecific = {
 		ns.AddReputationBar(self)
 		ns.AddExperienceBar(self)
 		ns.AddAltPowerBar(self)
-		
+
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 215, 5, 1)
 			ns.AddTotems(self, 60, 5)
@@ -38,10 +38,10 @@ local UnitSpecific = {
 		elseif (playerClass == "MONK") then
 			ns.AddHarmonyOrbsBar(self, 215, 5, 1)
 		end
-		
+
 		ns.AddCombatIcon(self)
 		ns.AddRestingIcon(self)
-		
+
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if (UnitExists("target")) then
 				PlaySound("igCreatureAggroSelect")
@@ -49,39 +49,39 @@ local UnitSpecific = {
 				PlaySound("igCreatureAggroDeselect")
 			end
 		end)
-		
+
 		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
-		
+
 		self:Tag(self.Power.value, "[rain:power][ - >rain:altmana]")
 	end,
-	
+
 	target = function(self)
 		self.Info = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
 		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
 		self:Tag(self.Info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
-		
+
 		ns.AddComboPointsBar(self, 215, 5, 1)
-		
+
 		ns.AddQuestIcon(self, "target")
 		ns.AddResurrectIcon(self, "target")
 		ns.AddRangeCheck(self)
 
 		self:Tag(self.Power.value, "[rain:power]")
 	end,
-	
+
 	pet = function(self)
 		ns.AddAltPowerBar(self) -- this is needed when the player is in vehicle. because the pet frame then holds the player unit
-		
+
 		ns.AddDebuffs(self, "pet")
 		ns.AddBuffs(self, "pet")
 		ns.AddRangeCheck(self)
 	end,
-	
+
 	focus = function(self)
 		ns.AddDebuffHighlight(self, "focus")
 	end,
-	
+
 	targettarget = function(self)
 		ns.AddDebuffHighlight(self, "targettarget")
 	end,
@@ -97,13 +97,13 @@ local Shared = function(self, unit)
 	self:RegisterForClicks("AnyDown")
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
-	
+
 	local unitIsPartyMember = self:GetParent():GetName():match("^oUF_Rain_Party$")
 	local unitIsPartyOrMTTarget = self:GetAttribute("unitsuffix") == "target"
 	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
 	local unitIsMT = self:GetParent():GetName():match("^oUF_Rain_MT$")
 	local unitIsBoss = unit:match("^boss%d$")
-	
+
 	self.FrameBackdrop = CreateFrame("Frame", nil, self)
 	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
 	self.FrameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
@@ -111,7 +111,7 @@ local Shared = function(self, unit)
 	self.FrameBackdrop:SetBackdrop(ns.media.BACKDROP2)
 	self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
 	self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
-	
+
 	self.Health = CreateFrame("StatusBar", self:GetName().."_Health", self)
 	self.Health:SetStatusBarTexture(ns.media.TEXTURE)
 	self.Health.colorDisconnected = true
@@ -121,25 +121,25 @@ local Shared = function(self, unit)
 	self.Health.frequentUpdates = true
 	self.Health:SetBackdrop(ns.media.BACKDROP)
 	self.Health:SetBackdropColor(0, 0, 0)
-	
+
 	self.Health.bg = self.Health:CreateTexture(nil, "BORDER")
 	self.Health.bg:SetAllPoints()
 	self.Health.bg:SetTexture(ns.media.TEXTURE)
 	self.Health.bg.multiplier = 0.5
-	
+
 	self.Health.PostUpdate = ns.PostUpdateHealth
-	
+
 	if (not unitIsPartyPet) then
 		self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
 		self.Power:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Power:SetBackdrop(ns.media.BACKDROP)
 		self.Power:SetBackdropColor(0, 0, 0)
-	
+
 		self.Power.colorPower = unit == "player" or unit == "pet"
 		self.Power.colorClass = true
 		self.Power.colorReaction = true
 		self.Power.frequentUpdates = true
-	
+
 		self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
 		self.Power.bg:SetAllPoints()
 		self.Power.bg:SetTexture(ns.media.TEXTURE)
@@ -147,36 +147,36 @@ local Shared = function(self, unit)
 
 		self.Power.PostUpdate = ns.PostUpdatePower
 	end
-	
+
 	ns.AddRaidIcon(self, unit)
 	ns.AddPhaseIcon(self, unit)
-	
+
 	if (unit == "player" or unit == "target") then
 		self:SetSize(230, 50)
-	
+
 		self.Health:SetSize(230, 30)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
-		
+
 		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
 		self.Health.value.frequentUpdates = 1/4
 		self:Tag(self.Health.value, "[dead][offline][rain:health]")
-		
+
 		self.Power:SetSize(230, 15)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
-		
+
 		self.Power.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
 		self.Power.value.frequentUpdates = 1/4
-		
+
 		ns.AddPortrait(self, unit)
 		ns.AddOverlay(self, unit)
 		ns.AddCastbar(self, unit)
 		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, unit)
-		
+
 		if (unit == "player" and ns.cfg.showPlayerBuffs or unit == "target") then
 			ns.AddBuffs(self, unit)
 		end
@@ -200,37 +200,37 @@ local Shared = function(self, unit)
 		self:HookScript("OnLeave", function(self)
 			self.Status:UpdateTag()
 		end)
-		
+
 		ns.AddAssistantIcon(self, unit)
 		ns.AddLeaderIcon(self, unit)
 		ns.AddMasterLooterIcon(self, unit)
 		ns.AddReadyCheckIcon(self, unit)
 	end
-	
+
 	if ((unit == "pet" or unit == "focus"
 			or unit == "targettarget" or unit == "focustarget"
-			or unitIsPartyMember or unitIsPartyOrMTTarget 
+			or unitIsPartyMember or unitIsPartyOrMTTarget
 			or unitIsMT or unitIsBoss) and not unitIsPartyPet) then
-		
+
 		self:SetSize(110, 22)
-		
+
 		self.Health:SetSize(110, 15)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
-		
+
 		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
 		self.Health.value.frequentUpdates = 1/4
 		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
-		
+
 		self.Power:SetSize(110, 5)
 		self.Power:SetPoint("BOTTOMRIGHT")
 		self.Power:SetPoint("BOTTOMLEFT")
-		
+
 		self.Name = PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("TOPLEFT", 2, -2)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		
+
 		if (not unitIsPartyMember) then
 			self:Tag(self.Name, "[rain:name]")
 		else
@@ -241,47 +241,47 @@ local Shared = function(self, unit)
 			ns.AddMasterLooterIcon(self, unit)
 			ns.AddReadyCheckIcon(self, unit)
 			ns.AddResurrectIcon(self, unit)
-			
+
 			ns.AddAuras(self, unit)
 			ns.AddDebuffHighlight(self, unit)
 			ns.AddRangeCheck(self)
 		end
-		
+
 		if (unitIsMT) then
 			ns.AddResurrectIcon(self, unit)
 			ns.AddRangeCheck(self)
 		end
-		
+
 		if (unitIsBoss) then
 			ns.AddBuffs(self, unit)
 			ns.AddCastbar(self, unit)
 		end
-		
+
 		if (unit == "pet" or unit == "focus"  or unitIsPartyMember) then
 			ns.AddCastbar(self, unit)
 			ns.AddHealPredictionBar(self, unit)
 			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 		end
 	end
-	
+
 	if (unitIsPartyPet) then
 		self:SetSize(110, 10)
 		self.Health:SetSize(110, 10)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
-		
+
 		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("RIGHT", -2, 0)
 		self:Tag(self.Health.value, "[perhp]")
-		
+
 		self.Name = PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("LEFT", 2, 0)
 		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
 		self:Tag(self.Name, "[rain:name]")
-		
+
 		ns.AddRangeCheck(self)
 	end
-	
+
 	if (UnitSpecific[unit]) then
 		return UnitSpecific[unit](self)
 	end
@@ -414,7 +414,7 @@ oUF:Factory(function(self)
 		partyPets:SetPoint("TOPLEFT", oUF_Rain_Party, 0, -29.5)
 		partyPets:Show()
 	end
-	
+
 	if (cfg.showMT) then
 		local mainTanks = self:SpawnHeader(
 			"oUF_Rain_MT", nil, "raid",
@@ -431,7 +431,7 @@ oUF:Factory(function(self)
 		mainTanks:SetPoint("TOPLEFT", UIParent, "LEFT", 50, -50)
 		mainTanks:Show()
 	end
-	
+
 	if (cfg.showMT and cfg.showMTT) then
 		local mainTankTargets = self:SpawnHeader(
 			"oUF_Rain_MTT", nil, "raid",
@@ -447,18 +447,18 @@ oUF:Factory(function(self)
 		mainTankTargets:SetPoint("TOPLEFT", oUF_Rain_MT, "TOPRIGHT", 7.5, 0)
 		mainTankTargets:Show()
 	end
-	
+
 	local boss = {}
 	for i = 1, MAX_BOSS_FRAMES do
 		boss[i] = self:Spawn("boss"..i, "oUF_Rain_Boss"..i)
-		
+
 		if (i == 1) then
 			boss[i]:SetPoint("TOP", UIParent, "TOP", 0, -20)
 		else
 			boss[i]:SetPoint("TOP", boss[i-1], "BOTTOM", 0, -15)
 		end
 	end
-	
+
 	self:SetActiveStyle("RainRaid")
 	-- TODO: add options for horizontal grow / filtering
 	if (cfg.showRaid) then
@@ -467,9 +467,9 @@ oUF:Factory(function(self)
 		CompactRaidFrameContainer:UnregisterAllEvents()
 		CompactRaidFrameContainer:Hide()
 		CompactRaidFrameContainer:SetParent(hiddenParent)
-		
+
 		local raid = {} -- need that for positioning the groups
-		
+
 		for i = 1, NUM_RAID_GROUPS do
 			local raidGroup = self:SpawnHeader(
 				"oUF_Rain_RaidGroup" .. i, nil, "raid",
@@ -484,7 +484,7 @@ oUF:Factory(function(self)
 				]]):format(spellName)
 			)
 			table.insert(raid, raidGroup)
-			
+
 			if (i == 1) then
 				raidGroup:SetPoint("TOPLEFT", UIParent, 15, -15)
 			else
@@ -498,10 +498,10 @@ oUF:RegisterInitCallback(function(self)
 	if (self:IsElementEnabled("DebuffHighlight")) then
 		self:DisableElement("DebuffHighlight")
 	end
-	
+
 	if (self:IsElementEnabled("Experience")) then
 		self:DisableElement("Experience")
 	end
-	
+
 	return true
 end)

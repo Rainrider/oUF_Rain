@@ -72,7 +72,7 @@ local AddReadyCheckIcon = function(self, unit)
 	self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
 	self.ReadyCheck:SetSize(16, 16)
 	self.ReadyCheck:SetPoint("RIGHT", -5, 0)
-	
+
 	self.ReadyCheck.finishedTime = 10
 	self.ReadyCheck.fadeTime = 3
 end

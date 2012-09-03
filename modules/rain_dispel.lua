@@ -1,7 +1,7 @@
 ﻿--[[
 		self.DebuffHightlight = Frame (to create the textures with)
 		self.DebuffHighlightFilter = boolean ( true = only debuffs player can dispell )
-		
+
 		self.DebuffHighlightBackdrop = Frame ( GetBackdrop() ~= nil ) - NYI
 		self.DebuffHighlightBackdropBorder = boolean ( true = color backdrop border ) - NYI
 		self.DebuffHighlightTexture = Texture ( GetTexture() ~= nil )
@@ -76,7 +76,7 @@ local UpdateDispelList = {
 	["SHAMAN"] = function()
 		ResetDispelList()
 		if (IsSpellKnown(51886)) then					-- Cleanse Spirit
-			dispelList.Curse = true 
+			dispelList.Curse = true
 		elseif (IsSpellKnown(77130)) then				-- Purify Spirit
 			dispelList.Curse = true
 			dispelList.Magic = true
@@ -112,18 +112,18 @@ end
 
 local CheckForPet = function(self, event, unit)
 	if (unit ~= "player" or playerClass ~= "WARLOCK") then return end
-	
+
 	UpdateDispelList[playerClass]()
 end
 
 local Update = function(self, event, unit)
 	if (unit ~= self.unit) then return end
-	
+
 	local color
 	local dispelType, texture, isBossDebuff = GetDebuffInfo(unit, self.DebuffHighlightFilter)
-	
+
 	color = debuffTypeColor[dispelType] or debuffTypeColor["none"]
-	
+
 	if (self.DebuffHighlightTexture) then
 		if (texture) then
 			self.DebuffHighlightTexture:SetVertexColor(color.r, color.g, color.b, 1)
@@ -131,7 +131,7 @@ local Update = function(self, event, unit)
 			self.DebuffHighlightTexture:SetVertexColor(0, 0, 0, 0)
 		end
 	end
-	
+
 	if (self.DebuffHighlightIcon and isBossDebuff) then
 		if (texture) then
 			self.DebuffHighlightIcon:SetTexture(texture)
@@ -150,18 +150,18 @@ end
 
 local Enable = function(self)
 	if (not self.DebuffHighlight) then return end
-	
+
 	-- exit if we filter by type and are not a dispeling class
 	if (self.DebuffHighlightFilter and not UpdateDispelList[playerClass]) then return end
 
 	self:RegisterEvent("UNIT_AURA", Update)
-	
+
 	-- we don't need these if we only filter for boss debuffs
 	if (UpdateDispelList[playerClass]) then
 		self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass]) -- check SPELLS_CHANGED cos it fires a lot less than this
 		self:RegisterEvent("UNIT_PET", CheckForPet)
 	end
-	
+
 	return true
 end
 

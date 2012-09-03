@@ -40,7 +40,7 @@ local ShortenName = function(name, shortenTo)
 		shortenTo = 12
 	end
 	name = (string.len(name) > shortenTo) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
-	
+
 	local bytes = string.len(name)
 	if (bytes <= shortenTo) then
 		return name
@@ -102,7 +102,7 @@ local PutFontString = function(parent, fontName, fontHeight, fontStyle, justifyH
 	fontString:SetJustifyH(justifyH or "LEFT")
 	fontString:SetShadowColor(0, 0, 0)
 	fontString:SetShadowOffset(0.75, -0.75)
-	
+
 	return fontString
 end
 ns.PutFontString = PutFontString
@@ -198,10 +198,10 @@ local AuraOnEnter = function(button)
 	local r, g, b = button.overlay:GetVertexColor()
 	local iconW, iconH = button:GetSize()
 	local magnify = button:GetParent().Magnify
-	
+
 	magnify:SetSize(iconW * 2, iconH * 2)
 	magnify:SetPoint("CENTER", button, "CENTER")
-	
+
 	magnify.icon:SetSize(iconW * 2, iconH * 2)
 	magnify.icon:SetTexture(button.icon:GetTexture())
 	magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
@@ -209,7 +209,7 @@ local AuraOnEnter = function(button)
 	magnify.border:SetVertexColor(r, g, b)
 
 	magnify:Show()
-	
+
 	button:GetParent().Magnify = magnify
 end
 
@@ -251,7 +251,7 @@ local PostUpdateHealth = function(health, unit, cur, max)
 
 		health:SetStatusBarColor(r, g, b)
 		health.bg:SetVertexColor(0.15, 0.15, 0.15)
-		
+
 		r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 		if (cur ~= max) then
 			health.value:SetTextColor(r, g, b)
@@ -266,7 +266,7 @@ local PostUpdatePower = function(Power, unit, cur, max)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)
 	end
-	
+
 	if (unit == "target") then
 		local self = Power.__owner
 		if (self.Info) then
@@ -364,7 +364,7 @@ local UpdateTotem = function(self, event, slot)
 	local total = 0
 	local totem = self.Totems[totemPriorities[slot]]
 	local haveTotem, name, start, duration, icon = GetTotemInfo(slot)
-	
+
 	if (duration > 0) then
 		totem:SetValue(1 - (GetTime() - start) / duration)
 		totem:SetScript("OnUpdate", function(self, elapsed)
@@ -480,12 +480,12 @@ local AddBuffs = function(self, unit)
 	self.Buffs.CreateIcon = CreateAuraIcon
 	self.Buffs.PreSetPosition = PreSetPosition
 	self.Buffs.PostUpdateIcon = PostUpdateIcon
-	
+
 	if (unit == "player" or unit == "target") then
 		self.Buffs:SetSize(8 * (self.Buffs.size + self.Buffs.spacing), 4 * (self.Buffs.size + self.Buffs.spacing))
 		self.Buffs["growth-y"] = "DOWN"
 		self.Buffs.CustomFilter = CustomFilter
-		
+
 		if (unit == "player") then
 			self.Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, 1)
 			self.Buffs.initialAnchor = "TOPRIGHT"
@@ -496,7 +496,7 @@ local AddBuffs = function(self, unit)
 			self.Buffs["growth-x"] = "RIGHT"
 		end
 	end
-	
+
 	if (unit == "pet") then
 		self.Buffs:SetPoint("RIGHT", self.Debuffs, "LEFT", -5, 0)
 		self.Buffs.num = 6
@@ -504,7 +504,7 @@ local AddBuffs = function(self, unit)
 		self.Buffs.initialAnchor = "RIGHT"
 		self.Buffs["growth-x"] = "LEFT"
 	end
-	
+
 	if (unit:match("^boss%d$")) then
 		self.Buffs:SetPoint("RIGHT", self, "LEFT", -15, 0)
 		self.Buffs.num = 6
@@ -512,13 +512,13 @@ local AddBuffs = function(self, unit)
 		self.Buffs.initialAnchor = "RIGHT"
 		self.Buffs["growth-x"] = "LEFT"
 	end
-	
+
 	self.Buffs.Magnify = CreateFrame("Frame", nil, self)
 	self.Buffs.Magnify:SetFrameLevel(self.Buffs:GetFrameLevel() + 2)
-	
+
 	self.Buffs.Magnify.icon = self.Buffs.Magnify:CreateTexture(nil, "ARTWORK")
 	self.Buffs.Magnify.icon:SetPoint("CENTER")
-	
+
 	self.Buffs.Magnify.border = self.Buffs.Magnify:CreateTexture(nil, "OVERLAY")
 	self.Buffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
 	self.Buffs.Magnify.border:SetPoint("TOPLEFT", self.Buffs.Magnify.icon, -5, 5)
@@ -536,47 +536,47 @@ local AddDebuffs = function(self, unit)
 	self.Debuffs.CreateIcon = CreateAuraIcon
 	self.Debuffs.PreSetPosition = PreSetPosition
 	self.Debuffs.PostUpdateIcon = PostUpdateIcon
-	
+
 	if (unit == "player" or unit == "target") then
 		self.Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -7.5)
 		self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -7.5)
 		self.Debuffs:SetHeight(5 * (self.Debuffs.size + self.Debuffs.spacing))
-		
+
 		self.Debuffs.initialAnchor = "TOPLEFT"
 		self.Debuffs["growth-x"] = "RIGHT"
 		self.Debuffs["growth-y"] = "DOWN"
-		
+
 		if (unit == "target") then
 			self.Debuffs.CustomFilter = CustomFilter
 		else
 			self.Debuffs.CustomFilter = CustomPlayerFilter
 		end
 	end
-	
+
 	if (unit == "pet") then
 		self.Debuffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -15, 0)
 		self.Debuffs.num = 6
 		self.Debuffs:SetSize(self.Debuffs.num * (self.Debuffs.size + self.Debuffs.spacing), self.Debuffs.size + self.Debuffs.spacing)
-		
+
 		self.Debuffs.initialAnchor = "RIGHT"
 		self.Debuffs["growth-x"] = "LEFT"
 	end
-	
+
 	if (unit == "targettarget") then
 		self.Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 15, 0)
 		self.Debuffs.num = 6
 		self.Debuffs:SetSize(self.Debuffs.num * self.Debuffs.size + (self.Debuffs.num - 1) * self.Debuffs.spacing, self.Debuffs.size)
-		
+
 		self.Debuffs.initialAnchor = "LEFT"
 		self.Debuffs["growth-x"] = "RIGHT"
 	end
-	
+
 	self.Debuffs.Magnify = CreateFrame("Frame", nil, self)
 	self.Debuffs.Magnify:SetFrameLevel(self.Debuffs:GetFrameLevel() + 2)
-	
+
 	self.Debuffs.Magnify.icon = self.Debuffs.Magnify:CreateTexture(nil, "ARTWORK")
 	self.Debuffs.Magnify.icon:SetPoint("CENTER")
-	
+
 	self.Debuffs.Magnify.border = self.Debuffs.Magnify:CreateTexture(nil, "OVERLAY")
 	self.Debuffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
 	self.Debuffs.Magnify.border:SetPoint("TOPLEFT", self.Debuffs.Magnify.icon, -5, 5)
@@ -598,7 +598,7 @@ local AddThreatHighlight = function(self, event, unit)
 	local status = UnitThreatSituation(unit)
 	if (status and status > 0) then
 		local r, g, b = GetThreatStatusColor(status)
-	
+
 		self.FrameBackdrop:SetBackdropBorderColor(r, g, b)
 	else
 		self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)

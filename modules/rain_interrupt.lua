@@ -46,7 +46,7 @@ rainInterrupt:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
 local populateInterrupts = function()
 	local areaID = GetCurrentMapAreaID()
-	
+
 	if (interruptZones[areaID]) then
 		for i, spellid in ipairs(interruptZones[areaID]) do
 			ns.interruptSpellNames[GetSpellInfo(spellid)] = true

@@ -18,11 +18,11 @@ local AddAltPowerBar = function(self)
 	self.AltPowerBar:SetStatusBarColor(0, 0.5, 1)
 	self.AltPowerBar:SetBackdrop(ns.media.BACKDROP)
 	self.AltPowerBar:SetBackdropColor(0, 0, 0, 0)
-	
+
 	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, ns.media.FONT2, 8, nil, "CENTER")
 	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
 	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
-	
+
 	self.AltPowerBar.Tooltip = function(self)
 		local unit = self.__owner.unit
 		-- XXX Temp fix for vehicle
@@ -30,7 +30,7 @@ local AddAltPowerBar = function(self)
 		-- XXX
 		local powerName = select(10, UnitAlternatePowerInfo(unit))
 		local powerTooltip = select(11, UnitAlternatePowerInfo(unit))
-		
+
 		if (powerName) then
 			GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
 			GameTooltip:AddLine(powerName)
@@ -40,7 +40,7 @@ local AddAltPowerBar = function(self)
 			GameTooltip:Show()
 		end
 	end
-	
+
 	self.AltPowerBar:EnableMouse()
 	self.AltPowerBar:HookScript("OnLeave", GameTooltip_Hide)
 	self.AltPowerBar:HookScript("OnEnter", self.AltPowerBar.Tooltip)
@@ -52,17 +52,17 @@ local AddCastbar = function(self, unit)
 	self.Castbar:SetStatusBarTexture(ns.media.TEXTURE)
 	self.Castbar:SetStatusBarColor(0.55, 0.57, 0.61)
 	self.Castbar:SetAlpha(0.75)
-	
+
 	if (unit == "player" or unit == "target") then
 		self.Castbar:SetAllPoints(self.Overlay)
-		
+
 		self.Castbar.Time = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "RIGHT")
 		self.Castbar.Time:SetPoint("RIGHT", -3.5, 3)
 		self.Castbar.Time:SetTextColor(0.84, 0.75, 0.65)
-		
+
 		self.Castbar.CustomTimeText = ns.CustomCastTimeText
 		self.Castbar.CustomDelayText = ns.CustomCastDelayText
-		
+
 		self.Castbar.Text = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "LEFT")
 		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
 		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
@@ -70,20 +70,20 @@ local AddCastbar = function(self, unit)
 	else
 		self.Castbar:SetAllPoints(self.Power)
 	end
-	
+
 	if (unit == "player") then
 		self.Castbar.SafeZone = self.Castbar:CreateTexture(nil, "ARTWORK")
 		self.Castbar.SafeZone:SetTexture(ns.media.TEXTURE)
 		self.Castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
 	end
-	
+
 	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
 		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
-		
+
 		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
 		self.Castbar.IconOverlay:SetTexture(ns.media.BTNTEXTURE)
 		self.Castbar.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
-		
+
 		if (unit == "target") then
 			self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
 			self.Castbar.Icon:SetSize(32, 32)
@@ -100,7 +100,7 @@ local AddCastbar = function(self, unit)
 			end
 		end
 		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-		
+
 		self.Castbar.PostCastStart = ns.PostUpdateCast
 		self.Castbar.PostChannelStart = ns.PostUpdateCast
 		self.Castbar.PostCastInterruptible = ns.PostUpdateCast
@@ -129,7 +129,7 @@ local AddEclipseBar = function(self, width, height)
 	eclipseBar:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
 	eclipseBar:SetBackdrop(ns.media.BACKDROP)
 	eclipseBar:SetBackdropColor(0, 0, 0)
-	
+
 	local lunarBar = CreateFrame("StatusBar", "oUF_Rain_LunarBar", eclipseBar)
 	lunarBar:SetAllPoints(eclipseBar)
 	lunarBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
@@ -145,11 +145,11 @@ local AddEclipseBar = function(self, width, height)
 	solarBar:SetStatusBarTexture(ns.media.TEXTURE)
 	solarBar:SetStatusBarColor(0.95, 0.73, 0.15)
 	eclipseBar.SolarBar = solarBar
-	
+
 	local eclipseBarText = PutFontString(solarBar, ns.media.FONT2, 10, "OUTLINE", "CENTER")
 	eclipseBarText:SetPoint("CENTER", eclipseBar, 0, 0)
 	self:Tag(eclipseBarText, "[pereclipse]%")
-	
+
 	self.EclipseBar = eclipseBar
 end
 ns.AddEclipseBar = AddEclipseBar
@@ -242,7 +242,7 @@ local AddRuneBar = function(self, width, height, spacing)
 		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
 		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Runes[i]:SetBackdropColor(0, 0, 0)
-		
+
 		self.Runes[i].bg = self.Runes[i]:CreateTexture(nil, "BORDER")
 		self.Runes[i].bg:SetTexture(ns.media.TEXTURE)
 		self.Runes[i].bg:SetAllPoints()

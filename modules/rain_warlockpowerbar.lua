@@ -117,11 +117,11 @@ end
 
 local Update = function(self, event, unit, powerType)
 	if (unit ~= "player") then return end
-	
+
 	if not powerType then
 		powerType = pType
 	end
-	
+
 	if (powerType and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY" and powerType ~= "BURNING_EMBERS") then return end
 
 	local element = self.WarlockPowerBar
@@ -161,7 +161,7 @@ local Update = function(self, event, unit, powerType)
 			element[i]:SetValue(power)
 		end
 	end
-	
+
 	if (element.PostUpdate) then
 		element:PostUpdate(powerType, power, maxPower)
 	end

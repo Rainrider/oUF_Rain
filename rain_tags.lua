@@ -41,13 +41,13 @@ tags["rain:namecolor"] = function(unit)
 		local reaction = UnitReaction(unit, "player")
 		color = ns.colors.reaction[reaction or 4]
 	end
-	
+
 	return RGBtoHEX(color[1], color[2], color[3])
 end
 
 tags["rain:healthSmall"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
-	
+
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	if (cur == 0 or max == 0) then return end
 
@@ -57,7 +57,7 @@ tags["rain:healthSmall"] = function(unit)
 	if (UnitIsFriend("player", unit) and unit ~= "pet") then
 		return "-" .. SiValue(max - cur)
 	end
-	
+
 	return floor(cur / max * 100 + 0.5) .. "%"
 end
 tagEvents["rain:healthSmall"] = tagEvents.perhp
@@ -67,15 +67,15 @@ tags["rain:health"] = function(unit)
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	if (cur == 0 or max == 0) then return end
-	
+
 	if (cur == max) then
 		return SiValue(max)
 	end
-	
+
 	if (UnitIsFriend("player", unit)) then
 		return "-" .. SiValue(max - cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
 	end
-	
+
 	return SiValue(cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
 end
 tagEvents["rain:health"] = tagEvents.missinghp
@@ -85,7 +85,7 @@ tags["rain:raidhp"] = function(unit)
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	if (cur == 0 or max == 0 or cur == max) then return end
-	
+
 	return "|cffff0000-" .. SiValue(max - cur) .. "|r"
 end
 tagEvents["rain:raidhp"] = tagEvents.missinghp
@@ -93,11 +93,11 @@ tagEvents["rain:raidhp"] = tagEvents.missinghp
 tags["rain:altmana"] = function(unit, ...)
 	local pType = UnitPowerType(unit)
 	if (unit ~= "player" or pType == 0) then return end
-	
+
 	local curMana, maxMana = UnitPower(unit, 0), UnitPowerMax(unit, 0)
-	
+
 	if (curMana == maxMana) then return end
-	
+
 	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
 tagEvents["rain:altmana"] = tagEvents.missingpp
@@ -178,11 +178,11 @@ tagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"
 tags["rain:altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
-	
+
 	if (max == 0) then max = 1 end
-	
+
 	local perc = floor(cur / max * 100 + 0.5)
-	
+
 	return cur .. " - " .. perc .. "%"
 end
 tagEvents["rain:altpower"] = "UNIT_POWER UNIT_MAXPOWER"
