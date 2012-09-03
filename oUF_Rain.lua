@@ -59,10 +59,7 @@ local UnitSpecific = {
 		
 		ns.AddQuestIcon(self, "target")
 		ns.AddResurrectIcon(self, "target")
-		
-		if (oUFversion > 1511) then
-			ns.AddRangeCheck(self)
-		end
+		ns.AddRangeCheck(self)
 	end,
 	
 	pet = function(self)
