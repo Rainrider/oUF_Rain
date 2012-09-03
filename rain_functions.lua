@@ -290,16 +290,6 @@ local PostUpdateHealth = function(health, unit, cur, max)
 end
 ns.PostUpdateHealth = PostUpdateHealth
 
-local PreUpdatePower = function(power, unit)
-	local _, pName = UnitPowerType(unit)
-	
-	local color = ns.colors.power[pName]
-	if (color) then
-		power:SetStatusBarColor(unpack(color))
-	end
-end
-ns.PreUpdatePower = PreUpdatePower
-
 local PostUpdatePower = function(Power, unit, cur, max)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)

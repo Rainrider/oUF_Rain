@@ -139,8 +139,7 @@ local Shared = function(self, unit)
 		self.Power.bg:SetAllPoints()
 		self.Power.bg:SetTexture(ns.media.TEXTURE)
 		self.Power.bg.multiplier = 0.5
-	
-		self.Power.PreUpdate = ns.PreUpdatePower
+
 		self.Power.PostUpdate = ns.PostUpdatePower
 	end
 	
