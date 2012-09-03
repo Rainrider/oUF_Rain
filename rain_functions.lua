@@ -321,10 +321,6 @@ local CreateAuraIcon = function(Auras, index)
 
 	table.insert(Auras, button)
 
-	if (Auras.PostCreateIcon) then
-		Auras:PostCreateIcon(button)
-	end
-
 	return button
 end
 
