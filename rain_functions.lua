@@ -390,6 +390,23 @@ local PostUpdateClassBar = function(classBar, unit)
 end
 ns.PostUpdateClassBar = PostUpdateClassBar
 
+local PostUpdateClassPowerIcons = function(element, power, maxPower)
+	local self = element.__owner
+	local width = element.width
+	local height = element.height
+	local spacing = element.spacing
+
+	if (not maxPower) then
+		maxPower = 5
+	end
+
+	for i = 1, maxPower do
+		element[i]:SetSize((width - maxPower * spacing - spacing) / maxPower, height)
+		element[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * element[i]:GetWidth() + i * spacing, 1)
+	end
+end
+ns.PostUpdateClassPowerIcons = PostUpdateClassPowerIcons
+
 local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower)
 	local self = element.__owner
 	local width = element.width

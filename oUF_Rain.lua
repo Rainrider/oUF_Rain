@@ -33,6 +33,8 @@ local UnitSpecific = {
 			ns.AddFocusHelper(self)
 		end
 
+		ns.AddClassPowerIcons(self, 215, 5, 1)
+
 		ns.AddCombatIcon(self)
 		ns.AddRestingIcon(self)
 

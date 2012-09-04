@@ -109,6 +109,26 @@ local AddCastbar = function(self, unit)
 end
 ns.AddCastbar = AddCastbar
 
+local AddClassPowerIcons = function(self, width, height, spacing)
+	self.ClassIcons = {}
+
+	self.ClassIcons.width  = width
+	self.ClassIcons.height = height
+	self.ClassIcons.spacing = spacing
+
+	local maxPower = 5
+
+	for i = 1, maxPower do
+		self.ClassIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
+		self.ClassIcons[i]:SetSize((width - maxPower * spacing - spacing) / maxPower, height)
+		self.ClassIcons[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.ClassIcons[i]:GetWidth() + i * spacing, 1)
+		self.ClassIcons[i]:SetTexture(ns.media.TEXTURE)
+	end
+
+	self.ClassIcons.PostUpdate = ns.PostUpdateClassPowerIcons
+end
+ns.AddClassPowerIcons = AddClassPowerIcons
+
 local AddComboPointsBar = function(self, width, height, spacing)
 	self.CPoints = {}
 	local maxCPoints = MAX_COMBO_POINTS
