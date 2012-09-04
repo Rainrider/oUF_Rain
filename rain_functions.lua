@@ -139,7 +139,7 @@ local CustomFilter = function(Auras, unit, aura, name, rank, texture, count, dty
 		if (aura.isDebuff) then
 			return true
 		else
-			return (Auras.onlyShowPlayer and Auras.isPlayer) or (not Auras.onlyShowPlayer and name)
+			return (Auras.onlyShowPlayer and aura.isPlayer) or (not Auras.onlyShowPlayer and name)
 		end
 	end
 end
