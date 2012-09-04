@@ -22,8 +22,6 @@ local UnitSpecific = {
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 215, 5, 1)
 			ns.AddTotems(self, 60, 5)
-		elseif (playerClass == "PALADIN") then
-			ns.AddHolyPowerBar(self, 215, 5, 1)
 		elseif (playerClass == "WARLOCK") then
 			ns.AddWarlockPowerBar(self, 215, 5, 1)
 		elseif (playerClass == "SHAMAN") then
@@ -33,10 +31,6 @@ local UnitSpecific = {
 			ns.AddTotems(self, 30, 5)
 		elseif (playerClass == "HUNTER") then
 			ns.AddFocusHelper(self)
-		elseif (playerClass == "PRIEST") then
-			ns.AddShadowOrbsBar(self, 215, 5, 1)
-		elseif (playerClass == "MONK") then
-			ns.AddHarmonyOrbsBar(self, 215, 5, 1)
 		end
 
 		ns.AddCombatIcon(self)

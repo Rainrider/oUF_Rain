@@ -154,27 +154,6 @@ local AddEclipseBar = function(self, width, height)
 end
 ns.AddEclipseBar = AddEclipseBar
 
-local AddHarmonyOrbsBar = function(self, width, height, spacing)
-	self.Harmony = {}
-
-	local maxOrbs = 5
-
-	self.Harmony.maxChi = maxOrbs
-	self.Harmony.width = width
-	self.Harmony.height = height
-	self.Harmony.spacing = spacing
-
-	for i = 1, maxOrbs do
-		self.Harmony[i] = self.Overlay:CreateTexture("oUF_Rain_ChiOrb_"..i, "OVERLAY")
-		self.Harmony[i]:SetSize((width - maxOrbs * spacing - spacing) / maxOrbs, height)
-		self.Harmony[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.Harmony[i]:GetWidth() + i * spacing, 1)
-		self.Harmony[i]:SetTexture(unpack(ns.colors.class["MONK"]))
-	end
-
-	self.Harmony.PostUpdate = ns.PostUpdateChi
-end
-ns.AddHarmonyOrbsBar = AddHarmonyOrbsBar
-
 local AddHealPredictionBar = function(self, unit)
 	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
 	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -197,19 +176,6 @@ local AddHealPredictionBar = function(self, unit)
 	}
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
-
-local AddHolyPowerBar = function(self, width, height, spacing)
-	self.HolyPower = {}
-	local maxHoly = UnitPowerMax("player", SPELL_POWER_HOLY_POWER)
-
-	for i = 1, maxHoly do
-		self.HolyPower[i] = self.Overlay:CreateTexture("oUF_Rain_HolyPower_"..i, "OVERLAY")
-		self.HolyPower[i]:SetSize((width - maxHoly * spacing - spacing) / maxHoly, height)
-		self.HolyPower[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.HolyPower[i]:GetWidth() + i * spacing, 1)
-		self.HolyPower[i]:SetTexture(unpack(ns.colors.power["HOLY_POWER"]))
-	end
-end
-ns.AddHolyPowerBar = AddHolyPowerBar
 
 local AddOverlay = function(self, unit)
 	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self.Portrait)
@@ -250,19 +216,6 @@ local AddRuneBar = function(self, width, height, spacing)
 	end
 end
 ns.AddRuneBar = AddRuneBar
-
-local AddShadowOrbsBar = function(self, width, height, spacing)
-	self.ShadowOrbs = {}
-	local maxOrbs = PRIEST_BAR_NUM_ORBS
-
-	for i = 1, maxOrbs do
-		self.ShadowOrbs[i] = self.Overlay:CreateTexture("oUF_Rain_ShadowOrb_"..i, "OVERLAY")
-		self.ShadowOrbs[i]:SetSize((width - maxOrbs * spacing - spacing) / maxOrbs, height)
-		self.ShadowOrbs[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.ShadowOrbs[i]:GetWidth() + i * spacing, 1)
-		self.ShadowOrbs[i]:SetTexture(unpack(ns.colors.power["SOUL_SHARDS"]))
-	end
-end
-ns.AddShadowOrbsBar = AddShadowOrbsBar
 
 local AddTotems = function(self, width, height)
 	self.Totems = {}

@@ -390,22 +390,6 @@ local PostUpdateClassBar = function(classBar, unit)
 end
 ns.PostUpdateClassBar = PostUpdateClassBar
 
--- temp fix for monks chi because the current implementation of HarmonyBar does not check for talent Ascension
-local PostUpdateChi = function(element, chi, maxChi, maxChiChanged)
-	if (not maxChiChanged) then return end
-
-	local self = element.__owner
-	local width = element.width
-	local height = element.height
-	local spacing = element.spacing
-
-	for i = 1, maxChi do
-		element[i]:SetSize((width - maxChi * spacing - spacing) / maxChi, height)
-		element[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * element[i]:GetWidth() + i * spacing, 1)
-	end
-end
-ns.PostUpdateChi = PostUpdateChi
-
 local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower)
 	local self = element.__owner
 	local width = element.width
