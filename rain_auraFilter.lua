@@ -8,8 +8,9 @@ local debuffs = {
 	},
 	["DRUID"] = {
 		[1] = function() return end, -- Balance
-		[2] = function() return 1, 3, 6 end, -- Feral
-		[3] = function() return end, -- Restoration
+		[2] = function() return end, -- Feral
+		[3] = function() return end, -- Guardian
+		[4] = function() return end, -- Restoration
 	},
 	["HUNTER"] = {
 		[1] = function() return end, -- Beastmaster
@@ -20,6 +21,11 @@ local debuffs = {
 		[1] = function() return end, -- Arcane
 		[2] = function() return end, -- Fire
 		[3] = function() return end, -- Frost
+	},
+	["MONK"] = {
+		[1] = function() return end, -- Brewmaster
+		[2] = function() return end, -- Mistweaver
+		[3] = function() return end, -- Windwalker
 	},
 	["PALADIN"] = {
 		[1] = function() return end, -- Holy
@@ -47,213 +53,114 @@ local debuffs = {
 		[3] = function() return end, -- Destruction
 	},
 	["WARRIOR"] = {
-		[1] = function() return 2 end, -- Arms
-		[2] = function() return 2 end, -- Fury
-		[3] = function() return 1, 6 end, -- Protection
+		[1] = function() return end, -- Arms
+		[2] = function() return end, -- Fury
+		[3] = function() return end, -- Protection
 	},
 }
 
 local sharedDebuffs = {
-	[1] = {	-- Armor
-		["DRUID"] = {
-			91565, -- Faerie Fire === DDD ===
-		},
-		["HUNTER"] = {
-			35387, -- Corrosive Spit (serpent ability)
-			50498, -- Tear Armor (raptor ability)
-		},
-		["ROGUE"] = {
-			8647, -- Expose Armor === DDD ===
-		},
-		["WARRIOR"] = {
-			58567, -- Sunder Armor === DDD ===
-		},
+	[1] = {	-- Weakened Armor
+		113746,	-- Weakened Armor
 	},
-	[2] = {	-- Attack Speed
-		["DEATHKNIGHT"] = {
-			55095, -- Frost Fever (Passive) === DDD ===
-		},
-		["DRUID"] = {
-			58180, -- Infected Wounds (Feral talent. Passive) === DDD ===
-			16914, -- Hurricane === DDD ===
-		},
-		["HUNTER"] = {
-			90315, -- Tailspin (Fox)
-			54404, -- Dust Cloud (Tallstrider)
-		},
-		["SHAMAN"] = {
-			8042, -- Earth Shock === DDD ===
-		},
-		["WARRIOR"] = {
-			6343, -- Thunder Clap === DDD ===
-		},
+	[2] = {	-- Physical Vulnerability
+		81326,		-- Physical Vulnerability
+		35290,		-- Gore (Boar)
+		50518,		-- Ravage (Ravager)
+		57386,		-- Stampede (Rhino)
+		55749,		-- Acid Spit (Worm)
 	},
-	[3] = {	-- Bleed Damage
-		["DRUID"] = {
-			33878, -- Mangle (bear)
-			33876, -- Mangle (cat)
-		},
-		["HUNTER"] = {
-			50271, -- Tendon Rip (hyena ability)
-			35290, -- Gore (boar ability)
-			57386, -- Stampede (rhino ability)
-		},
-		["ROGUE"] = {
-			16511, -- Hemorrhage
-		},
-		["WARRIOR"] = {
-			29836, -- Blood Frenzy (Arms talent. Passive)
-		}
+	[3] = {	-- Magic Vulnerability
+		93968,		-- Master Poisoner (Rogue)
+		1490,		-- Curse of the Elements (Warlock)
+		34889,		-- Fire Breath (Dragonhawk)
+		24844,		-- Lithning Breath (Wind Serpent)
 	},
-	[4] = {	-- Casting Speed
-		["DEATHKNIGHT"] = {
-			73975, -- Necrotic Strike
-		},
-		["HUNTER"] = {
-			50274, -- Spore Cloud (sporebat ability)
-			58604, -- Lava Breath (core hound ability)
-		},
-		["MAGE"] = {
-			31589, -- Slow
-		},
-		["ROGUE"] = {
-			5761, -- Mind-Numbing Poison
-		},
-		["WARLOCK"] = {
-			1714, -- Curse of Tongues === DDD ===
-		},
+	[4] = {	-- Weakened Blows
+		115798,		-- Weakened Blows
+		109466,		-- Curse of Enfeeblement (Warlock)
+		50256,		-- Demoralizing Roar (Bear)
+		24423,		-- Demoralizing Screech (Carrion Bird)
 	},
-	[5] = {	-- Healing
-		["HUNTER"] = {
-			82654, -- Widow Venom === DDD ===
-			54680, -- Monstrous Bite (devilsaur ability)
-		},
-		["PRIEST"] = {
-			15313, -- Improved Mind Blast
-		},
-		["ROGUE"] = {
-			13219, -- Wound Poison
-		},
-		["WARLOCK"] = {
-			30213, -- Legion Strike (felguard ability)
-		},
-		["WARRIOR"] = {
-			12294, -- Mortal Strike (Arms bonus talent)
-			46910, -- Furious Attacks (Fury Talent, passive)
-		},
+	[5] = {	-- Slow Casting
+		73975,		-- Necrotic Strike (DK)
+		109466,		-- Curse of Enfeeblement (Warlock)
+		5760,		-- Mind-numbling Poison (Rogue)
+		50274,		-- Spore Cloud (Spore Bat)
+		90315,		-- Tailspin (Fox)
+		126402,		-- Trample (Goat)						-- TODO
+		58604,		-- Lava Breath (Core Hound)
 	},
-	[6] = {	-- Physical Damage Dealt
-		["DEATHKNIGHT"] = {
-			81130, -- Scarlet Fever (Blood Talent) === DDD ===
-		},
-		["DRUID"] = {
-			99, -- Demoralizing Roar === DDD ===
-		},
-		["HUNTER"] = {
-			50256, -- Demoralizing Roar (bear pet ability)
-			24423, -- Demoralizing Screech (carrion bird ability)
-		},
-		["PALADIN"] = {
-			26017, -- Vindication
-		},
-		["WARLOCK"] = {
-			702, -- Curse of Weakness === DDD ===
-		},
-		["WARRIOR"] = {
-			1160, -- Demoralizing Shout === DDD ===
-		},
-	},
-	[7] = {	-- Physical Damage Taken
-		--[[
-			All class abilities providing this are talents that
-			improve class debuffs
-		--]]
-	},
-	[8] = {	-- Spell Crit Taken
-		["MAGE"] = {
-			22959, -- Critical Mass
-			2948, -- Scorch
-		},
-		["WARLOCK"] = {
-			17800, -- Shadow and Flame === DDD ===
-		},
-	},
-	[9] = {	-- Spell Damage Taken
-		["DEATHKNIGHT"] = {
-			51160, -- Ebon Plague (Unholy talent. Passive)
-		},
-		["DRUID"] = {
-			48506, -- Earth and Moon (passive)
-		},
-		["HUNTER"] = {
-			34889, -- Fire Breath (dragonhawk ability)
-			24844, -- Lightning Breath (wind serpent ability)
-		},
-		["ROGUE"] = {
-			58410, -- Master Poisoner (passive)
-		},
-		["WARLOCK"] = {
-			1490, -- Curse of the Elements === DDD ===
-		},
+	[6] = {	-- Mortal Wounds
+		115804,		-- Mortal Wounds
+		82654,		-- Widow Venom (Hunter)
+		8680,		-- Wound Poison (Rogue)
+		54680,		-- Monstrous Bite (Devilsaur)
 	},
 }
 
 local crowdControl = {
-	["DRUID"] = {
-		33786, -- Cyclone === DDD ===
-		2637, -- Hibernate == DDD ===
-	},
-	["HUNTER"] = {
-		3355, -- Freezing Trap === DDD ===
-		19386, -- Wyvern Sting === DDD ===
-	},
-	["MAGE"] = {
-		118, -- Polymorph
-		61305, -- Polymorph (Black Cat)
-		28272, -- Polymorph (Pig)
-		61721, -- Polymorph (Rabbit)
-		61780, -- Polymorph (Turkey)
-		28271, -- Polymorph (Turtle)
-	},
-	["PALADIN"] = {
-		20066, -- Repentance
-		10326, -- Turn Evil
-	},
-	["PRIEST"] = {
-		9484, -- Shackle Undead
-	},
-	["ROGUE"] = {
-		6770, -- Sap === DDD ===
-	},
-	["SHAMAN"] = {
-		76780, -- Bind Elemental
-		51514, -- Hex
-	},
-	["WARLOCK"] = {
-		710, -- Banish === DDD ===
-		5782, -- Fear === DDD ===
-		5484, -- Howl of Terror === DDD ===
-		6358, -- Seduction === DDD ===
-	},
-	["WARRIOR"] = {
-		20511, -- Intimidating Shout === DDD ===
-	},
+	-- DRUID
+	33786,		-- Cyclone
+	2637,		-- Hibernate
+	-- HUNTER
+	3355,		-- Freezing Trap
+	19386,		-- Wyvern Sting
+	1513,		-- Scare Beast
+	-- MAGE
+	118,		-- Polymorph
+	61305,		-- Polymorph (Black Cat)
+	28272,		-- Polymorph (Pig)
+	61721,		-- Polymorph (Rabbit)		-- TODO
+	28271,		-- Polymorph (Turtle)		-- TODO
+	-- MONK
+	115078,		-- Paralysis
+	-- PALADIN
+	20066,		-- Repentance
+	10326,		-- Turn Evil
+	-- PRIEST
+	9484,		-- Shackle Undead
+	113792,		-- Psychic Terror (Psyfiend)
+	-- ROGUE
+	2094,		-- Blind
+	6770,		-- Sap
+	-- SHAMAN
+	76780,		-- Bind Elemental
+	51514,		-- Hex
+	-- WARLOCK
+	710,		-- Banish
+	5484,		-- Howl of Terror
+	118699,		-- Blood Fear / Fear
+	6358,		-- Seduction (Succubus)
+	115268,		-- Mesmerize (Shivarra)
 }
 
 local disarm = {
-	["HUNTER"] = {
-		50541, -- Clench (Scorpid)
-		91644, -- Snatch (Bird of Prey)
-	},
-	["PRIEST"] = {
-		64058, -- Psychic Horror
-	},
-	["ROGUE"] = {
-		51722, -- Dismantle === both ===
-	},
-	["WARRIOR"] = {
-		676, -- Disarm === both ===
-	},
+	-- HUNTER
+	50541,		-- Clench (Scorpid)			-- TODO
+	91644,		-- Snatch (Bird of Prey)
+	-- MONK
+	117368,		-- Grapple Weapon
+	-- PRIEST
+	64058,		-- Psychic Horror
+	-- ROGUE
+	51722,		-- Dismantle
+	-- WARRIOR
+	676,		-- Disarm
+}
+
+local canDisarm = {
+	["DEATHKNIGHT"] = false,
+	["DRUID"] = false,
+	["HUNTER"] = true,
+	["MAGE"] = false,
+	["MONK"] = true,
+	["PALADIN"] = false,
+	["PRIEST"] = true,
+	["ROGUE"] = true,
+	["SHAMAN"] = false,
+	["WARLOCK"] = false,
+	["WARRIOR"] = true,
 }
 
 --[[
@@ -270,68 +177,44 @@ ns.debuffIDs = {}
 local _, playerClass = UnitClass("player")
 
 local GetSharedDebuffs = function(...)
-	wipe(ns.debuffIDs)
 	for i = 1, select('#', ...) do
 		local debuffGroup = select(i, ...)
-		print(debuffGroup)
-		for class, tab in pairs(sharedDebuffs[debuffGroup]) do
-			if (class ~= playerClass) then
-				for _, spellID in ipairs(tab) do
-					ns.debuffIDs[spellID] = true
-					print("Debuff added for class", class, ":", GetSpellLink(spellID))
-				end
+
+		if (debuffGroup) then
+			for _, spellID in ipairs(sharedDebuffs[debuffGroup]) do
+				ns.debuffIDs[spellID] = true
+				print("Debuff added for class", playerClass, ":", GetSpellLink(spellID))
 			end
 		end
 	end
 end
 
 local GetCC = function()
-	for class, tab in pairs(crowdControl) do
-		if (class ~= playerClass) then
-			for _, spellID in ipairs(tab) do
-				ns.debuffIDs[spellID] = true
-				print("CC added for class", class, ":", GetSpellLink(spellID))
-			end
-		end
+	for _, spellID in ipairs(crowdControl) do
+		ns.debuffIDs[spellID] = true
 	end
 end
 
 local GetDisarm = function()
-	local isDisarmCapable = false
-	for class in pairs(disarm) do
-		if (class == playerClass) then
-			isDisarmCapable = true
-			break
-		end
-	end
-	if (isDisarmCapable) then
-		for class, tab in pairs(disarm) do
-			if (class ~= playerClass) then
-				for _, spellID in ipairs(tab) do
-					ns.debuffIDs[spellID] = true
-					print("Diarm added for class", class, ":", GetSpellLink(spellID))
-				end
-			end
+	if (canDisarm[playerClass]) then
+		for _, spellID in ipairs(disarm) do
+			ns.debuffIDs[spellID] = true
+			print("Diarm added:", GetSpellLink(spellID))
 		end
 	end
 end
 
 local Update = function(self, event, ...)
-	local primaryTalentTree = GetPrimaryTalentTree()
-	if (primaryTalentTree) then
-		GetSharedDebuffs(debuffs[playerClass][primaryTalentTree]())
-		if (event == "PLAYER_TALENT_UPDATE") then
-			self:UnregisterEvent("PLAYER_TALENT_UPDATE")
-		end
+	local spec = GetSpecialization()
+	if (spec) then
+		wipe(ns.debuffIDs)
+		GetSharedDebuffs(debuffs[playerClass][spec]())
 	end
 	GetCC()
 	GetDisarm()
-	if event == "PLAYER_TALENT_UPDATE" then
-
-	end
 end
 
 local EventListener = CreateFrame("Frame")
 EventListener:RegisterEvent("PLAYER_TALENT_UPDATE")
-EventListener:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+EventListener:RegisterEvent("PLAYER_ENTERING_WORLD")
 EventListener:SetScript("OnEvent", Update)

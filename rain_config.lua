@@ -20,7 +20,7 @@ ns.cfg = {
 -- auras
 	-- filtering
 	showPlayerBuffs = true,			-- true to enable the display of player buffs left to the player frame; false to disable them
-	onlyShowPlayerBuffs = true,		-- true to show only player buffs; false to show all buffs (for friendly targets only)
+	onlyShowPlayerBuffs = false,		-- true to show only player buffs; false to show all buffs (for friendly targets only)
 	onlyShowPlayerDebuffs = false,	-- true to show only player debuffs; false to show only player class debuffs (for enemies only)
 
 	-- debuff highlightingt
