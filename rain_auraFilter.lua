@@ -1,65 +1,65 @@
 local _, ns = ...
 
-local debuffs = {
+local ClassDebuffs = {
 	["DEADKNIGHT"] = {
-		[1] = function() return end, -- Blood
-		[2] = function() return end, -- Frost
-		[3] = function() return end, -- Unholy
+		[1] = {}, -- Blood
+		[2] = {}, -- Frost
+		[3] = {}, -- Unholy
 	},
 	["DRUID"] = {
-		[1] = function() return end, -- Balance
-		[2] = function() return end, -- Feral
-		[3] = function() return end, -- Guardian
-		[4] = function() return end, -- Restoration
+		[1] = {}, -- Balance
+		[2] = {}, -- Feral
+		[3] = {}, -- Guardian
+		[4] = {}, -- Restoration
 	},
 	["HUNTER"] = {
-		[1] = function() return end, -- Beastmaster
-		[2] = function() return end, -- Markmanship
-		[3] = function() return end, -- Survival
+		[1] = {}, -- Beastmaster
+		[2] = {}, -- Markmanship
+		[3] = {}, -- Survival
 	},
 	["MAGE"] = {
-		[1] = function() return end, -- Arcane
-		[2] = function() return end, -- Fire
-		[3] = function() return end, -- Frost
+		[1] = {}, -- Arcane
+		[2] = {}, -- Fire
+		[3] = {}, -- Frost
 	},
 	["MONK"] = {
-		[1] = function() return end, -- Brewmaster
-		[2] = function() return end, -- Mistweaver
-		[3] = function() return end, -- Windwalker
+		[1] = {}, -- Brewmaster
+		[2] = {}, -- Mistweaver
+		[3] = {}, -- Windwalker
 	},
 	["PALADIN"] = {
-		[1] = function() return end, -- Holy
-		[2] = function() return end, -- Protection
-		[3] = function() return end, -- Retribution
+		[1] = {}, -- Holy
+		[2] = {}, -- Protection
+		[3] = {}, -- Retribution
 	},
 	["PRIEST"] = {
-		[1] = function() return end, -- Discipline
-		[2] = function() return end, -- Holy
-		[3] = function() return end, -- Shadow
+		[1] = {}, -- Discipline
+		[2] = {}, -- Holy
+		[3] = {}, -- Shadow
 	},
 	["ROGUE"] = {
-		[1] = function() return end, -- Assasination
-		[2] = function() return end, -- Combat
-		[3] = function() return end, -- Subtlety
+		[1] = {}, -- Assasination
+		[2] = {}, -- Combat
+		[3] = {}, -- Subtlety
 	},
 	["SHAMAN"] = {
-		[1] = function() return end, -- Elemental
-		[2] = function() return end, -- Enchancement
-		[3] = function() return end, -- Restoration
+		[1] = {}, -- Elemental
+		[2] = {}, -- Enchancement
+		[3] = {}, -- Restoration
 	},
 	["WARLOCK"] = {
-		[1] = function() return end, -- Affliction
-		[2] = function() return end, -- Demonology
-		[3] = function() return end, -- Destruction
+		[1] = {}, -- Affliction
+		[2] = {}, -- Demonology
+		[3] = {}, -- Destruction
 	},
 	["WARRIOR"] = {
-		[1] = function() return end, -- Arms
-		[2] = function() return end, -- Fury
-		[3] = function() return end, -- Protection
+		[1] = {}, -- Arms
+		[2] = {}, -- Fury
+		[3] = {}, -- Protection
 	},
 }
 
-local sharedDebuffs = {
+local SharedDebuffs = {
 	[1] = {	-- Weakened Armor
 		113746,	-- Weakened Armor
 	},
@@ -99,7 +99,7 @@ local sharedDebuffs = {
 	},
 }
 
-local disarm = {
+local Disarm = {
 	-- HUNTER
 	50541,		-- Clench (Scorpid)			-- TODO
 	91644,		-- Snatch (Bird of Prey)
@@ -113,7 +113,7 @@ local disarm = {
 	676,		-- Disarm
 }
 
-local canDisarm = {
+local CanDisarm = {
 	["DEATHKNIGHT"] = false,
 	["DRUID"] = false,
 	["HUNTER"] = true,
@@ -137,7 +137,7 @@ local canDisarm = {
 	I.e. debuffs["DRUID"][2] shall return 1, 3 and 6 which are then looked up in sharedDebuffs
 --]]
 
-ns.debuffIDs = {}
+ns.DebuffIDs = {}
 local _, playerClass = UnitClass("player")
 
 local GetSharedDebuffs = function(...)
@@ -145,8 +145,8 @@ local GetSharedDebuffs = function(...)
 		local debuffGroup = select(i, ...)
 
 		if (debuffGroup) then
-			for _, spellID in ipairs(sharedDebuffs[debuffGroup]) do
-				ns.debuffIDs[spellID] = true
+			for _, spellID in ipairs(SharedDebuffs[debuffGroup]) do
+				ns.DebuffIDs[spellID] = true
 				print("Debuff added for class", playerClass, ":", GetSpellLink(spellID))
 			end
 		end
@@ -154,9 +154,9 @@ local GetSharedDebuffs = function(...)
 end
 
 local GetDisarm = function()
-	if (canDisarm[playerClass]) then
-		for _, spellID in ipairs(disarm) do
-			ns.debuffIDs[spellID] = true
+	if (CanDisarm[playerClass]) then
+		for _, spellID in ipairs(Disarm) do
+			ns.DebuffIDs[spellID] = true
 			print("Diarm added:", GetSpellLink(spellID))
 		end
 	end
@@ -165,8 +165,8 @@ end
 local Update = function(self, event, ...)
 	local spec = GetSpecialization()
 	if (spec) then
-		wipe(ns.debuffIDs)
-		GetSharedDebuffs(debuffs[playerClass][spec]())
+		wipe(ns.DebuffIDs)
+		GetSharedDebuffs(unpack(ClassDebuffs[playerClass][spec]))
 	end
 	GetDisarm()
 end
