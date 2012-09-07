@@ -55,7 +55,7 @@ local UnitSpecific = {
 		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
 		self:Tag(self.Info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
 
-		--ns.AddComboPointsBar(self, 215, 5, 1)
+		ns.AddComboPointsBar(self, 215, 5, 1)
 
 		ns.AddQuestIcon(self, "target")
 		ns.AddResurrectIcon(self, "target")
