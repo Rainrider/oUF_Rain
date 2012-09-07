@@ -201,6 +201,13 @@ local AddOverlay = function(self, unit)
 	self.Overlay = CreateFrame("Frame", self:GetName().."_Overlay", self.Portrait)
 	self.Overlay:SetPoint("TOPLEFT", self.Portrait, 0, 1)
 	self.Overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 0, -1)
+
+	if (unit == "player") then
+		self.Threat = self.Overlay:CreateTexture(nil, "BORDER")
+		self.Threat:SetAllPoints()
+		self.Threat:SetTexture(ns.media.OVERLAY)
+		self.Threat:SetVertexColor(0.1, 0.1, 0.1, 0.75)
+	end
 end
 ns.AddOverlay = AddOverlay
 
