@@ -46,8 +46,6 @@ local UnitSpecific = {
 			end
 		end)
 
-		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
-
 		self:Tag(self.Power.value, "[rain:power][ - >rain:altmana]")
 	end,
 
