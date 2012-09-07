@@ -22,18 +22,22 @@ local UnitSpecific = {
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 215, 5, 1)
 			ns.AddTotems(self, 60, 5)
-		elseif (playerClass == "WARLOCK") then
-			ns.AddWarlockPowerBar(self, 215, 5, 1)
-		elseif (playerClass == "SHAMAN") then
-			ns.AddTotems(self, nil, 5)
 		elseif (playerClass == "DRUID") then
 			ns.AddEclipseBar(self, 230, 7)
 			ns.AddTotems(self, 30, 5)
 		elseif (playerClass == "HUNTER") then
 			ns.AddFocusHelper(self)
+		elseif (playerClass == "MONK") then
+			ns.AddClassPowerIcons(self, 215, 5, 1)
+		elseif (playerClass == "PALADIN") then
+			ns.AddClassPowerIcons(self, 215, 5, 1)
+		elseif (playerClass == "PRIEST") then
+			ns.AddClassPowerIcons(self, 215, 5, 1)
+		elseif (playerClass == "SHAMAN") then
+			ns.AddTotems(self, nil, 5)
+		elseif (playerClass == "WARLOCK") then
+			ns.AddWarlockPowerBar(self, 215, 5, 1)
 		end
-
-		ns.AddClassPowerIcons(self, 215, 5, 1)
 
 		ns.AddCombatIcon(self)
 		ns.AddRestingIcon(self)
