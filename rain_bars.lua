@@ -207,6 +207,11 @@ local AddOverlay = function(self, unit)
 		self.Threat:SetAllPoints()
 		self.Threat:SetTexture(ns.media.OVERLAY)
 		self.Threat:SetVertexColor(0.1, 0.1, 0.1, 0.75)
+	else
+		self.CCWarn = self.Overlay:CreateTexture(nil, "BORDER")
+		self.CCWarn:SetAllPoints()
+		self.CCWarn:SetTexture(ns.media.OVERLAY)
+		self.CCWarn:SetVertexColor(0.1, 0.1, 0.1, 0.75)
 	end
 end
 ns.AddOverlay = AddOverlay
