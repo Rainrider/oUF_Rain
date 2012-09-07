@@ -198,12 +198,9 @@ end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
 local AddOverlay = function(self, unit)
-	self.Overlay = CreateFrame("StatusBar", self:GetName().."_Overlay", self.Portrait)
-	self.Overlay:SetFrameLevel(self.Portrait:GetFrameLevel() + 1)
-	self.Overlay:SetPoint("TOPLEFT", self.Portrait, 0, 0)
-	self.Overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 1, -1)
-	self.Overlay:SetStatusBarTexture(ns.media.OVERLAY)
-	self.Overlay:SetStatusBarColor(0.1, 0.1, 0.1, 0.75)
+	self.Overlay = CreateFrame("Frame", self:GetName().."_Overlay", self.Portrait)
+	self.Overlay:SetPoint("TOPLEFT", self.Portrait, 0, 1)
+	self.Overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 0, -1)
 end
 ns.AddOverlay = AddOverlay
 
