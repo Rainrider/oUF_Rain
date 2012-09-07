@@ -99,42 +99,6 @@ local sharedDebuffs = {
 	},
 }
 
-local crowdControl = {
-	-- DRUID
-	33786,		-- Cyclone
-	2637,		-- Hibernate
-	-- HUNTER
-	3355,		-- Freezing Trap
-	19386,		-- Wyvern Sting
-	1513,		-- Scare Beast
-	-- MAGE
-	118,		-- Polymorph
-	61305,		-- Polymorph (Black Cat)
-	28272,		-- Polymorph (Pig)
-	61721,		-- Polymorph (Rabbit)		-- TODO
-	28271,		-- Polymorph (Turtle)		-- TODO
-	-- MONK
-	115078,		-- Paralysis
-	-- PALADIN
-	20066,		-- Repentance
-	10326,		-- Turn Evil
-	-- PRIEST
-	9484,		-- Shackle Undead
-	113792,		-- Psychic Terror (Psyfiend)
-	-- ROGUE
-	2094,		-- Blind
-	6770,		-- Sap
-	-- SHAMAN
-	76780,		-- Bind Elemental
-	51514,		-- Hex
-	-- WARLOCK
-	710,		-- Banish
-	5484,		-- Howl of Terror
-	118699,		-- Blood Fear / Fear
-	6358,		-- Seduction (Succubus)
-	115268,		-- Mesmerize (Shivarra)
-}
-
 local disarm = {
 	-- HUNTER
 	50541,		-- Clench (Scorpid)			-- TODO
@@ -186,12 +150,6 @@ local GetSharedDebuffs = function(...)
 				print("Debuff added for class", playerClass, ":", GetSpellLink(spellID))
 			end
 		end
-	end
-end
-
-local GetCC = function()
-	for _, spellID in ipairs(crowdControl) do
-		ns.debuffIDs[spellID] = true
 	end
 end
 
