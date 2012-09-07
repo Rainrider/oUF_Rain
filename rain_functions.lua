@@ -589,3 +589,17 @@ local AddRangeCheck = function(self, unit)
 	}
 end
 ns.AddRangeCheck = AddRangeCheck
+
+local AddThreatHighlight = function(self, event, unit)
+	if (unit ~= self.unit) then return end
+
+	local status = UnitThreatSituation(unit)
+
+	if (status and status > 0) then
+		local r, g, b = GetThreatStatusColor(status)
+		self.FrameBackdrop:SetBackdropBorderColor(r, g, b)
+	else
+		self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+ns.AddThreatHighlight = AddThreatHighlight
