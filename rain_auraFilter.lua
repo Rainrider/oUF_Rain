@@ -168,7 +168,6 @@ local Update = function(self, event, ...)
 		wipe(ns.debuffIDs)
 		GetSharedDebuffs(debuffs[playerClass][spec]())
 	end
-	GetCC()
 	GetDisarm()
 end
 
