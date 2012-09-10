@@ -128,7 +128,7 @@ local CustomFilter = function(Auras, unit, aura, name, rank, texture, count, dty
 
 	if (not UnitIsFriend("player", unit)) then
 		if (aura.isDebuff) then
-			if(aura.isPlayer or ns.debuffIDs[spellID]) then
+			if(aura.isPlayer or ns.DebuffIDs[spellID]) then
 				return true
 			end
 		else
