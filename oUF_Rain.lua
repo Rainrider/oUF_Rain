@@ -205,12 +205,15 @@ local Shared = function(self, unit)
 		ns.AddReadyCheckIcon(self, unit)
 	end
 
+	if (unit == "pet" or unit == "focus"
+			or unit == "targettarget" or unit == "focustarget") then
+		self:SetSize(110, 22)
+	end
+
 	if ((unit == "pet" or unit == "focus"
 			or unit == "targettarget" or unit == "focustarget"
 			or unitIsPartyMember or unitIsPartyOrMTTarget
 			or unitIsMT or unitIsBoss) and not unitIsPartyPet) then
-
-		self:SetSize(110, 22)
 
 		self.Health:SetSize(110, 15)
 		self.Health:SetPoint("TOPRIGHT")
@@ -263,7 +266,6 @@ local Shared = function(self, unit)
 	end
 
 	if (unitIsPartyPet) then
-		self:SetSize(110, 10)
 		self.Health:SetSize(110, 10)
 		self.Health:SetPoint("TOPRIGHT")
 		self.Health:SetPoint("TOPLEFT")
