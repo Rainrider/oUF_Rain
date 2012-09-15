@@ -288,7 +288,7 @@ local AddTotems = function(self, width, height)
 
 		self.Totems[i].UpdateTooltip = function(self)
 			GameTooltip:SetTotem(self:GetID())
-			GameTooltip:AddLine("|cffff0000"..GLYPH_SLOT_REMOVE_TOOLTIP.."|r")
+			GameTooltip:AddLine(GLYPH_SLOT_REMOVE_TOOLTIP, 1, 0, 0)
 			GameTooltip:Show()
 		end
 	end
