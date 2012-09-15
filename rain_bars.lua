@@ -269,7 +269,7 @@ local AddTotems = function(self, width, height)
 				else
 					self.Totems[i]:SetPoint("LEFT", self.Totems[1], "RIGHT", 1, 0)
 				end
-		elseif (playerClass) == "DEATHKNIGHT" then -- Death knight's ghoul
+		elseif (playerClass == "DEATHKNIGHT") then -- Death knight's ghoul
 			self.Totems[i]:SetSize(width, height)
 			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
@@ -278,55 +278,24 @@ local AddTotems = function(self, width, height)
 		self.Totems[i]:SetBackdrop(ns.media.BACKDROP)
 		self.Totems[i]:SetBackdropColor(0, 0, 0)
 
-		self.Totems[i].Destroy = CreateFrame("Button", nil, self.Totems[i])
-		self.Totems[i].Destroy:SetAllPoints()
-		self.Totems[i].Destroy:RegisterForClicks("RightButtonUp")
-		self.Totems[i].Destroy:SetScript("OnClick", function()
-			if (IsShiftKeyDown()) then
-				DestroyTotem(self.Totems[i]:GetID())
+		self.Totems[i]:EnableMouse()
+
+		self.Totems[i]:SetScript("OnMouseUp", function(self, button)
+			if (button == "RightButton") then
+				DestroyTotem(self:GetID())
 			end
 		end)
 
-		self.Totems[i].Destroy:EnableMouse()
-		self.Totems[i].Destroy:SetScript("OnEnter", function(self)
-			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-			GameTooltip:SetTotem(self:GetParent():GetID())
-			GameTooltip:AddLine("|cffff0000"..GLYPH_SLOT_REMOVE_TOOLTIP.."|r") -- <Shift Right Click to Remove>
+		self.Totems[i].UpdateTooltip = function(self)
+			GameTooltip:SetTotem(self:GetID())
+			GameTooltip:AddLine("|cffff0000"..GLYPH_SLOT_REMOVE_TOOLTIP.."|r")
 			GameTooltip:Show()
-		end)
-		self.Totems[i].Destroy:SetScript("OnLeave", function()
-			GameTooltip:Hide()
-		end)
+		end
 	end
 
 	self.Totems.Override = ns.UpdateTotem
 end
 ns.AddTotems = AddTotems
---[[
-	NOTES: Just an example for icons with cooldowns --]]
---[[
-local function AddTotems(self, width, height)
-	local Totems = {}
-
-	for i = 1, MAX_TOTEMS do
-		Totems[i] = CreateFrame("Button", "Totem"..i, self)
-		Totems[i]:SetSize(40, 40)
-		Totems[i]:SetPoint("BOTTOMLEFT", self, "TOPLEFT", (i - 1) * 42, 10)
-
-		Totems[i].Icon = Totems[i]:CreateTexture(nil, "OVERLAY")
-		Totems[i].Icon:SetAllPoints()
-		Totems[i].Cooldown = CreateFrame("Cooldown", nil, Totems[i])
-		Totems[i].Cooldown:SetAllPoints()
-		Totems[i].Cooldown:SetReverse(true)
-
-		Totems[i]:EnableMouse() -- for tooltips
-		Totems[i]:RegisterForClicks("RightButtonUp") -- Rightclick for destroy
-	end
-
-	self.Totems = Totems
-end
-ns.AddTotems = AddTotems
---]]
 
 local AddWarlockPowerBar = function(self, width, height, spacing)
 	self.WarlockPowerBar = {}
