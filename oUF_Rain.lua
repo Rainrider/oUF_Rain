@@ -158,7 +158,6 @@ local Shared = function(self, unit)
 
 		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
-		self.Health.value.frequentUpdates = 1/4
 		self:Tag(self.Health.value, "[dead][offline][rain:health]")
 
 		self.Power:SetSize(230, 15)
@@ -167,7 +166,6 @@ local Shared = function(self, unit)
 
 		self.Power.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
-		self.Power.value.frequentUpdates = 1/4
 
 		ns.AddPortrait(self, unit)
 		ns.AddOverlay(self, unit)
@@ -221,7 +219,6 @@ local Shared = function(self, unit)
 
 		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
-		self.Health.value.frequentUpdates = 1/4
 		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
 
 		self.Power:SetSize(110, 5)

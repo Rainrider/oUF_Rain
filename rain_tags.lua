@@ -60,7 +60,7 @@ tags["rain:healthSmall"] = function(unit)
 
 	return floor(cur / max * 100 + 0.5) .. "%"
 end
-tagEvents["rain:healthSmall"] = tagEvents.perhp
+tagEvents["rain:healthSmall"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
 tags["rain:health"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
@@ -78,7 +78,7 @@ tags["rain:health"] = function(unit)
 
 	return SiValue(cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
 end
-tagEvents["rain:health"] = tagEvents.missinghp
+tagEvents["rain:health"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
 tags["rain:raidhp"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
@@ -100,7 +100,7 @@ tags["rain:altmana"] = function(unit, ...)
 
 	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
-tagEvents["rain:altmana"] = tagEvents.missingpp
+tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
 tags["rain:level"] = function(unit)
 	local c = UnitClassification(unit)
@@ -140,7 +140,7 @@ tags["rain:power"] = function(unit)
 
 	return RGBtoHEX(unpack(textColor)) .. powerValue .. "|r"
 end
-tagEvents["rain:power"] = tagEvents.missingpp
+tagEvents["rain:power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
 tags["rain:role"] = function(unit)
 	local xOffset = 0
