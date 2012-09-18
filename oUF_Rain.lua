@@ -285,7 +285,7 @@ local Shared = function(self, unit)
 end
 
 oUF:RegisterStyle("Rain", Shared)
-oUF:RegisterStyle("RainRaid", ns.raidStyle)
+oUF:RegisterStyle("RainRaid", ns.RaidStyle)
 oUF:Factory(function(self)
 	local cfg = ns.cfg
 

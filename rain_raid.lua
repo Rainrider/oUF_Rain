@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local raidStyle = function(self, unit)
+local RaidStyle = function(self, unit)
 
 	self.menu = ns.menu
 	self.colors = ns.colors
@@ -8,8 +8,6 @@ local raidStyle = function(self, unit)
 	self:RegisterForClicks("AnyDown")
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
-
-	self:SetSize(64, 30)
 
 	self.FrameBackdrop = CreateFrame("Frame", nil, self)
 	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
@@ -84,4 +82,4 @@ local raidStyle = function(self, unit)
 	-- TODO: add highlight on targeted
 	-- TODO: add mouseover highlight ??
 end
-ns.raidStyle = raidStyle
+ns.RaidStyle = RaidStyle
