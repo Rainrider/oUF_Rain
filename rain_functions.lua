@@ -180,7 +180,11 @@ end
 
 local SortAuras = function(a, b)
 	if (a and b and a.timeLeft and b.timeLeft) then
-		return a.timeLeft > b.timeLeft
+		if (a:IsShown() and b:IsShown()) then
+			return a.timeLeft > b.timeLeft
+		elseif (a:IsShown()) then
+			return true
+		end
 	end
 end
 
