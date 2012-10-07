@@ -147,7 +147,6 @@ local GetSharedDebuffs = function(...)
 		if (debuffGroup) then
 			for _, spellID in ipairs(SharedDebuffs[debuffGroup]) do
 				ns.DebuffIDs[spellID] = true
-				print("Debuff added for class", playerClass, ":", GetSpellLink(spellID))
 			end
 		end
 	end
@@ -157,7 +156,6 @@ local GetDisarm = function()
 	if (CanDisarm[playerClass]) then
 		for _, spellID in ipairs(Disarm) do
 			ns.DebuffIDs[spellID] = true
-			print("Diarm added:", GetSpellLink(spellID))
 		end
 	end
 end
