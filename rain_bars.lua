@@ -120,8 +120,6 @@ local AddClassPowerIcons = function(self, width, height, spacing)
 
 	for i = 1, maxPower do
 		self.ClassIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
-		self.ClassIcons[i]:SetSize((width - maxPower * spacing - spacing) / maxPower, height)
-		self.ClassIcons[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.ClassIcons[i]:GetWidth() + i * spacing, 1)
 		self.ClassIcons[i]:SetTexture(ns.media.TEXTURE)
 	end
 
