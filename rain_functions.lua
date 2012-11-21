@@ -117,8 +117,14 @@ local CustomCastDelayText = function(Castbar, duration)
 end
 ns.CustomCastDelayText = CustomCastDelayText
 
-local CustomPlayerFilter = function()
-	return true
+local CustomPlayerFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+	if (aura.isDebuff) then
+		return true
+	else
+		if (duration <= 300 and duration > 0) then
+			return true
+		end
+	end
 end
 
 local CustomFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
@@ -486,16 +492,17 @@ local AddBuffs = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		self.Buffs:SetSize(8 * (self.Buffs.size + self.Buffs.spacing), 4 * (self.Buffs.size + self.Buffs.spacing))
 		self.Buffs["growth-y"] = "DOWN"
-		self.Buffs.CustomFilter = CustomFilter
 
 		if (unit == "player") then
 			self.Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, 1)
 			self.Buffs.initialAnchor = "TOPRIGHT"
 			self.Buffs["growth-x"] = "LEFT"
+			self.Buffs.CustomFilter = CustomPlayerFilter
 		else
 			self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 9, 1)
 			self.Buffs.initialAnchor = "TOPLEFT"
 			self.Buffs["growth-x"] = "RIGHT"
+			self.Buffs.CustomFilter = CustomFilter
 		end
 	end
 
@@ -548,10 +555,10 @@ local AddDebuffs = function(self, unit)
 		self.Debuffs["growth-x"] = "RIGHT"
 		self.Debuffs["growth-y"] = "DOWN"
 
-		if (unit == "target") then
-			self.Debuffs.CustomFilter = CustomFilter
-		else
+		if (unit == "player") then
 			self.Debuffs.CustomFilter = CustomPlayerFilter
+		else
+			self.Debuffs.CustomFilter = CustomFilter
 		end
 	end
 
