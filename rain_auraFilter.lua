@@ -88,7 +88,7 @@ local SharedDebuffs = {
 		5760,		-- Mind-numbling Poison (Rogue)
 		50274,		-- Spore Cloud (Spore Bat)
 		90315,		-- Tailspin (Fox)
-		126402,		-- Trample (Goat)						-- TODO
+		126406,		-- Trample (Goat)
 		58604,		-- Lava Breath (Core Hound)
 	},
 	[6] = {	-- Mortal Wounds
@@ -101,7 +101,7 @@ local SharedDebuffs = {
 
 local Disarm = {
 	-- HUNTER
-	50541,		-- Clench (Scorpid)			-- TODO
+	50541,		-- Clench (Scorpid)
 	91644,		-- Snatch (Bird of Prey)
 	-- MONK
 	117368,		-- Grapple Weapon
