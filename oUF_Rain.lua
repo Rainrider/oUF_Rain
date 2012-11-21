@@ -448,6 +448,7 @@ oUF:Factory(function(self)
 	local boss = {}
 	for i = 1, MAX_BOSS_FRAMES do
 		boss[i] = self:Spawn("boss"..i, "oUF_Rain_Boss"..i)
+		boss[i]:SetSize(110, 22)
 
 		if (i == 1) then
 			boss[i]:SetPoint("TOP", UIParent, "TOP", 0, -20)
