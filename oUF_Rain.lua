@@ -138,6 +138,11 @@ local Shared = function(self, unit)
 		self.Power.colorReaction = true
 		self.Power.frequentUpdates = true
 
+		if (unitIsBoss) then
+			self.Power.displayAltPower = true
+			self.Power.colorAltTexture = true
+		end
+
 		self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
 		self.Power.bg:SetAllPoints()
 		self.Power.bg:SetTexture(ns.media.TEXTURE)
