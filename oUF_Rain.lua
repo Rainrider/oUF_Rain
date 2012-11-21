@@ -133,7 +133,7 @@ local Shared = function(self, unit)
 		self.Power:SetBackdrop(ns.media.BACKDROP)
 		self.Power:SetBackdropColor(0, 0, 0)
 
-		self.Power.colorPower = unit == "player" or unit == "pet"
+		self.Power.colorPower = unit == "player" or unit == "pet" or unitIsBoss
 		self.Power.colorClass = true
 		self.Power.colorReaction = true
 		self.Power.frequentUpdates = true
