@@ -15,7 +15,7 @@ local AddAltPowerBar = function(self)
 	self.AltPowerBar:SetPoint("TOPRIGHT", "oUF_Rain_Player_Overlay", 0, 0)
 	self.AltPowerBar:SetToplevel(true)
 	self.AltPowerBar:SetStatusBarTexture(ns.media.TEXTURE)
-	self.AltPowerBar:SetStatusBarColor(0, 0.5, 1)
+	self.AltPowerBar.colorTexture = true
 	self.AltPowerBar:SetBackdrop(ns.media.BACKDROP)
 	self.AltPowerBar:SetBackdropColor(0, 0, 0, 0)
 
