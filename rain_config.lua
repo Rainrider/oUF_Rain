@@ -54,7 +54,7 @@ ns.cfg = {
 -- click casting spell
 	-- use i.e. ["ENGLISH_CLASS_NAME"] = spellID,
 	clickSpell = {
-		["DEADKNIGHT"] = 61999,	-- Raise Ally (61999)
+		["DEATHKNIGHT"] = 61999,	-- Raise Ally (61999)
 		["DRUID"] = 29166,		-- Innervate (29166)
 		["HUNTER"] = 34477,		-- Misdirection (34477)
 		["MAGE"] = 475,			-- Remove Curse (475)

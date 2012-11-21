@@ -1,7 +1,7 @@
 local _, ns = ...
 
 local ClassDebuffs = {
-	["DEADKNIGHT"] = {
+	["DEATHKNIGHT"] = {
 		[1] = {}, -- Blood
 		[2] = {}, -- Frost
 		[3] = {}, -- Unholy
