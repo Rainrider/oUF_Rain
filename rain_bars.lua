@@ -23,27 +23,13 @@ local AddAltPowerBar = function(self)
 	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
 	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
 
-	self.AltPowerBar.Tooltip = function(self)
-		local unit = self.__owner.unit
-		-- XXX Temp fix for vehicle
-		if (unit == "vehicle" or unit == "pet") then unit = "player" end
-		-- XXX
-		local powerName = select(10, UnitAlternatePowerInfo(unit))
-		local powerTooltip = select(11, UnitAlternatePowerInfo(unit))
-
-		if (powerName) then
-			GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
-			GameTooltip:AddLine(powerName)
-			if (powerTooltip and powerTooltip ~= "") then
-				GameTooltip:AddLine("\n"..powerTooltip, nil, nil, nil, true)
-			end
-			GameTooltip:Show()
-		end
+	self.AltPowerBar.OnEnter = function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
+		self:UpdateTooltip()
 	end
 
 	self.AltPowerBar:EnableMouse()
-	self.AltPowerBar:HookScript("OnLeave", GameTooltip_Hide)
-	self.AltPowerBar:HookScript("OnEnter", self.AltPowerBar.Tooltip)
+	self.AltPowerBar:SetScript("OnEnter", self.AltPowerBar.OnEnter)
 end
 ns.AddAltPowerBar = AddAltPowerBar
 
