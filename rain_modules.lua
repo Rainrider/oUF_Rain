@@ -135,10 +135,19 @@ local AddReputationBar = function(self)
 	self.Reputation.colorStanding = true
 
 	self.Reputation.Tooltip = function(self)
-		local name, id, min, max, value = GetWatchedFactionInfo()
+		local name, standing, min, max, value, id = GetWatchedFactionInfo()
+		local _, friendRep, friendMaxRep, _, _, _, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(id)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
-		GameTooltip:AddLine(string.format("%s (%s)", name, _G["FACTION_STANDING_LABEL"..id]))
-		GameTooltip:AddLine(string.format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100))
+		if (not friendRep) then
+			GameTooltip:AddLine(string.format("%s (%s)", name, _G["FACTION_STANDING_LABEL"..standing], UnitSex("player")))
+			GameTooltip:AddLine(string.format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100 + 0.5))
+		else
+			local currentValue = friendRep - friendThreshold
+			local maxCurrentValue = math.min(friendMaxRep - friendThreshold, 8400)
+			local currentRank, maxRank = GetFriendshipReputationRanks(id)
+			GameTooltip:AddLine(string.format("%s (%d / %d - %s)", name, currentRank, maxRank, friendTextLevel))
+			GameTooltip:AddLine(string.format("%d / %d (%d%%)", currentValue, maxCurrentValue, currentValue / maxCurrentValue * 100 + 0.5))
+		end
 		GameTooltip:Show()
 	end
 
