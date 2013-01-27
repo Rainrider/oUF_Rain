@@ -9,19 +9,15 @@
 
 modules\rain_interrupt.lua
 rain_config.lua
-rain_media.lua
 rain_colors.lua
 rain_auraFilter.lua
 rain_functions.lua
-rain_modules.lua
 modules\rain_dispel.lua
 modules\rain_experience.lua
 modules\rain_focushelper.lua
 modules\rain_warlockpowerbar.lua
 rain_menu.lua
 rain_tags.lua
-rain_icons.lua
-rain_bars.lua
 modules\rain_ccwarn.lua
 rain_raid.lua
-oUF_Rain.lua
+rain_layout.lua

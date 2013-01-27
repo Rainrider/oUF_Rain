@@ -54,7 +54,7 @@ ns.cfg = {
 -- click casting spell
 	-- use i.e. ["ENGLISH_CLASS_NAME"] = spellID,
 	clickSpell = {
-		["DEATHKNIGHT"] = 61999,	-- Raise Ally (61999)
+		["DEATHKNIGHT"] = 61999,-- Raise Ally (61999)
 		["DRUID"] = 29166,		-- Innervate (29166)
 		["HUNTER"] = 34477,		-- Misdirection (34477)
 		["MAGE"] = 475,			-- Remove Curse (475)
@@ -74,6 +74,34 @@ ns.cfg = {
 
 -- other
 	raidHealth = 1,					-- 0 - none; 1 - deficit; 2 - percent
+}
+
+ns.media = {
+	FONT = [=[Interface\AddOns\oUF_Rain\media\fonts\russel square lt.ttf]=],
+	FONT2 = [=[Interface\AddOns\oUF_Rain\media\fonts\neuropol x cd rg.ttf]=],
+	TEXTURE = [=[Interface\AddOns\oUF_Rain\media\textures\normtexc]=],
+	BTNTEXTURE = [=[Interface\AddOns\oUF_Rain\media\textures\buttonnormal]=],
+	HIGHLIGHTTEXTURE = [=[Interface\AddOns\oUF_Rain\media\textures\highlighttex]=],
+	BORDER = [=[Interface\AddOns\oUF_Rain\media\textures\glowTex3]=],
+	STEALABLETEX = [=[Interface\AddOns\oUF_Rain\media\textures\stealableTex]=],
+	OVERLAY = [=[Interface\AddOns\oUF_Rain\media\textures\smallshadertex]=],
+	RAIDICONS = [=[Interface\AddOns\oUF_Rain\media\icons\raidicons]=],
+	BACKDROP = {
+		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+		insets = {top = -1, bottom = -1, left = -1, right = -1},
+	},
+	BACKDROP2 = {
+		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+		edgeFile = [=[Interface\AddOns\oUF_Rain\media\textures\glowTex3]=],
+		edgeSize = 2,
+		insets = {top = 2, left = 2, bottom = 2, right = 2},
+	},
+	BORDERBACKDROP = {
+		bgFile = nil,
+		edgeFile = [=[Interface\AddOns\oUF_Rain\media\textures\glowTex3]=],
+		edgeSize = 4,
+		insets = {top = 2, left = 2, bottom = 2, right = 2},
+	},
 }
 
 -- do not touch anything below
