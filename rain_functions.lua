@@ -526,51 +526,56 @@ local AddCastbar = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		castbar:SetAllPoints(self.Overlay)
 
-		castbar.Time = PutFontString(castbar, ns.media.FONT2, 12, nil, "RIGHT")
-		castbar.Time:SetPoint("RIGHT", -3.5, 3)
-		castbar.Time:SetTextColor(0.84, 0.75, 0.65)
+		local castTime = PutFontString(castbar, ns.media.FONT2, 12, nil, "RIGHT")
+		castTime:SetPoint("RIGHT", -3.5, 3)
+		castTime:SetTextColor(0.84, 0.75, 0.65)
+		castbar.Time = castTime
 
 		castbar.CustomTimeText = CustomCastTimeText
 		castbar.CustomDelayText = CustomCastDelayText
 
-		castbar.Text = PutFontString(castbar, ns.media.FONT2, 12, nil, "LEFT")
-		castbar.Text:SetPoint("LEFT", 3.5, 3)
-		castbar.Text:SetPoint("RIGHT", castbar.Time, "LEFT", -3.5, 0)
-		castbar.Text:SetTextColor(0.84, 0.75, 0.65)
+		local text = PutFontString(castbar, ns.media.FONT2, 12, nil, "LEFT")
+		text:SetPoint("LEFT", 3.5, 3)
+		text:SetPoint("RIGHT", castbar.Time, "LEFT", -3.5, 0)
+		text:SetTextColor(0.84, 0.75, 0.65)
+		castbar.Text = text
 	else
 		castbar:SetAllPoints(self.Power)
 	end
 
 	if (unit == "player") then
-		castbar.SafeZone = castbar:CreateTexture(nil, "ARTWORK")
-		castbar.SafeZone:SetTexture(ns.media.TEXTURE)
-		castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
+		local safeZone = castbar:CreateTexture(nil, "ARTWORK")
+		safeZone:SetTexture(ns.media.TEXTURE)
+		safeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
+		castbar.SaveZone = safeZone
 	end
 
 	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
-		castbar.Icon = castbar:CreateTexture(nil, "ARTWORK")
+		local icon = castbar:CreateTexture(nil, "ARTWORK")
 
-		castbar.IconOverlay = castbar:CreateTexture(nil, "OVERLAY")
-		castbar.IconOverlay:SetTexture(ns.media.BTNTEXTURE)
-		castbar.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
+		local iconOverlay = castbar:CreateTexture(nil, "OVERLAY")
+		iconOverlay:SetTexture(ns.media.BTNTEXTURE)
+		iconOverlay:SetVertexColor(0.84, 0.75, 0.65)
 
 		if (unit == "target") then
-			castbar.Icon:SetPoint("RIGHT", castbar, "LEFT", -15, 0)
-			castbar.Icon:SetSize(32, 32)
-			castbar.IconOverlay:SetPoint("TOPLEFT", castbar.Icon, -5, 5)
-			castbar.IconOverlay:SetPoint("BOTTOMRIGHT", castbar.Icon, 5, -5)
+			icon:SetPoint("RIGHT", castbar, "LEFT", -15, 0)
+			icon:SetSize(32, 32)
+			iconOverlay:SetPoint("TOPLEFT", icon, -5, 5)
+			iconOverlay:SetPoint("BOTTOMRIGHT", icon, 5, -5)
 		else
-			castbar.Icon:SetSize(22, 22)
-			castbar.IconOverlay:SetPoint("TOPLEFT", castbar.Icon, -3, 3)
-			castbar.IconOverlay:SetPoint("BOTTOMRIGHT", castbar.Icon, 3, -3)
+			icon:SetSize(22, 22)
+			iconOverlay:SetPoint("TOPLEFT", icon, -3, 3)
+			iconOverlay:SetPoint("BOTTOMRIGHT", icon, 3, -3)
 			if (unit == "focus") then
-				castbar.Icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
+				icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
 			else
-				castbar.Icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
+				icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
 			end
 		end
-		castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
+		castbar.Icon = icon
+		castbar.IconOverlay = iconOverlay
 		castbar.PostCastStart = PostUpdateCast
 		castbar.PostChannelStart = PostUpdateCast
 		castbar.PostCastInterruptible = PostUpdateCast
