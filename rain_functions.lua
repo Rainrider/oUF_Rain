@@ -841,7 +841,7 @@ local AddOverlay = function(self, unit)
 end
 ns.AddOverlay = AddOverlay
 
-local AddPortrait = function(self, unit)
+local AddPortrait = function(self)
 	local portrait = CreateFrame("PlayerModel", self:GetName().."_Portrait", self)
 	portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
 	portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
@@ -853,7 +853,7 @@ local AddPortrait = function(self, unit)
 end
 ns.AddPortrait = AddPortrait
 
-local AddRangeCheck = function(self, unit)
+local AddRangeCheck = function(self)
 	self.Range = {
 		insideAlpha = 1,
 		outsideAlpha = 0.5,
@@ -1046,7 +1046,7 @@ ns.AddWarlockPowerBar = AddWarlockPowerBar
 
 --[[ ICONS ]]--
 
-local AddAssistantIcon = function(self, unit)
+local AddAssistantIcon = function(self)
 	local assistant = self.Health:CreateTexture(nil, "OVERLAY")
 	assistant:SetSize(16, 16)
 	assistant:SetPoint("TOPLEFT", -8.5, 8.5)
@@ -1062,7 +1062,7 @@ local AddCombatIcon = function(self)
 end
 ns.AddCombatIcon = AddCombatIcon
 
-local AddLeaderIcon = function(self, unit)
+local AddLeaderIcon = function(self)
 	local leader = self.Health:CreateTexture(nil, "OVERLAY")
 	leader:SetSize(16, 16)
 	leader:SetPoint("TOPLEFT", -8.5, 8.5)
@@ -1070,7 +1070,7 @@ local AddLeaderIcon = function(self, unit)
 end
 ns.AddLeaderIcon = AddLeaderIcon
 
-local AddMasterLooterIcon = function(self, unit)
+local AddMasterLooterIcon = function(self)
 	local masterLooter = self.Health:CreateTexture(nil, "OVERLAY")
 	masterLooter:SetSize(16, 16)
 	masterLooter:SetPoint("TOPRIGHT", 8.5, 8.5)
@@ -1078,7 +1078,7 @@ local AddMasterLooterIcon = function(self, unit)
 end
 ns.AddMasterLooterIcon = AddMasterLooterIcon
 
-local AddPhaseIcon = function(self, unit)
+local AddPhaseIcon = function(self)
 	local phaseIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	phaseIcon:SetSize(16, 16)
 	phaseIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
@@ -1086,7 +1086,7 @@ local AddPhaseIcon = function(self, unit)
 end
 ns.AddPhaseIcon = AddPhaseIcon
 
-local AddQuestIcon = function(self, unit)
+local AddQuestIcon = function(self)
 	local questIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	questIcon:SetSize(16, 16)
 	questIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
@@ -1107,8 +1107,8 @@ local AddRaidIcon = function(self, unit)
 	self.RaidIcon = raidIcon
 end
 ns.AddRaidIcon = AddRaidIcon
-
-local AddRaidRoleIcon = function(self, unit)
+-- TODO: not used?
+local AddRaidRoleIcon = function(self)
 	local raidRole = self:CreateTexture(nil, "OVERLAY")
 	raidRole:SetSize(16, 16)
 	raidRole:SetPoint("BOTTOMRIGHT", -8.5, 8.5)
@@ -1117,7 +1117,7 @@ end
 ns.AddRaidRoleIcon = AddRaidRoleIcon
 
 -- oUF checks ready status only for raid and party
-local AddReadyCheckIcon = function(self, unit)
+local AddReadyCheckIcon = function(self)
 	local readyCheck = self.Health:CreateTexture(nil, "OVERLAY")
 	readyCheck:SetSize(16, 16)
 	readyCheck:SetPoint("RIGHT", -5, 0)
@@ -1137,7 +1137,7 @@ local AddRestingIcon = function(self)
 end
 ns.AddRestingIcon = AddRestingIcon
 
-local AddResurrectIcon = function(self, unit)
+local AddResurrectIcon = function(self)
 	local resurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	resurrectIcon:SetSize(16, 16)
 	resurrectIcon:SetPoint("CENTER")

@@ -61,8 +61,8 @@ local UnitSpecific = {
 
 		ns.AddComboPointsBar(self, 215, 5, 1)
 
-		ns.AddQuestIcon(self, "target")
-		ns.AddResurrectIcon(self, "target")
+		ns.AddQuestIcon(self)
+		ns.AddResurrectIcon(self)
 		ns.AddRangeCheck(self)
 
 		self:Tag(self.Power.value, "[rain:power]")
@@ -152,7 +152,7 @@ local Shared = function(self, unit)
 	end
 
 	ns.AddRaidIcon(self, unit)
-	ns.AddPhaseIcon(self, unit)
+	ns.AddPhaseIcon(self)
 
 	if (unit == "player" or unit == "target") then
 		self:SetSize(230, 50)
@@ -172,7 +172,7 @@ local Shared = function(self, unit)
 		self.Power.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
 
-		ns.AddPortrait(self, unit)
+		ns.AddPortrait(self)
 		ns.AddOverlay(self, unit)
 		ns.AddCastbar(self, unit)
 		ns.AddCombatFeedbackText(self)
@@ -202,10 +202,10 @@ local Shared = function(self, unit)
 			self.Status:UpdateTag()
 		end)
 
-		ns.AddAssistantIcon(self, unit)
-		ns.AddLeaderIcon(self, unit)
-		ns.AddMasterLooterIcon(self, unit)
-		ns.AddReadyCheckIcon(self, unit)
+		ns.AddAssistantIcon(self)
+		ns.AddLeaderIcon(self)
+		ns.AddMasterLooterIcon(self)
+		ns.AddReadyCheckIcon(self)
 	end
 
 	if (unit == "pet" or unit == "focus"
@@ -239,11 +239,11 @@ local Shared = function(self, unit)
 		else
 			self:Tag(self.Name, "[rain:role][rain:name]")
 
-			ns.AddAssistantIcon(self, unit)
-			ns.AddLeaderIcon(self, unit)
-			ns.AddMasterLooterIcon(self, unit)
-			ns.AddReadyCheckIcon(self, unit)
-			ns.AddResurrectIcon(self, unit)
+			ns.AddAssistantIcon(self)
+			ns.AddLeaderIcon(self)
+			ns.AddMasterLooterIcon(self)
+			ns.AddReadyCheckIcon(self)
+			ns.AddResurrectIcon(self)
 
 			ns.AddAuras(self, unit)
 			ns.AddDebuffHighlight(self, unit)
@@ -251,7 +251,7 @@ local Shared = function(self, unit)
 		end
 
 		if (unitIsMT) then
-			ns.AddResurrectIcon(self, unit)
+			ns.AddResurrectIcon(self)
 			ns.AddRangeCheck(self)
 		end
 
