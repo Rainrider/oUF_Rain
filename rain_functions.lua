@@ -1059,16 +1059,16 @@ local AddTotems = function(self, width, height)
 		totems[i]:SetBackdropColor(0, 0, 0)
 
 		totems[i]:EnableMouse()
-
+--[[
 		totems[i]:SetScript("OnMouseUp", function(self, button)
 			if (button == "RightButton") then
 				DestroyTotem(self:GetID())
 			end
 		end)
-
+--]]
 		totems[i].UpdateTooltip = function(self)
 			GameTooltip:SetTotem(self:GetID())
-			GameTooltip:AddLine(GLYPH_SLOT_REMOVE_TOOLTIP, 1, 0, 0)
+			--GameTooltip:AddLine(GLYPH_SLOT_REMOVE_TOOLTIP, 1, 0, 0)
 			GameTooltip:Show()
 		end
 	end
