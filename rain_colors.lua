@@ -49,20 +49,3 @@ ns.colors.power[6] = ns.colors.power["RUNIC_POWER"]
 ns.colors.power[7] = ns.colors.power["SOUL_SHARDS"]
 ns.colors.power[8] = ns.colors.power["ECLIPSE"]
 ns.colors.power[9] = ns.colors.power["HOLY_POWER"]
-
-ns.combatFeedbackColors = {
-	DAMAGE = {0.69, 0.31, 0.31},
-	CRUSHING = {0.69, 0.31, 0.31},
-	CRITICAL = {0.69, 0.31, 0.31},
-	GLANCING = {0.69, 0.31, 0.31},
-	STANDARD = {0.84, 0.75, 0.65},
-	IMMUNE = {0.84, 0.75, 0.65},
-	ABSORB = {0.84, 0.75, 0.65},
-	BLOCK = {0.84, 0.75, 0.65},
-	RESIST = {0.84, 0.75, 0.65},
-	MISS = {0.84, 0.75, 0.65},
-	HEAL = {0.33, 0.59, 0.33},
-	CRITHEAL = {0.33, 0.59, 0.33},
-	ENERGIZE = {0.31, 0.45, 0.63},
-	CRITENERGIZE = {0.31, 0.45, 0.63},
-}

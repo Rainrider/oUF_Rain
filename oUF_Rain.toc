@@ -5,7 +5,7 @@
 ## Notes: oUF layout
 ## X-Credits: Caellian, HankTheTank, haste, zork, p3lim
 ## RequiredDeps: oUF
-## OptionalDeps: oUF_CombatFeedback, oUF_Reputation, oUF_Swing
+## OptionalDeps: oUF_Reputation, oUF_Swing
 
 modules\rain_ccwarn.lua
 modules\rain_dispel.lua

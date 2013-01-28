@@ -641,17 +641,6 @@ local AddClassPowerIcons = function(self, width, height, spacing)
 end
 ns.AddClassPowerIcons = AddClassPowerIcons
 
-local AddCombatFeedbackText = function(self)
-	if (not IsAddOnLoaded("oUF_CombatFeedback")) then return end
-
-	local combatFeedbackText = PutFontString(self.Overlay, ns.media.FONT, 14, "OUTLINE", "LEFT")
-	combatFeedbackText:SetPoint("CENTER", 0, 5)
-	combatFeedbackText.colors = ns.combatFeedbackColors
-
-	self.CombatFeedbackText = combatFeedbackText
-end
-ns.AddCombatFeedbackText = AddCombatFeedbackText
-
 local AddComboPointsBar = function(self, width, height, spacing)
 	local comboPoints = {}
 	local maxCPoints = MAX_COMBO_POINTS
