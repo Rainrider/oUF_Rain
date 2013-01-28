@@ -1097,7 +1097,7 @@ local AddWarlockPowerBar = function(self, width, height, spacing)
 		bg:SetTexture(ns.media.TEXTURE)
 		bg:SetAllPoints()
 		bg.multiplier = 0.3
-		warlockPowerBar.bg = bg
+		warlockPowerBar[i].bg = bg
 	end
 
 	warlockPowerBar.PostUpdateVisibility = WarlockPowerPostUpdateVisibility
