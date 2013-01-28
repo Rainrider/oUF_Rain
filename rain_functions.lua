@@ -1,9 +1,4 @@
-﻿--[[========================================================================
-	DESCRIPTION:
-	Contrains the pre and post update and some helper functions for oUF_Rain
-	========================================================================--]]
-
-local _, ns = ...
+﻿local _, ns = ...
 local playerClass = ns.playerClass
 local UnitIsFriend = UnitIsFriend
 
@@ -435,229 +430,243 @@ end
 local AddAuras = function(self, unit)
 	if (not next(prioTable)) then return end
 
-	self.Auras = CreateFrame("Frame", self:GetName().."_Auras", self)
+	local auras = CreateFrame("Frame", self:GetName().."_Auras", self)
 	if (ns.cfg.horizParty) then
-		self.Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 9)
-		self.Auras.initialAnchor = "LEFT"
-		self.Auras["growth-x"] = "RIGHT"
-		self.Auras["growth-y"] = "UP"
+		auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 9)
+		auras.initialAnchor = "LEFT"
+		auras["growth-x"] = "RIGHT"
+		auras["growth-y"] = "UP"
 	else
-		self.Auras:SetPoint("RIGHT", self, "LEFT", -9, 0)
-		self.Auras.initialAnchor = "RIGHT"
-		self.Auras["growth-x"] = "LEFT"
-		self.Auras["growth-y"] = "DOWN"
+		auras:SetPoint("RIGHT", self, "LEFT", -9, 0)
+		auras.initialAnchor = "RIGHT"
+		auras["growth-x"] = "LEFT"
+		auras["growth-y"] = "DOWN"
 	end
-	self.Auras.numBuffs = 3
-	self.Auras.numDebuffs = 3
-	self.Auras.spacing = 6
-	self.Auras.size = (230 - 9 * self.Auras.spacing) / 10
-	self.Auras:SetSize(12 * (self.Auras.size + self.Auras.spacing), self.Auras.size + self.Auras.spacing)
-	self.Auras.disableCooldown = true
-	self.Auras.showType = true
-	self.Auras.onlyShowPlayer = false
-	self.Auras.CreateIcon = CreateAuraIcon
-	self.Auras.PreSetPosition = PreSetPosition
-	self.Auras.PostUpdateIcon = PostUpdateIcon
-	self.Auras.CustomFilter = CustomPartyFilter
+	auras.numBuffs = 3
+	auras.numDebuffs = 3
+	auras.spacing = 6
+	auras.size = (230 - 9 * auras.spacing) / 10
+	auras:SetSize(12 * (auras.size + auras.spacing), auras.size + auras.spacing)
+	auras.disableCooldown = true
+	auras.showType = true
+	auras.onlyShowPlayer = false
+	auras.CreateIcon = CreateAuraIcon
+	auras.PreSetPosition = PreSetPosition
+	auras.PostUpdateIcon = PostUpdateIcon
+	auras.CustomFilter = CustomPartyFilter
 
-	self.Auras.Magnify = CreateFrame("Frame", nil, self)
-	self.Auras.Magnify:SetFrameLevel(self.Auras:GetFrameLevel() + 2)
+	auras.Magnify = CreateFrame("Frame", nil, self)
+	auras.Magnify:SetFrameLevel(auras:GetFrameLevel() + 2)
 
-	self.Auras.Magnify.icon = self.Auras.Magnify:CreateTexture(nil, "ARTWORK")
-	self.Auras.Magnify.icon:SetPoint("CENTER")
+	auras.Magnify.icon = auras.Magnify:CreateTexture(nil, "ARTWORK")
+	auras.Magnify.icon:SetPoint("CENTER")
 
-	self.Auras.Magnify.border = self.Auras.Magnify:CreateTexture(nil, "OVERLAY")
-	self.Auras.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
-	self.Auras.Magnify.border:SetPoint("TOPLEFT", self.Auras.Magnify.icon, -5, 5)
-	self.Auras.Magnify.border:SetPoint("BOTTOMRIGHT", self.Auras.Magnify.icon, 5, -5)
+	auras.Magnify.border = auras.Magnify:CreateTexture(nil, "OVERLAY")
+	auras.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
+	auras.Magnify.border:SetPoint("TOPLEFT", auras.Magnify.icon, -5, 5)
+	auras.Magnify.border:SetPoint("BOTTOMRIGHT", auras.Magnify.icon, 5, -5)
+
+	self.Auras = auras
 end
 ns.AddAuras = AddAuras
 
 local AddAltPowerBar = function(self)
-	self.AltPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
-	self.AltPowerBar:SetHeight(3)
-	self.AltPowerBar:SetPoint("TOPLEFT", "oUF_Rain_Player_Overlay", 0, 0)
-	self.AltPowerBar:SetPoint("TOPRIGHT", "oUF_Rain_Player_Overlay", 0, 0)
-	self.AltPowerBar:SetToplevel(true)
-	self.AltPowerBar:SetStatusBarTexture(ns.media.TEXTURE)
-	self.AltPowerBar:SetStatusBarColor(0, 0.5, 1)
-	self.AltPowerBar:SetBackdrop(ns.media.BACKDROP)
-	self.AltPowerBar:SetBackdropColor(0, 0, 0, 0)
+	local altPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
+	altPowerBar:SetHeight(3)
+	altPowerBar:SetPoint("TOPLEFT", "oUF_Rain_Player_Overlay", 0, 0)
+	altPowerBar:SetPoint("TOPRIGHT", "oUF_Rain_Player_Overlay", 0, 0)
+	altPowerBar:SetToplevel(true)
+	altPowerBar:SetStatusBarTexture(ns.media.TEXTURE)
+	altPowerBar:SetStatusBarColor(0, 0.5, 1)
+	altPowerBar:SetBackdrop(ns.media.BACKDROP)
+	altPowerBar:SetBackdropColor(0, 0, 0, 0)
 
-	self.AltPowerBar.Text = PutFontString(self.AltPowerBar, ns.media.FONT2, 8, nil, "CENTER")
-	self.AltPowerBar.Text:SetPoint("CENTER", self.AltPowerBar, 0, 0)
-	self:Tag(self.AltPowerBar.Text, "[rain:altpower]")
+	altPowerBar.Text = PutFontString(altPowerBar, ns.media.FONT2, 8, nil, "CENTER")
+	altPowerBar.Text:SetPoint("CENTER", altPowerBar, 0, 0)
+	self:Tag(altPowerBar.Text, "[rain:altpower]")
 
-	self.AltPowerBar.OnEnter = function(self)
+	altPowerBar.OnEnter = function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
 		self:UpdateTooltip()
 	end
 
-	self.AltPowerBar:EnableMouse()
-	self.AltPowerBar:SetScript("OnEnter", self.AltPowerBar.OnEnter)
+	altPowerBar:EnableMouse()
+	altPowerBar:SetScript("OnEnter", altPowerBar.OnEnter)
+
+	self.AltPowerBar = altPowerBar
 end
 ns.AddAltPowerBar = AddAltPowerBar
 
 local AddBuffs = function(self, unit)
-	self.Buffs = CreateFrame("Frame", self:GetName().."_Buffs", self)
-	self.Buffs.spacing = 6
-	self.Buffs.size = (230 - 7 * self.Buffs.spacing) / 8
-	self.Buffs.disableCooldown = true
-	self.Buffs.showType = true
-	self.Buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
-	self.Buffs.showStealableBuffs = true
-	self.Buffs.CreateIcon = CreateAuraIcon
-	self.Buffs.PreSetPosition = PreSetPosition
-	self.Buffs.PostUpdateIcon = PostUpdateIcon
+	local buffs = CreateFrame("Frame", self:GetName().."_Buffs", self)
+	buffs.spacing = 6
+	buffs.size = (230 - 7 * buffs.spacing) / 8
+	buffs.disableCooldown = true
+	buffs.showType = true
+	buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
+	buffs.showStealableBuffs = true
+	buffs.CreateIcon = CreateAuraIcon
+	buffs.PreSetPosition = PreSetPosition
+	buffs.PostUpdateIcon = PostUpdateIcon
 
 	if (unit == "player" or unit == "target") then
-		self.Buffs:SetSize(8 * (self.Buffs.size + self.Buffs.spacing), 4 * (self.Buffs.size + self.Buffs.spacing))
-		self.Buffs["growth-y"] = "DOWN"
+		buffs:SetSize(8 * (buffs.size + buffs.spacing), 4 * (buffs.size + buffs.spacing))
+		buffs["growth-y"] = "DOWN"
 
 		if (unit == "player") then
-			self.Buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, 1)
-			self.Buffs.initialAnchor = "TOPRIGHT"
-			self.Buffs["growth-x"] = "LEFT"
-			self.Buffs.CustomFilter = CustomPlayerFilter
+			buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, 1)
+			buffs.initialAnchor = "TOPRIGHT"
+			buffs["growth-x"] = "LEFT"
+			buffs.CustomFilter = CustomPlayerFilter
 		else
-			self.Buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 9, 1)
-			self.Buffs.initialAnchor = "TOPLEFT"
-			self.Buffs["growth-x"] = "RIGHT"
-			self.Buffs.CustomFilter = CustomFilter
+			buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 9, 1)
+			buffs.initialAnchor = "TOPLEFT"
+			buffs["growth-x"] = "RIGHT"
+			buffs.CustomFilter = CustomFilter
 		end
 	end
 
 	if (unit == "pet") then
-		self.Buffs:SetPoint("RIGHT", self.Debuffs, "LEFT", -5, 0)
-		self.Buffs.num = 6
-		self.Buffs:SetSize(self.Buffs.num * (self.Buffs.size + self.Buffs.spacing), self.Buffs.size + self.Buffs.spacing)
-		self.Buffs.initialAnchor = "RIGHT"
-		self.Buffs["growth-x"] = "LEFT"
+		buffs:SetPoint("RIGHT", self.Debuffs, "LEFT", -5, 0)
+		buffs.num = 6
+		buffs:SetSize(buffs.num * (buffs.size + buffs.spacing), buffs.size + buffs.spacing)
+		buffs.initialAnchor = "RIGHT"
+		buffs["growth-x"] = "LEFT"
 	end
 
 	if (unit:match("^boss%d$")) then
-		self.Buffs:SetPoint("RIGHT", self, "LEFT", -15, 0)
-		self.Buffs.num = 6
-		self.Buffs:SetSize(self.Buffs.num * (self.Buffs.size + self.Buffs.spacing), self.Buffs.size + self.Buffs.spacing)
-		self.Buffs.initialAnchor = "RIGHT"
-		self.Buffs["growth-x"] = "LEFT"
+		buffs:SetPoint("RIGHT", self, "LEFT", -15, 0)
+		buffs.num = 6
+		buffs:SetSize(buffs.num * (buffs.size + buffs.spacing), buffs.size + buffs.spacing)
+		buffs.initialAnchor = "RIGHT"
+		buffs["growth-x"] = "LEFT"
 	end
 
-	self.Buffs.Magnify = CreateFrame("Frame", nil, self)
-	self.Buffs.Magnify:SetFrameLevel(self.Buffs:GetFrameLevel() + 2)
+	buffs.Magnify = CreateFrame("Frame", nil, self)
+	buffs.Magnify:SetFrameLevel(buffs:GetFrameLevel() + 2)
 
-	self.Buffs.Magnify.icon = self.Buffs.Magnify:CreateTexture(nil, "ARTWORK")
-	self.Buffs.Magnify.icon:SetPoint("CENTER")
+	buffs.Magnify.icon = buffs.Magnify:CreateTexture(nil, "ARTWORK")
+	buffs.Magnify.icon:SetPoint("CENTER")
 
-	self.Buffs.Magnify.border = self.Buffs.Magnify:CreateTexture(nil, "OVERLAY")
-	self.Buffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
-	self.Buffs.Magnify.border:SetPoint("TOPLEFT", self.Buffs.Magnify.icon, -5, 5)
-	self.Buffs.Magnify.border:SetPoint("BOTTOMRIGHT", self.Buffs.Magnify.icon, 5, -5)
+	buffs.Magnify.border = buffs.Magnify:CreateTexture(nil, "OVERLAY")
+	buffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
+	buffs.Magnify.border:SetPoint("TOPLEFT", buffs.Magnify.icon, -5, 5)
+	buffs.Magnify.border:SetPoint("BOTTOMRIGHT", buffs.Magnify.icon, 5, -5)
+
+	self.Buffs = buffs
 end
 ns.AddBuffs = AddBuffs
 
 local AddCastbar = function(self, unit)
-	self.Castbar = CreateFrame("StatusBar", self:GetName().."_Castbar", (unit == "player" or unit == "target") and self.Portrait or self.Power)
-	self.Castbar:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Castbar:SetStatusBarColor(0.55, 0.57, 0.61)
-	self.Castbar:SetAlpha(0.75)
+	local castbar = CreateFrame("StatusBar", self:GetName().."_Castbar", (unit == "player" or unit == "target") and self.Portrait or self.Power)
+	castbar:SetStatusBarTexture(ns.media.TEXTURE)
+	castbar:SetStatusBarColor(0.55, 0.57, 0.61)
+	castbar:SetAlpha(0.75)
 
 	if (unit == "player" or unit == "target") then
-		self.Castbar:SetAllPoints(self.Overlay)
+		castbar:SetAllPoints(self.Overlay)
 
-		self.Castbar.Time = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "RIGHT")
-		self.Castbar.Time:SetPoint("RIGHT", -3.5, 3)
-		self.Castbar.Time:SetTextColor(0.84, 0.75, 0.65)
+		castbar.Time = PutFontString(castbar, ns.media.FONT2, 12, nil, "RIGHT")
+		castbar.Time:SetPoint("RIGHT", -3.5, 3)
+		castbar.Time:SetTextColor(0.84, 0.75, 0.65)
 
-		self.Castbar.CustomTimeText = CustomCastTimeText
-		self.Castbar.CustomDelayText = CustomCastDelayText
+		castbar.CustomTimeText = CustomCastTimeText
+		castbar.CustomDelayText = CustomCastDelayText
 
-		self.Castbar.Text = PutFontString(self.Castbar, ns.media.FONT2, 12, nil, "LEFT")
-		self.Castbar.Text:SetPoint("LEFT", 3.5, 3)
-		self.Castbar.Text:SetPoint("RIGHT", self.Castbar.Time, "LEFT", -3.5, 0)
-		self.Castbar.Text:SetTextColor(0.84, 0.75, 0.65)
+		castbar.Text = PutFontString(castbar, ns.media.FONT2, 12, nil, "LEFT")
+		castbar.Text:SetPoint("LEFT", 3.5, 3)
+		castbar.Text:SetPoint("RIGHT", castbar.Time, "LEFT", -3.5, 0)
+		castbar.Text:SetTextColor(0.84, 0.75, 0.65)
 	else
-		self.Castbar:SetAllPoints(self.Power)
+		castbar:SetAllPoints(self.Power)
 	end
 
 	if (unit == "player") then
-		self.Castbar.SafeZone = self.Castbar:CreateTexture(nil, "ARTWORK")
-		self.Castbar.SafeZone:SetTexture(ns.media.TEXTURE)
-		self.Castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
+		castbar.SafeZone = castbar:CreateTexture(nil, "ARTWORK")
+		castbar.SafeZone:SetTexture(ns.media.TEXTURE)
+		castbar.SafeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
 	end
 
 	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
-		self.Castbar.Icon = self.Castbar:CreateTexture(nil, "ARTWORK")
+		castbar.Icon = castbar:CreateTexture(nil, "ARTWORK")
 
-		self.Castbar.IconOverlay = self.Castbar:CreateTexture(nil, "OVERLAY")
-		self.Castbar.IconOverlay:SetTexture(ns.media.BTNTEXTURE)
-		self.Castbar.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
+		castbar.IconOverlay = castbar:CreateTexture(nil, "OVERLAY")
+		castbar.IconOverlay:SetTexture(ns.media.BTNTEXTURE)
+		castbar.IconOverlay:SetVertexColor(0.84, 0.75, 0.65)
 
 		if (unit == "target") then
-			self.Castbar.Icon:SetPoint("RIGHT", self.Castbar, "LEFT", -15, 0)
-			self.Castbar.Icon:SetSize(32, 32)
-			self.Castbar.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -5, 5)
-			self.Castbar.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 5, -5)
+			castbar.Icon:SetPoint("RIGHT", castbar, "LEFT", -15, 0)
+			castbar.Icon:SetSize(32, 32)
+			castbar.IconOverlay:SetPoint("TOPLEFT", castbar.Icon, -5, 5)
+			castbar.IconOverlay:SetPoint("BOTTOMRIGHT", castbar.Icon, 5, -5)
 		else
-			self.Castbar.Icon:SetSize(22, 22)
-			self.Castbar.IconOverlay:SetPoint("TOPLEFT", self.Castbar.Icon, -3, 3)
-			self.Castbar.IconOverlay:SetPoint("BOTTOMRIGHT", self.Castbar.Icon, 3, -3)
+			castbar.Icon:SetSize(22, 22)
+			castbar.IconOverlay:SetPoint("TOPLEFT", castbar.Icon, -3, 3)
+			castbar.IconOverlay:SetPoint("BOTTOMRIGHT", castbar.Icon, 3, -3)
 			if (unit == "focus") then
-				self.Castbar.Icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
+				castbar.Icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
 			else
-				self.Castbar.Icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
+				castbar.Icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
 			end
 		end
-		self.Castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		castbar.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
-		self.Castbar.PostCastStart = PostUpdateCast
-		self.Castbar.PostChannelStart = PostUpdateCast
-		self.Castbar.PostCastInterruptible = PostUpdateCast
-		self.Castbar.PostCastNotInterruptible = PostUpdateCast
+		castbar.PostCastStart = PostUpdateCast
+		castbar.PostChannelStart = PostUpdateCast
+		castbar.PostCastInterruptible = PostUpdateCast
+		castbar.PostCastNotInterruptible = PostUpdateCast
 	end
+
+	self.Castbar = castbar
 end
 ns.AddCastbar = AddCastbar
 
 local AddClassPowerIcons = function(self, width, height, spacing)
-	self.ClassIcons = {}
+	local classIcons = {}
 
-	self.ClassIcons.width  = width
-	self.ClassIcons.height = height
-	self.ClassIcons.spacing = spacing
+	classIcons.width  = width
+	classIcons.height = height
+	classIcons.spacing = spacing
 
 	local maxPower = 5
 
 	for i = 1, maxPower do
-		self.ClassIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
-		self.ClassIcons[i]:SetTexture(ns.media.TEXTURE)
+		classIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
+		classIcons[i]:SetTexture(ns.media.TEXTURE)
 	end
 
-	self.ClassIcons.PostUpdate = PostUpdateClassPowerIcons
+	classIcons.PostUpdate = PostUpdateClassPowerIcons
+
+	self.ClassIcons = classIcons
 end
 ns.AddClassPowerIcons = AddClassPowerIcons
 
 local AddCombatFeedbackText = function(self)
 	if (not IsAddOnLoaded("oUF_CombatFeedback")) then return end
 
-	self.CombatFeedbackText = PutFontString(self.Overlay, ns.media.FONT, 14, "OUTLINE", "LEFT")
-	self.CombatFeedbackText:SetPoint("CENTER", 0, 5)
-	self.CombatFeedbackText.colors = ns.combatFeedbackColors
+	local combatFeedbackText = PutFontString(self.Overlay, ns.media.FONT, 14, "OUTLINE", "LEFT")
+	combatFeedbackText:SetPoint("CENTER", 0, 5)
+	combatFeedbackText.colors = ns.combatFeedbackColors
+
+	self.CombatFeedbackText = combatFeedbackText
 end
 ns.AddCombatFeedbackText = AddCombatFeedbackText
 
 local AddComboPointsBar = function(self, width, height, spacing)
-	self.CPoints = {}
+	local comboPoints = {}
 	local maxCPoints = MAX_COMBO_POINTS
 
 	for i = 1, maxCPoints do
-		self.CPoints[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
-		self.CPoints[i]:SetSize((width - maxCPoints * spacing - spacing) / maxCPoints, height)
-		self.CPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.CPoints[i]:GetWidth() + i * spacing, 1)
-		self.CPoints[i]:SetTexture(unpack(ns.colors.cpoints[i]))
+		comboPoints[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
+		comboPoints[i]:SetSize((width - maxCPoints * spacing - spacing) / maxCPoints, height)
+		comboPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * comboPoints[i]:GetWidth() + i * spacing, 1)
+		comboPoints[i]:SetTexture(unpack(ns.colors.cpoints[i]))
 	end
+
+	self.CPoints = comboPoints
 end
 ns.AddComboPointsBar = AddComboPointsBar
-
+-- TODO: this looks awfully
 local AddDebuffHighlight = function(self, unit)
 	self.DebuffHighlight = CreateFrame("Frame", self:GetName().."_DebuffHighlight", self.Health)
 	self.DebuffHighlight:SetAllPoints()
@@ -694,60 +703,62 @@ end
 ns.AddDebuffHighlight = AddDebuffHighlight
 
 local AddDebuffs = function(self, unit)
-	self.Debuffs = CreateFrame("Frame", self:GetName().."_Debuffs", self)
-	self.Debuffs.spacing = 6
-	self.Debuffs.size = (230 - 7 * self.Debuffs.spacing) / 8
-	self.Debuffs.showType = true
-	self.Debuffs.disableCooldown = true
-	self.Debuffs.onlyShowPlayer = ns.cfg.onlyShowPlayerDebuffs
-	self.Debuffs.CreateIcon = CreateAuraIcon
-	self.Debuffs.PreSetPosition = PreSetPosition
-	self.Debuffs.PostUpdateIcon = PostUpdateIcon
+	local debuffs = CreateFrame("Frame", self:GetName().."_Debuffs", self)
+	debuffs.spacing = 6
+	debuffs.size = (230 - 7 * debuffs.spacing) / 8
+	debuffs.showType = true
+	debuffs.disableCooldown = true
+	debuffs.onlyShowPlayer = ns.cfg.onlyShowPlayerDebuffs
+	debuffs.CreateIcon = CreateAuraIcon
+	debuffs.PreSetPosition = PreSetPosition
+	debuffs.PostUpdateIcon = PostUpdateIcon
 
 	if (unit == "player" or unit == "target") then
-		self.Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -7.5)
-		self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -7.5)
-		self.Debuffs:SetHeight(5 * (self.Debuffs.size + self.Debuffs.spacing))
+		debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -7.5)
+		debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -7.5)
+		debuffs:SetHeight(5 * (debuffs.size + debuffs.spacing))
 
-		self.Debuffs.initialAnchor = "TOPLEFT"
-		self.Debuffs["growth-x"] = "RIGHT"
-		self.Debuffs["growth-y"] = "DOWN"
+		debuffs.initialAnchor = "TOPLEFT"
+		debuffs["growth-x"] = "RIGHT"
+		debuffs["growth-y"] = "DOWN"
 
 		if (unit == "player") then
-			self.Debuffs.CustomFilter = CustomPlayerFilter
+			debuffs.CustomFilter = CustomPlayerFilter
 		else
-			self.Debuffs.CustomFilter = CustomFilter
+			debuffs.CustomFilter = CustomFilter
 		end
 	end
 
 	if (unit == "pet") then
-		self.Debuffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -15, 0)
-		self.Debuffs.num = 6
-		self.Debuffs:SetSize(self.Debuffs.num * (self.Debuffs.size + self.Debuffs.spacing), self.Debuffs.size + self.Debuffs.spacing)
+		debuffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -15, 0)
+		debuffs.num = 6
+		debuffs:SetSize(debuffs.num * (debuffs.size + debuffs.spacing), debuffs.size + debuffs.spacing)
 
-		self.Debuffs.initialAnchor = "RIGHT"
-		self.Debuffs["growth-x"] = "LEFT"
+		debuffs.initialAnchor = "RIGHT"
+		debuffs["growth-x"] = "LEFT"
 	end
 
 	if (unit == "targettarget") then
-		self.Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 15, 0)
-		self.Debuffs.num = 6
-		self.Debuffs:SetSize(self.Debuffs.num * self.Debuffs.size + (self.Debuffs.num - 1) * self.Debuffs.spacing, self.Debuffs.size)
+		debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 15, 0)
+		debuffs.num = 6
+		debuffs:SetSize(debuffs.num * debuffs.size + (debuffs.num - 1) * debuffs.spacing, debuffs.size)
 
-		self.Debuffs.initialAnchor = "LEFT"
-		self.Debuffs["growth-x"] = "RIGHT"
+		debuffs.initialAnchor = "LEFT"
+		debuffs["growth-x"] = "RIGHT"
 	end
 
-	self.Debuffs.Magnify = CreateFrame("Frame", nil, self)
-	self.Debuffs.Magnify:SetFrameLevel(self.Debuffs:GetFrameLevel() + 2)
+	debuffs.Magnify = CreateFrame("Frame", nil, self)
+	debuffs.Magnify:SetFrameLevel(debuffs:GetFrameLevel() + 2)
 
-	self.Debuffs.Magnify.icon = self.Debuffs.Magnify:CreateTexture(nil, "ARTWORK")
-	self.Debuffs.Magnify.icon:SetPoint("CENTER")
+	debuffs.Magnify.icon = debuffs.Magnify:CreateTexture(nil, "ARTWORK")
+	debuffs.Magnify.icon:SetPoint("CENTER")
 
-	self.Debuffs.Magnify.border = self.Debuffs.Magnify:CreateTexture(nil, "OVERLAY")
-	self.Debuffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
-	self.Debuffs.Magnify.border:SetPoint("TOPLEFT", self.Debuffs.Magnify.icon, -5, 5)
-	self.Debuffs.Magnify.border:SetPoint("BOTTOMRIGHT", self.Debuffs.Magnify.icon, 5, -5)
+	debuffs.Magnify.border = debuffs.Magnify:CreateTexture(nil, "OVERLAY")
+	debuffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
+	debuffs.Magnify.border:SetPoint("TOPLEFT", debuffs.Magnify.icon, -5, 5)
+	debuffs.Magnify.border:SetPoint("BOTTOMRIGHT", debuffs.Magnify.icon, 5, -5)
+
+	self.Debuffs = debuffs
 end
 ns.AddDebuffs = AddDebuffs
 
@@ -784,29 +795,30 @@ end
 ns.AddEclipseBar = AddEclipseBar
 
 local AddExperienceBar = function(self)
-	self.Experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
-	self.Experience:SetHeight(5)
-	self.Experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
-	self.Experience:SetPoint("BOTTOMRIGHT", self.Health, "TOP", -2, 2.5)
-	self.Experience:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Experience:SetStatusBarColor(0.67, 0.51, 1)
-	self.Experience:SetBackdrop(ns.media.BACKDROP)
-	self.Experience:SetBackdropColor(0, 0, 0)
-	self.Experience:SetAlpha(0)
+	local experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
+	experience:SetHeight(5)
+	experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
+	experience:SetPoint("BOTTOMRIGHT", self.Health, "TOP", -2, 2.5)
+	experience:SetStatusBarTexture(ns.media.TEXTURE)
+	experience:SetStatusBarColor(0.67, 0.51, 1)
+	experience:SetBackdrop(ns.media.BACKDROP)
+	experience:SetBackdropColor(0, 0, 0)
+	experience:SetAlpha(0)
 
-	self.Experience:EnableMouse()
-	self.Experience:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
-	self.Experience:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
+	experience:EnableMouse()
+	experience:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
+	experience:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
 
-	self.Experience.Rested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", self.Experience)
-	self.Experience.Rested:SetPoint("TOPLEFT", self.Experience:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	self.Experience.Rested:SetPoint("BOTTOMRIGHT", self.Experience, 0, 0)
-	self.Experience.Rested:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Experience.Rested:SetStatusBarColor(0, 0.56, 1)
-	self.Experience.Rested:SetBackdrop(ns.media.BACKDROP)
-	self.Experience.Rested:SetBackdropColor(0, 0, 0)
+	local rested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", experience)
+	rested:SetPoint("TOPLEFT", experience:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	rested:SetPoint("BOTTOMRIGHT", experience, 0, 0)
+	rested:SetStatusBarTexture(ns.media.TEXTURE)
+	rested:SetStatusBarColor(0, 0.56, 1)
+	rested:SetBackdrop(ns.media.BACKDROP)
+	rested:SetBackdropColor(0, 0, 0)
+	experience.Rested = rested
 
-	self.Experience.Tooltip = function(self)
+	experience.Tooltip = function(self)
 		local curXP, maxXP = UnitXP("player"), UnitXPMax("player")
 		local bars = 20
 		local rested = GetXPExhaustion()
@@ -819,24 +831,29 @@ local AddExperienceBar = function(self)
 		GameTooltip:Show()
 	end
 
-	self.Experience:HookScript("OnLeave", GameTooltip_Hide)
-	self.Experience:HookScript("OnEnter", self.Experience.Tooltip)
+	experience:HookScript("OnLeave", GameTooltip_Hide)
+	experience:HookScript("OnEnter", experience.Tooltip)
+
+	self.Experience = experience
 end
 ns.AddExperienceBar = AddExperienceBar
 
 local AddFocusHelper = function(self)
-	self.FocusSpark = self.Power:CreateTexture(nil, "OVERLAY")
-	self.FocusSpark:SetWidth(10)
-	self.FocusSpark:SetHeight(self.Power:GetHeight() * 1.85)
+	local focusSpark = self.Power:CreateTexture(nil, "OVERLAY")
+	focusSpark:SetWidth(10)
+	focusSpark:SetHeight(self.Power:GetHeight() * 1.85)
 
-	self.FocusSpark.bmSpell = ns.cfg.bmSpell -- Kill Command
-	self.FocusSpark.mmSpell = ns.cfg.mmSpell -- Chimera Shot
-	self.FocusSpark.svSpell = ns.cfg.svSpell -- Explosive Shot
+	focusSpark.bmSpell = ns.cfg.bmSpell -- Kill Command
+	focusSpark.mmSpell = ns.cfg.mmSpell -- Chimera Shot
+	focusSpark.svSpell = ns.cfg.svSpell -- Explosive Shot
 
-	self.FocusGain = self.Power:CreateTexture(nil, "OVERLAY")
-	self.FocusGain:SetHeight(self.Power:GetHeight())
-	self.FocusGain:SetTexture(ns.media.TEXTURE)
-	self.FocusGain:SetVertexColor(0, 1, 0, 0.3)
+	local focusGain = self.Power:CreateTexture(nil, "OVERLAY")
+	focusGain:SetHeight(self.Power:GetHeight())
+	focusGain:SetTexture(ns.media.TEXTURE)
+	focusGain:SetVertexColor(0, 1, 0, 0.3)
+
+	self.FocusSpark = focusSpark
+	self.FocusGain = focusGain
 end
 ns.AddFocusHelper = AddFocusHelper
 
@@ -864,31 +881,37 @@ end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
 local AddOverlay = function(self, unit)
-	self.Overlay = CreateFrame("Frame", self:GetName().."_Overlay", self.Portrait)
-	self.Overlay:SetPoint("TOPLEFT", self.Portrait, 0, 1)
-	self.Overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 0, -1)
+	local overlay = CreateFrame("Frame", self:GetName().."_Overlay", self.Portrait)
+	overlay:SetPoint("TOPLEFT", self.Portrait, 0, 1)
+	overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 0, -1)
 
 	if (unit == "player") then
-		self.Threat = self.Overlay:CreateTexture(nil, "BORDER")
-		self.Threat:SetAllPoints()
-		self.Threat:SetTexture(ns.media.OVERLAY)
-		self.Threat:SetVertexColor(0.1, 0.1, 0.1, 0.75)
+		local threat = overlay:CreateTexture(nil, "BORDER")
+		threat:SetAllPoints()
+		threat:SetTexture(ns.media.OVERLAY)
+		threat:SetVertexColor(0.1, 0.1, 0.1, 0.75)
+		self.Threat = threat
 	else
-		self.CCWarn = self.Overlay:CreateTexture(nil, "BORDER")
-		self.CCWarn:SetAllPoints()
-		self.CCWarn:SetTexture(ns.media.OVERLAY)
-		self.CCWarn:SetVertexColor(0.1, 0.1, 0.1, 0.75)
+		local ccWarn = overlay:CreateTexture(nil, "BORDER")
+		ccWarn:SetAllPoints()
+		ccWarn:SetTexture(ns.media.OVERLAY)
+		ccWarn:SetVertexColor(0.1, 0.1, 0.1, 0.75)
+		self.CCWarn = ccWarn
 	end
+
+	self.Overlay = overlay
 end
 ns.AddOverlay = AddOverlay
 
 local AddPortrait = function(self, unit)
-	self.Portrait = CreateFrame("PlayerModel", self:GetName().."_Portrait", self)
-	self.Portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
-	self.Portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
-	self.Portrait:SetFrameLevel(self:GetFrameLevel() + 3)
-	self.Portrait:SetBackdrop(ns.media.BACKDROP)
-	self.Portrait:SetBackdropColor(0, 0, 0, 1)
+	local portrait = CreateFrame("PlayerModel", self:GetName().."_Portrait", self)
+	portrait:SetPoint("TOPLEFT", self.Health, "BOTTOMLEFT", 7.5, 10)
+	portrait:SetPoint("BOTTOMRIGHT", self.Power, "TOPRIGHT", -7.5, -7.5)
+	portrait:SetFrameLevel(self:GetFrameLevel() + 3)
+	portrait:SetBackdrop(ns.media.BACKDROP)
+	portrait:SetBackdropColor(0, 0, 0, 1)
+
+	self.Portrait = portrait
 end
 ns.AddPortrait = AddPortrait
 
@@ -903,27 +926,28 @@ ns.AddRangeCheck = AddRangeCheck
 local AddReputationBar = function(self)
 	if (not IsAddOnLoaded("oUF_Reputation")) then return end
 
-	self.Reputation = CreateFrame("StatusBar", "oUF_Rain_Reputation", self)
-	self.Reputation:SetHeight(5)
-	self.Reputation:SetPoint("TOPLEFT", self.Health, "TOP", 2, 7.5)
-	self.Reputation:SetPoint("TOPRIGHT", self.Health, "TOPRIGHT", 0, 7.5)
-	self.Reputation:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Reputation:SetBackdrop(ns.media.BACKDROP)
-	self.Reputation:SetBackdropColor(0, 0, 0)
-	self.Reputation:SetAlpha(0)
+	local reputation = CreateFrame("StatusBar", "oUF_Rain_Reputation", self)
+	reputation:SetHeight(5)
+	reputation:SetPoint("TOPLEFT", self.Health, "TOP", 2, 7.5)
+	reputation:SetPoint("TOPRIGHT", self.Health, "TOPRIGHT", 0, 7.5)
+	reputation:SetStatusBarTexture(ns.media.TEXTURE)
+	reputation:SetBackdrop(ns.media.BACKDROP)
+	reputation:SetBackdropColor(0, 0, 0)
+	reputation:SetAlpha(0)
 
-	self.Reputation:EnableMouse()
-	self.Reputation:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
-	self.Reputation:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
+	reputation:EnableMouse()
+	reputation:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
+	reputation:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
 
-	self.Reputation.bg = self.Reputation:CreateTexture(nil, "BORDER")
-	self.Reputation.bg:SetAllPoints(self.Reputation)
-	self.Reputation.bg:SetTexture(ns.media.TEXTURE)
-	self.Reputation.bg:SetVertexColor(0.15, 0.15, 0.15)
+	local bg = reputation:CreateTexture(nil, "BORDER")
+	bg:SetAllPoints(reputation)
+	bg:SetTexture(ns.media.TEXTURE)
+	bg:SetVertexColor(0.15, 0.15, 0.15)
+	reputation.bg = bg
 
-	self.Reputation.colorStanding = true
+	reputation.colorStanding = true
 
-	self.Reputation.Tooltip = function(self)
+	reputation.Tooltip = function(self)
 		local name, standing, min, max, value, id = GetWatchedFactionInfo()
 		local _, friendRep, friendMaxRep, _, _, _, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(id)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
@@ -940,44 +964,51 @@ local AddReputationBar = function(self)
 		GameTooltip:Show()
 	end
 
-	self.Reputation:HookScript("OnLeave", GameTooltip_Hide)
-	self.Reputation:HookScript("OnEnter", self.Reputation.Tooltip)
+	reputation:HookScript("OnLeave", GameTooltip_Hide)
+	reputation:HookScript("OnEnter", reputation.Tooltip)
+
+	self.Reputation = reputation
 end
 ns.AddReputationBar = AddReputationBar
 
 local AddRuneBar = function(self, width, height, spacing)
-	self.Runes = {}
+	local runes = {}
 	local maxRunes = 6
 
 	for i = 1, maxRunes do
-		self.Runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
-		self.Runes[i]:SetSize((width - maxRunes * spacing - spacing) / maxRunes, height)
-		self.Runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.Runes[i]:GetWidth() + i * spacing, 1)
-		self.Runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.Runes[i]:SetBackdrop(ns.media.BACKDROP)
-		self.Runes[i]:SetBackdropColor(0, 0, 0)
+		runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
+		runes[i]:SetSize((width - maxRunes * spacing - spacing) / maxRunes, height)
+		runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * runes[i]:GetWidth() + i * spacing, 1)
+		runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
+		runes[i]:SetBackdrop(ns.media.BACKDROP)
+		runes[i]:SetBackdropColor(0, 0, 0)
 
-		self.Runes[i].bg = self.Runes[i]:CreateTexture(nil, "BORDER")
-		self.Runes[i].bg:SetTexture(ns.media.TEXTURE)
-		self.Runes[i].bg:SetAllPoints()
-		self.Runes[i].bg.multiplier = 0.5
+		local bg = runes[i]:CreateTexture(nil, "BORDER")
+		bg:SetTexture(ns.media.TEXTURE)
+		bg:SetAllPoints()
+		bg.multiplier = 0.5
+		runes[i].bg = bg
 	end
+
+	self.Runes = runes
 end
 ns.AddRuneBar = AddRuneBar
 
 local AddSwingBar = function(self)
 	if (not IsAddOnLoaded("oUF_Swing")) then return end
 
-	self.Swing = CreateFrame("Frame", self:GetName().."_Swing", self)
-	self.Swing:SetHeight(3)
-	self.Swing:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 7)
-	self.Swing:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 7)
-	self.Swing.texture = ns.media.TEXTURE
-	self.Swing.color = {0.55, 0.57, 0.61, 1}
-	self.Swing.textureBG = ns.media.TEXTURE
-	self.Swing.colorBG = {0, 0, 0, 0.6}
+	local swing = CreateFrame("Frame", self:GetName().."_Swing", self)
+	swing:SetHeight(3)
+	swing:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 7)
+	swing:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 7)
+	swing.texture = ns.media.TEXTURE
+	swing.color = {0.55, 0.57, 0.61, 1}
+	swing.textureBG = ns.media.TEXTURE
+	swing.colorBG = {0, 0, 0, 0.6}
 
-	self.Swing.hideOoc = true
+	swing.hideOoc = true
+
+	self.Swing = swing
 end
 ns.AddSwingBar = AddSwingBar
 
@@ -996,165 +1027,182 @@ end
 ns.AddThreatHighlight = AddThreatHighlight
 
 local AddTotems = function(self, width, height)
-	self.Totems = {}
+	local totems = {}
 	local maxTotems = MAX_TOTEMS
 
 	for i = 1, maxTotems do
-		self.Totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
-		self.Totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.Totems[i]:SetMinMaxValues(0, 1)
+		totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
+		totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
+		totems[i]:SetMinMaxValues(0, 1)
 
 		if (playerClass == "SHAMAN") then
-			self.Totems[i]:SetSize((215 - maxTotems - 1) / maxTotems, height)
-			self.Totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxTotems) + 1, 0)
-			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
+			totems[i]:SetSize((215 - maxTotems - 1) / maxTotems, height)
+			totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxTotems) + 1, 0)
+			totems[i]:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
-			self.Totems[i]:SetSize(width, height)
-			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
+			totems[i]:SetSize(width, height)
+			totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 				if (i == 1) then
-					self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+					totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 				elseif (i == 2) then
-					self.Totems[i]:SetPoint("RIGHT", self.Totems[1], "LEFT", -1, 0)
+					totems[i]:SetPoint("RIGHT", totems[1], "LEFT", -1, 0)
 				else
-					self.Totems[i]:SetPoint("LEFT", self.Totems[1], "RIGHT", 1, 0)
+					totems[i]:SetPoint("LEFT", totems[1], "RIGHT", 1, 0)
 				end
 		elseif (playerClass == "DEATHKNIGHT") then -- Death knight's ghoul
-			self.Totems[i]:SetSize(width, height)
-			self.Totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
-			self.Totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+			totems[i]:SetSize(width, height)
+			totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
+			totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 		end
 
-		self.Totems[i]:SetBackdrop(ns.media.BACKDROP)
-		self.Totems[i]:SetBackdropColor(0, 0, 0)
+		totems[i]:SetBackdrop(ns.media.BACKDROP)
+		totems[i]:SetBackdropColor(0, 0, 0)
 
-		self.Totems[i]:EnableMouse()
+		totems[i]:EnableMouse()
 
-		self.Totems[i]:SetScript("OnMouseUp", function(self, button)
+		totems[i]:SetScript("OnMouseUp", function(self, button)
 			if (button == "RightButton") then
 				DestroyTotem(self:GetID())
 			end
 		end)
 
-		self.Totems[i].UpdateTooltip = function(self)
+		totems[i].UpdateTooltip = function(self)
 			GameTooltip:SetTotem(self:GetID())
 			GameTooltip:AddLine(GLYPH_SLOT_REMOVE_TOOLTIP, 1, 0, 0)
 			GameTooltip:Show()
 		end
 	end
 
-	self.Totems.Override = UpdateTotem
+	totems.Override = UpdateTotem
+
+	self.Totems = totems
 end
 ns.AddTotems = AddTotems
 
 local AddWarlockPowerBar = function(self, width, height, spacing)
-	self.WarlockPowerBar = {}
-	self.WarlockPowerBar.width = width
-	self.WarlockPowerBar.height = height
-	self.WarlockPowerBar.spacing = spacing
+	local warlockPowerBar = {}
+	warlockPowerBar.width = width
+	warlockPowerBar.height = height
+	warlockPowerBar.spacing = spacing
 
 	for i = 1, 4 do
-		self.WarlockPowerBar[i] = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
-		self.WarlockPowerBar[i]:SetSize((width - 4 * spacing - spacing) / 4, height)
-		self.WarlockPowerBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * self.WarlockPowerBar[i]:GetWidth() + i * spacing, 1)
-		self.WarlockPowerBar[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		self.WarlockPowerBar[i]:SetBackdrop(ns.media.BACKDROP)
-		self.WarlockPowerBar[i]:SetBackdropColor(0, 0, 0)
+		warlockPowerBar[i] = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
+		warlockPowerBar[i]:SetSize((width - 4 * spacing - spacing) / 4, height)
+		warlockPowerBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * warlockPowerBar[i]:GetWidth() + i * spacing, 1)
+		warlockPowerBar[i]:SetStatusBarTexture(ns.media.TEXTURE)
+		warlockPowerBar[i]:SetBackdrop(ns.media.BACKDROP)
+		warlockPowerBar[i]:SetBackdropColor(0, 0, 0)
 
-		self.WarlockPowerBar[i].bg = self.WarlockPowerBar[i]:CreateTexture(nil, "BORDER")
-		self.WarlockPowerBar[i].bg:SetTexture(ns.media.TEXTURE)
-		self.WarlockPowerBar[i].bg:SetAllPoints()
-		self.WarlockPowerBar[i].bg.multiplier = 0.3
+		local bg = warlockPowerBar[i]:CreateTexture(nil, "BORDER")
+		bg:SetTexture(ns.media.TEXTURE)
+		bg:SetAllPoints()
+		bg.multiplier = 0.3
+		warlockPowerBar.bg = bg
 	end
 
-	self.WarlockPowerBar.PostUpdateVisibility = WarlockPowerPostUpdateVisibility
+	warlockPowerBar.PostUpdateVisibility = WarlockPowerPostUpdateVisibility
+
+	self.WarlockPowerBar = warlockPowerBar
 end
 ns.AddWarlockPowerBar = AddWarlockPowerBar
 
 --[[ ICONS ]]--
 
 local AddAssistantIcon = function(self, unit)
-	self.Assistant = self.Health:CreateTexture(nil, "OVERLAY")
-	self.Assistant:SetSize(16, 16)
-	self.Assistant:SetPoint("TOPLEFT", -8.5, 8.5)
+	local assistant = self.Health:CreateTexture(nil, "OVERLAY")
+	assistant:SetSize(16, 16)
+	assistant:SetPoint("TOPLEFT", -8.5, 8.5)
+	self.Assistant = assistant
 end
 ns.AddAssistantIcon = AddAssistantIcon
 
 local AddCombatIcon = function(self)
-	self.Combat = self.Health:CreateTexture(nil, "OVERLAY")
-	self.Combat:SetSize(20, 20)
-	self.Combat:SetPoint("TOP", 0, 1)
+	local combat = self.Health:CreateTexture(nil, "OVERLAY")
+	combat:SetSize(20, 20)
+	combat:SetPoint("TOP", 0, 1)
+	self.Combat = combat
 end
 ns.AddCombatIcon = AddCombatIcon
 
 local AddLeaderIcon = function(self, unit)
-	self.Leader = self.Health:CreateTexture(nil, "OVERLAY")
-	self.Leader:SetSize(16, 16)
-	self.Leader:SetPoint("TOPLEFT", -8.5, 8.5)
+	local leader = self.Health:CreateTexture(nil, "OVERLAY")
+	leader:SetSize(16, 16)
+	leader:SetPoint("TOPLEFT", -8.5, 8.5)
+	self.Leader = leader
 end
 ns.AddLeaderIcon = AddLeaderIcon
 
 local AddMasterLooterIcon = function(self, unit)
-	self.MasterLooter = self.Health:CreateTexture(nil, "OVERLAY")
-	self.MasterLooter:SetSize(16, 16)
-	self.MasterLooter:SetPoint("TOPRIGHT", 8.5, 8.5)
+	local masterLooter = self.Health:CreateTexture(nil, "OVERLAY")
+	masterLooter:SetSize(16, 16)
+	masterLooter:SetPoint("TOPRIGHT", 8.5, 8.5)
+	self.MasterLooter = masterLooter
 end
 ns.AddMasterLooterIcon = AddMasterLooterIcon
 
 local AddPhaseIcon = function(self, unit)
-	self.PhaseIcon = self.Health:CreateTexture(nil, "OVERLAY")
-	self.PhaseIcon:SetSize(16, 16)
-	self.PhaseIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
+	local phaseIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	phaseIcon:SetSize(16, 16)
+	phaseIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
+	self.PhaseIcon = phaseIcon
 end
 ns.AddPhaseIcon = AddPhaseIcon
 
 local AddQuestIcon = function(self, unit)
-	self.QuestIcon = self.Health:CreateTexture(nil, "OVERLAY")
-	self.QuestIcon:SetSize(16, 16)
-	self.QuestIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
+	local questIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	questIcon:SetSize(16, 16)
+	questIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
+	self.QuestIcon = questIcon
 end
 ns.AddQuestIcon = AddQuestIcon
 
 local AddRaidIcon = function(self, unit)
-	self.RaidIcon = self.Health:CreateTexture(nil, "OVERLAY")
-	self.RaidIcon:SetTexture(ns.media.RAIDICONS)
+	raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	raidIcon:SetTexture(ns.media.RAIDICONS)
 	if (unit ~= "player" and unit ~= "target") then
-		self.RaidIcon:SetSize(14, 14)
-		self.RaidIcon:SetPoint("TOP", 0, 10)
+		raidIcon:SetSize(14, 14)
+		raidIcon:SetPoint("TOP", 0, 10)
 	else
-		self.RaidIcon:SetSize(18, 18)
-		self.RaidIcon:SetPoint("TOP", 0, 10)
+		raidIcon:SetSize(18, 18)
+		raidIcon:SetPoint("TOP", 0, 10)
 	end
+	self.RaidIcon = raidIcon
 end
 ns.AddRaidIcon = AddRaidIcon
 
 local AddRaidRoleIcon = function(self, unit)
-	self.RaidRole = self:CreateTexture(nil, "OVERLAY")
-	self.RaidRole:SetSize(16, 16)
-	self.RaidRole:SetPoint("BOTTOMRIGHT", -8.5, 8.5)
+	local raidRole = self:CreateTexture(nil, "OVERLAY")
+	raidRole:SetSize(16, 16)
+	raidRole:SetPoint("BOTTOMRIGHT", -8.5, 8.5)
+	self.RaidRole = raidRole
 end
 ns.AddRaidRoleIcon = AddRaidRoleIcon
 
 -- oUF checks ready status only for raid and party
 local AddReadyCheckIcon = function(self, unit)
-	self.ReadyCheck = self.Health:CreateTexture(nil, "OVERLAY")
-	self.ReadyCheck:SetSize(16, 16)
-	self.ReadyCheck:SetPoint("RIGHT", -5, 0)
+	local readyCheck = self.Health:CreateTexture(nil, "OVERLAY")
+	readyCheck:SetSize(16, 16)
+	readyCheck:SetPoint("RIGHT", -5, 0)
 
-	self.ReadyCheck.finishedTime = 10
-	self.ReadyCheck.fadeTime = 3
+	readyCheck.finishedTime = 10
+	readyCheck.fadeTime = 3
+
+	self.ReadyCheck = readyCheck
 end
 ns.AddReadyCheckIcon = AddReadyCheckIcon
 
 local AddRestingIcon = function(self)
-	self.Resting = self.Power:CreateTexture(nil, "OVERLAY")
-	self.Resting:SetSize(16, 16)
-	self.Resting:SetPoint("BOTTOMLEFT", -8.5, -8.5)
+	local resting = self.Power:CreateTexture(nil, "OVERLAY")
+	resting:SetSize(16, 16)
+	resting:SetPoint("BOTTOMLEFT", -8.5, -8.5)
+	self.Resting = resting
 end
 ns.AddRestingIcon = AddRestingIcon
 
 local AddResurrectIcon = function(self, unit)
-	self.ResurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
-	self.ResurrectIcon:SetSize(16, 16)
-	self.ResurrectIcon:SetPoint("CENTER")
+	local resurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
+	resurrectIcon:SetSize(16, 16)
+	resurrectIcon:SetPoint("CENTER")
+	self.ResurrectIcon = resurrectIcon
 end
 ns.AddResurrectIcon = AddResurrectIcon
