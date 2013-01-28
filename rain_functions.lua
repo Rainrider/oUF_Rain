@@ -196,28 +196,10 @@ local AuraOnEnter = function(button)
 
 	GameTooltip:SetOwner(button, "ANCHOR_BOTTOMRIGHT")
 	button:UpdateTooltip()
-
-	local r, g, b = button.overlay:GetVertexColor()
-	local iconW, iconH = button:GetSize()
-	local magnify = button:GetParent().Magnify
-
-	magnify:SetSize(iconW * 2, iconH * 2)
-	magnify:SetPoint("CENTER", button, "CENTER")
-
-	magnify.icon:SetSize(iconW * 2, iconH * 2)
-	magnify.icon:SetTexture(button.icon:GetTexture())
-	magnify.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-
-	magnify.border:SetVertexColor(r, g, b)
-
-	magnify:Show()
-
-	button:GetParent().Magnify = magnify
 end
 
 local AuraOnLeave = function(button)
 	GameTooltip:Hide()
-	button:GetParent().Magnify:Hide()
 end
 
 --[[ END OF HELPER FUNCTIONS ]]--
@@ -455,17 +437,6 @@ local AddAuras = function(self, unit)
 	auras.PostUpdateIcon = PostUpdateIcon
 	auras.CustomFilter = CustomPartyFilter
 
-	auras.Magnify = CreateFrame("Frame", nil, self)
-	auras.Magnify:SetFrameLevel(auras:GetFrameLevel() + 2)
-
-	auras.Magnify.icon = auras.Magnify:CreateTexture(nil, "ARTWORK")
-	auras.Magnify.icon:SetPoint("CENTER")
-
-	auras.Magnify.border = auras.Magnify:CreateTexture(nil, "OVERLAY")
-	auras.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
-	auras.Magnify.border:SetPoint("TOPLEFT", auras.Magnify.icon, -5, 5)
-	auras.Magnify.border:SetPoint("BOTTOMRIGHT", auras.Magnify.icon, 5, -5)
-
 	self.Auras = auras
 end
 ns.AddAuras = AddAuras
@@ -541,17 +512,6 @@ local AddBuffs = function(self, unit)
 		buffs.initialAnchor = "RIGHT"
 		buffs["growth-x"] = "LEFT"
 	end
-
-	buffs.Magnify = CreateFrame("Frame", nil, self)
-	buffs.Magnify:SetFrameLevel(buffs:GetFrameLevel() + 2)
-
-	buffs.Magnify.icon = buffs.Magnify:CreateTexture(nil, "ARTWORK")
-	buffs.Magnify.icon:SetPoint("CENTER")
-
-	buffs.Magnify.border = buffs.Magnify:CreateTexture(nil, "OVERLAY")
-	buffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
-	buffs.Magnify.border:SetPoint("TOPLEFT", buffs.Magnify.icon, -5, 5)
-	buffs.Magnify.border:SetPoint("BOTTOMRIGHT", buffs.Magnify.icon, 5, -5)
 
 	self.Buffs = buffs
 end
@@ -735,17 +695,6 @@ local AddDebuffs = function(self, unit)
 		debuffs.initialAnchor = "LEFT"
 		debuffs["growth-x"] = "RIGHT"
 	end
-
-	debuffs.Magnify = CreateFrame("Frame", nil, self)
-	debuffs.Magnify:SetFrameLevel(debuffs:GetFrameLevel() + 2)
-
-	debuffs.Magnify.icon = debuffs.Magnify:CreateTexture(nil, "ARTWORK")
-	debuffs.Magnify.icon:SetPoint("CENTER")
-
-	debuffs.Magnify.border = debuffs.Magnify:CreateTexture(nil, "OVERLAY")
-	debuffs.Magnify.border:SetTexture(ns.media.BTNTEXTURE)
-	debuffs.Magnify.border:SetPoint("TOPLEFT", debuffs.Magnify.icon, -5, 5)
-	debuffs.Magnify.border:SetPoint("BOTTOMRIGHT", debuffs.Magnify.icon, 5, -5)
 
 	self.Debuffs = debuffs
 end
