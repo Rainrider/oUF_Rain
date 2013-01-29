@@ -175,7 +175,6 @@ local Shared = function(self, unit)
 		ns.AddPortrait(self)
 		ns.AddOverlay(self, unit)
 		ns.AddCastbar(self, unit)
-		ns.AddCombatFeedbackText(self)
 		ns.AddHealPredictionBar(self, unit)
 
 		if (unit == "player" and ns.cfg.showPlayerBuffs or unit == "target") then
