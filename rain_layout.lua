@@ -308,9 +308,9 @@ oUF:Factory(function(self)
 	if (cfg.showParty) then
 		if (cfg.horizParty) then
 			party = self:SpawnHeader(
-				"oUF_Rain_Party", nil, "party, raid",
+				"oUF_Rain_Party", nil, "party",
 				"showParty", true,
-				"showRaid", true,
+				"showRaid", false,
 				"maxColumns", 4,
 				"unitsPerColumn", 1,
 				"columnAnchorPoint", "LEFT",
@@ -325,9 +325,9 @@ oUF:Factory(function(self)
 			party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 130)
 		else
 			party = self:SpawnHeader(
-				"oUF_Rain_Party", nil, "party, raid",
+				"oUF_Rain_Party", nil, "party",
 				"showParty", true,
-				"showRaid", true,
+				"showRaid", false,
 				"yOffset", -27.5,
 				"oUF-initialConfigFunction", ([[
 					self:SetWidth(110)
