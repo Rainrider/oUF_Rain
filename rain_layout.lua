@@ -25,8 +25,6 @@ local UnitSpecific = {
 		elseif (playerClass == "DRUID") then
 			ns.AddEclipseBar(self, 230, 7)
 			ns.AddTotems(self, 30, 5)
-		elseif (playerClass == "HUNTER") then
-			ns.AddFocusHelper(self)
 		elseif (playerClass == "MONK") then
 			ns.AddClassPowerIcons(self, 215, 5, 1)
 		elseif (playerClass == "PALADIN") then

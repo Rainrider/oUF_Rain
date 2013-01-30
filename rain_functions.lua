@@ -781,25 +781,6 @@ local AddExperienceBar = function(self)
 end
 ns.AddExperienceBar = AddExperienceBar
 
-local AddFocusHelper = function(self)
-	local focusSpark = self.Power:CreateTexture(nil, "OVERLAY")
-	focusSpark:SetWidth(10)
-	focusSpark:SetHeight(self.Power:GetHeight() * 1.85)
-
-	focusSpark.bmSpell = ns.cfg.bmSpell -- Kill Command
-	focusSpark.mmSpell = ns.cfg.mmSpell -- Chimera Shot
-	focusSpark.svSpell = ns.cfg.svSpell -- Explosive Shot
-
-	local focusGain = self.Power:CreateTexture(nil, "OVERLAY")
-	focusGain:SetHeight(self.Power:GetHeight())
-	focusGain:SetTexture(ns.media.TEXTURE)
-	focusGain:SetVertexColor(0, 1, 0, 0.3)
-
-	self.FocusSpark = focusSpark
-	self.FocusGain = focusGain
-end
-ns.AddFocusHelper = AddFocusHelper
-
 local AddHealPredictionBar = function(self, unit)
 	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
 	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)

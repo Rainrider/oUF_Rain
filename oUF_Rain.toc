@@ -11,7 +11,6 @@ modules\rain_ccwarn.lua
 modules\rain_dispel.lua
 modules\rain_interrupt.lua
 modules\rain_experience.lua
-modules\rain_focushelper.lua
 modules\rain_warlockpowerbar.lua
 rain_config.lua
 rain_colors.lua
