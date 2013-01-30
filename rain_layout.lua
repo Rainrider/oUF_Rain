@@ -94,10 +94,10 @@ local Shared = function(self, unit)
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	local unitIsPartyMember = self:GetParent():GetName():match("^oUF_Rain_Party$")
-	local unitIsPartyOrMTTarget = self:GetAttribute("unitsuffix") == "target"
-	local unitIsPartyPet = self:GetAttribute("unitsuffix") == "pet"
-	local unitIsMT = self:GetParent():GetName():match("^oUF_Rain_MT$")
+	local unitIsPartyMember = self:GetParent():GetName():match("^oUF_Rain_Party$") -- could use unit == "party" here as long as showRaid is false on the party header
+	local unitIsPartyOrMTTarget = unit == "partytarget" or unit == "maintanktarget"
+	local unitIsPartyPet = unit == "partypet"
+	local unitIsMT = unit == "maintank"
 	local unitIsBoss = unit:match("^boss%d$")
 
 	self.FrameBackdrop = CreateFrame("Frame", nil, self)
