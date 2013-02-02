@@ -9,53 +9,61 @@ local RaidStyle = function(self, unit)
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	self.FrameBackdrop = CreateFrame("Frame", nil, self)
-	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
-	self.FrameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
-	self.FrameBackdrop:SetPoint("BOTTOMRIGHT", self, 5, -5)
-	self.FrameBackdrop:SetBackdrop(ns.media.BACKDROP2)
-	self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
-	self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
+	local frameBackdrop = CreateFrame("Frame", nil, self)
+	frameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
+	frameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
+	frameBackdrop:SetPoint("BOTTOMRIGHT", self, 5, -5)
+	frameBackdrop:SetBackdrop(ns.media.BACKDROP2)
+	frameBackdrop:SetBackdropColor(0, 0, 0, 0)
+	frameBackdrop:SetBackdropBorderColor(0, 0, 0)
+	self.FrameBackdrop = frameBackdrop
 
-	self.Health = CreateFrame("StatusBar", self:GetName().."_Health", self)
-	self.Health:SetSize(64, 25)
-	self.Health:SetPoint("TOPLEFT")
-	self.Health:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Health.colorDisconnected = true
-	self.Health.colorClass = true
-	self.Health.colorReaction = true
-	self.Health.frequentUpdates = true
-	self.Health:SetBackdrop(ns.media.BACKDROP)
-	self.Health:SetBackdropColor(0, 0, 0)
+	local health = CreateFrame("StatusBar", self:GetName().."_Health", self)
+	health:SetSize(64, 25)
+	health:SetPoint("TOPLEFT")
+	health:SetStatusBarTexture(ns.media.TEXTURE)
+	health.colorDisconnected = true
+	health.colorClass = true
+	health.colorReaction = true
+	health.frequentUpdates = true
+	health:SetBackdrop(ns.media.BACKDROP)
+	health:SetBackdropColor(0, 0, 0)
 
-	self.Health.bg = self.Health:CreateTexture(nil, "BORDER")
-	self.Health.bg:SetAllPoints()
-	self.Health.bg:SetTexture(ns.media.TEXTURE)
-	self.Health.bg.multiplier = 0.5 -- TODO: solid color for health background
+	local hpBG = health:CreateTexture(nil, "BORDER")
+	hpBG:SetAllPoints()
+	hpBG:SetTexture(ns.media.TEXTURE)
+	hpBG.multiplier = 0.5 -- TODO: solid color for health background
+	health.bg = hpBG
 
-	self.Health.value = ns.PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
-	self.Health.value:SetPoint("RIGHT", -2, 0)
-	--self.Health.value.frequentUpdates = true
+	local hpValue = ns.PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
+	hpValue:SetPoint("RIGHT", -2, 0)
+
 	if (ns.cfg.raidHealth > 0) then
 		if (ns.cfg.raidHealth == 1) then
-			self:Tag(self.Health.value, "[dead][offline][rain:raidhp]") -- TODO: coloring
+			self:Tag(hpValue, "[dead][offline][rain:raidhp]") -- TODO: coloring
 		elseif (ns.cfg.raidHealth == 2) then
-			self:Tag(self.Health.value, "[dead][offline][perhp<%]")
+			self:Tag(hpValue, "[dead][offline][perhp<%]")
 		end
 	end
+	health.value = hpValue
 
-	self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
-	self.Power:SetSize(64, 5)
-	self.Power:SetPoint("BOTTOMLEFT")
-	self.Power:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Power.colorPower = true
-	self.Power:SetBackdrop(ns.media.BACKDROP)
-	self.Power:SetBackdropColor(0, 0, 0)
+	self.Health = health
 
-	self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
-	self.Power.bg:SetAllPoints()
-	self.Power.bg:SetTexture(ns.media.TEXTURE)
-	self.Power.bg.multiplier = 0.5
+	local power = CreateFrame("StatusBar", self:GetName().."_Power", self)
+	power:SetSize(64, 5)
+	power:SetPoint("BOTTOMLEFT")
+	power:SetStatusBarTexture(ns.media.TEXTURE)
+	power.colorPower = true
+	power:SetBackdrop(ns.media.BACKDROP)
+	power:SetBackdropColor(0, 0, 0)
+
+	local pbBG = power:CreateTexture(nil, "BORDER")
+	pbBG:SetAllPoints()
+	pbBG:SetTexture(ns.media.TEXTURE)
+	pbBG.multiplier = 0.5
+	power.bg = pbBG
+
+	self.Power = power
 
 	--[[ ICONS ]]--
 	ns.AddAssistantIcon(self, unit)
@@ -70,10 +78,11 @@ local RaidStyle = function(self, unit)
 	--[[ BARS ]]--
 	ns.AddHealPredictionBar(self, unit)
 
-	self.Name = ns.PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
-	self.Name:SetPoint("LEFT", 2, 0)
-	self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-	self:Tag(self.Name, "[rain:role][rain:name]") --TODO: option to display role
+	local name = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+	name:SetPoint("LEFT", 2, 0)
+	name:SetPoint("RIGHT", health.value, "LEFT", -3, 0)
+	self:Tag(name, "[rain:role][rain:name]") --TODO: option to display role
+	self.Name = name
 
 	--[[ MODULES ]]--
 	ns.AddDebuffHighlight(self, unit) -- TODO: check appearance
