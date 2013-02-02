@@ -66,14 +66,14 @@ local RaidStyle = function(self, unit)
 	self.Power = power
 
 	--[[ ICONS ]]--
-	ns.AddAssistantIcon(self, unit)
-	ns.AddLeaderIcon(self, unit)
-	ns.AddMasterLooterIcon(self, unit)
-	ns.AddPhaseIcon(self, unit)
+	ns.AddAssistantIcon(self)
+	ns.AddLeaderIcon(self)
+	ns.AddMasterLooterIcon(self)
+	ns.AddPhaseIcon(self)
 	ns.AddRaidIcon(self, unit) -- TODO: placement for raid frames
-	ns.AddRaidRoleIcon(self, unit)
-	ns.AddReadyCheckIcon(self, unit)
-	ns.AddResurrectIcon(self, unit)
+	ns.AddRaidRoleIcon(self)
+	ns.AddReadyCheckIcon(self)
+	ns.AddResurrectIcon(self)
 
 	--[[ BARS ]]--
 	ns.AddHealPredictionBar(self, unit)
