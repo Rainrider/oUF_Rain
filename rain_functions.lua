@@ -936,7 +936,7 @@ local AddThreatHighlight = function(self, event, unit)
 
 	local status = UnitThreatSituation(unit)
 
-	if (status and status > 0) then
+	if (status and status > 1) then
 		local r, g, b = GetThreatStatusColor(status)
 		self.FrameBackdrop:SetBackdropColor(r, g, b, 1)
 	else
