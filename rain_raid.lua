@@ -65,6 +65,12 @@ local RaidStyle = function(self, unit)
 
 	self.Power = power
 
+	local name = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+	name:SetPoint("LEFT", 2, 0)
+	name:SetPoint("RIGHT", health.value, "LEFT", -3, 0)
+	self:Tag(name, "[rain:role][rain:name]") --TODO: option to display role
+	self.Name = name
+
 	--[[ ICONS ]]--
 	ns.AddAssistantIcon(self)
 	ns.AddLeaderIcon(self)
@@ -75,20 +81,11 @@ local RaidStyle = function(self, unit)
 	ns.AddReadyCheckIcon(self)
 	ns.AddResurrectIcon(self)
 
-	--[[ BARS ]]--
-	ns.AddHealPredictionBar(self, unit)
-
-	local name = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
-	name:SetPoint("LEFT", 2, 0)
-	name:SetPoint("RIGHT", health.value, "LEFT", -3, 0)
-	self:Tag(name, "[rain:role][rain:name]") --TODO: option to display role
-	self.Name = name
-
-	--[[ MODULES ]]--
+	--[[ ELEMENTS ]]--
 	ns.AddDebuffHighlight(self, unit) -- TODO: check appearance
+	ns.AddHealPredictionBar(self, unit)
 	ns.AddRangeCheck(self)
 	-- TODO: add aggro highlight
 	-- TODO: add highlight on targeted
-	-- TODO: add mouseover highlight ??
 end
 ns.RaidStyle = RaidStyle
