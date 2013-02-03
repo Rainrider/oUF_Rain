@@ -40,6 +40,7 @@ local UnitSpecific = {
 		ns.AddCombatIcon(self)
 		ns.AddRestingIcon(self)
 
+		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if (UnitExists("target")) then
 				PlaySound("igCreatureAggroSelect")
