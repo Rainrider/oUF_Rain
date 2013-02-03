@@ -809,18 +809,13 @@ local AddOverlay = function(self, unit)
 	overlay:SetPoint("TOPLEFT", self.Portrait, 0, 1)
 	overlay:SetPoint("BOTTOMRIGHT", self.Portrait, 0, -1)
 
-	if (unit == "player") then
-		local threat = overlay:CreateTexture(nil, "BORDER")
-		threat:SetAllPoints()
-		threat:SetTexture(ns.media.OVERLAY)
-		threat:SetVertexColor(0.1, 0.1, 0.1, 0.75)
-		self.Threat = threat
-	else
-		local ccWarn = overlay:CreateTexture(nil, "BORDER")
-		ccWarn:SetAllPoints()
-		ccWarn:SetTexture(ns.media.OVERLAY)
-		ccWarn:SetVertexColor(0.1, 0.1, 0.1, 0.75)
-		self.CCWarn = ccWarn
+	local tex = overlay:CreateTexture(nil, "BORDER")
+	tex:SetAllPoints()
+	tex:SetTexture(ns.media.OVERLAY)
+	tex:SetVertexColor(0.1, 0.1, 0.1, 0.75)
+
+	if (unit == "target") then
+		self.CCWarn = tex
 	end
 
 	self.Overlay = overlay
@@ -943,9 +938,9 @@ local AddThreatHighlight = function(self, event, unit)
 
 	if (status and status > 0) then
 		local r, g, b = GetThreatStatusColor(status)
-		self.FrameBackdrop:SetBackdropBorderColor(r, g, b)
+		self.FrameBackdrop:SetBackdropColor(r, g, b, 1)
 	else
-		self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
+		self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
 	end
 end
 ns.AddThreatHighlight = AddThreatHighlight
@@ -1093,7 +1088,7 @@ local AddRaidIcon = function(self, unit)
 	self.RaidIcon = raidIcon
 end
 ns.AddRaidIcon = AddRaidIcon
--- TODO: not used?
+
 local AddRaidRoleIcon = function(self)
 	local raidRole = self:CreateTexture(nil, "OVERLAY")
 	raidRole:SetSize(16, 16)
