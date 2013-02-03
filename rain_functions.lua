@@ -611,10 +611,11 @@ local AddComboPointsBar = function(self, width, height, spacing)
 	local maxCPoints = MAX_COMBO_POINTS
 
 	for i = 1, maxCPoints do
-		comboPoints[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
-		comboPoints[i]:SetSize((width - maxCPoints * spacing - spacing) / maxCPoints, height)
-		comboPoints[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * comboPoints[i]:GetWidth() + i * spacing, 1)
-		comboPoints[i]:SetTexture(unpack(ns.colors.cpoints[i]))
+		local cPoint = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
+		cPoint:SetSize((width - maxCPoints * spacing - spacing) / maxCPoints, height)
+		cPoint:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * cPoint:GetWidth() + i * spacing, 1)
+		cPoint:SetTexture(unpack(ns.colors.cpoints[i]))
+		comboPoints[i] = cPoint
 	end
 
 	self.CPoints = comboPoints
@@ -895,18 +896,19 @@ local AddRuneBar = function(self, width, height, spacing)
 	local maxRunes = 6
 
 	for i = 1, maxRunes do
-		runes[i] = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
-		runes[i]:SetSize((width - maxRunes * spacing - spacing) / maxRunes, height)
-		runes[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * runes[i]:GetWidth() + i * spacing, 1)
-		runes[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		runes[i]:SetBackdrop(ns.media.BACKDROP)
-		runes[i]:SetBackdropColor(0, 0, 0)
+		local rune = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
+		rune:SetSize((width - maxRunes * spacing - spacing) / maxRunes, height)
+		rune:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * rune:GetWidth() + i * spacing, 1)
+		rune:SetStatusBarTexture(ns.media.TEXTURE)
+		rune:SetBackdrop(ns.media.BACKDROP)
+		rune:SetBackdropColor(0, 0, 0)
 
-		local bg = runes[i]:CreateTexture(nil, "BORDER")
+		local bg = rune:CreateTexture(nil, "BORDER")
 		bg:SetTexture(ns.media.TEXTURE)
 		bg:SetAllPoints()
 		bg.multiplier = 0.5
-		runes[i].bg = bg
+		rune.bg = bg
+		runes[i] = rune
 	end
 
 	self.Runes = runes
@@ -950,34 +952,34 @@ local AddTotems = function(self, width, height)
 	local maxTotems = MAX_TOTEMS
 
 	for i = 1, maxTotems do
-		totems[i] = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
-		totems[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		totems[i]:SetMinMaxValues(0, 1)
+		local totem = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
+		totem:SetStatusBarTexture(ns.media.TEXTURE)
+		totem:SetMinMaxValues(0, 1)
 
 		if (playerClass == "SHAMAN") then
-			totems[i]:SetSize((215 - maxTotems - 1) / maxTotems, height)
-			totems[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxTotems) + 1, 0)
-			totems[i]:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
+			totem:SetSize((215 - maxTotems - 1) / maxTotems, height)
+			totem:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxTotems) + 1, 0)
+			totem:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
-			totems[i]:SetSize(width, height)
-			totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
+			totem:SetSize(width, height)
+			totem:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
 				if (i == 1) then
-					totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+					totem:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 				elseif (i == 2) then
-					totems[i]:SetPoint("RIGHT", totems[1], "LEFT", -1, 0)
+					totem:SetPoint("RIGHT", totems[1], "LEFT", -1, 0)
 				else
-					totems[i]:SetPoint("LEFT", totems[1], "RIGHT", 1, 0)
+					totem:SetPoint("LEFT", totems[1], "RIGHT", 1, 0)
 				end
 		elseif (playerClass == "DEATHKNIGHT") then -- Death knight's ghoul
-			totems[i]:SetSize(width, height)
-			totems[i]:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
-			totems[i]:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+			totem:SetSize(width, height)
+			totem:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
+			totem:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
 		end
 
-		totems[i]:SetBackdrop(ns.media.BACKDROP)
-		totems[i]:SetBackdropColor(0, 0, 0)
+		totem:SetBackdrop(ns.media.BACKDROP)
+		totem:SetBackdropColor(0, 0, 0)
 
-		totems[i]:EnableMouse()
+		totem:EnableMouse()
 --[[
 		totems[i]:SetScript("OnMouseUp", function(self, button)
 			if (button == "RightButton") then
@@ -985,11 +987,13 @@ local AddTotems = function(self, width, height)
 			end
 		end)
 --]]
-		totems[i].UpdateTooltip = function(self)
+		totem.UpdateTooltip = function(self)
 			GameTooltip:SetTotem(self:GetID())
 			--GameTooltip:AddLine(GLYPH_SLOT_REMOVE_TOOLTIP, 1, 0, 0)
 			GameTooltip:Show()
 		end
+
+		totems[i] = totem
 	end
 
 	totems.Override = UpdateTotem
@@ -1005,18 +1009,19 @@ local AddWarlockPowerBar = function(self, width, height, spacing)
 	warlockPowerBar.spacing = spacing
 
 	for i = 1, 4 do
-		warlockPowerBar[i] = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
-		warlockPowerBar[i]:SetSize((width - 4 * spacing - spacing) / 4, height)
-		warlockPowerBar[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * warlockPowerBar[i]:GetWidth() + i * spacing, 1)
-		warlockPowerBar[i]:SetStatusBarTexture(ns.media.TEXTURE)
-		warlockPowerBar[i]:SetBackdrop(ns.media.BACKDROP)
-		warlockPowerBar[i]:SetBackdropColor(0, 0, 0)
+		local wpb = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
+		wpb:SetSize((width - 4 * spacing - spacing) / 4, height)
+		wpb:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * wpb:GetWidth() + i * spacing, 1)
+		wpb:SetStatusBarTexture(ns.media.TEXTURE)
+		wpb:SetBackdrop(ns.media.BACKDROP)
+		wpb:SetBackdropColor(0, 0, 0)
 
-		local bg = warlockPowerBar[i]:CreateTexture(nil, "BORDER")
+		local bg = wpb:CreateTexture(nil, "BORDER")
 		bg:SetTexture(ns.media.TEXTURE)
 		bg:SetAllPoints()
 		bg.multiplier = 0.3
-		warlockPowerBar[i].bg = bg
+		wpb.bg = bg
+		warlockPowerBar[i] = wpb
 	end
 
 	warlockPowerBar.PostUpdateVisibility = WarlockPowerPostUpdateVisibility
