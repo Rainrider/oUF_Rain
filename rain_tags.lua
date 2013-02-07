@@ -90,9 +90,8 @@ tags["rain:raidhp"] = function(unit)
 end
 tagEvents["rain:raidhp"] = tagEvents.missinghp
 
-tags["rain:altmana"] = function(unit, ...)
-	local pType = UnitPowerType(unit)
-	if (unit ~= "player" or pType == 0) then return end
+tags["rain:altmana"] = function(unit)
+	if (unit ~= "player" or UnitPowerType(unit) == 0) then return end
 
 	local curMana, maxMana = UnitPower(unit, 0), UnitPowerMax(unit, 0)
 
@@ -103,8 +102,7 @@ end
 tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
 tags["rain:level"] = function(unit)
-	local c = UnitClassification(unit)
-	if (c == "worldboss") then return end
+	if (UnitClassification(unit) == "worldboss") then return end
 	local level = UnitLevel(unit)
 	if (level == UnitLevel("player")) then return end
 	if (level < 0) then return "??" end
