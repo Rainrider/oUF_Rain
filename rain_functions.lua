@@ -231,18 +231,12 @@ local PostUpdateHealth = function(health, unit, cur, max)
 		health:SetStatusBarColor(unpack(ns.colors.tapped))
 		health.bg:SetVertexColor(0.15, 0.15, 0,15)
 	else
-		local r, g, b
-		r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
-
+		local r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
 		health:SetStatusBarColor(r, g, b)
 		health.bg:SetVertexColor(0.15, 0.15, 0.15)
 
 		r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
-		if (cur ~= max) then
-			health.value:SetTextColor(r, g, b)
-		else
-			health.value:SetTextColor(r, g, b)
-		end
+		health.value:SetTextColor(r, g, b)
 	end
 end
 ns.PostUpdateHealth = PostUpdateHealth
