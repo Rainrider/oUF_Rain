@@ -254,16 +254,17 @@ local PostUpdatePower = function(Power, unit, cur, max)
 
 	if (unit == "target") then
 		local self = Power.__owner
-		if (self.Info) then
-			self.Info:ClearAllPoints()
+		local info = self.Info
+		if (info) then
+			info:ClearAllPoints()
 			if (Power.value:GetText()) then
-				self.Info:SetPoint("LEFT", self.Power.value, "RIGHT", 5, 0)
-				self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
-				self.Info:SetJustifyH("CENTER")
+				info:SetPoint("LEFT", Power.value, "RIGHT", 5, 0)
+				info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
+				info:SetJustifyH("CENTER")
 			else
-				self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
-				self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
-				self.Info:SetJustifyH("LEFT")
+				info:SetPoint("TOPLEFT", 3.5, -3.5)
+				info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
+				info:SetJustifyH("LEFT")
 			end
 		end
 	end
@@ -275,30 +276,35 @@ local CreateAuraIcon = function(Auras, index)
 
 	local button = CreateFrame("Button", nil, Auras)
 
-	button.icon = button:CreateTexture(nil, "BORDER")
-	button.icon:SetAllPoints(button)
-	button.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	local icon = button:CreateTexture(nil, "BORDER")
+	icon:SetAllPoints(button)
+	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	button.icon = icon
 
-	button.count = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "RIGHT")
-	button.count:SetPoint("BOTTOMRIGHT", 1, 1.5)
-	button.count:SetTextColor(0.84, 0.75, 0.65)
+	local count = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "RIGHT")
+	count:SetPoint("BOTTOMRIGHT", 1, 1.5)
+	count:SetTextColor(0.84, 0.75, 0.65)
+	button.count = count
 	-- aura border
-	button.overlay = button:CreateTexture(nil, "OVERLAY")
-	button.overlay:SetTexture(ns.media.BTNTEXTURE)
-	button.overlay:SetPoint("TOPLEFT", -4.5, 4.5)
-	button.overlay:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
-	button.overlay:SetTexCoord(0, 1, 0, 1)
+	local overlay = button:CreateTexture(nil, "OVERLAY")
+	overlay:SetTexture(ns.media.BTNTEXTURE)
+	overlay:SetPoint("TOPLEFT", -4.5, 4.5)
+	overlay:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
+	overlay:SetTexCoord(0, 1, 0, 1)
+	button.overlay = overlay
 
-	button.stealable = button:CreateTexture(nil, "OVERLAY", nil, 1)
-	button.stealable:SetTexture(ns.media.STEALABLETEX)
-	button.stealable:SetPoint("TOPLEFT", -4.5, 4.5)
-	button.stealable:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
-	button.stealable:SetTexCoord(0, 1, 0, 1)
-	button.stealable:SetBlendMode("DISABLE")
-	button.stealable:SetVertexColor(unpack(oUF.colors.class[playerClass]))
+	local stealable = button:CreateTexture(nil, "OVERLAY", nil, 1)
+	stealable:SetTexture(ns.media.STEALABLETEX)
+	stealable:SetPoint("TOPLEFT", -4.5, 4.5)
+	stealable:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
+	stealable:SetTexCoord(0, 1, 0, 1)
+	stealable:SetBlendMode("DISABLE")
+	stealable:SetVertexColor(unpack(oUF.colors.class[playerClass]))
+	button.stealable = stealable
 	-- timer text
-	button.remaining = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "LEFT")
-	button.remaining:SetPoint("TOP", 0, 1)
+	local remaining = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "LEFT")
+	remaining:SetPoint("TOP", 0, 1)
+	button.remaining = remaining
 
 	button.UpdateTooltip = UpdateAuraTooltip
 	button:SetScript("OnEnter", AuraOnEnter)
