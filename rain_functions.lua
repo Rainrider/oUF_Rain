@@ -227,7 +227,7 @@ local PostUpdateHealth = function(health, unit, cur, max)
 		health:SetValue(0)
 		health.bg:SetVertexColor(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
 		health.value:SetTextColor(0.75, 0.75, 0.75)
-	elseif (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
+	elseif (not UnitPlayerControlled(unit) and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)) then
 		health:SetStatusBarColor(unpack(ns.colors.tapped))
 		health.bg:SetVertexColor(0.15, 0.15, 0,15)
 	else
