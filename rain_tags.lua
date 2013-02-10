@@ -97,7 +97,7 @@ tags["rain:altmana"] = function(unit)
 
 	if (curMana == maxMana) then return end
 
-	return RGBtoHEX(unpack(ns.colors.class[playerClass])) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
+	return RGBtoHEX(unpack(ns.colors.power.MANA)) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
 end
 tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
