@@ -1,6 +1,15 @@
 ﻿local _, ns = ...
 local playerClass = ns.playerClass
 local UnitIsFriend = UnitIsFriend
+local UnitIsConnected = UnitIsConnected
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitClass = UnitClass
+local UnitIsPlayer = UnitIsPlayer
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitIsTapped = UnitIsTapped
+local UnitIsTappedByPlayer = UnitIsTappedByPlayer
+local UnitIsTappedByAllThreatList = UnitIsTappedByAllThreatList
+local ColorGradient = oUF.ColorGradient
 
 local prioTable = {}
 --[[
@@ -231,11 +240,11 @@ local PostUpdateHealth = function(health, unit, cur, max)
 		health:SetStatusBarColor(unpack(ns.colors.tapped))
 		health.background:SetVertexColor(0.15, 0.15, 0,15)
 	else
-		local r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
+		local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
 		health:SetStatusBarColor(r, g, b)
 		health.background:SetVertexColor(0.15, 0.15, 0.15)
 
-		r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+		r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 		health.value:SetTextColor(r, g, b)
 	end
 end
