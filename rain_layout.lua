@@ -111,18 +111,14 @@ local Shared = function(self, unit)
 
 	self.Health = CreateFrame("StatusBar", self:GetName().."_Health", self)
 	self.Health:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Health.colorDisconnected = true
-	self.Health.colorTapping = true
-	self.Health.colorClass = true
-	self.Health.colorReaction = true
 	self.Health.frequentUpdates = true
 	self.Health:SetBackdrop(ns.media.BACKDROP)
 	self.Health:SetBackdropColor(0, 0, 0)
 
-	self.Health.bg = self.Health:CreateTexture(nil, "BORDER")
-	self.Health.bg:SetAllPoints()
-	self.Health.bg:SetTexture(ns.media.TEXTURE)
-	self.Health.bg.multiplier = 0.5
+	self.Health.background = self.Health:CreateTexture(nil, "BORDER")
+	self.Health.background:SetAllPoints()
+	self.Health.background:SetTexture(ns.media.TEXTURE)
+	self.Health.background:SetVertexColor(0.15, 0.15, 0.15)
 
 	self.Health.PostUpdate = ns.PostUpdateHealth
 
