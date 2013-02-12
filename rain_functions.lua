@@ -419,32 +419,40 @@ end
 
 --[[ LAYOUT FUNCTIONS ]]--
 local AddAuras = function(self, unit)
-	if (not next(prioTable)) then return end
-
 	local auras = CreateFrame("Frame", self:GetName().."_Auras", self)
-	if (ns.cfg.horizParty) then
-		auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 9)
-		auras.initialAnchor = "LEFT"
-		auras["growth-x"] = "RIGHT"
-		auras["growth-y"] = "UP"
-	else
+
+	if (unit == "party") then
+		if (ns.cfg.horizParty) then
+			auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 9)
+			auras.initialAnchor = "LEFT"
+			auras["growth-x"] = "RIGHT"
+			auras["growth-y"] = "UP"
+		else
+			auras:SetPoint("RIGHT", self, "LEFT", -9, 0)
+			auras.initialAnchor = "RIGHT"
+			auras["growth-x"] = "LEFT"
+			auras["growth-y"] = "DOWN"
+		end
+	elseif (unit == "pet") then
 		auras:SetPoint("RIGHT", self, "LEFT", -9, 0)
 		auras.initialAnchor = "RIGHT"
 		auras["growth-x"] = "LEFT"
-		auras["growth-y"] = "DOWN"
+		auras["growth-y"] = "UP"
 	end
 	auras.numBuffs = 3
 	auras.numDebuffs = 3
+	auras.gap = true
 	auras.spacing = 6
-	auras.size = (230 - 9 * auras.spacing) / 10
-	auras:SetSize(12 * (auras.size + auras.spacing), auras.size + auras.spacing)
+	auras.size = (230 - 7 * auras.spacing) / 8
+	auras:SetSize(7 * (auras.size + auras.spacing), auras.size + auras.spacing)
 	auras.disableCooldown = true
 	auras.showType = true
 	auras.onlyShowPlayer = false
 	auras.CreateIcon = CreateAuraIcon
 	auras.PreSetPosition = PreSetPosition
 	auras.PostUpdateIcon = PostUpdateIcon
-	auras.CustomFilter = CustomPartyFilter
+	auras.buffFilter = nil
+	auras.debuffFilter = nil
 
 	self.Auras = auras
 end

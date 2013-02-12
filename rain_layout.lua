@@ -70,8 +70,7 @@ local UnitSpecific = {
 	pet = function(self)
 		ns.AddAltPowerBar(self) -- this is needed when the player is in vehicle. because the pet frame then holds the player unit
 
-		ns.AddDebuffs(self, "pet")
-		ns.AddBuffs(self, "pet")
+		ns.AddAuras(self, "pet")
 		ns.AddRangeCheck(self)
 	end,
 
