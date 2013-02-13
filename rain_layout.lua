@@ -288,9 +288,6 @@ oUF:Factory(function(self)
 	local cfg = ns.cfg
 
 	local spellName = GetSpellInfo(cfg.clickSpell[playerClass] or 6603)	-- 6603 Auto Attack
-	if (not spellName) then
-		spellName = GetSpellInfo(6603)
-	end
 
 	self:SetActiveStyle("Rain")
 	self:Spawn("player", "oUF_Rain_Player"):SetPoint("CENTER", -210, -215)

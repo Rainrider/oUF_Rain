@@ -63,7 +63,7 @@ ns.cfg = {
 		["ROGUE"] = 57934,		-- Tricks of the Trade (57934)
 		["SHAMAN"] = 546,		-- Water Walking (546)
 		["WARRIOR"] = 3411,		-- Intervene (3411)
-		["WARLOCK"] = 80398,	-- Dark Intent (80398)
+		["WARLOCK"] = 109773,	-- Dark Intent (109773)
 	},
 
 -- focus helper spells
