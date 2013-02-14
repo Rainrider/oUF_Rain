@@ -352,6 +352,11 @@ local PostUpdateIcon = function(Auras, unit, aura, index, offset)
 	aura.first = true
 end
 
+local PostUpdateGapIcon = function(Auras, unit, aura, index)
+	aura.remaining:Hide()
+	aura:SetScript("OnUpdate", nil)
+end
+
 local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or STANDARD_TOTEM_PRIORITIES
 
 local UpdateTotem = function(self, event, slot)
@@ -451,6 +456,7 @@ local AddAuras = function(self, unit)
 	auras.CreateIcon = CreateAuraIcon
 	auras.PreSetPosition = PreSetPosition
 	auras.PostUpdateIcon = PostUpdateIcon
+	auras.PostUpdateGapIcon = PostUpdateGapIcon
 	auras.buffFilter = nil
 	auras.debuffFilter = nil
 
