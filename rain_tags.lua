@@ -134,7 +134,7 @@ tags["rain:power"] = function(unit)
 		powerValue = SiValue(cur)
 	end
 
-	local r, g, b = unpack(ns.colors.power[pName or pType])
+	local r, g, b = unpack(ns.colors.power[pName] or ns.colors.power[pType])
 	return format("|cff%02x%02x%02x%d|r", r * 255, g * 255, b * 255, powerValue)
 end
 tagEvents["rain:power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
