@@ -151,7 +151,7 @@ local Update = function(self, event, unit, powerType)
 		element[1]:SetValue(power)
 	elseif (powerType == "BURNING_EMBERS" and spec == 3) then
 		power = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
-		maxPower = math.floor(UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true) / MAX_POWER_PER_EMBER)
+		maxPower = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS)
 
 		if maxPower ~= element.maxPower then
 			Visibility(self)
