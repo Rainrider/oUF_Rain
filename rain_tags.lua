@@ -6,7 +6,6 @@
 local _, ns = ...
 local SiValue = ns.SiValue
 local playerClass = ns.playerClass
-local RGBtoHEX = ns.RGBtoHEX
 
 -- local references for some lua function
 local floor = math.floor
@@ -42,7 +41,7 @@ tags["rain:namecolor"] = function(unit)
 		color = ns.colors.reaction[reaction or 4]
 	end
 
-	return RGBtoHEX(color[1], color[2], color[3])
+	return format("|cff%02x%02x%02x", color[1] * 255, color[2] * 255, color[3] * 255)
 end
 
 tags["rain:healthSmall"] = function(unit)
@@ -97,7 +96,8 @@ tags["rain:altmana"] = function(unit)
 
 	if (curMana == maxMana) then return end
 
-	return RGBtoHEX(unpack(ns.colors.power.MANA)) .. floor(curMana / maxMana * 100 + 0.5) .. "%|r"
+	local r, g, b = unpack(ns.colors.power.MANA)
+	return format("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(curMana / maxMana * 100 + 0.5))
 end
 tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
@@ -134,9 +134,8 @@ tags["rain:power"] = function(unit)
 		powerValue = SiValue(cur)
 	end
 
-	local textColor = ns.colors.power[pName] or ns.colors.power[pType]
-
-	return RGBtoHEX(unpack(textColor)) .. powerValue .. "|r"
+	local r, g, b = unpack(ns.colors.power[pName or pType])
+	return format("|cff%02x%02x%02x%d|r", r * 255, g * 255, b * 255, powerValue)
 end
 tagEvents["rain:power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 

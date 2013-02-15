@@ -78,11 +78,6 @@ local ShortenName = function(name, shortenTo)
 end
 ns.ShortenName = ShortenName
 
-local RGBtoHEX = function(r, g, b)
-	return string.format("|cff%02x%02x%02x", r * 255, g * 255, b * 255)
-end
-ns.RGBtoHEX = RGBtoHEX
-
 local FormatTime = function(seconds)
 	local day, hour, minute = 86400, 3600, 60
 	if (seconds >= day) then
