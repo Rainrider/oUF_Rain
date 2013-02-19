@@ -238,7 +238,7 @@ local Shared = function(self, unit)
 			ns.AddReadyCheckIcon(self)
 			ns.AddResurrectIcon(self)
 
-			ns.AddAuras(self, unit)
+			--ns.AddAuras(self, unit)
 			ns.AddDebuffHighlight(self, unit)
 			ns.AddRangeCheck(self)
 		end
