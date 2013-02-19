@@ -267,7 +267,7 @@ local Shared = function(self, unit)
 
 		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
 		self.Health.value:SetPoint("RIGHT", -2, 0)
-		self:Tag(self.Health.value, "[perhp]")
+		self:Tag(self.Health.value, "[perhp<%]")
 
 		self.Name = PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
 		self.Name:SetPoint("LEFT", 2, 0)
