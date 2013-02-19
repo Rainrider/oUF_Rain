@@ -68,7 +68,7 @@ local RaidStyle = function(self, unit)
 	local name = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
 	name:SetPoint("LEFT", 2, 0)
 	name:SetPoint("RIGHT", health.value, "LEFT", -3, 0)
-	self:Tag(name, "[rain:role][rain:name]") --TODO: option to display role
+	self:Tag(name, "[rain:role]")
 	self.Name = name
 
 	--[[ ICONS ]]--
