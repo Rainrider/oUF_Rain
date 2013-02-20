@@ -32,8 +32,8 @@ local RaidStyle = function(self, unit)
 	local hpBG = health:CreateTexture(nil, "BORDER")
 	hpBG:SetAllPoints()
 	hpBG:SetTexture(ns.media.TEXTURE)
-	hpBG.multiplier = 0.5 -- TODO: solid color for health background
-	health.bg = hpBG
+	hpBG:SetVertexColor(0.15, 0.15, 0.15)
+	health.background = hpBG
 
 	local hpValue = ns.PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
 	hpValue:SetPoint("RIGHT", -2, 0)
