@@ -53,10 +53,11 @@ local UnitSpecific = {
 	end,
 
 	target = function(self)
-		self.Info = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
-		self.Info:SetPoint("TOPLEFT", 3.5, -3.5)
-		self.Info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
-		self:Tag(self.Info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
+		local info = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
+		info:SetPoint("TOPLEFT", 3.5, -3.5)
+		info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
+		self:Tag(info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
+		self.Info = info
 
 		ns.AddComboPointsBar(self, 215, 5, 1)
 
@@ -100,49 +101,56 @@ local Shared = function(self, unit)
 	local unitIsMT = unit == "maintank"
 	local unitIsBoss = unit:match("^boss%d$")
 
-	self.FrameBackdrop = CreateFrame("Frame", nil, self)
-	self.FrameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
-	self.FrameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
-	self.FrameBackdrop:SetPoint("BOTTOMRIGHT", self, 5, -5)
-	self.FrameBackdrop:SetBackdrop(ns.media.BACKDROP2)
-	self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
-	self.FrameBackdrop:SetBackdropBorderColor(0, 0, 0)
+	local frameBackdrop = CreateFrame("Frame", nil, self)
+	frameBackdrop:SetFrameLevel(self:GetFrameLevel() - 1)
+	frameBackdrop:SetPoint("TOPLEFT", self, -5, 5)
+	frameBackdrop:SetPoint("BOTTOMRIGHT", self, 5, -5)
+	frameBackdrop:SetBackdrop(ns.media.BACKDROP2)
+	frameBackdrop:SetBackdropColor(0, 0, 0, 0)
+	frameBackdrop:SetBackdropBorderColor(0, 0, 0)
+	self.FrameBackdrop = frameBackdrop
 
-	self.Health = CreateFrame("StatusBar", self:GetName().."_Health", self)
-	self.Health:SetStatusBarTexture(ns.media.TEXTURE)
-	self.Health.frequentUpdates = true
-	self.Health:SetBackdrop(ns.media.BACKDROP)
-	self.Health:SetBackdropColor(0, 0, 0)
+	local health = CreateFrame("StatusBar", self:GetName().."_Health", self)
+	health:SetStatusBarTexture(ns.media.TEXTURE)
+	health.frequentUpdates = true
+	health:SetBackdrop(ns.media.BACKDROP)
+	health:SetBackdropColor(0, 0, 0)
+	self.Health = health
 
-	self.Health.background = self.Health:CreateTexture(nil, "BORDER")
-	self.Health.background:SetAllPoints()
-	self.Health.background:SetTexture(ns.media.TEXTURE)
-	self.Health.background:SetVertexColor(0.15, 0.15, 0.15)
+	local hbBG = health:CreateTexture(nil, "BORDER")
+	hbBG:SetAllPoints()
+	hbBG:SetTexture(ns.media.TEXTURE)
+	hbBG:SetVertexColor(0.15, 0.15, 0.15)
+	health.background = hbBG
 
-	self.Health.PostUpdate = ns.PostUpdateHealth
+	health.PostUpdate = ns.PostUpdateHealth
+
+	local power
 
 	if (not unitIsPartyPet) then
-		self.Power = CreateFrame("StatusBar", self:GetName().."_Power", self)
-		self.Power:SetStatusBarTexture(ns.media.TEXTURE)
-		self.Power:SetBackdrop(ns.media.BACKDROP)
-		self.Power:SetBackdropColor(0, 0, 0)
+		power = CreateFrame("StatusBar", self:GetName().."_Power", self)
+		power:SetStatusBarTexture(ns.media.TEXTURE)
+		power:SetBackdrop(ns.media.BACKDROP)
+		power:SetBackdropColor(0, 0, 0)
 
-		self.Power.altPowerColor = {0, 0.5, 1}
-		self.Power.colorPower = unit == "player" or unit == "pet" or unitIsBoss
-		self.Power.colorClass = true
-		self.Power.colorReaction = true
-		self.Power.frequentUpdates = true
+		power.altPowerColor = {0, 0.5, 1}
+		power.colorPower = unit == "player" or unit == "pet" or unitIsBoss
+		power.colorClass = true
+		power.colorReaction = true
+		power.frequentUpdates = true
 
 		if (unitIsBoss) then
-			self.Power.displayAltPower = true
+			power.displayAltPower = true
 		end
 
-		self.Power.bg = self.Power:CreateTexture(nil, "BORDER")
-		self.Power.bg:SetAllPoints()
-		self.Power.bg:SetTexture(ns.media.TEXTURE)
-		self.Power.bg.multiplier = 0.5
+		local pbBG = power:CreateTexture(nil, "BORDER")
+		pbBG:SetAllPoints()
+		pbBG:SetTexture(ns.media.TEXTURE)
+		pbBG.multiplier = 0.5
+		power.bg = pbBG
 
-		self.Power.PostUpdate = ns.PostUpdatePower
+		power.PostUpdate = ns.PostUpdatePower
+		self.Power = power
 	end
 
 	ns.AddRaidIcon(self, unit)
@@ -151,20 +159,22 @@ local Shared = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		self:SetSize(230, 50)
 
-		self.Health:SetSize(230, 30)
-		self.Health:SetPoint("TOPRIGHT")
-		self.Health:SetPoint("TOPLEFT")
+		health:SetSize(230, 30)
+		health:SetPoint("TOPRIGHT")
+		health:SetPoint("TOPLEFT")
 
-		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "RIGHT")
-		self.Health.value:SetPoint("TOPRIGHT", self.Health, -3.5, -3.5)
-		self:Tag(self.Health.value, "[dead][offline][rain:health]")
+		local healthValue = PutFontString(health, ns.media.FONT2, 12, nil, "RIGHT")
+		healthValue:SetPoint("TOPRIGHT", health, -3.5, -3.5)
+		self:Tag(healthValue, "[dead][offline][rain:health]")
+		health.value = healthValue
 
-		self.Power:SetSize(230, 15)
-		self.Power:SetPoint("BOTTOMRIGHT")
-		self.Power:SetPoint("BOTTOMLEFT")
+		power:SetSize(230, 15)
+		power:SetPoint("BOTTOMRIGHT")
+		power:SetPoint("BOTTOMLEFT")
 
-		self.Power.value = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
-		self.Power.value:SetPoint("TOPLEFT", self.Health, 3.5, -3.5)
+		local powerValue = PutFontString(health, ns.media.FONT2, 12, nil, "LEFT")
+		powerValue:SetPoint("TOPLEFT", health, 3.5, -3.5)
+		power.value = powerValue
 
 		ns.AddPortrait(self)
 		ns.AddOverlay(self, unit)
@@ -177,22 +187,22 @@ local Shared = function(self, unit)
 		ns.AddDebuffs(self, unit)
 		ns.AddDebuffHighlight(self, unit)
 
-		self.Status = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
-		self.Status:SetPoint("RIGHT", -3.5, 2)
-		self.Status:SetTextColor(0.69, 0.31, 0.31, 0.6)
-		self:Tag(self.Status, "[pvp]")
+		local pvpStatus = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
+		pvpStatus:SetPoint("RIGHT", -3.5, 2)
+		pvpStatus:SetTextColor(0.69, 0.31, 0.31, 0.6)
+		self:Tag(pvpStatus, "[pvp]")
 
 		self:HookScript("OnEnter", function(self)
 			if (UnitIsUnit("player", unit) and UnitIsPVP(unit)) then
 				local pvpTimer = GetPVPTimer() / 1000 -- remaining seconds
 				if (pvpTimer < 300 and pvpTimer > 0) then
-					self.Status:SetText(format("%d:%02d", floor(pvpTimer / 60), pvpTimer % 60))
+					pvpStatus:SetText(format("%d:%02d", floor(pvpTimer / 60), pvpTimer % 60))
 				end
 			end
 		end)
 
 		self:HookScript("OnLeave", function(self)
-			self.Status:UpdateTag()
+			pvpStatus:UpdateTag()
 		end)
 
 		ns.AddAssistantIcon(self)
@@ -211,26 +221,27 @@ local Shared = function(self, unit)
 			or unitIsPartyMember or unitIsPartyOrMTTarget
 			or unitIsMT or unitIsBoss) and not unitIsPartyPet) then
 
-		self.Health:SetSize(110, 15)
-		self.Health:SetPoint("TOPRIGHT")
-		self.Health:SetPoint("TOPLEFT")
+		health:SetSize(110, 15)
+		health:SetPoint("TOPRIGHT")
+		health:SetPoint("TOPLEFT")
 
-		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
-		self.Health.value:SetPoint("TOPRIGHT", -2, -2)
-		self:Tag(self.Health.value, "[dead][offline][rain:healthSmall]")
+		local healthValue = PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
+		healthValue:SetPoint("TOPRIGHT", -2, -2)
+		self:Tag(healthValue, "[dead][offline][rain:healthSmall]")
+		health.value = healthValue
 
-		self.Power:SetSize(110, 5)
-		self.Power:SetPoint("BOTTOMRIGHT")
-		self.Power:SetPoint("BOTTOMLEFT")
+		power:SetSize(110, 5)
+		power:SetPoint("BOTTOMRIGHT")
+		power:SetPoint("BOTTOMLEFT")
 
-		self.Name = PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
-		self.Name:SetPoint("TOPLEFT", 2, -2)
-		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
+		local name = PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+		name:SetPoint("TOPLEFT", 2, -2)
+		name:SetPoint("RIGHT", healthValue, "LEFT", -3, 0)
 
 		if (not unitIsPartyMember) then
-			self:Tag(self.Name, "[rain:name]")
+			self:Tag(name, "[rain:name]")
 		else
-			self:Tag(self.Name, "[rain:role][rain:name]")
+			self:Tag(name, "[rain:role][rain:name]")
 
 			ns.AddAssistantIcon(self)
 			ns.AddLeaderIcon(self)
@@ -261,18 +272,19 @@ local Shared = function(self, unit)
 	end
 
 	if (unitIsPartyPet) then
-		self.Health:SetSize(110, 10)
-		self.Health:SetPoint("TOPRIGHT")
-		self.Health:SetPoint("TOPLEFT")
+		health:SetSize(110, 10)
+		health:SetPoint("TOPRIGHT")
+		health:SetPoint("TOPLEFT")
 
-		self.Health.value = PutFontString(self.Health, ns.media.FONT2, 9, nil, "RIGHT")
-		self.Health.value:SetPoint("RIGHT", -2, 0)
-		self:Tag(self.Health.value, "[perhp<%]")
+		local healthValue = PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
+		healthValue:SetPoint("RIGHT", -2, 0)
+		self:Tag(healthValue, "[perhp<%]")
+		health.value = healthValue
 
-		self.Name = PutFontString(self.Health, ns.media.FONT2, 9, nil, "LEFT")
-		self.Name:SetPoint("LEFT", 2, 0)
-		self.Name:SetPoint("RIGHT", self.Health.value, "LEFT", -3, 0)
-		self:Tag(self.Name, "[rain:name]")
+		local name = PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+		name:SetPoint("LEFT", 2, 0)
+		name:SetPoint("RIGHT", healthValue, "LEFT", -3, 0)
+		self:Tag(name, "[rain:name]")
 
 		ns.AddRangeCheck(self)
 	end
