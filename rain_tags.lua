@@ -103,7 +103,12 @@ tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
 
 tags["rain:level"] = function(unit)
 	if (UnitClassification(unit) == "worldboss") then return end
-	local level = UnitLevel(unit)
+	local level
+	if (UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit)) then
+		level = UnitBattlePetLevel(unit)
+	else
+		level = UnitLevel(unit)
+	end
 	if (level == UnitLevel("player")) then return end
 	if (level < 0) then return "??" end
 	return level
