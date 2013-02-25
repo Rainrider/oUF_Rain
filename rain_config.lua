@@ -58,6 +58,7 @@ ns.cfg = {
 		["DRUID"] = 29166,		-- Innervate (29166)
 		["HUNTER"] = 34477,		-- Misdirection (34477)
 		["MAGE"] = 475,			-- Remove Curse (475)
+		["MONK"] = 115450,		-- Detox (115450)
 		["PALADIN"] = 31789,	-- Righteous Defense (31789)
 		["PRIEST"] = 73325,		-- Leap of Faith (73325)
 		["ROGUE"] = 57934,		-- Tricks of the Trade (57934)
