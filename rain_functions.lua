@@ -1098,10 +1098,10 @@ local AddQuestIcon = function(self)
 end
 ns.AddQuestIcon = AddQuestIcon
 
-local AddRaidIcon = function(self, unit)
+local AddRaidIcon = function(self)
 	raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	raidIcon:SetTexture(ns.media.RAIDICONS)
-	raidIcon:SetSize(18,18)
+	raidIcon:SetSize(18, 18)
 	raidIcon:SetPoint("CENTER", self.Health, "TOP", 0, 0)
 	self.RaidIcon = raidIcon
 end

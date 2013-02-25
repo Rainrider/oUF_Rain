@@ -153,7 +153,7 @@ local Shared = function(self, unit)
 		self.Power = power
 	end
 
-	ns.AddRaidIcon(self, unit)
+	ns.AddRaidIcon(self)
 	ns.AddPhaseIcon(self)
 
 	if (unit == "player" or unit == "target") then
