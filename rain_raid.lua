@@ -65,18 +65,16 @@ local RaidStyle = function(self, unit)
 
 	self.Power = power
 
-	local name = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
-	name:SetPoint("LEFT", 2, 0)
-	name:SetPoint("RIGHT", health.value, "LEFT", -3, 0)
-	self:Tag(name, "[rain:role]")
-	self.Name = name
+	local role = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+	role:SetPoint("LEFT", 2, 0)
+	self:Tag(role, "[rain:role]")
 
 	--[[ ICONS ]]--
 	ns.AddAssistantIcon(self)
 	ns.AddLeaderIcon(self)
 	ns.AddMasterLooterIcon(self)
 	ns.AddPhaseIcon(self)
-	ns.AddRaidIcon(self, unit) -- TODO: placement for raid frames
+	ns.AddRaidIcon(self, unit)
 	ns.AddRaidRoleIcon(self)
 	ns.AddReadyCheckIcon(self)
 	ns.AddResurrectIcon(self)
