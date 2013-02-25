@@ -1101,13 +1101,8 @@ ns.AddQuestIcon = AddQuestIcon
 local AddRaidIcon = function(self, unit)
 	raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	raidIcon:SetTexture(ns.media.RAIDICONS)
-	if (unit ~= "player" and unit ~= "target") then
-		raidIcon:SetSize(14, 14)
-		raidIcon:SetPoint("TOP", 0, 10)
-	else
-		raidIcon:SetSize(18, 18)
-		raidIcon:SetPoint("TOP", 0, 10)
-	end
+	raidIcon:SetSize(18,18)
+	raidIcon:SetPoint("CENTER", self.Health, "TOP", 0, 0)
 	self.RaidIcon = raidIcon
 end
 ns.AddRaidIcon = AddRaidIcon
