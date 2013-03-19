@@ -801,23 +801,26 @@ end
 ns.AddExperienceBar = AddExperienceBar
 
 local AddHealPredictionBar = function(self, unit)
-	local mhpb = CreateFrame("StatusBar", self:GetName().."PlayersHealBar", self.Health)
-	mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-	mhpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
-	mhpb:SetStatusBarTexture(ns.media.TEXTURE)
-	mhpb:SetStatusBarColor(0, 0.5, 0.5, 0.5)
+	local health = self.Health
 
-	local ohpb = CreateFrame("StatusBar", self:GetName().."OthersHealBar", self.Health)
-	ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-	ohpb:SetWidth((unit == "player" or unit == "target") and 230 or 110)
-	ohpb:SetStatusBarTexture(ns.media.TEXTURE)
-	ohpb:SetStatusBarColor(0, 1, 0, 0.5)
+	local mhpb = health:CreateTexture(nil, "OVERLAY")
+	mhpb:SetTexture(ns.media.TEXTURE)
+	mhpb:SetVertexColor(0, 0.5, 0.5, 0.5)
 
-	self.HealPrediction = {
+	local ohpb = health:CreateTexture(nil, "OVERLAY")
+	ohpb:SetTexture(ns.media.TEXTURE)
+	ohpb:SetVertexColor(0, 1, 0, 0.5)
+
+	local absorb = health:CreateTexture(nil, "OVERLAY")
+	absorb:SetAlpha(0.5)
+
+	local overAbsorb = health:CreateTexture(nil, "OVERLAY")
+
+	self.RainHealPrediction = {
 		myBar = mhpb,
 		otherBar = ohpb,
+		absorbBar = absorb,
+		overAbsorbGlow = overAbsorb,
 		maxOverflow = unit == "target" and 1.25 or 1,
 	}
 end
