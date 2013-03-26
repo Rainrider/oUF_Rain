@@ -23,6 +23,8 @@ local UnitIsUnit = UnitIsUnit
 local UnitIsFriend = UnitIsFriend
 local UnitName = UnitName
 
+local ColorGradient = oUF.ColorGradient
+
 local tags = oUF.Tags.Methods
 local tagEvents = oUF.Tags.Events
 local tagSharedEvents = oUF.Tags.SharedEvents
@@ -50,14 +52,16 @@ tags["rain:healthSmall"] = function(unit)
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	if (cur == 0 or max == 0) then return end
 
+	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+
 	if (cur == max) then
-		return SiValue(max)
+		return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, SiValue(max))
 	end
 	if (UnitIsFriend("player", unit) and unit ~= "pet") then
-		return "-" .. SiValue(max - cur)
+		return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, SiValue(cur - max))
 	end
 
-	return floor(cur / max * 100 + 0.5) .. "%"
+	return format("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(cur / max * 100 + 0.5))
 end
 tagEvents["rain:healthSmall"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
@@ -67,15 +71,17 @@ tags["rain:health"] = function(unit)
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	if (cur == 0 or max == 0) then return end
 
+	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+
 	if (cur == max) then
-		return SiValue(max)
+		return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, SiValue(max))
 	end
 
 	if (UnitIsFriend("player", unit)) then
-		return "-" .. SiValue(max - cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
+		return format("|cff%02x%02x%02x%s - %d%%|r", r * 255, g * 255, b * 255, SiValue(cur - max), floor(cur / max * 100 + 0.5))
 	end
 
-	return SiValue(cur) .. " - " .. floor(cur / max * 100 + 0.5) .. "%"
+	return format("|cff%02x%02x%02x%s - %d%%|r", r * 255, g * 255, b * 255, SiValue(cur), floor(cur / max * 100 + 0.5))
 end
 tagEvents["rain:health"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 

@@ -9,7 +9,6 @@ local UnitPlayerControlled = UnitPlayerControlled
 local UnitIsTapped = UnitIsTapped
 local UnitIsTappedByPlayer = UnitIsTappedByPlayer
 local UnitIsTappedByAllThreatList = UnitIsTappedByAllThreatList
-local ColorGradient = oUF.ColorGradient
 
 local prioTable = {}
 --[[
@@ -223,26 +222,6 @@ local PostUpdateCast = function(castbar, unit, name)
 	end
 end
 
-local PostUpdateHealth = function(health, unit, cur, max)
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
-		local _, class = UnitClass(unit)
-		local color = UnitIsPlayer(unit) and ns.colors.class[class] or {0.84, 0.75, 0.65}
-
-		health:SetValue(max)
-		health:SetStatusBarColor(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
-		health.value:SetTextColor(0.75, 0.75, 0.75)
-	elseif (not UnitPlayerControlled(unit) and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)) then
-		health:SetStatusBarColor(unpack(ns.colors.tapped))
-	else
-		local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.71, 0.43, 0.27, 0.17, 0.17, 0.24)
-		health:SetStatusBarColor(r, g, b)
-
-		r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
-		health.value:SetTextColor(r, g, b)
-	end
-end
-ns.PostUpdateHealth = PostUpdateHealth
-
 local PostUpdatePower = function(Power, unit, cur, max)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)
@@ -348,6 +327,7 @@ end
 local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.remaining:Hide()
 	aura:SetScript("OnUpdate", nil)
+	aura.stealable:Show() -- TODO: test to make the gap aura visible
 end
 
 local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or STANDARD_TOTEM_PRIORITIES

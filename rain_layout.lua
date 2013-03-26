@@ -111,6 +111,9 @@ local Shared = function(self, unit)
 
 	local health = CreateFrame("StatusBar", self:GetName().."_Health", self)
 	health:SetStatusBarTexture(ns.media.TEXTURE)
+	health.colorTapping = true
+	health.colorDisconnected = true
+	health.colorSmooth = true
 	health.frequentUpdates = true
 	health:SetBackdrop(ns.media.BACKDROP)
 	health:SetBackdropColor(0, 0, 0)
@@ -121,8 +124,6 @@ local Shared = function(self, unit)
 	hbBG:SetTexture(ns.media.TEXTURE)
 	hbBG:SetVertexColor(0.15, 0.15, 0.15)
 	health.background = hbBG
-
-	health.PostUpdate = ns.PostUpdateHealth
 
 	local power
 

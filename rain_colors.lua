@@ -25,6 +25,11 @@ ns.colors = setmetatable({
 		["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
 		["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},
 	}, {__index = oUF.colors.power}),
+	smooth = setmetatable({
+		0.69, 0.31, 0.31,
+		0.71, 0.43, 0.27,
+		0.17, 0.17, 0.24,
+	}, {__index = oUF.colors.smooth}),
 	runes = setmetatable({
 		{0.69, 0.31, 0.31},	-- blood
 		{0.33, 0.59, 0.33},	-- unholy
