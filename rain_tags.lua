@@ -58,7 +58,7 @@ tags["rain:healthSmall"] = function(unit)
 		return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, SiValue(max))
 	end
 	if (UnitIsFriend("player", unit) and unit ~= "pet") then
-		return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, SiValue(cur - max))
+		return format("|cff%02x%02x%02x-%s|r", r * 255, g * 255, b * 255, SiValue(max - cur))
 	end
 
 	return format("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(cur / max * 100 + 0.5))
@@ -78,7 +78,7 @@ tags["rain:health"] = function(unit)
 	end
 
 	if (UnitIsFriend("player", unit)) then
-		return format("|cff%02x%02x%02x%s - %d%%|r", r * 255, g * 255, b * 255, SiValue(cur - max), floor(cur / max * 100 + 0.5))
+		return format("|cff%02x%02x%02x-%s - %d%%|r", r * 255, g * 255, b * 255, SiValue(max - cur), floor(cur / max * 100 + 0.5))
 	end
 
 	return format("|cff%02x%02x%02x%s - %d%%|r", r * 255, g * 255, b * 255, SiValue(cur), floor(cur / max * 100 + 0.5))
