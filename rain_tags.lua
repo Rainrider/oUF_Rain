@@ -209,6 +209,8 @@ tags["rain:name"] = function(unit, r)
     local name = UnitName(r or unit)
 	if (unit == "target") then
 		name = ns.ShortenName(name, 18)
+	elseif (unit:match("raid%d")) then
+		name = ns.ShortenName(name, 8)
 	else
 		name = ns.ShortenName(name, 12)
 	end
