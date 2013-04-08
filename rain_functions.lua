@@ -1,5 +1,7 @@
 ﻿local _, ns = ...
 local playerClass = ns.playerClass
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
 local UnitIsFriend = UnitIsFriend
 local UnitIsConnected = UnitIsConnected
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
@@ -9,6 +11,8 @@ local UnitPlayerControlled = UnitPlayerControlled
 local UnitIsTapped = UnitIsTapped
 local UnitIsTappedByPlayer = UnitIsTappedByPlayer
 local UnitIsTappedByAllThreatList = UnitIsTappedByAllThreatList
+
+local ColorGradient = oUF.ColorGradient
 
 local prioTable = {}
 --[[
@@ -373,6 +377,46 @@ local PostUpdateClassPowerIcons = function(element, power, maxPower, maxPowerCha
 		element[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * element[i]:GetWidth() + i * spacing, 1)
 	end
 end
+
+local UpdateHealth = function(self, event, unit)
+	if (self.unit ~= unit) then return end
+
+	local health = self.Health
+
+	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	local disconnected = not UnitIsConnected(unit)
+
+	health:SetMinMaxValues(0, max)
+	health:SetValue(cur)
+	health.disconnected = disconnected
+
+	local r, g, b, t, faded
+	if (health.colorDisconnected and disconnected or UnitIsDeadOrGhost(unit)) then
+		health:SetValue(max)
+		local _, class = UnitClass(unit)
+		t = UnitIsPlayer(unit) and self.colors.class[class] or self.colors.disconnected
+		faded = true
+	elseif (health.colorTapping and not UnitPlayerControlled(unit) and
+		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and
+		not UnitIsTappedByAllThreatList(unit)) then
+		t = self.colors.tapped
+	elseif (health.colorSmooth) then
+		r, g, b = ColorGradient(cur, max, unpack(self.colors.smooth))
+	end
+
+	if (t) then
+		if (not faded) then
+			r, g, b = t[1], t[2], t[3]
+		else
+			r, g, b = t[1] * 0.5, t[2] * 0.5, t[3] * 0.5
+		end
+	end
+
+	if (b) then
+		health:SetStatusBarColor(r, g, b)
+	end
+end
+ns.UpdateHealth = UpdateHealth
 
 local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower)
 	local self = element.__owner
