@@ -13,6 +13,8 @@ local format = string.format
 
 -- local references for some Blizz functions
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsDead = UnitIsDead
+local UnitIsGhost = UnitIsGhost
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local UnitPower = UnitPower
@@ -85,15 +87,35 @@ tags["rain:health"] = function(unit)
 end
 tagEvents["rain:health"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
-tags["rain:raidhp"] = function(unit)
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
-
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	if (cur == 0 or max == 0 or cur == max) then return end
-
-	return "|cffff0000-" .. SiValue(max - cur) .. "|r"
+tags["rain:raidmissinghp"] = function(unit)
+	local status = tags["rain:status"](unit)
+	if (status) then
+		return status
+	else
+		local missing = UnitHealthMax(unit) - UnitHealth(unit)
+		if (missing > 0) then
+			return "-" .. SiValue(missing)
+		else
+			return tags["rain:name"](unit)
+		end
+	end
 end
-tagEvents["rain:raidhp"] = tagEvents.missinghp
+tagEvents["rain:raidmissinghp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_FACTION"
+
+tags["rain:raidpercenthp"] = function(unit)
+	local status = tags["rain:status"](unit)
+	if (status) then
+		return status
+	else
+		local percent = math.floor(UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.5) -- chuck norris can divide by zero
+		if (percent < 100 and percent > 0) then
+			return percent .. "%"
+		else
+			return tags["rain:name"](unit)
+		end
+	end
+end
+tagEvents["rain:raidpercenthp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_FACTION"
 
 tags["rain:altmana"] = function(unit)
 	if (unit ~= "player" or UnitPowerType(unit) == 0) then return end
@@ -120,6 +142,17 @@ tags["rain:level"] = function(unit)
 	return level
 end
 tagEvents["rain:level"] = "UNIT_LEVEL"
+
+tags["rain:status"] = function(unit)
+	if (UnitIsDead(unit)) then
+		return _G["DEAD"]
+	elseif (UnitIsGhost(unit)) then
+		return "Ghost"
+	elseif (not UnitIsConnected(unit)) then
+		return _G["PLAYER_OFFLINE"]
+	end
+end
+tagEvents["rain:status"] = "UNIT_HEALTH UNIT_CONNECTION"
 
 tags["rain:power"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end

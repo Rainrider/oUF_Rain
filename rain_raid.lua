@@ -42,9 +42,9 @@ local RaidStyle = function(self, unit)
 
 	if (ns.cfg.raidHealth > 0) then
 		if (ns.cfg.raidHealth == 1) then
-			self:Tag(hpValue, "[dead][offline][rain:raidhp]") -- TODO: coloring
+			self:Tag(hpValue, "[rain:raidmissinghp]") -- TODO: coloring
 		elseif (ns.cfg.raidHealth == 2) then
-			self:Tag(hpValue, "[dead][offline][perhp<%]")
+			self:Tag(hpValue, "[rain:raidpercenthp]")
 		end
 	end
 	health.value = hpValue
