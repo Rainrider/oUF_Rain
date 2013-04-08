@@ -55,7 +55,7 @@ local RaidStyle = function(self, unit)
 	power:SetSize(64, 5)
 	power:SetPoint("BOTTOMLEFT")
 	power:SetStatusBarTexture(ns.media.TEXTURE)
-	power.colorPower = true
+	power.colorClass = true
 	power:SetBackdrop(ns.media.BACKDROP)
 	power:SetBackdropColor(0, 0, 0)
 
