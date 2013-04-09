@@ -147,7 +147,11 @@ tags["rain:status"] = function(unit)
 	if (UnitIsDead(unit)) then
 		return _G["DEAD"]
 	elseif (UnitIsGhost(unit)) then
-		return "Ghost"
+		local ghost = GetSpellInfo(8326)
+		if (GetLocale() == "deDE") then
+			ghost = ghost:sub(1, 5)		-- Geisterscheinung my ass
+		end
+		return ghost
 	elseif (not UnitIsConnected(unit)) then
 		return _G["PLAYER_OFFLINE"]
 	end
