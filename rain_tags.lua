@@ -27,6 +27,13 @@ local UnitName = UnitName
 
 local ColorGradient = oUF.ColorGradient
 
+local GHOST = GetSpellInfo(8326)
+do
+	if (GetLocale() == "deDE") then
+		GHOST = "Geist"		-- Geisterscheinung my ass
+	end
+end
+
 local tags = oUF.Tags.Methods
 local tagEvents = oUF.Tags.Events
 local tagSharedEvents = oUF.Tags.SharedEvents
@@ -145,15 +152,15 @@ tagEvents["rain:level"] = "UNIT_LEVEL"
 
 tags["rain:status"] = function(unit)
 	if (UnitIsDead(unit)) then
-		return _G["DEAD"]
+		return DEAD
 	elseif (UnitIsGhost(unit)) then
-		local ghost = GetSpellInfo(8326)
-		if (GetLocale() == "deDE") then
-			ghost = ghost:sub(1, 5)		-- Geisterscheinung my ass
-		end
-		return ghost
+		-- local GHOST = GetSpellInfo(8326)
+		-- if (GetLocale() == "deDE") then
+			-- GHOST = "Geist"		-- Geisterscheinung my ass
+		-- end
+		return GHOST
 	elseif (not UnitIsConnected(unit)) then
-		return _G["PLAYER_OFFLINE"]
+		return PLAYER_OFFLINE
 	end
 end
 tagEvents["rain:status"] = "UNIT_HEALTH UNIT_CONNECTION"
