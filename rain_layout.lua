@@ -167,7 +167,7 @@ local Shared = function(self, unit)
 
 		local healthValue = PutFontString(health, ns.media.FONT2, 12, nil, "RIGHT")
 		healthValue:SetPoint("TOPRIGHT", health, -3.5, -3.5)
-		self:Tag(healthValue, "[dead][offline][rain:health]")
+		self:Tag(healthValue, "[rain:status][rain:health]")
 		health.value = healthValue
 
 		power:SetSize(230, 15)
@@ -229,7 +229,7 @@ local Shared = function(self, unit)
 
 		local healthValue = PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
 		healthValue:SetPoint("TOPRIGHT", -2, -2)
-		self:Tag(healthValue, "[dead][offline][rain:healthSmall]")
+		self:Tag(healthValue, "[rain:status][rain:healthSmall]")
 		health.value = healthValue
 
 		power:SetSize(110, 5)
