@@ -91,11 +91,6 @@ local UpdateDispelList = {
 	end,
 }
 
--- Populate the dispelList
-if (UpdateDispelList[playerClass]) then
-	UpdateDispelList[playerClass]()
-end
-
 local GetDebuffInfo = function(unit, filter)
 	if (not UnitCanAssist("player", unit)) then return end
 
@@ -154,6 +149,9 @@ local Enable = function(self)
 	-- exit if we filter by type and are not a dispeling class
 	if (self.DebuffHighlightFilter and not UpdateDispelList[playerClass]) then return end
 
+	if (self.DebuffHighlightFilter and UpdateDispelList[playerClass]) then
+		UpdateDispelList[playerClass]()
+	end
 	self:RegisterEvent("UNIT_AURA", Update)
 
 	-- we don't need these if we only filter for boss debuffs
