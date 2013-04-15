@@ -151,14 +151,11 @@ local Enable = function(self)
 
 	if (self.DebuffHighlightFilter and UpdateDispelList[playerClass]) then
 		UpdateDispelList[playerClass]()
-	end
-	self:RegisterEvent("UNIT_AURA", Update)
-
-	-- we don't need these if we only filter for boss debuffs
-	if (UpdateDispelList[playerClass]) then
 		self:RegisterEvent("SPELLS_CHANGED", UpdateDispelList[playerClass])
 		self:RegisterEvent("UNIT_PET", CheckForPet)
 	end
+
+	self:RegisterEvent("UNIT_AURA", Update)
 
 	return true
 end
