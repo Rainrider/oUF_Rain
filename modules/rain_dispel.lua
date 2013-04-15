@@ -156,7 +156,7 @@ local Enable = function(self)
 
 	-- we don't need these if we only filter for boss debuffs
 	if (UpdateDispelList[playerClass]) then
-		self:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdateDispelList[playerClass]) -- check SPELLS_CHANGED cos it fires a lot less than this
+		self:RegisterEvent("SPELLS_CHANGED", UpdateDispelList[playerClass])
 		self:RegisterEvent("UNIT_PET", CheckForPet)
 	end
 
@@ -167,7 +167,7 @@ local Disable = function(self)
 	if (self.DebuffHighlight) then
 		self:UnregisterEvent("UNIT_AURA")
 		if (UpdateDispelList[playerClass]) then
-			self:UnregisterEvent("LEARNED_SPELL_IN_TAB")
+			self:UnregisterEvent("SPELLS_CHANGED")
 			self:UnregisterEvent("UNIT_PET")
 		end
 	end
