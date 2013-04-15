@@ -2,7 +2,6 @@ local _, ns = ...
 
 local RaidStyle = function(self, unit)
 
-	self.menu = ns.menu
 	self.colors = ns.colors
 
 	self:RegisterForClicks("AnyDown")
