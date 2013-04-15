@@ -134,7 +134,7 @@ tags["rain:altmana"] = function(unit)
 	local r, g, b = unpack(ns.colors.power.MANA)
 	return format("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(curMana / maxMana * 100 + 0.5))
 end
-tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
+tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 tags["rain:level"] = function(unit)
 	if (UnitClassification(unit) == "worldboss") then return end
@@ -188,7 +188,7 @@ tags["rain:power"] = function(unit)
 	local r, g, b = unpack(ns.colors.power[pName] or ns.colors.power[pType])
 	return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, powerValue)
 end
-tagEvents["rain:power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER"
+tagEvents["rain:power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 tags["rain:role"] = function(unit)
 	local xOffset = 0
