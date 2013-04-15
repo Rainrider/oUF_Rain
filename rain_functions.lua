@@ -807,10 +807,10 @@ local AddExperienceBar = function(self)
 		local bars = 20
 		local rested = GetXPExhaustion()
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT", 0, 5)
-		GameTooltip:AddLine(string.format("XP: %d / %d (%d%% - %.1f bars)", curXP, maxXP, curXP/maxXP * 100 + 0.5, bars * curXP / maxXP))
-		GameTooltip:AddLine(string.format("Remaining: %d (%d%% - %.1f bars)", maxXP - curXP, (maxXP - curXP) / maxXP * 100 + 0.5, bars * (maxXP - curXP) / maxXP))
+		GameTooltip:AddLine(string.format("XP: %s / %s (%d%% - %.1f bars)", BreakUpLargeNumbers(curXP), BreakUpLargeNumbers(maxXP), curXP/maxXP * 100 + 0.5, bars * curXP / maxXP))
+		GameTooltip:AddLine(string.format("Remaining: %s (%d%% - %.1f bars)", BreakUpLargeNumbers(maxXP - curXP), (maxXP - curXP) / maxXP * 100 + 0.5, bars * (maxXP - curXP) / maxXP))
 		if (rested and rested > 0) then
-			GameTooltip:AddLine(string.format("|cff0090ffRested: +%d (%d%%)", rested, rested / maxXP * 100 + 0.5))
+			GameTooltip:AddLine(string.format("|cff0090ffRested: +%s (%d%%)", BreakUpLargeNumbers(rested), rested / maxXP * 100 + 0.5))
 		end
 		GameTooltip:Show()
 	end
