@@ -187,7 +187,9 @@ end
 local SortAuras = function(a, b)
 	if (a and b and a.timeLeft and b.timeLeft) then
 		if (a:IsShown() and b:IsShown()) then
-			return a.timeLeft > b.timeLeft
+			if (a.isDebuff and b.isDebuff or not a.isDebuff and not b.isDebuff) then
+				return a.timeLeft > b.timeLeft
+			end
 		elseif (a:IsShown()) then
 			return true
 		end
@@ -468,7 +470,7 @@ local AddAuras = function(self, unit)
 	auras.size = (230 - 7 * auras.spacing) / 8
 	auras:SetSize(7 * (auras.size + auras.spacing), auras.size + auras.spacing)
 	auras.disableCooldown = true
-	auras.showType = true
+	auras.showDebuffType = true -- TODO: change to showType after done sorting auras
 	auras.onlyShowPlayer = false
 	auras.CreateIcon = CreateAuraIcon
 	auras.PreSetPosition = PreSetPosition
