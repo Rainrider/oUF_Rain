@@ -661,39 +661,43 @@ local AddComboPointsBar = function(self, width, height, spacing)
 	self.CPoints = comboPoints
 end
 ns.AddComboPointsBar = AddComboPointsBar
--- TODO: this looks awfully
+
 local AddDebuffHighlight = function(self, unit)
-	self.DebuffHighlight = CreateFrame("Frame", self:GetName().."_DebuffHighlight", self.Health)
-	self.DebuffHighlight:SetAllPoints()
-	self.DebuffHighlight:SetFrameLevel(self.DebuffHighlight:GetParent():GetFrameLevel() + 1)
+	local debuffHighlight = {}
 
-	self.DebuffHighlightFilter = ns.cfg.dispelTypeFilter
+	local texture = self.Health:CreateTexture(nil, "OVERLAY")
+	texture:SetAllPoints()
+	texture:SetTexture(ns.media.HIGHLIGHTTEXTURE)
+	texture:SetBlendMode("ADD")
+	texture:SetVertexColor(0, 0, 0, 0)
+	debuffHighlight.texture = texture
 
-	self.DebuffHighlightTexture = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
-	self.DebuffHighlightTexture:SetAllPoints()
-	self.DebuffHighlightTexture:SetTexture(ns.media.HIGHLIGHTTEXTURE)
-	self.DebuffHighlightTexture:SetBlendMode("ADD")
-	self.DebuffHighlightTexture:SetVertexColor(0, 0, 0, 0)
-
+	local icon, iconOverlay
 	if (unit == "player" or unit == "target") then
-		self.DebuffHighlightIcon = self.Overlay:CreateTexture(nil, "OVERLAY")
-		self.DebuffHighlightIcon:SetSize(18, 18)
+		icon = self.Overlay:CreateTexture(nil, "OVERLAY")
+		icon:SetSize(18, 18)
 
-		self.DebuffHighlightIconOverlay = self.Overlay:CreateTexture(nil, "OVERLAY")
-		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -3.5, 3.5)
-		self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 3.5, -3.5)
+		iconOverlay = self.Overlay:CreateTexture(nil, "OVERLAY", nil, 1)
+		iconOverlay:SetPoint("TOPLEFT", icon, -3.5, 3.5)
+		iconOverlay:SetPoint("BOTTOMRIGHT", icon, 3.5, -3.5)
 	else
-		self.DebuffHighlightIcon = self.Health:CreateTexture(nil, "OVERLAY")
-		self.DebuffHighlightIcon:SetSize(16, 16)
+		icon = self.Health:CreateTexture(nil, "OVERLAY")
+		icon:SetSize(16, 16)
 
-		self.DebuffHighlightIconOverlay = self.DebuffHighlight:CreateTexture(nil, "OVERLAY")
-		self.DebuffHighlightIconOverlay:SetPoint("TOPLEFT", self.DebuffHighlightIcon, -1, 1)
-		self.DebuffHighlightIconOverlay:SetPoint("BOTTOMRIGHT", self.DebuffHighlightIcon, 1, -1)
+		iconOverlay = self.Health:CreateTexture(nil, "OVERLAY", nil, 1)
+		iconOverlay:SetPoint("TOPLEFT", icon, -1, 1)
+		iconOverlay:SetPoint("BOTTOMRIGHT", icon, 1, -1)
 	end
-	self.DebuffHighlightIcon:SetPoint("CENTER")
-	self.DebuffHighlightIcon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-	self.DebuffHighlightIconOverlay:SetTexture(ns.media.BTNTEXTURE)
-	self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
+	icon:SetPoint("CENTER")
+	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+	iconOverlay:SetTexture(ns.media.BTNTEXTURE)
+	iconOverlay:SetVertexColor(0, 0, 0, 0)
+
+	debuffHighlight.icon = icon
+	debuffHighlight.iconOverlay = iconOverlay
+	debuffHighlight.filter = ns.cfg.dispelTypeFilter
+
+	self.DebuffHighlight = debuffHighlight
 end
 ns.AddDebuffHighlight = AddDebuffHighlight
 
