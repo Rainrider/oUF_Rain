@@ -331,7 +331,7 @@ end
 local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.remaining:Hide()
 	aura:SetScript("OnUpdate", nil)
-	aura.stealable:Show() -- TODO: test to make the gap aura visible
+	aura.timeLeft = nil
 end
 
 local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or STANDARD_TOTEM_PRIORITIES
