@@ -1,14 +1,11 @@
 ﻿--[[
-		self.DebuffHightlight = Frame (to create the textures with)
-		self.DebuffHighlightFilter = boolean ( true = only debuffs player can dispell )
-
-		self.DebuffHighlightBackdrop = Frame ( GetBackdrop() ~= nil ) - NYI
-		self.DebuffHighlightBackdropBorder = boolean ( true = color backdrop border ) - NYI
-		self.DebuffHighlightTexture = Texture ( GetTexture() ~= nil )
-		self.DebuffHighlightIcon = Texture ( for the debuff icon )
-		self.DebuffHighlightIconOverlay = Texture ( for icon border )
+	self.DebuffHighlight = Table
+	self.DebuffHighlight.texture = Texture (will be colored by debuff type)
+	self.DebuffHighlight.filter = boolean (true = only debuffs player can dispell)
+	self.DebuffHighlight.icon = Texture (for the debuff icon)
+	self.DebuffHighlight.iconOverlay = Texture (for icon border)
 --]]
-local playerClass = select(2, UnitClass("player"))
+local _, playerClass = UnitClass("player")
 
 local dispelList = {
 	Curse = false,
@@ -19,7 +16,7 @@ local dispelList = {
 
 local debuffTypeColor = {}
 for dispelType, color in pairs(_G["DebuffTypeColor"]) do
-	debuffTypeColor[dispelType] = color
+	debuffTypeColor[dispelType] = {color.r, color.g, color.b}
 end
 
 local ResetDispelList = function()
@@ -114,42 +111,55 @@ end
 local Update = function(self, event, unit)
 	if (unit ~= self.unit) then return end
 
-	local color
-	local dispelType, texture, isBossDebuff = GetDebuffInfo(unit, self.DebuffHighlightFilter)
+	local element = self.DebuffHighlight
 
-	color = debuffTypeColor[dispelType] or debuffTypeColor["none"]
+	local dispelType, texture, isBossDebuff = GetDebuffInfo(unit, element.filter)
+	local color = debuffTypeColor[dispelType] or debuffTypeColor["none"]
 
-	if (self.DebuffHighlightTexture) then
+	if (element.texture) then
 		if (texture) then
-			self.DebuffHighlightTexture:SetVertexColor(color.r, color.g, color.b, 1)
+			element.texture:SetVertexColor(color[1], color[2], color[3], 1)
 		else
-			self.DebuffHighlightTexture:SetVertexColor(0, 0, 0, 0)
+			element.texture:SetVertexColor(0, 0, 0, 0)
 		end
 	end
 
-	if (self.DebuffHighlightIcon and isBossDebuff) then
+	if (isBossDebuff and element.icon) then
 		if (texture) then
-			self.DebuffHighlightIcon:SetTexture(texture)
+			element.icon:SetTexture(texture)
+			if (element.iconOverlay) then
+				element.iconOverlay:SetVertexColor(color[1], color[2], color[3], 1)
+			end
 		else
-			self.DebuffHighlightIcon:SetTexture(nil)
-		end
-		if (self.DebuffHighlightIconOverlay) then
-			if (texture) then
-				self.DebuffHighlightIconOverlay:SetVertexColor(color.r, color.g, color.b, 1)
-			else
-				self.DebuffHighlightIconOverlay:SetVertexColor(0, 0, 0, 0)
+			element.icon:SetTexture(nil)
+			if (element.iconOverlay) then
+				element.iconOverlay:SetVertexColor(0, 0, 0, 0)
 			end
 		end
 	end
+
+	if (element.PostUpdate) then
+		return element:PostUpdate(unit, dispelType, texture, isBossDebuff)
+	end
+end
+
+local Path = function(self, ...)
+	return (self.DebuffHighlight.Override or Update)(self, ...)
+end
+
+local ForceUpdate = function(element)
+	return Path(self.__owner, "ForceUpdate", self.__owner.unit)
 end
 
 local Enable = function(self)
-	if (not self.DebuffHighlight) then return end
+	local element = self.DebuffHighlight
 
-	-- exit if we filter by type and are not a dispeling class
-	if (self.DebuffHighlightFilter and not UpdateDispelList[playerClass]) then return end
+	if (not element or element.filter and not UpdateDispelList[playerClass]) then return end
 
-	if (self.DebuffHighlightFilter and UpdateDispelList[playerClass]) then
+	element.__owner = self
+	element.ForceUpdate = ForceUpdate
+
+	if (element.filter and UpdateDispelList[playerClass]) then
 		UpdateDispelList[playerClass]()
 		self:RegisterEvent("SPELLS_CHANGED", UpdateDispelList[playerClass])
 		self:RegisterEvent("UNIT_PET", CheckForPet)
@@ -170,4 +180,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement("rain_dispell", Update, Enable, Disable)
+oUF:AddElement("rain_dispel", Update, Enable, Disable)
