@@ -165,7 +165,7 @@ local Enable = function(self)
 		self:RegisterEvent("UNIT_PET", CheckForPet)
 	end
 
-	self:RegisterEvent("UNIT_AURA", Update)
+	self:RegisterEvent("UNIT_AURA", Path)
 
 	return true
 end
@@ -180,4 +180,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement("rain_dispel", Update, Enable, Disable)
+oUF:AddElement("rain_dispel", Path, Enable, Disable)
