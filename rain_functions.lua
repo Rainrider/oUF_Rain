@@ -185,8 +185,10 @@ local CreateAuraTimer = function(aura, elapsed)
 end
 
 local SortAuras = function(a, b)
-	if (a:IsShown() and b:IsShown() and a.isDebuff == b.isDebuff) then
-		return a.timeLeft > b.timeLeft
+	if (a:IsShown() and b:IsShown()) then
+		if (a.isDebuff == b.isDebuff) then
+			return a.timeLeft > b.timeLeft
+		end
 	elseif (a:IsShown()) then
 		return true
 	end
