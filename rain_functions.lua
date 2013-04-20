@@ -329,7 +329,7 @@ end
 local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.remaining:Hide()
 	aura:SetScript("OnUpdate", nil)
-	aura.timeLeft = nil
+	aura.timeLeft = aura.isDebuff and math.huge or -5
 end
 
 local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or STANDARD_TOTEM_PRIORITIES
