@@ -89,13 +89,12 @@ local FormatTime = function(seconds)
 		return format("%dh", floor(seconds/hour + 0.5)), seconds % hour
 	elseif (seconds >= minute) then
 		if (seconds <= minute * 5) then
-			return format("%d:%02d", floor(seconds/60), seconds % minute), seconds - floor(seconds)
+			return format("%d:%02d", floor(seconds/minute), seconds % minute), seconds - floor(seconds)
 		end
 		return format("%dm", floor(seconds/minute + 0.5)), seconds % minute
-	elseif (seconds >= minute / 12) then
+	else
 		return floor(seconds + 0.5), (seconds * 100 - floor(seconds * 100)) / 100
 	end
-	return format("%.1f", seconds), (seconds * 100 - floor(seconds * 100)) / 100
 end
 
 local PutFontString = function(parent, fontName, fontHeight, fontStyle, justifyH)
@@ -160,7 +159,7 @@ end
 local CreateAuraTimer = function(aura, elapsed)
 	if (aura.timeLeft) then
 		aura.elapsed = (aura.elapsed or 0) + elapsed
-		if (aura.elapsed >= 0.1) then
+		if (aura.elapsed >= 0.5) then
 			if (not aura.first) then
 				aura.timeLeft = aura.timeLeft - aura.elapsed
 			else
