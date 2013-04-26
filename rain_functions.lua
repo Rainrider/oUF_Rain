@@ -84,16 +84,16 @@ ns.ShortenName = ShortenName
 local FormatTime = function(seconds)
 	local day, hour, minute = 86400, 3600, 60
 	if (seconds >= day) then
-		return format("%dd", floor(seconds/day + 0.5)), seconds % day
+		return format("%dd", floor(seconds/day + 0.5))
 	elseif (seconds >= hour) then
-		return format("%dh", floor(seconds/hour + 0.5)), seconds % hour
+		return format("%dh", floor(seconds/hour + 0.5))
 	elseif (seconds >= minute) then
 		if (seconds <= minute * 5) then
-			return format("%d:%02d", floor(seconds/minute), seconds % minute), seconds - floor(seconds)
+			return format("%d:%02d", floor(seconds/minute), seconds % minute)
 		end
-		return format("%dm", floor(seconds/minute + 0.5)), seconds % minute
+		return format("%dm", floor(seconds/minute + 0.5))
 	else
-		return floor(seconds + 0.5), (seconds * 100 - floor(seconds * 100)) / 100
+		return floor(seconds + 0.5)
 	end
 end
 
