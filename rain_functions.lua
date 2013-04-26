@@ -83,17 +83,20 @@ ns.ShortenName = ShortenName
 
 local FormatTime = function(seconds)
 	local day, hour, minute = 86400, 3600, 60
+	local expColor = "|cffAF4F4F"
+	local color = "|cffD6BFA5"
 	if (seconds >= day) then
-		return format("%dd", floor(seconds/day + 0.5))
+		return format("%s%dd|r", color, floor(seconds/day + 0.5))
 	elseif (seconds >= hour) then
-		return format("%dh", floor(seconds/hour + 0.5))
+		return format("%s%dh|r", color, floor(seconds/hour + 0.5))
 	elseif (seconds >= minute) then
 		if (seconds <= minute * 5) then
-			return format("%d:%02d", floor(seconds/minute), seconds % minute)
+			return format("%s%d:%02d|r", color, floor(seconds/minute), seconds % minute)
 		end
-		return format("%dm", floor(seconds/minute + 0.5))
+		return format("%s%dm|r", color, floor(seconds/minute + 0.5))
 	else
-		return floor(seconds + 0.5)
+		local secs = floor(seconds + 0.5)
+		return format("%s%d|r", secs > 5 and color or expColor, secs)
 	end
 end
 
@@ -169,11 +172,6 @@ local CreateAuraTimer = function(aura, elapsed)
 			if (aura.timeLeft > 0) then
 				local time = FormatTime(aura.timeLeft)
 					aura.remaining:SetText(time)
-				if (aura.timeLeft < 5) then
-					aura.remaining:SetTextColor(0.69, 0.31, 0.31)
-				else
-					aura.remaining:SetTextColor(0.84, 0.75, 0.65)
-				end
 			else
 				aura.remaining:Hide()
 				aura:SetScript("OnUpdate", nil)
