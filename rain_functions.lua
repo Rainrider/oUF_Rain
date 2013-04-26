@@ -426,8 +426,8 @@ local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower
 	local height = element.height
 	local spacing = element.spacing
 
-	if spec then
-		if spec == 1 or spec == 3 then -- Affliction or Destruction
+	if (spec) then
+		if (spec == 1 or spec == 3) then -- Affliction or Destruction
 			for i = 1, maxPower do
 				element[i]:SetSize((width - maxPower * spacing - spacing) / maxPower, height)
 				element[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * element[i]:GetWidth() + i * spacing, 1)
@@ -436,6 +436,25 @@ local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower
 			element[1]:SetSize(width - 2 * spacing, height)
 			element[1]:SetPoint("BOTTOMLEFT", self.Overlay, spacing, 1)
 			--element[1]:SetPoint("BOTTOMRIGHT", self.Overlay, -spacing, 1) -- we have to use SetSize lol?
+		end
+	end
+
+	if (spec ~= 3) then
+		for i = 1, 4 do
+			element[i]:SetBackdropColor(0, 0, 0)
+		end
+	end
+end
+
+local MAX_POWER_PER_EMBER = MAX_POWER_PER_EMBER
+local WarlockPostUpdatePower = function(element, powerType, power, maxPower)
+	if (powerType == "BURNING_EMBERS") then
+		for i = 1, maxPower do
+			if (i <= power / MAX_POWER_PER_EMBER) then
+				element[i]:SetBackdropColor(1, 0.5, 0)
+			else
+				element[i]:SetBackdropColor(0, 0, 0)
+			end
 		end
 	end
 end
@@ -1074,6 +1093,7 @@ local AddWarlockPowerBar = function(self, width, height, spacing)
 	end
 
 	warlockPowerBar.PostUpdateVisibility = WarlockPowerPostUpdateVisibility
+	warlockPowerBar.PostUpdate = WarlockPostUpdatePower
 
 	self.WarlockPowerBar = warlockPowerBar
 end
