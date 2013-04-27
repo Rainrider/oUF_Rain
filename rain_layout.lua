@@ -114,7 +114,7 @@ local Shared = function(self, unit)
 	health.colorTapping = true
 	health.colorDisconnected = true
 	health.colorSmooth = true
-	health.frequentUpdates = true
+	health.frequentUpdates = unit == "player" or unit == "target" or unitIsBoss -- TODO: remove unitIsBoss here when Blizzard fixes UNIT_HEALTH for boss units
 	health:SetBackdrop(ns.media.BACKDROP)
 	health:SetBackdropColor(0, 0, 0)
 	self.Health = health
@@ -139,7 +139,7 @@ local Shared = function(self, unit)
 		power.colorPower = unit == "player" or unit == "pet" or unitIsBoss
 		power.colorClass = true
 		power.colorReaction = true
-		power.frequentUpdates = true
+		power.frequentUpdates = unit == "player" or unit == "target"
 
 		if (unitIsBoss) then
 			power.displayAltPower = true

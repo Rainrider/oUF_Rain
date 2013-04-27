@@ -24,7 +24,7 @@ local RaidStyle = function(self, unit)
 	health.colorDisconnected = true
 	health.colorSmooth = true
 	-- health.colorReaction = true -- TODO: coloring for mind-controlled units (need further events too)
-	health.frequentUpdates = true
+	health.frequentUpdates = nil
 	health:SetBackdrop(ns.media.BACKDROP)
 	health:SetBackdropColor(0, 0, 0)
 
