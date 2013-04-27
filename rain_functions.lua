@@ -610,27 +610,20 @@ local AddCastbar = function(self, unit)
 
 	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
 		local icon = castbar:CreateTexture(nil, "ARTWORK")
+		icon:SetSize(30, 30)
+		icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+
+		if (unit == "target") then
+			icon:SetPoint("RIGHT", castbar, "LEFT", -15, 0)
+		else
+			icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
+		end
 
 		local iconOverlay = castbar:CreateTexture(nil, "OVERLAY")
 		iconOverlay:SetTexture(ns.media.BTNTEXTURE)
 		iconOverlay:SetVertexColor(0.84, 0.75, 0.65)
-
-		if (unit == "target") then
-			icon:SetPoint("RIGHT", castbar, "LEFT", -15, 0)
-			icon:SetSize(32, 32)
-			iconOverlay:SetPoint("TOPLEFT", icon, -5, 5)
-			iconOverlay:SetPoint("BOTTOMRIGHT", icon, 5, -5)
-		else
-			icon:SetSize(22, 22)
-			iconOverlay:SetPoint("TOPLEFT", icon, -3, 3)
-			iconOverlay:SetPoint("BOTTOMRIGHT", icon, 3, -3)
-			if (unit == "focus") then
-				icon:SetPoint("BOTTOMLEFT", self, "BOTTOMRIGHT", 7.5, 0)
-			else
-				icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
-			end
-		end
-		icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		iconOverlay:SetPoint("TOPLEFT", icon, -5, 5)
+		iconOverlay:SetPoint("BOTTOMRIGHT", icon, 5, -5)
 
 		castbar.Icon = icon
 		castbar.IconOverlay = iconOverlay
