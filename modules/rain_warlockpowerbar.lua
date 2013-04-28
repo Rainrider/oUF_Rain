@@ -144,7 +144,7 @@ Visibility = function(self, event, unit)
 end
 
 local Update = function(self, event, unit, powerType)
-	if (self.unit ~= unit) then return end
+	if (unit ~= "player") then return end
 
 	if (powerType and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY" and powerType ~= "BURNING_EMBERS" or not powerType) then return end
 
@@ -190,7 +190,9 @@ local ForceUpdate = function(element, ...)
 	return Visibility(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
-local Enable = function(self)
+local Enable = function(self, unit)
+	if (unit ~= "player") then return end
+
 	local element = self.WarlockPowerBar
 
 	if (element) then
