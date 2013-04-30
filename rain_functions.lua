@@ -188,6 +188,8 @@ local SortAuras = function(a, b)
 	if (a:IsShown() and b:IsShown()) then
 		if (a.isDebuff == b.isDebuff) then
 			return a.timeLeft > b.timeLeft
+		elseif (not a.isDebuff) then
+			return b.isDebuff
 		end
 	elseif (a:IsShown()) then
 		return true
