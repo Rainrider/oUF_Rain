@@ -182,14 +182,14 @@ local CreateAuraTimer = function(aura, elapsed)
 end
 
 local SortAuras = function(a, b)
-	if (a and b and a.timeLeft and b.timeLeft) then
-		if (a:IsShown() and b:IsShown()) then
-			if (a.isDebuff and b.isDebuff or not a.isDebuff and not b.isDebuff) then
-				return a.timeLeft > b.timeLeft
-			end
-		elseif (a:IsShown()) then
-			return true
+	if (a:IsShown() and b:IsShown()) then
+		if (a.isDebuff == b.isDebuff) then
+			return a.timeLeft > b.timeLeft
+		elseif (not a.isDebuff) then
+			return b.isDebuff
 		end
+	elseif (a:IsShown()) then
+		return true
 	end
 end
 
@@ -330,7 +330,7 @@ end
 local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.remaining:Hide()
 	aura:SetScript("OnUpdate", nil)
-	aura.timeLeft = nil
+	aura.timeLeft = aura.isDebuff and math.huge or -5
 end
 
 local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or STANDARD_TOTEM_PRIORITIES
@@ -486,7 +486,7 @@ local AddAuras = function(self, unit)
 	auras.size = (230 - 7 * auras.spacing) / 8
 	auras:SetSize(7 * (auras.size + auras.spacing), auras.size + auras.spacing)
 	auras.disableCooldown = true
-	auras.showDebuffType = true -- TODO: change to showType after done sorting auras
+	auras.showType = true
 	auras.onlyShowPlayer = false
 	auras.CreateIcon = CreateAuraIcon
 	auras.PreSetPosition = PreSetPosition
