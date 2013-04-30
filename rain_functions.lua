@@ -294,8 +294,39 @@ local CreateAuraIcon = function(Auras, index)
 	return button
 end
 
+local PrintAuras = function(Auras)
+	local button
+	local text = {}
+	for i = 1, #Auras do
+		button = Auras[i]
+		if (not button) then
+			tinsert(text, i, "NC") -- not created
+		elseif (button:IsShown()) then
+			if (not button.isDebuff) then -- buff
+				if (button.timeLeft == -5) then
+					tinsert(text, i, "|cff00ff00GAP|r")
+				else
+					tinsert(text, i, "|cff00ff00B|r")
+				end
+			else -- debuff
+				if (button.timeLeft == math.huge) then
+					tinsert(text, i, "|cffff0000GAP|r")
+				else
+					tinsert(text, i, "|cffff0000D|r")
+				end
+			end
+		else
+			tinsert(text, i, "U") -- unused, hidden
+		end
+	end
+	return table.concat(text, "-")
+end
+
 local PreSetPosition = function(Auras)
+	local pre = PrintAuras(Auras)
 	table.sort(Auras, SortAuras)
+	local post = PrintAuras(Auras)
+	if (pre ~= post) then print(date("%X"), pre, "\n", post, "\n") end
 	return 1, Auras.createdIcons
 end
 
