@@ -257,8 +257,8 @@ local CreateAuraIcon = function(Auras, index)
 	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	button.icon = icon
 
-	local count = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "RIGHT")
-	count:SetPoint("BOTTOMRIGHT", 1, 1.5)
+	local count = PutFontString(button, ns.media.FONT, 9, "OUTLINE", "RIGHT")
+	count:SetPoint("BOTTOMRIGHT", 2.5, 0)
 	count:SetTextColor(0.84, 0.75, 0.65)
 	button.count = count
 	-- aura border
@@ -278,8 +278,8 @@ local CreateAuraIcon = function(Auras, index)
 	stealable:SetVertexColor(unpack(oUF.colors.class[playerClass]))
 	button.stealable = stealable
 	-- timer text
-	local remaining = PutFontString(button, ns.media.FONT, 8, "OUTLINE", "LEFT")
-	remaining:SetPoint("TOP", 0, 1)
+	local remaining = PutFontString(button, ns.media.FONT, 9, "OUTLINE", "LEFT")
+	remaining:SetPoint("TOPLEFT", -0.5, 0)
 	button.remaining = remaining
 
 	button.UpdateTooltip = UpdateAuraTooltip
