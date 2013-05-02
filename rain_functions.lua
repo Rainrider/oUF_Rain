@@ -83,20 +83,18 @@ ns.ShortenName = ShortenName
 
 local FormatTime = function(seconds)
 	local day, hour, minute = 86400, 3600, 60
-	local expColor = "|cffAF4F4F"
-	local color = "|cffD6BFA5"
 	if (seconds >= day) then
-		return format("%s%dd|r", color, floor(seconds/day + 0.5))
+		return format("|cffD6BFA5%dd|r", floor(seconds/day + 0.5))
 	elseif (seconds >= hour) then
-		return format("%s%dh|r", color, floor(seconds/hour + 0.5))
+		return format("|cffD6BFA5%dh|r", floor(seconds/hour + 0.5))
 	elseif (seconds >= minute) then
 		if (seconds <= minute * 5) then
-			return format("%s%d:%02d|r", color, floor(seconds/minute), seconds % minute)
+			return format("|cffD6BFA5%d:%02d|r", floor(seconds/minute), seconds % minute)
 		end
-		return format("%s%dm|r", color, floor(seconds/minute + 0.5))
+		return format("|cffD6BFA5%dm|r", floor(seconds/minute + 0.5))
 	else
 		local secs = floor(seconds + 0.5)
-		return format("%s%d|r", secs > 5 and color or expColor, secs)
+		return format("|cffD6BFA5%d|r", secs)
 	end
 end
 
