@@ -38,6 +38,21 @@ local tags = oUF.Tags.Methods
 local tagEvents = oUF.Tags.Events
 local tagSharedEvents = oUF.Tags.SharedEvents
 
+local SmallUnitHealthTag = function(unit)
+	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
+
+	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+
+	if (cur == max) then
+		return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, SiValue(max))
+	end
+	if (unit ~= "pet" and UnitIsFriend("player", unit)) then
+		return format("|cff%02x%02x%02x-%s|r", r * 255, g * 255, b * 255, SiValue(max - cur))
+	end
+	return format("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(cur / max * 100 + 0.5))
+end
+
 tags["rain:namecolor"] = function(unit)
 	local color = {1, 1, 1}
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
@@ -55,31 +70,16 @@ tags["rain:namecolor"] = function(unit)
 	return format("|cff%02x%02x%02x", color[1] * 255, color[2] * 255, color[3] * 255)
 end
 
-tags["rain:healthSmall"] = function(unit)
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
+tags["rain:healthSmall"] = SmallUnitHealthTag
+tagEvents["rain:healthSmall"] = "UNIT_HEALTH UNIT_MAXHEALTH"
 
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	if (cur == 0 or max == 0) then return end
-
-	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
-
-	if (cur == max) then
-		return format("|cff%02x%02x%02x%s|r", r * 255, g * 255, b * 255, SiValue(max))
-	end
-	if (UnitIsFriend("player", unit) and unit ~= "pet") then
-		return format("|cff%02x%02x%02x-%s|r", r * 255, g * 255, b * 255, SiValue(max - cur))
-	end
-
-	return format("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(cur / max * 100 + 0.5))
-end
-tagEvents["rain:healthSmall"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
+tags["rain:bossHealth"] = SmallUnitHealthTag
+tagEvents["rain:bossHealth"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
 tags["rain:health"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	if (cur == 0 or max == 0) then return end
-
 	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 
 	if (cur == max) then
@@ -98,14 +98,13 @@ tags["rain:raidmissinghp"] = function(unit)
 	local status = tags["rain:status"](unit)
 	if (status) then
 		return status
-	else
-		local missing = UnitHealthMax(unit) - UnitHealth(unit)
-		if (missing > 0) then
-			return "-" .. SiValue(missing)
-		else
-			return tags["rain:name"](unit)
-		end
 	end
+
+	local missing = UnitHealthMax(unit) - UnitHealth(unit)
+	if (missing > 0) then
+		return "-" .. SiValue(missing)
+	end
+	return tags["rain:name"](unit)
 end
 tagEvents["rain:raidmissinghp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_FACTION"
 
@@ -131,7 +130,8 @@ tags["rain:altmana"] = function(unit)
 
 	if (curMana == maxMana) then return end
 
-	local r, g, b = unpack(ns.colors.power.MANA)
+	local color = ns.colors.power.MANA
+	local r, g, b = color[1], color[2], color[3]
 	return format("|cff%02x%02x%02x%d%%|r", r * 255, g * 255, b * 255, floor(curMana / maxMana * 100 + 0.5))
 end
 tagEvents["rain:altmana"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
@@ -231,8 +231,6 @@ tags["rain:altpower"] = function(unit)
 
 	if (max == 0) then max = 1 end
 
-	local perc = floor(cur / max * 100 + 0.5)
-
-	return cur .. " - " .. perc .. "%"
+	return format("%d - %d%%", cur, floor(cur / max * 100 + 0.5))
 end
 tagEvents["rain:altpower"] = "UNIT_POWER UNIT_MAXPOWER"

@@ -229,7 +229,11 @@ local Shared = function(self, unit)
 
 		local healthValue = PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
 		healthValue:SetPoint("TOPRIGHT", -2, -2)
-		self:Tag(healthValue, "[rain:status][rain:healthSmall]")
+		if (unitIsBoss) then
+			self:Tag(healthValue, "[rain:bossHealth]")
+		else
+			self:Tag(healthValue, "[rain:status][rain:healthSmall]")
+		end
 		health.value = healthValue
 
 		power:SetSize(110, 5)
