@@ -218,10 +218,7 @@ local Shared = function(self, unit)
 		self:SetSize(110, 22)
 	end
 
-	if ((unit == "pet" or unit == "focus"
-			or unit == "targettarget" or unit == "focustarget"
-			or unitIsPartyMember or unitIsPartyOrMTTarget
-			or unitIsMT or unitIsBoss) and not unitIsPartyPet) then
+	if (unit ~= "player" and unit ~= "target" and not unitIsPartyPet) then
 
 		health:SetSize(110, 15)
 		health:SetPoint("TOPRIGHT")
