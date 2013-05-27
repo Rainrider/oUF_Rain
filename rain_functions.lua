@@ -46,9 +46,9 @@ local ShortenName = function(name, shortenTo)
 	if (not shortenTo) then
 		shortenTo = 12
 	end
-	name = (string.len(name) > shortenTo) and string.gsub(name, "%s?(.[\128-\191]*)%S+%s", "%1. ") or name
+	name = (strlenutf8(name) > shortenTo) and string.gsub(name, "(%S[\128-\191]*)%S+%s", "%1. ") or name
 
-	local bytes = string.len(name)
+	local bytes = strlen(name)
 	if (bytes <= shortenTo) then
 		return name
 	else
