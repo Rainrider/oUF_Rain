@@ -1,4 +1,7 @@
 ﻿local _, ns = ...
+
+local format = format
+
 local playerClass = ns.playerClass
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
@@ -32,9 +35,9 @@ end
 
 local SiValue = function(val)
 	if (val >= 1e6) then
-		return ("%.1fm"):format(val / 1e6)--:gsub('%.', 'm')
+		return format("%.1fm", val / 1e6)
 	elseif (val >= 1e4) then
-		return ("%.1fk"):format(val / 1e3)--:gsub('%.', 'k')
+		return format("%.1fk", val / 1e3)
 	else
 		return val
 	end
@@ -110,11 +113,11 @@ end
 ns.PutFontString = PutFontString
 
 local CustomCastTimeText = function(Castbar, duration)
-	Castbar.Time:SetText(("%.1f / %.2f"):format(Castbar.channeling and duration or Castbar.max - duration, Castbar.max))
+	Castbar.Time:SetText(format("%.1f / %.2f", Castbar.channeling and duration or Castbar.max - duration, Castbar.max))
 end
 
 local CustomCastDelayText = function(Castbar, duration)
-	Castbar.Time:SetText(("%.1f |cffaf5050%s %.1f|r"):format(Castbar.channeling and duration or Castbar.max - duration, Castbar.channeling and "- " or "+", Castbar.delay))
+	Castbar.Time:SetText(format("%.1f |cffaf5050%s %.1f|r", Castbar.channeling and duration or Castbar.max - duration, Castbar.channeling and "- " or "+", Castbar.delay))
 end
 
 local CustomPlayerFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
@@ -820,10 +823,10 @@ local AddExperienceBar = function(self)
 		local bars = 20
 		local rested = GetXPExhaustion()
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT", 0, 5)
-		GameTooltip:AddLine(string.format("XP: %s / %s (%d%% - %.1f bars)", BreakUpLargeNumbers(curXP), BreakUpLargeNumbers(maxXP), curXP/maxXP * 100 + 0.5, bars * curXP / maxXP))
-		GameTooltip:AddLine(string.format("Remaining: %s (%d%% - %.1f bars)", BreakUpLargeNumbers(maxXP - curXP), (maxXP - curXP) / maxXP * 100 + 0.5, bars * (maxXP - curXP) / maxXP))
+		GameTooltip:AddLine(format("XP: %s / %s (%d%% - %.1f bars)", BreakUpLargeNumbers(curXP), BreakUpLargeNumbers(maxXP), curXP/maxXP * 100 + 0.5, bars * curXP / maxXP))
+		GameTooltip:AddLine(format("Remaining: %s (%d%% - %.1f bars)", BreakUpLargeNumbers(maxXP - curXP), (maxXP - curXP) / maxXP * 100 + 0.5, bars * (maxXP - curXP) / maxXP))
 		if (rested and rested > 0) then
-			GameTooltip:AddLine(string.format("|cff0090ffRested: +%s (%d%%)", BreakUpLargeNumbers(rested), rested / maxXP * 100 + 0.5))
+			GameTooltip:AddLine(format("|cff0090ffRested: +%s (%d%%)", BreakUpLargeNumbers(rested), rested / maxXP * 100 + 0.5))
 		end
 		GameTooltip:Show()
 	end
@@ -928,14 +931,14 @@ local AddReputationBar = function(self)
 		local _, friendRep, friendMaxRep, _, _, _, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(id)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
 		if (not friendRep) then
-			GameTooltip:AddLine(string.format("%s (%s)", name, _G["FACTION_STANDING_LABEL"..standing], UnitSex("player")))
-			GameTooltip:AddLine(string.format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100 + 0.5))
+			GameTooltip:AddLine(format("%s (%s)", name, _G["FACTION_STANDING_LABEL"..standing], UnitSex("player")))
+			GameTooltip:AddLine(format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100 + 0.5))
 		else
 			local currentValue = friendRep - friendThreshold
 			local maxCurrentValue = math.min(friendMaxRep - friendThreshold, 8400)
 			local currentRank, maxRank = GetFriendshipReputationRanks(id)
-			GameTooltip:AddLine(string.format("%s (%d / %d - %s)", name, currentRank, maxRank, friendTextLevel))
-			GameTooltip:AddLine(string.format("%d / %d (%d%%)", currentValue, maxCurrentValue, currentValue / maxCurrentValue * 100 + 0.5))
+			GameTooltip:AddLine(format("%s (%d / %d - %s)", name, currentRank, maxRank, friendTextLevel))
+			GameTooltip:AddLine(format("%d / %d (%d%%)", currentValue, maxCurrentValue, currentValue / maxCurrentValue * 100 + 0.5))
 		end
 		GameTooltip:Show()
 	end
