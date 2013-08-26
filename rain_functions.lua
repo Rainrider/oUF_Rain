@@ -367,14 +367,15 @@ end
 local PostUpdateClassPowerIcons = function(element, power, maxPower, maxPowerChanged)
 	if (not maxPowerChanged) then return end
 
-	local self = element.__owner
-	local width = element.width
 	local height = element.height
 	local spacing = element.spacing
 
+	local width = (element.width - maxPower * spacing - spacing ) / maxPower -- factoring causes rounding issues?
+	spacing = width + spacing
+
 	for i = 1, maxPower do
-		element[i]:SetSize((width - maxPower * spacing - spacing) / maxPower, height)
-		element[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * element[i]:GetWidth() + i * spacing, 1)
+		element[i]:SetSize(width, height)
+		element[i]:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
 	end
 end
 
@@ -419,21 +420,22 @@ end
 ns.UpdateHealth = UpdateHealth
 
 local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower)
-	local self = element.__owner
-	local width = element.width
 	local height = element.height
 	local spacing = element.spacing
+	local width = (element.width - maxPower * spacing - spacing) / maxPower -- factoring causes rounding issues?
+	spacing = width + spacing
 
 	if (spec) then
 		if (spec == 1 or spec == 3) then -- Affliction or Destruction
 			for i = 1, maxPower do
-				element[i]:SetSize((width - maxPower * spacing - spacing) / maxPower, height)
-				element[i]:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * element[i]:GetWidth() + i * spacing, 1)
+				element[i]:ClearAllPoints()
+				element[i]:SetSize(width, height)
+				element[i]:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
 			end
 		else -- Demonology
-			element[1]:SetSize(width - 2 * spacing, height)
-			element[1]:SetPoint("BOTTOMLEFT", self.Overlay, spacing, 1)
-			--element[1]:SetPoint("BOTTOMRIGHT", self.Overlay, -spacing, 1) -- we have to use SetSize lol?
+			element[1]:ClearAllPoints()
+			element[1]:SetPoint("BOTTOMLEFT", element.spacing, 1)
+			element[1]:SetPoint("BOTTOMRIGHT", -element.spacing, 1)
 		end
 	end
 
@@ -648,7 +650,7 @@ local AddClassPowerIcons = function(self, width, height, spacing)
 	local maxPower = 5
 
 	for i = 1, maxPower do
-		classIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
+		classIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ClassIcon_"..i, "OVERLAY")
 		classIcons[i]:SetTexture(ns.media.TEXTURE)
 	end
 
@@ -662,11 +664,15 @@ local AddComboPointsBar = function(self, width, height, spacing)
 	local comboPoints = {}
 	local maxCPoints = MAX_COMBO_POINTS
 
+	width = (width - maxCPoints * spacing - spacing) / maxCPoints -- factoring causes rounding issues?
+	spacing = width + spacing
+
 	for i = 1, maxCPoints do
 		local cPoint = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
-		cPoint:SetSize((width - maxCPoints * spacing - spacing) / maxCPoints, height)
-		cPoint:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * cPoint:GetWidth() + i * spacing, 1)
-		cPoint:SetTexture(unpack(ns.colors.cpoints[i]))
+		cPoint:SetSize(width, height)
+		cPoint:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
+		local color = ns.colors.cpoints[i]
+		cPoint:SetTexture(color[1], color[2], color[3])
 		comboPoints[i] = cPoint
 	end
 
@@ -954,10 +960,13 @@ local AddRuneBar = function(self, width, height, spacing)
 	local runes = {}
 	local maxRunes = 6
 
+	width = (width - maxRunes * spacing - spacing) / maxRunes -- factoring causes rounding issues?
+	spacing = width + spacing
+
 	for i = 1, maxRunes do
 		local rune = CreateFrame("StatusBar", "oUF_Rain_Rune"..i, self.Overlay)
-		rune:SetSize((width - maxRunes * spacing - spacing) / maxRunes, height)
-		rune:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * rune:GetWidth() + i * spacing, 1)
+		rune:SetSize(width, height)
+		rune:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
 		rune:SetStatusBarTexture(ns.media.TEXTURE)
 		rune:SetBackdrop(ns.media.BACKDROP)
 		rune:SetBackdropColor(0, 0, 0)
@@ -1067,10 +1076,13 @@ local AddWarlockPowerBar = function(self, width, height, spacing)
 	warlockPowerBar.height = height
 	warlockPowerBar.spacing = spacing
 
+	width = (width - 4 * spacing - spacing) / 4 -- factoring causes rounding issues?
+	spacing = width + spacing
+
 	for i = 1, 4 do
 		local wpb = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
-		wpb:SetSize((width - 4 * spacing - spacing) / 4, height)
-		wpb:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * wpb:GetWidth() + i * spacing, 1)
+		wpb:SetSize(width, height)
+		wpb:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
 		wpb:SetStatusBarTexture(ns.media.TEXTURE)
 		wpb:SetBackdrop(ns.media.BACKDROP)
 		wpb:SetBackdropColor(0, 0, 0)
