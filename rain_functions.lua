@@ -1015,49 +1015,54 @@ local AddThreatHighlight = function(self, event, unit)
 end
 ns.AddThreatHighlight = AddThreatHighlight
 
-local AddTotems = function(self, width, height)
+local AddTotems = function(self, width, height, spacing)
 	local totems = {}
 	local maxTotems = MAX_TOTEMS
+
+	width = (width - maxTotems * spacing - spacing) / maxTotems -- factoring causes rounding issues?
+	spacing = width + spacing
 
 	for i = 1, maxTotems do
 		local totem = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
 		totem:SetStatusBarTexture(ns.media.TEXTURE)
+		totem:SetSize(width, height)
 		totem:SetMinMaxValues(0, 1)
+		local color
 
 		if (playerClass == "SHAMAN") then
-			totem:SetSize((215 - maxTotems - 1) / maxTotems, height)
-			totem:SetPoint("BOTTOMLEFT", self.Overlay, (i - 1) * (214 / maxTotems) + 1, 0)
-			totem:SetStatusBarColor(unpack(ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]))
+			totem:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
+			color = ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
-			totem:SetSize(width, height)
-			totem:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
-				if (i == 1) then
-					totem:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
-				elseif (i == 2) then
-					totem:SetPoint("RIGHT", totems[1], "LEFT", -1, 0)
-				else
-					totem:SetPoint("LEFT", totems[1], "RIGHT", 1, 0)
-				end
-		elseif (playerClass == "DEATHKNIGHT") then -- Death knight's ghoul
-			totem:SetSize(width, height)
-			totem:SetStatusBarColor(unpack(ns.colors.class[playerClass]))
-			totem:SetPoint("BOTTOM", self.Overlay, "TOP", 0, 0)
+			if (i == 1) then
+				totem:SetPoint("TOP", 0, height / 2)
+			elseif (i == 2) then
+				totem:SetPoint("RIGHT", totems[1], "LEFT", -(spacing - width), 0)
+			else
+				totem:SetPoint("LEFT", totems[1], "RIGHT", spacing - width, 0)
+			end
+			color = ns.colors.class[playerClass]
+		else
+			-- Death knight: Ghoul
+			-- Mage
+			-- Monk
+			-- Paladin: Consecration
+			-- Warlock
+			-- Warrior: Banners
+			totem:SetPoint("TOP", 0, height / 2)
+			color = ns.colors.class[playerClass]
 		end
 
+		totem:SetStatusBarColor(color[1], color[2], color[3])
 		totem:SetBackdrop(ns.media.BACKDROP)
 		totem:SetBackdropColor(0, 0, 0)
 
+		local bg = totem:CreateTexture(nil, "BORDER")
+		bg:SetAllPoints()
+		bg:SetTexture(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
+
 		totem:EnableMouse()
---[[
-		totems[i]:SetScript("OnMouseUp", function(self, button)
-			if (button == "RightButton") then
-				DestroyTotem(self:GetID())
-			end
-		end)
---]]
 		totem.UpdateTooltip = function(self)
 			GameTooltip:SetTotem(self:GetID())
-			--GameTooltip:AddLine(GLYPH_SLOT_REMOVE_TOOLTIP, 1, 0, 0)
 			GameTooltip:Show()
 		end
 
