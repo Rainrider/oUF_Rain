@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 
 local major, minor, rev = strsplit(".", GetAddOnMetadata("oUF", "version"))
 minor = minor or 0
@@ -164,7 +164,7 @@ local Shared = function(self, unit)
 
 		local healthValue = PutFontString(health, ns.media.FONT2, 12, nil, "RIGHT")
 		healthValue:SetPoint("TOPRIGHT", health, -3.5, -3.5)
-		self:Tag(healthValue, "[rain:status][rain:health]")
+		self:Tag(healthValue, "[rain:health]")
 		health.value = healthValue
 
 		power:SetSize(230, 15)
@@ -226,7 +226,7 @@ local Shared = function(self, unit)
 		if (unitIsBoss) then
 			self:Tag(healthValue, "[rain:bossHealth]")
 		else
-			self:Tag(healthValue, "[rain:status][rain:healthSmall]")
+			self:Tag(healthValue, "[rain:healthSmall]")
 		end
 		health.value = healthValue
 

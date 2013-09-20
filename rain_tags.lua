@@ -1,4 +1,4 @@
-﻿--[[===================================
+--[[===================================
 	DESCRIPTION:
 	Contrains the tags used in oUF_Rain
 	===================================--]]
@@ -39,9 +39,27 @@ local tagEvents = oUF.Tags.Events
 local tagSharedEvents = oUF.Tags.SharedEvents
 
 local SmallUnitHealthTag = function(unit)
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
+	if (not UnitIsConnected(unit)) then
+		return PLAYER_OFFLINE
+	end
 
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	local cur = UnitHealth(unit)
+
+	if (cur <= 0) then
+		if (UnitIsUnconscious(unit)) then
+			return UNCONSCIOUS
+		end
+		if (UnitIsDead(unit)) then
+			return DEAD
+		end
+	end
+
+	if (UnitIsGhost(unit)) then
+		return GHOST
+	end
+
+	local max = UnitHealthMax(unit)
+
 	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 
 	if (cur == max) then
@@ -77,9 +95,27 @@ tags["rain:bossHealth"] = SmallUnitHealthTag
 tagEvents["rain:bossHealth"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
 tags["rain:health"] = function(unit)
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
+	if (not UnitIsConnected(unit)) then
+		return PLAYER_OFFLINE
+	end
 
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	local cur = UnitHealth(unit)
+
+	if (cur <= 0) then
+		if (UnitIsUnconscious(unit)) then
+			return UNCONSCIOUS
+		end
+		if (UnitIsDead(unit)) then
+			return DEAD
+		end
+	end
+
+	if (UnitIsGhost(unit)) then
+		return GHOST
+	end
+
+	local max = UnitHealthMax(unit)
+
 	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 
 	if (cur == max) then
@@ -95,12 +131,28 @@ end
 tagEvents["rain:health"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
 tags["rain:raidmissinghp"] = function(unit)
-	local status = tags["rain:status"](unit)
-	if (status) then
-		return status
+	if (not UnitIsConnected(unit)) then
+		return PLAYER_OFFLINE
 	end
 
-	local missing = UnitHealthMax(unit) - UnitHealth(unit)
+	local cur = UnitHealth(unit)
+
+	if (cur <= 0) then
+		if (UnitIsUnconscious(unit)) then
+			return UNCONSCIOUS
+		end
+		if (UnitIsDead(unit)) then
+			return DEAD
+		end
+	end
+
+	if (UnitIsGhost(unit)) then
+		return GHOST
+	end
+
+	local max = UnitHealthMax(unit)
+
+	local missing = max - cur
 	if (missing > 0) then
 		return "-" .. SiValue(missing)
 	end
@@ -109,16 +161,31 @@ end
 tagEvents["rain:raidmissinghp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_FACTION"
 
 tags["rain:raidpercenthp"] = function(unit)
-	local status = tags["rain:status"](unit)
-	if (status) then
-		return status
-	else
-		local percent = math.floor(UnitHealth(unit) / UnitHealthMax(unit) * 100 + 0.5) -- chuck norris can divide by zero
-		if (percent < 100 and percent > 0) then
-			return percent .. "%"
-		else
-			return tags["rain:name"](unit)
+	if (not UnitIsConnected(unit)) then
+		return PLAYER_OFFLINE
+	end
+
+	local cur = UnitHealth(unit)
+
+	if (cur <= 0) then
+		if (UnitIsUnconscious(unit)) then
+			return UNCONSCIOUS
 		end
+		if (UnitIsDead(unit)) then
+			return DEAD
+		end
+	end
+
+	if (UnitIsGhost(unit)) then
+		return GHOST
+	end
+
+	local max = UnitHealthMax(unit)
+	local percent = math.floor(cur / max * 100 + 0.5) -- chuck norris can divide by zero
+	if (percent < 100 and percent > 0) then
+		return percent .. "%"
+	else
+		return tags["rain:name"](unit)
 	end
 end
 tagEvents["rain:raidpercenthp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_FACTION"
@@ -149,17 +216,6 @@ tags["rain:level"] = function(unit)
 	return level
 end
 tagEvents["rain:level"] = "UNIT_LEVEL"
-
-tags["rain:status"] = function(unit)
-	if (UnitIsDead(unit)) then
-		return DEAD
-	elseif (UnitIsGhost(unit)) then
-		return GHOST
-	elseif (not UnitIsConnected(unit)) then
-		return PLAYER_OFFLINE
-	end
-end
-tagEvents["rain:status"] = "UNIT_HEALTH UNIT_CONNECTION"
 
 tags["rain:power"] = function(unit)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then return end
