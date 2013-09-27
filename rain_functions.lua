@@ -458,6 +458,17 @@ local WarlockPostUpdatePower = function(element, powerType, power, maxPower)
 		end
 	end
 end
+
+local PostUpdateRune = function(_, rune, _, _, _, runeReady)
+	if (runeReady) then
+		UIFrameFlash(rune, 0.5, 0.5, 1, true)
+		rune.fullAlpha = true
+	elseif (rune.fullAlpha) then
+		UIFrameFlashStop(rune)
+		rune:SetAlpha(0.5)
+		rune.fullAlpha = nil
+	end
+end
 --[[ END OF PRE AND POST FUNCTIONS ]]--
 
 --[[ LAYOUT FUNCTIONS ]]--
@@ -979,6 +990,7 @@ local AddRuneBar = function(self, width, height, spacing)
 		runes[i] = rune
 	end
 
+	runes.PostUpdateRune = PostUpdateRune
 	self.Runes = runes
 end
 ns.AddRuneBar = AddRuneBar
