@@ -469,6 +469,46 @@ local PostUpdateRune = function(_, rune, _, _, _, runeReady)
 		rune.fullAlpha = nil
 	end
 end
+
+local PostUpdateHealPrediction = function(element, unit, overAbsorb, overHealAbsorb)
+	local health = element.__owner.Health
+	local maxHealth = UnitHealthMax(unit)
+	local myBar = element.myBar
+	local absorbBar = element.absorbBar
+	local healAbsorbBar = element.healAbsorbBar
+	local myCurrentHealAbsorb = UnitGetTotalHealAbsorbs(unit) or 0
+	local myCurrentHealAbsorbPercent = myCurrentHealAbsorb / maxHealth
+
+	if (absorbBar:GetValue() > 0) then
+		absorbBar:ClearAllPoints()
+		absorbBar:SetPoint("TOP")
+		absorbBar:SetPoint("BOTTOM")
+
+		if (healAbsorbBar:GetValue() > 0) then
+			absorbBar:SetPoint("LEFT", healAbsorbBar:GetStatusBarTexture(), "RIGHT", 0, 0)
+		else
+			absorbBar:SetPoint("LEFT", element.otherBar:GetStatusBarTexture(), "RIGHT", 0, 0)
+		end
+	end
+
+	if (overHealAbsorb) then
+		element.overHealAbsorbGlow:Show()
+		myBar:Hide()
+	else
+		element.overHealAbsorbGlow:Hide()
+		myBar:ClearAllPoints()
+		myBar:SetPoint("TOP")
+		myBar:SetPoint("BOTTOM")
+		myBar:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT", -(230 * myCurrentHealAbsorbPercent), 0)
+		myBar:Show()
+	end
+
+	if (overAbsorb) then
+		element.overAbsorbGlow:Show()
+	else
+		element.overAbsorbGlow:Hide()
+	end
+end
 --[[ END OF PRE AND POST FUNCTIONS ]]--
 
 --[[ LAYOUT FUNCTIONS ]]--
@@ -858,25 +898,64 @@ ns.AddExperienceBar = AddExperienceBar
 local AddHealPredictionBar = function(self, unit)
 	local health = self.Health
 
-	local mhpb = health:CreateTexture(nil, "OVERLAY")
-	mhpb:SetTexture(ns.media.TEXTURE)
-	mhpb:SetVertexColor(0, 0.5, 0.5, 0.5)
+	local hab = CreateFrame("StatusBar", nil, health)
+	hab:SetStatusBarTexture(ns.media.TEXTURE)
+	hab:SetStatusBarColor(0.75, 0.75, 0, 0.5)
+	hab:SetPoint("TOP")
+	hab:SetPoint("BOTTOM")
+	hab:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT", -230, 0)
+	hab:SetWidth(230)
+	hab:SetReverseFill(true)
 
-	local ohpb = health:CreateTexture(nil, "OVERLAY")
-	ohpb:SetTexture(ns.media.TEXTURE)
-	ohpb:SetVertexColor(0, 1, 0, 0.5)
+	local mhpb = CreateFrame("StatusBar", nil, health)
+	mhpb:SetStatusBarTexture(ns.media.TEXTURE)
+	mhpb:SetStatusBarColor(0, 0.5, 0.5, 0.5)
+	mhpb:SetPoint("TOP")
+	mhpb:SetPoint("BOTTOM")
+	mhpb:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT")
+	mhpb:SetWidth(230)
 
-	local absorb = health:CreateTexture(nil, "OVERLAY")
-	absorb:SetAlpha(0.5)
+	local ohpb = CreateFrame("StatusBar", nil, health)
+	ohpb:SetStatusBarTexture(ns.media.TEXTURE)
+	ohpb:SetStatusBarColor(0, 1, 0, 0.5)
+	ohpb:SetPoint("TOP")
+	ohpb:SetPoint("BOTTOM")
+	ohpb:SetPoint("LEFT", mhpb:GetStatusBarTexture(), "RIGHT")
+	ohpb:SetWidth(230)
+
+	local absorb = CreateFrame("StatusBar", nil, health)
+	absorb:SetStatusBarTexture(ns.media.TEXTURE)
+	absorb:SetStatusBarColor(1, 1, 1, 0.5)
+	absorb:SetPoint("TOP")
+	absorb:SetPoint("BOTTOM")
+	absorb:SetPoint("LEFT", ohpb:GetStatusBarTexture(), "RIGHT")
+	absorb:SetWidth(230)
 
 	local overAbsorb = health:CreateTexture(nil, "OVERLAY")
+	overAbsorb:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
+	overAbsorb:SetBlendMode("ADD")
+	overAbsorb:SetPoint("TOP")
+	overAbsorb:SetPoint("BOTTOM")
+	overAbsorb:SetPoint("LEFT", health, "RIGHT", -7, 0)
+	overAbsorb:Hide()
 
-	self.RainHealPrediction = {
+	local overHealAbsorb = health:CreateTexture(nil, "OVERLAY")
+	overHealAbsorb:SetTexture([[Interface\RaidFrame\Absorb-Overabsorb]])
+	overHealAbsorb:SetBlendMode("ADD")
+	overHealAbsorb:SetPoint("TOP")
+	overHealAbsorb:SetPoint("BOTTOM")
+	overHealAbsorb:SetPoint("RIGHT", health, "LEFT", 7, 0)
+	overHealAbsorb:Hide()
+
+	self.HealPrediction = {
+		healAbsorbBar = hab,
 		myBar = mhpb,
 		otherBar = ohpb,
 		absorbBar = absorb,
 		overAbsorbGlow = overAbsorb,
+		overHealAbsorbGlow = overHealAbsorb,
 		maxOverflow = unit == "target" and 1.25 or 1,
+		PostUpdate = PostUpdateHealPrediction
 	}
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
