@@ -29,7 +29,7 @@ oUF.colors.warlock = {
 
 local Path
 local Visibility
-Visibility = function(self, event, unit)
+Visibility = function(self, event)
 	local element = self.WarlockPowerBar
 
 	spec = GetSpecialization()
@@ -139,7 +139,7 @@ Visibility = function(self, event, unit)
 	end
 
 	if (show) then
-		return Path(self, "Visibility", unit, powerType)
+		return Path(self, "Visibility", self.unit, powerType)
 	end
 end
 
@@ -186,8 +186,8 @@ Path = function(self, ...)
 	return (self.WarlockPowerBar.Override or Update) (self, ...)
 end
 
-local ForceUpdate = function(element, ...)
-	return Visibility(element.__owner, "ForceUpdate", element.__owner.unit)
+local ForceUpdate = function(element)
+	return Visibility(element.__owner, "ForceUpdate")
 end
 
 local Enable = function(self, unit)
