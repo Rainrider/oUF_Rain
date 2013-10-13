@@ -214,7 +214,7 @@ local Disable = function(self)
 		self:UnregisterEvent("UNIT_POWER", Path)
 		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
 		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Visibility)
-		self:UnregisterEvent("SPELLS_CHANGED", Visibility, true)
+		self:UnregisterEvent("SPELLS_CHANGED", Visibility)
 
 		for i = 1, 4 do
 			element[i]:Hide()
