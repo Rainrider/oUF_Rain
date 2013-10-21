@@ -897,6 +897,7 @@ ns.AddExperienceBar = AddExperienceBar
 
 local AddHealPredictionBar = function(self, unit)
 	local health = self.Health
+	local width = self:GetWidth()
 
 	local hab = CreateFrame("StatusBar", nil, health)
 	hab:SetStatusBarTexture(ns.media.TEXTURE)
@@ -904,7 +905,7 @@ local AddHealPredictionBar = function(self, unit)
 	hab:SetPoint("TOP")
 	hab:SetPoint("BOTTOM")
 	hab:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT", -230, 0)
-	hab:SetWidth(230)
+	hab:SetWidth(width)
 	hab:SetReverseFill(true)
 
 	local mhpb = CreateFrame("StatusBar", nil, health)
@@ -913,7 +914,7 @@ local AddHealPredictionBar = function(self, unit)
 	mhpb:SetPoint("TOP")
 	mhpb:SetPoint("BOTTOM")
 	mhpb:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT")
-	mhpb:SetWidth(230)
+	mhpb:SetWidth(width)
 
 	local ohpb = CreateFrame("StatusBar", nil, health)
 	ohpb:SetStatusBarTexture(ns.media.TEXTURE)
@@ -921,7 +922,7 @@ local AddHealPredictionBar = function(self, unit)
 	ohpb:SetPoint("TOP")
 	ohpb:SetPoint("BOTTOM")
 	ohpb:SetPoint("LEFT", mhpb:GetStatusBarTexture(), "RIGHT")
-	ohpb:SetWidth(230)
+	ohpb:SetWidth(width)
 
 	local absorb = CreateFrame("StatusBar", nil, health)
 	absorb:SetStatusBarTexture(ns.media.TEXTURE)
@@ -929,7 +930,7 @@ local AddHealPredictionBar = function(self, unit)
 	absorb:SetPoint("TOP")
 	absorb:SetPoint("BOTTOM")
 	absorb:SetPoint("LEFT", ohpb:GetStatusBarTexture(), "RIGHT")
-	absorb:SetWidth(230)
+	absorb:SetWidth(width)
 
 	local overAbsorb = health:CreateTexture(nil, "OVERLAY")
 	overAbsorb:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
