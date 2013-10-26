@@ -956,6 +956,7 @@ local AddHealPredictionBar = function(self, unit)
 		overAbsorbGlow = overAbsorb,
 		overHealAbsorbGlow = overHealAbsorb,
 		maxOverflow = unit == "target" and 1.25 or 1,
+		frequentUpdates = health.frequentUpdates,
 		PostUpdate = PostUpdateHealPrediction
 	}
 end
