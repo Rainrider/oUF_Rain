@@ -89,7 +89,7 @@ tags["rain:namecolor"] = function(unit)
 end
 
 tags["rain:healthSmall"] = SmallUnitHealthTag
-tagEvents["rain:healthSmall"] = "UNIT_HEALTH UNIT_MAXHEALTH"
+tagEvents["rain:healthSmall"] = "UNIT_CONNECTION UNIT_HEALTH UNIT_MAXHEALTH"
 
 tags["rain:bossHealth"] = SmallUnitHealthTag
 tagEvents["rain:bossHealth"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
@@ -128,7 +128,7 @@ tags["rain:health"] = function(unit)
 
 	return format("|cff%02x%02x%02x%s - %d%%|r", r * 255, g * 255, b * 255, SiValue(cur), floor(cur / max * 100 + 0.5))
 end
-tagEvents["rain:health"] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
+tagEvents["rain:health"] = "UNIT_CONNECTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
 
 tags["rain:raidmissinghp"] = function(unit)
 	if (not UnitIsConnected(unit)) then
