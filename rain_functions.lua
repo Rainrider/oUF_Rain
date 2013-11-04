@@ -583,7 +583,7 @@ ns.AddAltPowerBar = AddAltPowerBar
 local AddBuffs = function(self, unit)
 	local buffs = CreateFrame("Frame", self:GetName().."_Buffs", self)
 	buffs.spacing = 6
-	buffs.size = (230 - 7 * buffs.spacing) / 8
+	buffs.size = unit == "player" and self:GetHeight() or (230 - 7 * buffs.spacing) / 8
 	buffs.disableCooldown = true
 	buffs.showType = true
 	buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
