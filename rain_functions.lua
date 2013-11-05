@@ -395,7 +395,11 @@ local UpdateHealth = function(self, event, unit)
 	if (health.colorDisconnected and disconnected or UnitIsDeadOrGhost(unit)) then
 		health:SetValue(max)
 		local _, class = UnitClass(unit)
-		t = UnitIsPlayer(unit) and not unit:match("raid%d") and self.colors.class[class] or self.colors.disconnected
+		if not string.match(unit, "raid%d") then
+			t = UnitIsPlayer(unit) and self.colors.class[class] or self.colors.disconnected
+		else
+			t = {1, 0, 0}
+		end
 		faded = true
 	elseif (health.colorTapping and not UnitPlayerControlled(unit) and
 		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and

@@ -50,7 +50,7 @@ local SmallUnitHealthTag = function(unit)
 			return UNCONSCIOUS
 		end
 		if (UnitIsDead(unit)) then
-			return DEAD
+			return string.upper(DEAD)
 		end
 	end
 
@@ -106,7 +106,7 @@ tags["rain:health"] = function(unit)
 			return UNCONSCIOUS
 		end
 		if (UnitIsDead(unit)) then
-			return DEAD
+			return string.upper(DEAD)
 		end
 	end
 
@@ -142,7 +142,7 @@ tags["rain:raidmissinghp"] = function(unit)
 			return UNCONSCIOUS
 		end
 		if (UnitIsDead(unit)) then
-			return DEAD
+			return string.upper(DEAD)
 		end
 	end
 
@@ -172,7 +172,7 @@ tags["rain:raidpercenthp"] = function(unit)
 			return UNCONSCIOUS
 		end
 		if (UnitIsDead(unit)) then
-			return DEAD
+			return string.upper(DEAD)
 		end
 	end
 
