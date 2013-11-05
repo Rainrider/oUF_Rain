@@ -67,12 +67,6 @@ ns.cfg = {
 		["WARLOCK"] = 109773,	-- Dark Intent (109773)
 	},
 
--- focus helper spells
-	-- use i.e. bmSpell = spellID,
-	bmSpell = 34026,	-- Kill Command (34026)
-	mmSpell = 53209,	-- Chimera Shot (53209)
-	svSpell = 53301,	-- Explosive Shot (53301)
-
 -- other
 	raidHealth = 1,					-- 0 - none; 1 - deficit; 2 - percent
 }
