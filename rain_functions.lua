@@ -597,15 +597,16 @@ local AddBuffs = function(self, unit)
 	buffs.PostUpdateIcon = PostUpdateIcon
 
 	if (unit == "player" or unit == "target") then
-		buffs:SetSize(8 * (buffs.size + buffs.spacing), 4 * (buffs.size + buffs.spacing))
 		buffs["growth-y"] = "DOWN"
 
 		if (unit == "player") then
+			buffs:SetSize(6 * (buffs.size + buffs.spacing), 6 * (buffs.size + buffs.spacing))
 			buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, 1)
 			buffs.initialAnchor = "TOPRIGHT"
 			buffs["growth-x"] = "LEFT"
 			buffs.CustomFilter = CustomPlayerFilter
 		else
+			buffs:SetSize(8 * (buffs.size + buffs.spacing), 4 * (buffs.size + buffs.spacing))
 			buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 9, 1)
 			buffs.initialAnchor = "TOPLEFT"
 			buffs["growth-x"] = "RIGHT"
