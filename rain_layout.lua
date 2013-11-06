@@ -36,8 +36,7 @@ local UnitSpecific = {
 
 		ns.AddCombatIcon(self)
 		ns.AddRestingIcon(self)
-
-		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
+		
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if (UnitExists("target")) then
 				PlaySound("igCreatureAggroSelect")
@@ -179,6 +178,7 @@ local Shared = function(self, unit)
 		ns.AddOverlay(self, unit)
 		ns.AddCastbar(self, unit)
 		ns.AddHealPredictionBar(self, unit)
+		ns.AddThreatHighlight(self)
 
 		if (unit == "player" and ns.cfg.showPlayerBuffs or unit == "target") then
 			ns.AddBuffs(self, unit)
@@ -267,7 +267,7 @@ local Shared = function(self, unit)
 		if (unit == "pet" or unit == "focus"  or unitIsPartyMember) then
 			ns.AddCastbar(self, unit)
 			ns.AddHealPredictionBar(self, unit)
-			self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
+			ns.AddThreatHighlight(self)
 		end
 	end
 

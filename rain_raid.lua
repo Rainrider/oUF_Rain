@@ -84,8 +84,8 @@ local RaidStyle = function(self, unit)
 	ns.AddDebuffHighlight(self, unit) -- TODO: check appearance
 	ns.AddHealPredictionBar(self, unit)
 	ns.AddRangeCheck(self)
-
-	self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", ns.AddThreatHighlight)
+	ns.AddThreatHighlight(self)
+	
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", function(self)
 		if (UnitIsUnit(self.unit, "target")) then
 			self.FrameBackdrop:SetBackdropBorderColor(1, 1, 0)

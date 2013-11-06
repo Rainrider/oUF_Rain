@@ -423,6 +423,19 @@ local UpdateHealth = function(self, event, unit)
 end
 ns.UpdateHealth = UpdateHealth
 
+local UpdateThreat = function(self, event, unit)
+	if (self.unit ~= unit) then return end
+
+	local status = UnitThreatSituation(unit)
+
+	if (status and status > 1) then
+		local r, g, b = GetThreatStatusColor(status)
+		self.FrameBackdrop:SetBackdropColor(r, g, b, 1)
+	else
+		self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
+	end	
+end
+
 local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower)
 	local height = element.height
 	local spacing = element.spacing
@@ -1099,17 +1112,11 @@ local AddSwingBar = function(self)
 end
 ns.AddSwingBar = AddSwingBar
 
-local AddThreatHighlight = function(self, event, unit)
-	if (unit ~= self.unit) then return end
-
-	local status = UnitThreatSituation(unit)
-
-	if (status and status > 1) then
-		local r, g, b = GetThreatStatusColor(status)
-		self.FrameBackdrop:SetBackdropColor(r, g, b, 1)
-	else
-		self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
-	end
+local AddThreatHighlight = function(self)
+	local threat = self:CreateTexture(nil) -- oUF requires that IsObjectType can be called with this
+	threat:SetTexture(1, 1, 1, 0) -- so that oUF does not try to replace it
+	threat.Override = UpdateThreat
+	self.Threat = threat
 end
 ns.AddThreatHighlight = AddThreatHighlight
 
