@@ -902,7 +902,7 @@ ns.AddExperienceBar = AddExperienceBar
 
 local AddHealPredictionBar = function(self, unit)
 	local health = self.Health
-	local width = self:GetWidth()
+	local width = unit == "raid" and 64 or self:GetWidth()
 
 	local hab = CreateFrame("StatusBar", nil, health)
 	hab:SetStatusBarTexture(ns.media.TEXTURE)
