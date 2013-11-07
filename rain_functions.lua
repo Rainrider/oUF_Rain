@@ -306,7 +306,7 @@ local PostUpdateIcon = function(Auras, unit, aura, index, offset)
 		aura.isPlayer = true
 	end
 
-	if (not aura.isPlayer) then
+	if (not aura.isPlayer and unit ~= "player") then
 		local friend = UnitIsFriend("player", unit)
 		if ((not friend and aura.isDebuff)
 				or (friend and not aura.isDebuff)) then
