@@ -516,7 +516,7 @@ local PostUpdateHealPrediction = function(element, unit, overAbsorb, overHealAbs
 		myBar:ClearAllPoints()
 		myBar:SetPoint("TOP")
 		myBar:SetPoint("BOTTOM")
-		myBar:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT", -(230 * myCurrentHealAbsorbPercent), 0)
+		myBar:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT", -(health:GetWidth() * myCurrentHealAbsorbPercent), 0)
 		myBar:Show()
 	end
 
@@ -915,7 +915,14 @@ ns.AddExperienceBar = AddExperienceBar
 
 local AddHealPredictionBar = function(self, unit)
 	local health = self.Health
-	local width = unit == "raid" and 64 or self:GetWidth()
+	local width
+	if (unit == "raid") then
+		width = 64
+	elseif (unit == "party") then
+		width = 110
+	else
+		width = self:GetWidth()
+	end
 
 	local hab = CreateFrame("StatusBar", nil, health)
 	hab:SetStatusBarTexture(ns.media.TEXTURE)
