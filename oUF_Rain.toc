@@ -1,4 +1,4 @@
-﻿## Interface: 50400
+## Interface: 50400
 ## Title: oUF |cff0099CCRain|r
 ## Author: Rainrider
 ## Version: pre alpha

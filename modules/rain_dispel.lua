@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 	self.DebuffHighlight = Table
 	self.DebuffHighlight.texture = Texture (will be colored by debuff type)
 	self.DebuffHighlight.filter = boolean (true = only debuffs player can dispell)

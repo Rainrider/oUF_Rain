@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local oUF = ns.oUF or oUF
 
 local origR, origG, origB, origA
@@ -23,7 +23,7 @@ local crowdControl = {
 	[10326] = true,		-- Turn Evil
 	-- PRIEST
 	[9484] = true,		-- Shackle Undead
-	[113792] = true,		-- Psychic Terror (Psyfiend)
+	[113792] = true,	-- Psychic Terror (Psyfiend)
 	-- ROGUE
 	[2094] = true,		-- Blind
 	[6770] = true,		-- Sap
