@@ -673,7 +673,7 @@ local AddCastbar = function(self, unit)
 		local safeZone = castbar:CreateTexture(nil, "ARTWORK")
 		safeZone:SetTexture(ns.media.TEXTURE)
 		safeZone:SetVertexColor(0.69, 0.31, 0.31, 0.75)
-		castbar.SaveZone = safeZone
+		castbar.SafeZone = safeZone
 	end
 
 	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
