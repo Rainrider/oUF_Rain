@@ -36,7 +36,7 @@ local UnitSpecific = {
 
 		ns.AddCombatIcon(self)
 		ns.AddRestingIcon(self)
-		
+
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if (UnitExists("target")) then
 				PlaySound("igCreatureAggroSelect")
@@ -147,7 +147,7 @@ local Shared = function(self, unit)
 		pbBG.multiplier = 0.5
 		power.bg = pbBG
 
-		power.PostUpdate = ns.PostUpdatePower
+		power.PostUpdate = unit == "player" and playerClass == "MONK" and ns.UpdateMonkStagger or ns.PostUpdatePower
 		self.Power = power
 	end
 

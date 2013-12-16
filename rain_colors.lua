@@ -22,6 +22,11 @@ ns.colors = setmetatable({
 		["HOLY_POWER"] = {0.95, 0.93, 0.65},
 		["AMMOSLOT"] = {0.8, 0.6, 0},
 		["FUEL"] = {0, 0.55, 0.5},
+		["STAGGER"] = {
+			{0.52, 1.0, 0.52},
+			{1.0, 0.98, 0.72},
+			{1.0, 0.42, 0.42},
+		},
 		-- for list of available power types look in FrameXML/GlobalStrings.lua
 		["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
 		["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},

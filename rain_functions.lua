@@ -226,6 +226,42 @@ local PostUpdateCast = function(castbar, unit, name)
 	end
 end
 
+local SPEC_MONK_BREWMASTER = SPEC_MONK_BREWMASTER
+local STAGGER_YELLOW_TRANSITION = STAGGER_YELLOW_TRANSITION
+local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
+local UnitStagger = UnitStagger
+
+--[[
+	 This differs from blizzard's implementation in that it uses the player's current health instead of max health
+	 This is to make the display more meaningful when playing solo
+--]]
+
+local UpdateMonkStagger = function(Power, unit)
+	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
+		return Power:SetValue(0)
+	end
+
+	if (ns.playerSpec ~= SPEC_MONK_BREWMASTER) then return end
+
+	local unitHealth = UnitHealth(unit)
+	unitHealth = unitHealth > 0 and unitHealth or UnitHealthMax(unit) -- in the seldom case of UnitIsUnconscious(unit) == true
+	local staggerPercent = UnitStagger(unit) / unitHealth
+	local color
+	local self = Power.__owner
+
+	if (staggerPercent > STAGGER_YELLOW_TRANSITION and staggerPercent < STAGGER_RED_TRANSITION) then
+		color = self.colors.power["STAGGER"][2]
+	elseif (staggerPercent > STAGGER_RED_TRANSITION) then
+		color = self.colors.power["STAGGER"][3]
+	else
+		color = self.colors.power["STAGGER"][1]
+	end
+
+	local r, g, b = color[1], color[2], color[3]
+	Power:SetStatusBarColor(r, g, b)
+end
+ns.UpdateMonkStagger = UpdateMonkStagger
+
 local PostUpdatePower = function(Power, unit, cur, max)
 	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)
@@ -1152,7 +1188,7 @@ local AddTotems = function(self, width, height, spacing)
 		else
 			-- Death knight: Ghoul
 			-- Mage
-			-- Monk
+			-- Monk: Statues
 			-- Paladin: Consecration
 			-- Warlock
 			-- Warrior: Banners

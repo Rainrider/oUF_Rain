@@ -107,8 +107,9 @@ cfg:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 cfg:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 
 function cfg:PLAYER_SPECIALIZATION_CHANGED(unit)
-	if (unit ~= "player") then return end
-	ns.playerSpec = GetSpecialization() or 0
+	if (not unit or unit == "player") then
+		ns.playerSpec = GetSpecialization() or 0
+	end
 end
 
 ns.cfg = cfg
