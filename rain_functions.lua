@@ -247,18 +247,18 @@ local UpdateMonkStagger = function(Power, unit)
 	unitHealth = unitHealth > 0 and unitHealth or UnitHealthMax(unit) -- in the seldom case of UnitIsUnconscious(unit) == true
 	local staggerPercent = UnitStagger(unit) / unitHealth
 	local color
-	local self = Power.__owner
 
 	if (staggerPercent > STAGGER_YELLOW_TRANSITION and staggerPercent < STAGGER_RED_TRANSITION) then
-		color = self.colors.power["STAGGER"][2]
-	elseif (staggerPercent > STAGGER_RED_TRANSITION) then
-		color = self.colors.power["STAGGER"][3]
+		color = Power.__owner.colors.power["STAGGER"][2]
+	elseif (staggerPercent >= STAGGER_RED_TRANSITION) then
+		color = Power.__owner.colors.power["STAGGER"][3]
 	else
-		color = self.colors.power["STAGGER"][1]
+		color = Power.__owner.colors.power["STAGGER"][1]
 	end
 
 	local r, g, b = color[1], color[2], color[3]
 	Power:SetStatusBarColor(r, g, b)
+	Power.bg:SetVertexColor(r * 0.5, g * 0.5, b * 0.5)
 end
 ns.UpdateMonkStagger = UpdateMonkStagger
 
