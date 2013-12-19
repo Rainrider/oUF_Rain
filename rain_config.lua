@@ -20,7 +20,7 @@ cfg.horizParty = true				-- true for horizontal party layout; false for vertical
 
 -- auras filtering
 cfg.showPlayerBuffs = true			-- true to enable the display of player buffs left to the player frame; false to disable them
-cfg.onlyShowPlayerBuffs = false		-- true to show only player buffs; false to show all buffs (for friendly targets only)
+cfg.onlyShowPlayerBuffs = true		-- true to show only player buffs; false to show all buffs (for friendly targets only)
 cfg.onlyShowPlayerDebuffs = false	-- true to show only player debuffs; false to show only player class debuffs (for enemies only)
 
 -- debuff highlightingt
@@ -105,10 +105,42 @@ ns.playerSpec = GetSpecialization() or 0
 
 cfg:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 cfg:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+cfg:RegisterEvent("PLAYER_REGEN_ENABLED")
+cfg:RegisterEvent("PLAYER_REGEN_DISABLED")
+cfg:RegisterEvent("MODIFIER_STATE_CHANGED")
 
 function cfg:PLAYER_SPECIALIZATION_CHANGED(unit)
 	if (not unit or unit == "player") then
 		ns.playerSpec = GetSpecialization() or 0
+	end
+end
+
+function cfg:PLAYER_REGEN_DISABLED()
+	cfg:UnregisterEvent("MODIFIER_STATE_CHANGED")
+	cfg:MODIFIER_STATE_CHANGED("LSHIFT", 0)
+end
+
+function cfg:PLAYER_REGEN_ENABLED()
+	cfg:RegisterEvent("MODIFIER_STATE_CHANGED")
+	cfg:MODIFIER_STATE_CHANGED("LSHIFT", IsShiftKeyDown() and 1 or 0)
+end
+
+function cfg:MODIFIER_STATE_CHANGED(key, state)
+	if (key ~= "LSHIFT" and key ~= "RSHIFT") then return end
+
+	for i = 1, #oUF.objects do
+		local object = oUF.objects[i]
+		local unit = object.realUnit or object.unit
+		if (unit == "target") then
+			local buffs = object.Buffs
+			if (state == 1) then
+				buffs.onlyShowPlayer = nil
+			else
+				buffs.onlyShowPlayer = cfg.onlyShowPlayerBuffs
+			end
+			buffs:ForceUpdate()
+			break
+		end
 	end
 end
 
