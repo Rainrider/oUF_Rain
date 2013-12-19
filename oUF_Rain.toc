@@ -3,7 +3,7 @@
 ## Author: Rainrider
 ## Version: pre alpha
 ## Notes: oUF layout
-## X-Credits: Caellian, HankTheTank, haste, zork, p3lim
+## X-Credits: Caellian, HankTheTank, haste, p3lim, Phanx, zork
 ## RequiredDeps: oUF
 ## OptionalDeps: oUF_Reputation, oUF_Swing
 
