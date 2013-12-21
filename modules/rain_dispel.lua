@@ -8,10 +8,10 @@
 local _, playerClass = UnitClass("player")
 
 local dispelList = {
-	Curse = false,
-	Desease = false,
-	Magic = false,
-	Poison = false,
+	Curse = nil,
+	Desease = nil,
+	Magic = nil,
+	Poison = nil,
 }
 
 local debuffTypeColor = {}
@@ -19,15 +19,9 @@ for dispelType, color in pairs(_G["DebuffTypeColor"]) do
 	debuffTypeColor[dispelType] = {color.r, color.g, color.b}
 end
 
-local ResetDispelList = function()
-	for k,v in pairs(dispelList) do
-		dispelList[k] = false
-	end
-end
-
 local UpdateDispelList = {
 	["DRUID"] = function()
-		ResetDispelList()
+		table.wipe(dispelList)
 		if (IsSpellKnown(2782)) then					-- Remove Corruption
 			dispelList.Curse = true
 			dispelList.Poison = true
@@ -38,13 +32,13 @@ local UpdateDispelList = {
 		end
 	end,
 	["MAGE"] = function()
-		ResetDispelList()
+		table.wipe(dispelList)
 		if (IsSpellKnown(475)) then						-- Remove Curse
 			dispelList.Curse = true
 		end
 	end,
 	["MONK"] = function()
-		ResetDispelList()
+		table.wipe(dispelList)
 		if (IsSpellKnown(115450)) then					-- Detox
 			dispelList.Desease = true
 			dispelList.Poison = true
@@ -54,7 +48,7 @@ local UpdateDispelList = {
 		end
 	end,
 	["PALADIN"] = function()
-		ResetDispelList()
+		table.wipe(dispelList)
 		if (IsSpellKnown(4987)) then					-- Cleanse
 			dispelList.Desease = true
 			dispelList.Poison = true
@@ -64,14 +58,14 @@ local UpdateDispelList = {
 		end
 	end,
 	["PRIEST"] = function()
-		ResetDispelList()
+		table.wipe(dispelList)
 		if (IsSpellKnown(527)) then						-- Purify
 			dispelList.Desease = true
 			dispelList.Magic = true
 		end
 	end,
 	["SHAMAN"] = function()
-		ResetDispelList()
+		table.wipe(dispelList)
 		if (IsSpellKnown(51886)) then					-- Cleanse Spirit
 			dispelList.Curse = true
 		elseif (IsSpellKnown(77130)) then				-- Purify Spirit
@@ -80,7 +74,7 @@ local UpdateDispelList = {
 		end
 	end,
 	["WARLOCK"] = function()
-		ResetDispelList()
+		table.wipe(dispelList)
 		local _, _, texture = GetSpellInfo(119898)		-- Command Demon
 		if (string.find(texture, "spell_fel_elementaldevastation")		-- Singe Magic (Imp Sacrifice) NOTE: IsSpellKnown(132411) always returns false
 			or IsSpellKnown(89808, true) 				-- Singe Magic (Imp ability)
