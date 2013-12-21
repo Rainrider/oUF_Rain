@@ -81,7 +81,9 @@ local UpdateDispelList = {
 	end,
 	["WARLOCK"] = function()
 		ResetDispelList()
-		if (IsSpellKnown(89808, true) 					-- Single Magic (Imp ability)
+		local _, _, texture = GetSpellInfo(119898)		-- Command Demon
+		if (string.find(texture, "spell_fel_elementaldevastation")		-- Singe Magic (Imp Sacrifice) NOTE: IsSpellKnown(132411) always returns false
+			or IsSpellKnown(89808, true) 				-- Singe Magic (Imp ability)
 			or IsSpellKnown(115276, true)) then			-- Sear Magic (Fel Imp ability)
 			dispelList.Magic = true
 		end
