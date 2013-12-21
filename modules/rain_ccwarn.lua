@@ -36,6 +36,7 @@ local crowdControl = {
 	[118699] = true,	-- Blood Fear / Fear
 	[6358] = true,		-- Seduction (Succubus)
 	[115268] = true,	-- Mesmerize (Shivarra)
+	[104045] =  true,	-- Sleep (Dark Apotheosis)
 }
 
 local Update = function(self, event, unit)
