@@ -104,12 +104,6 @@ local GetDebuffInfo = function(unit, filter)
 	end
 end
 
-local CheckForPet = function(self, event, unit)
-	if (unit ~= "player" or playerClass ~= "WARLOCK") then return end
-
-	UpdateDispelList[playerClass]()
-end
-
 local Update = function(self, event, unit)
 	if (unit ~= self.unit) then return end
 
@@ -164,7 +158,6 @@ local Enable = function(self)
 	if (element.filter and UpdateDispelList[playerClass]) then
 		UpdateDispelList[playerClass]()
 		self:RegisterEvent("SPELLS_CHANGED", UpdateDispelList[playerClass])
-		self:RegisterEvent("UNIT_PET", CheckForPet)
 	end
 
 	self:RegisterEvent("UNIT_AURA", Path)
@@ -177,7 +170,6 @@ local Disable = function(self)
 		self:UnregisterEvent("UNIT_AURA")
 		if (UpdateDispelList[playerClass]) then
 			self:UnregisterEvent("SPELLS_CHANGED")
-			self:UnregisterEvent("UNIT_PET")
 		end
 	end
 end
