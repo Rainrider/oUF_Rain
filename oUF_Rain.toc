@@ -13,6 +13,7 @@ modules\rain_healprediction.lua
 modules\rain_interrupt.lua
 modules\rain_experience.lua
 modules\rain_warlockpowerbar.lua
+modules\rain_missinggroupdebuffs.lua
 rain_config.lua
 rain_colors.lua
 rain_auraFilter.lua

@@ -1019,6 +1019,26 @@ local AddHealPredictionBar = function(self, unit)
 end
 ns.AddHealPredictionBar = AddHealPredictionBar
 
+local AddMissingGroupDebuffs = function(self)
+	local mgd = {}
+
+	for i = 1, 6 do
+		local button = CreateFrame("Button", nil, self)
+		button:SetSize(30, 30)
+		button:SetPoint("BOTTOMLEFT", self, "TOPLEFT", (i - 1) * (30 + 5), 60)
+		button.icon = button:CreateTexture(nil, "ARTWORK")
+		button.icon:SetAllPoints(button)
+		local border = button:CreateTexture(nil, "OVERLAY")
+		border:SetTexture(ns.media.BTNTEXTURE)
+		border:SetPoint("TOPLEFT", button.icon, "TOPLEFT", -4.5, 4.5)
+		border:SetPoint("BOTTOMRIGHT", button.icon, "BOTTOMRIGHT", 4.5, -4.5)
+		mgd[i] = button
+	end
+
+	self.MissingGroupDebuffs = mgd
+end
+ns.AddMissingGroupDebuffs = AddMissingGroupDebuffs
+
 local AddOverlay = function(self, unit)
 	local overlay = CreateFrame("Frame", self:GetName().."_Overlay", self.Portrait)
 	overlay:SetPoint("TOPLEFT", self.Portrait, 0, 1)
