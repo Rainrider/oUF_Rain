@@ -837,7 +837,7 @@ local AddDebuffs = function(self, unit)
 	debuffs.disableCooldown = true
 	debuffs.onlyShowPlayer = unit ~= "focus" and ns.cfg.onlyShowPlayerDebuffs
 	debuffs.CreateIcon = CreateAuraIcon
-	debuffs.PreSetPosition = unit ~= "focus" and PreSetPosition
+	debuffs.PreSetPosition = unit ~= "player" and unit ~= "focus" and PreSetPosition
 	debuffs.PostUpdateIcon = PostUpdateIcon
 
 	if (unit == "player" or unit == "target") then
