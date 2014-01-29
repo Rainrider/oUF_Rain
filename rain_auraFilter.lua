@@ -1,5 +1,20 @@
 local _, ns = ...
 
+ns.PlayerWhiteList = {
+	-- raid buffs
+	[2825]   = true, -- Bloodlust
+	[32182]  = true, -- Heroism
+	[80353]  = true, -- Time Warp
+	[90355]  = true, -- Ancient Hysteria
+	[1022]   = true, -- Hand of Protection
+	-- enchant procs where blizz forgot to tag the caster as the player
+	[116631] = true, -- Colossus
+	[120032] = true, -- Dancing Steel (agi)
+	[118335] = true, -- Dancing Steel (str) ???
+	[104993] = true, -- Jade Spirit ???
+	[116660] = true, -- River's Song ???
+}
+
 --- [encounterID] = {
 ---		debuffID = stackSize (0 means spot away when debuff expires)
 --- }

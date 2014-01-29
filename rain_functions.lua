@@ -120,11 +120,12 @@ local CustomCastDelayText = function(Castbar, duration)
 	Castbar.Time:SetText(format("%.1f |cffaf5050%s %.1f|r", Castbar.channeling and duration or Castbar.max - duration, Castbar.channeling and "- " or "+", Castbar.delay))
 end
 
+local PlayerWhiteList = ns.PlayerWhiteList
 local CustomPlayerFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 	if (aura.isDebuff) then
 		return true
 	else
-		if (duration <= 300 and duration > 0) then
+		if (caster == "player" and duration <= 300 and duration > 0 or PlayerWhiteList[spellID]) then
 			return true
 		end
 	end
