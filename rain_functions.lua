@@ -647,7 +647,7 @@ local AddBuffs = function(self, unit)
 	buffs.onlyShowPlayer = ns.cfg.onlyShowPlayerBuffs
 	buffs.showStealableBuffs = true
 	buffs.CreateIcon = CreateAuraIcon
-	buffs.PreSetPosition = PreSetPosition
+	buffs.PreSetPosition = unit ~= "player" and PreSetPosition
 	buffs.PostUpdateIcon = PostUpdateIcon
 
 	if (unit == "player" or unit == "target") then
