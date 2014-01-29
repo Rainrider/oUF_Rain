@@ -1,5 +1,136 @@
 local _, ns = ...
 
+--- [encounterID] = {
+---		debuffID = stackSize (0 means spot away when debuff expires)
+--- }
+
+local TankSwapDebuffs = {
+	----------------------
+	-- MOGU'SHAN VAULTS --
+	----------------------
+	-- Feng the Accursed
+	[1390] = {
+		[131788] = 2, -- Lightning Lash
+		[116942] = 2, -- Flaming Spear
+		[131790] = 2, -- Arcane Shock
+	},
+	-- Gara'jal the Spiritbinder
+	[1434] = {
+		[122151] = 0, -- Voodoo Dolls (Probably unneeded)
+	},
+	 -- Elegon
+	[1500] = {
+		[117878] = 10, -- Overcharged (not in LFR)
+	},
+	-------------------
+	-- HEART OF FEAR --
+	-------------------
+	-- Blade Lord Ta'yak
+	[1504] = {
+		[123474] = 2, -- Overwhelming Assault
+	},
+	 -- Amber-Shaper Un'sok
+	[1499] = {
+		[122370] = 1, -- Reshape Life
+		[121949] = 1, -- Parasitic Growth TODO: can it be applied to tanks?
+	},
+	 -- Grand Empress Shek'zeer
+	[1501] = {
+		[123707] = 4, -- Eyes of the Empress
+	},
+	-------------------------------
+	-- TERRACE OF ENDLESS SPRING --
+	-------------------------------
+	-- Tsulong 742
+	[1505] = {
+		[122752] = 1, -- Shadow Breath
+	},
+	-- Lei Shi 729
+	[1506] = {
+		[123121] = 30, -- Spray
+	},
+	-----------------------
+	-- THRONE OF THUNDER --
+	-----------------------
+	-- Jin'rokh the Breaker
+	[1577] = {
+		[138349] = 1, -- Static Wound
+	},
+	-- Horridon
+	[1575] = {
+		[136767] = 6, -- Triple Puncture
+	},
+	-- Council of Elders
+	[1570] = {
+		[136903] = 12, -- Frigid Assault
+	},
+	-- Ji-Kun
+	[1573] = {
+		[134366] = 3, -- Talon Rake
+		[140092] = 10, -- Infected Talons
+	},
+	-- Durumu the Forgotten
+	[1572] = {
+		[133767] = 4, -- Serious Wound
+	},
+	-- Primordius
+	[1574] = {
+		[136050] = 6, -- Malformed Blood
+	},
+	-- Dark Animus
+	[1576] = {
+		[136962] = 1, -- Anima Ring
+	},
+	-- Iron Qon
+	[1559] = {
+		[134691] = 5, -- Impale
+	},
+	-- Twin Consorts
+	[1560] = {
+		[137375] = 1, -- Beast of Nightmares
+		[137408] = 4, -- Fan of Flames
+	},
+	-- Lei Shen
+	[1579] = {
+		[134916] = 1, -- Decapitate
+		[136478] = 1, -- Fusion Slash
+		[136914] = 10, -- Electrical Shock
+		[136913] = 10, -- Overwhelming Power TODO: which one get applied to the tank
+	},
+	------------------------
+	-- Siege of Orgrimmar --
+	------------------------
+	-- Immerseus
+	[1602] = {
+		[143436] = 1, -- Corrosive Blast
+	},
+	-- Norushen
+	[1624] = {
+		[146124] = 1, -- Self Doubt
+	},
+	-- Sha of Pride
+	[1604] = {
+		[144358] = 1, -- Wounded Pride
+	},
+	-- Galakras
+	[1622] = {
+		[147029] = 1, -- Flames of Galakrond
+		--[] = 1, --
+	},
+	-- Iron Juggernaut
+	[1600] = {
+		[144467] = 4, -- Ignite Armor
+	},
+	-- Kor'kron Dark Shaman
+	[1606] = {
+		[144215] = 1, -- Froststorm Strike
+	},
+	-- General Nazgrim
+	[1603] = {
+		[143494] = 1, -- Sundering Blow
+	},
+}
+
 local Taunts = {
 	-- Death Knight
 	56222,		-- Dark Command
@@ -60,7 +191,6 @@ local CanDisarm = {
 
 ns.DebuffIDs = {}
 local _, playerClass = UnitClass("player")
-local playerSpec = GetSpecialization() or 0
 
 local UpdateDisarms = function(canDisarm)
 	for i = 1, #Disarms do
@@ -82,8 +212,17 @@ Frame:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end
 
 function Frame:PLAYER_SPECIALIZATION_CHANGED(unit)
 	if not unit or unit == "player" then
-		local _, _, _, _, _, role = GetSpecializationInfo(playerSpec)
+		local _, _, _, _, _, role = GetSpecializationInfo(GetSpecialization() or 0) -- we can't rely on ns.playerSpec being correct
 		UpdateTaunts(role == "TANK" or nil)
+		if role == "TANK" then
+			UpdateTaunts(true)
+			self:RegisterEvent("ENCOUNTER_START")
+			self:RegisterEvent("ENCOUNTER_END")
+		else
+			UpdateTaunts()
+			self:UnregisterEvent("ENCOUNTER_START")
+			self:UnregisterEvent("ENCOUNTER_END")
+		end
 	end
 end
 
@@ -94,4 +233,24 @@ end
 function Frame:PLAYER_ENTERING_WORLD()
 	self:PLAYER_SPECIALIZATION_CHANGED("player")
 	self:SPELLS_CHANGED()
+end
+
+ns.TankDebuffs = {}
+function Frame:ENCOUNTER_START(encounterID, name, difficultyID, size)
+	print("ENCOUNTER_START", encounterID, name)
+	table.wipe(ns.TankDebuffs)
+	local currentEncounterDebuffs = TankSwapDebuffs[encounterID]
+	if currentEncounterDebuffs then
+		for spellID, stackCount in pairs(currentEncounterDebuffs) do
+			ns.TankDebuffs[spellID] = stackCount
+		end
+	end
+	print("Tracking following debuffs for", name)
+	for spellID in pairs(ns.TankDebuffs) do
+		print(string.gsub(GetSpellLink(spellID), "|", "\124"))
+	end
+end
+
+function Frame:ENCOUNTER_END(encounterID, name, difficultyID, size, success)
+	table.wipe(ns.TankDebuffs)
 end

@@ -130,6 +130,14 @@ local CustomPlayerFilter = function(Auras, unit, aura, name, rank, texture, coun
 	end
 end
 
+local CustomFocusFilter = function(Auras, unit, aura, _, _, _, count, _, duration, timeLeft, _, _, _, spellID)
+	local stackCount = ns.TankDebuffs[spellID]
+	if (stackCount) then
+		-- TODO: add flashing if stackCount == count
+		return true
+	end
+end
+
 local CustomFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 	if (caster == "pet") then
 		aura.isPlayer = true
@@ -826,9 +834,9 @@ local AddDebuffs = function(self, unit)
 	debuffs.size = (230 - 7 * debuffs.spacing) / 8
 	debuffs.showType = true
 	debuffs.disableCooldown = true
-	debuffs.onlyShowPlayer = ns.cfg.onlyShowPlayerDebuffs
+	debuffs.onlyShowPlayer = unit ~= "focus" and ns.cfg.onlyShowPlayerDebuffs
 	debuffs.CreateIcon = CreateAuraIcon
-	debuffs.PreSetPosition = PreSetPosition
+	debuffs.PreSetPosition = unit ~= "focus" and PreSetPosition
 	debuffs.PostUpdateIcon = PostUpdateIcon
 
 	if (unit == "player" or unit == "target") then
@@ -847,13 +855,15 @@ local AddDebuffs = function(self, unit)
 		end
 	end
 
-	if (unit == "pet") then
-		debuffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -15, 0)
+	if (unit == "focus") then
+		debuffs:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7.5)
 		debuffs.num = 6
 		debuffs:SetSize(debuffs.num * (debuffs.size + debuffs.spacing), debuffs.size + debuffs.spacing)
 
 		debuffs.initialAnchor = "RIGHT"
 		debuffs["growth-x"] = "LEFT"
+
+		debuffs.CustomFilter = CustomFocusFilter
 	end
 
 	if (unit == "targettarget") then

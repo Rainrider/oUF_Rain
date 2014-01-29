@@ -73,6 +73,7 @@ local UnitSpecific = {
 	end,
 
 	focus = function(self)
+		ns.AddDebuffs(self, "focus")
 		ns.AddDebuffHighlight(self, "focus")
 	end,
 
