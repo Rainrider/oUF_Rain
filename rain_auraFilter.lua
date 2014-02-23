@@ -1,6 +1,6 @@
 local _, ns = ...
 
-ns.PlayerWhiteList = {
+local PlayerWhiteList = {
 	-- raid buffs
 	[2825]   = true, -- Bloodlust
 	[32182]  = true, -- Heroism
@@ -129,7 +129,7 @@ local TankSwapDebuffs = {
 	},
 	-- Galakras
 	[1622] = {
-		[147029] = 1, -- Flames of Galakrond
+		[147029] = 3, -- Flames of Galakrond
 		--[] = 1, --
 	},
 	-- Iron Juggernaut
@@ -142,7 +142,7 @@ local TankSwapDebuffs = {
 	},
 	-- General Nazgrim
 	[1603] = {
-		[143494] = 1, -- Sundering Blow
+		[143494] = 5, -- Sundering Blow
 	},
 }
 
@@ -204,20 +204,60 @@ local CanDisarm = {
 	["WARRIOR"] = function() return IsSpellKnown(676) end,
 }
 
-ns.DebuffIDs = {}
+local DebuffIDs = {}
 local _, playerClass = UnitClass("player")
 
 local UpdateDisarms = function(canDisarm)
 	for i = 1, #Disarms do
-		ns.DebuffIDs[Disarms[i]] = canDisarm
+		DebuffIDs[Disarms[i]] = canDisarm
 	end
 end
 
 local UpdateTaunts = function(addTaunt)
 	for i = 1, #Taunts do
-		ns.DebuffIDs[Taunts[i]] = addTaunt
+		DebuffIDs[Taunts[i]] = addTaunt
 	end
 end
+
+ns.CustomFilter = {
+	player = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+		if (aura.isDebuff) then
+			return true
+		else
+			if ((aura.isPlayer or caster == "pet") and duration <= 300 and duration > 0 or PlayerWhiteList[spellID]) then
+				return true
+			end
+		end
+	end,
+	target = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
+		if (caster == "pet") then
+			aura.isPlayer = true
+		end
+
+		if (not UnitIsFriend("player", unit)) then
+			if (aura.isDebuff) then
+				if(aura.isPlayer or isBossDebuff or DebuffIDs[spellID]) then
+					return true
+				end
+			else
+				return true
+			end
+		else
+			if (aura.isDebuff) then
+				return true
+			else
+				return (Auras.onlyShowPlayer and aura.isPlayer) or (not Auras.onlyShowPlayer and name)
+			end
+		end
+	end,
+	focus = function(Auras, unit, aura, _, _, _, count, _, duration, timeLeft, _, _, _, spellID)
+		local stackCount = TankDebuffs[spellID]
+		if (stackCount) then
+			-- TODO: add flashing if stackCount == count
+			return true
+		end
+	end,
+}
 
 local Frame = CreateFrame("Frame")
 Frame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
@@ -228,7 +268,6 @@ Frame:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end
 function Frame:PLAYER_SPECIALIZATION_CHANGED(unit)
 	if not unit or unit == "player" then
 		local _, _, _, _, _, role = GetSpecializationInfo(GetSpecialization() or 0) -- we can't rely on ns.playerSpec being correct
-		UpdateTaunts(role == "TANK" or nil)
 		if role == "TANK" then
 			UpdateTaunts(true)
 			self:RegisterEvent("ENCOUNTER_START")
@@ -250,22 +289,22 @@ function Frame:PLAYER_ENTERING_WORLD()
 	self:SPELLS_CHANGED()
 end
 
-ns.TankDebuffs = {}
+local TankDebuffs = {}
 function Frame:ENCOUNTER_START(encounterID, name, difficultyID, size)
 	print("ENCOUNTER_START", encounterID, name)
-	table.wipe(ns.TankDebuffs)
+	table.wipe(TankDebuffs)
 	local currentEncounterDebuffs = TankSwapDebuffs[encounterID]
 	if currentEncounterDebuffs then
 		for spellID, stackCount in pairs(currentEncounterDebuffs) do
-			ns.TankDebuffs[spellID] = stackCount
+			TankDebuffs[spellID] = stackCount
 		end
 	end
 	print("Tracking following debuffs for", name)
-	for spellID in pairs(ns.TankDebuffs) do
+	for spellID in pairs(TankDebuffs) do
 		print(string.gsub(GetSpellLink(spellID), "|", "\124"))
 	end
 end
 
 function Frame:ENCOUNTER_END(encounterID, name, difficultyID, size, success)
-	table.wipe(ns.TankDebuffs)
+	table.wipe(TankDebuffs)
 end

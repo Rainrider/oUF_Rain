@@ -120,47 +120,6 @@ local CustomCastDelayText = function(Castbar, duration)
 	Castbar.Time:SetText(format("%.1f |cffaf5050%s %.1f|r", Castbar.channeling and duration or Castbar.max - duration, Castbar.channeling and "- " or "+", Castbar.delay))
 end
 
-local PlayerWhiteList = ns.PlayerWhiteList
-local CustomPlayerFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
-	if (aura.isDebuff) then
-		return true
-	else
-		if ((aura.isPlayer or caster == "pet") and duration <= 300 and duration > 0 or PlayerWhiteList[spellID]) then
-			return true
-		end
-	end
-end
-
-local CustomFocusFilter = function(Auras, unit, aura, _, _, _, count, _, duration, timeLeft, _, _, _, spellID)
-	local stackCount = ns.TankDebuffs[spellID]
-	if (stackCount) then
-		-- TODO: add flashing if stackCount == count
-		return true
-	end
-end
-
-local CustomFilter = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
-	if (caster == "pet") then
-		aura.isPlayer = true
-	end
-
-	if (not UnitIsFriend("player", unit)) then
-		if (aura.isDebuff) then
-			if(aura.isPlayer or isBossDebuff or ns.DebuffIDs[spellID]) then
-				return true
-			end
-		else
-			return true
-		end
-	else
-		if (aura.isDebuff) then
-			return true
-		else
-			return (Auras.onlyShowPlayer and aura.isPlayer) or (not Auras.onlyShowPlayer and name)
-		end
-	end
-end
-
 local CustomPartyFilter = function(Auras, unit, aura, name, _, _, _, _, _, _, caster)
 	if (prioTable[name]) then
 		if ((prioTable[name] == 1 and caster == "player") or prioTable[name] == 2) then
@@ -658,14 +617,14 @@ local AddBuffs = function(self, unit)
 			buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -9, 1)
 			buffs.initialAnchor = "TOPRIGHT"
 			buffs["growth-x"] = "LEFT"
-			buffs.CustomFilter = CustomPlayerFilter
 		else
 			buffs:SetSize(8 * (buffs.size + buffs.spacing), 4 * (buffs.size + buffs.spacing))
 			buffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 9, 1)
 			buffs.initialAnchor = "TOPLEFT"
 			buffs["growth-x"] = "RIGHT"
-			buffs.CustomFilter = CustomFilter
 		end
+		
+		buffs.CustomFilter = ns.CustomFilter[unit]
 	end
 
 	if (unit == "pet") then
@@ -848,12 +807,6 @@ local AddDebuffs = function(self, unit)
 		debuffs.initialAnchor = "TOPLEFT"
 		debuffs["growth-x"] = "RIGHT"
 		debuffs["growth-y"] = "DOWN"
-
-		if (unit == "player") then
-			debuffs.CustomFilter = CustomPlayerFilter
-		else
-			debuffs.CustomFilter = CustomFilter
-		end
 	end
 
 	if (unit == "focus") then
@@ -863,8 +816,6 @@ local AddDebuffs = function(self, unit)
 
 		debuffs.initialAnchor = "RIGHT"
 		debuffs["growth-x"] = "LEFT"
-
-		debuffs.CustomFilter = CustomFocusFilter
 	end
 
 	if (unit == "targettarget") then
@@ -875,6 +826,8 @@ local AddDebuffs = function(self, unit)
 		debuffs.initialAnchor = "LEFT"
 		debuffs["growth-x"] = "RIGHT"
 	end
+
+	debuffs.CustomFilter = ns.CustomFilter[unit]
 
 	self.Debuffs = debuffs
 end
