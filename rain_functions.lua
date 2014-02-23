@@ -125,7 +125,7 @@ local CustomPlayerFilter = function(Auras, unit, aura, name, rank, texture, coun
 	if (aura.isDebuff) then
 		return true
 	else
-		if (caster == "player" and duration <= 300 and duration > 0 or PlayerWhiteList[spellID]) then
+		if ((aura.isPlayer or caster == "pet") and duration <= 300 and duration > 0 or PlayerWhiteList[spellID]) then
 			return true
 		end
 	end
