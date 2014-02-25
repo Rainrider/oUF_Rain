@@ -289,10 +289,16 @@ end
 function Frame:PLAYER_ENTERING_WORLD()
 	self:PLAYER_SPECIALIZATION_CHANGED("player")
 	self:SPELLS_CHANGED()
+	if (not IsEncounterInProgress()) then
+		ns.db.encounterID = nil
+	end
+	if (ns.db.encounterID) then
+		self:ENCOUNTER_START(ns.db.encounterID)
+	end
 end
 
 function Frame:ENCOUNTER_START(encounterID, name, difficultyID, size)
-	print("ENCOUNTER_START", encounterID, name)
+	ns.db.encounterID = encounterID
 	table.wipe(TankDebuffs)
 	local currentEncounterDebuffs = TankSwapDebuffs[encounterID]
 	if currentEncounterDebuffs then
@@ -307,5 +313,6 @@ function Frame:ENCOUNTER_START(encounterID, name, difficultyID, size)
 end
 
 function Frame:ENCOUNTER_END(encounterID, name, difficultyID, size, success)
+	ns.db.encounterID = nil
 	table.wipe(TankDebuffs)
 end

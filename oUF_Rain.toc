@@ -7,6 +7,9 @@
 ## RequiredDeps: oUF
 ## OptionalDeps: oUF_Reputation, oUF_Swing
 
+## SavedVariables: oUF_RainDB
+
+rain_init.lua
 modules\rain_ccwarn.lua
 modules\rain_dispel.lua
 modules\rain_healprediction.lua
