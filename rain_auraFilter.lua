@@ -205,6 +205,8 @@ local CanDisarm = {
 }
 
 local DebuffIDs = {}
+local TankDebuffs = {}
+
 local _, playerClass = UnitClass("player")
 
 local UpdateDisarms = function(canDisarm)
@@ -289,7 +291,6 @@ function Frame:PLAYER_ENTERING_WORLD()
 	self:SPELLS_CHANGED()
 end
 
-local TankDebuffs = {}
 function Frame:ENCOUNTER_START(encounterID, name, difficultyID, size)
 	print("ENCOUNTER_START", encounterID, name)
 	table.wipe(TankDebuffs)
