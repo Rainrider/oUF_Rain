@@ -125,12 +125,11 @@ local TankSwapDebuffs = {
 	},
 	-- Sha of Pride
 	[1604] = {
-		[144358] = 1, -- Wounded Pride
+		[144358] = 5, -- Wounded Pride
 	},
 	-- Galakras
 	[1622] = {
 		[147029] = 3, -- Flames of Galakrond
-		--[] = 1, --
 	},
 	-- Iron Juggernaut
 	[1600] = {
@@ -143,6 +142,37 @@ local TankSwapDebuffs = {
 	-- General Nazgrim
 	[1603] = {
 		[143494] = 5, -- Sundering Blow
+	},
+	-- Malkorok
+	[1595] = {
+		[142990] = 3, -- Fatal Strike ??? stacks
+	},
+	-- Thok the Bloodthirsty
+	[1599] = {
+		[143766] = 3, -- Panic (applied by Fearsome Roar)
+		[143780] = 3, -- Acid Breath
+		[143773] = 3, -- Freezing Breath
+		 [83855] = 3, -- Scorching Breath ??? id
+	},
+	-- Siegecrafter Blackfuse
+	[1601] = {
+		[143385] = 3, -- Electrostatic Charge
+	},
+	-- Paragons of the Klaxxi
+	[1593] = {
+		-- Skeer the Bloodseeker
+		[143275] = 3, -- Hewn (only if Rik'kal lives) ??? stacks
+		-- Rik'kal the Dissector
+		[143279] = 3, -- Genetic Alteration (only if Skeer lives) ??? stacks
+		-- Xaril the Poisoned Mind
+		[142929] = 3, -- Tenderizing Strikes (only of Kil'ruk lives) ??? stacks
+		-- Kil'ruk the Wind-Reaver
+		[142931] = 3, -- Exposed Veins (only if Xaril lives) ??? stackSize
+	},
+	-- Garrosh Hellscream
+	[1623] = {
+		[145183] = 8, -- Gripping Despair
+		[145195] = 8, -- Empowered Gripping Despair
 	},
 }
 
