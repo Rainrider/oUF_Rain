@@ -296,6 +296,8 @@ local Shared = function(self, unit)
 	end
 end
 
+local raid = {}
+
 oUF:RegisterStyle("Rain", Shared)
 oUF:RegisterStyle("RainRaid", ns.RaidStyle)
 oUF:Factory(function(self)
@@ -512,3 +514,44 @@ oUF:RegisterInitCallback(function(self)
 
 	return true
 end)
+
+SLASH_OUF_RAIN1 = "/raintest"
+SlashCmdList.OUF_RAIN = function(group)
+	if group == "raid" then
+		local raid = {}
+		oUF:SetActiveStyle("RainRaid")
+		for i = 1, 8 do
+			local header = oUF:SpawnHeader(
+				"oUF_Rain_TestRaidGroup"..i, nil, "solo",
+				"showSolo", true,
+				"yOffset", -7.5,
+				"oUF-initialConfigFunction", [[
+					self:SetWidth(64)
+					self:SetHeight(30)
+				]]
+			)
+			raid[i] = header
+			if (i == 1) then
+				header:SetPoint("TOPLEFT", UIParent, 15, -15)
+			else
+				header:SetPoint("TOPLEFT", raid[i - 1], "TOPRIGHT", 7.5, 0)
+			end
+		end
+	elseif group == "party" then
+		oUF:SetActiveStyle("Rain")
+		local party = oUF:SpawnHeader(
+				"oUF_Rain_TestParty", nil, "solo",
+				"showSolo", true,
+				"showParty", true, -- need this or else oUF gets confused about the unit
+				"maxColumns", 4,
+				"unitsPerColumn", 1,
+				"columnAnchorPoint", "LEFT",
+				"columnSpacing", 9.5,
+				"oUF-initialConfigFunction", [[
+					self:SetWidth(110)
+					self:SetHeight(22)
+				]]
+			)
+		party:SetPoint("LEFT", UIParent, "BOTTOM", -231.25, 130)
+	end
+end
