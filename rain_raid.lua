@@ -37,7 +37,7 @@ local RaidStyle = function(self, unit)
 	health.background = hpBG
 
 	local hpValue = ns.PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
-	hpValue:SetPoint("RIGHT", -2, 0)
+	hpValue:SetPoint("BOTTOMRIGHT", -2, 2)
 
 	if (ns.cfg.raidHealth > 0) then
 		if (ns.cfg.raidHealth == 1) then
@@ -66,9 +66,9 @@ local RaidStyle = function(self, unit)
 
 	self.Power = power
 
-	local role = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
-	role:SetPoint("LEFT", 2, 0)
-	self:Tag(role, "[rain:role]")
+	local name = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+	name:SetPoint("TOPLEFT", 2, -2)
+	self:Tag(name, "[rain:role][rain:name]")
 
 	--[[ ICONS ]]--
 	ns.AddAssistantIcon(self)
@@ -81,7 +81,7 @@ local RaidStyle = function(self, unit)
 	ns.AddResurrectIcon(self)
 
 	--[[ ELEMENTS ]]--
-	ns.AddDebuffHighlight(self, unit) -- TODO: check appearance
+	ns.AddDebuffHighlight(self, unit)
 	ns.AddHealPredictionBar(self, unit)
 	ns.AddRangeCheck(self)
 	ns.AddThreatHighlight(self)

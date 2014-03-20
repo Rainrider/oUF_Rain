@@ -156,7 +156,6 @@ tags["rain:raidmissinghp"] = function(unit)
 	if (missing > 0) then
 		return "-" .. SiValue(missing)
 	end
-	return tags["rain:name"](unit)
 end
 tagEvents["rain:raidmissinghp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_FACTION"
 
@@ -184,8 +183,6 @@ tags["rain:raidpercenthp"] = function(unit)
 	local percent = math.floor(cur / max * 100 + 0.5) -- chuck norris can divide by zero
 	if (percent < 100 and percent > 0) then
 		return percent .. "%"
-	else
-		return tags["rain:name"](unit)
 	end
 end
 tagEvents["rain:raidpercenthp"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_FACTION"
@@ -279,7 +276,7 @@ tags["rain:name"] = function(unit, r)
 	end
     return color..(name or "").."|r"
 end
-tagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION"
+tagEvents["rain:name"] = "UNIT_NAME_UPDATE UNIT_FACTION"
 
 tags["rain:altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
