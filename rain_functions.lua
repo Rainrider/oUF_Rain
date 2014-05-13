@@ -641,6 +641,7 @@ local AddBuffs = function(self, unit)
 		buffs:SetSize(buffs.num * (buffs.size + buffs.spacing), buffs.size + buffs.spacing)
 		buffs.initialAnchor = "RIGHT"
 		buffs["growth-x"] = "LEFT"
+		buffs.onlyShowPlayer = nil
 	end
 
 	self.Buffs = buffs
