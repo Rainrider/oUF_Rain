@@ -1,18 +1,31 @@
 local _, ns = ...
 
+local _, playerClass = UnitClass("player")
+
 local PlayerWhiteList = {
 	-- raid buffs
-	[2825]   = true, -- Bloodlust
-	[32182]  = true, -- Heroism
-	[80353]  = true, -- Time Warp
-	[90355]  = true, -- Ancient Hysteria
-	[1022]   = true, -- Hand of Protection
+	[  2825] = true, -- Bloodlust
+	[ 32182] = true, -- Heroism
+	[ 80353] = true, -- Time Warp
+	[ 90355] = true, -- Ancient Hysteria
+	[146555] = true, -- Drums of Rage
+	[  1022] = true, -- Hand of Protection
+	[ 20707] = true, -- Soulstone
 	-- enchant procs where blizz forgot to tag the caster as the player
 	[116631] = true, -- Colossus
 	[120032] = true, -- Dancing Steel (agi)
 	[118335] = true, -- Dancing Steel (str) ???
 	[104993] = true, -- Jade Spirit ???
 	[116660] = true, -- River's Song ???
+}
+
+local ImportantDebuffs = {
+	[ 6788] = playerClass == "PRIEST", -- Weakened Soul
+	[25771] = playerClass == "PALADIN", -- Forbearance
+	[80354] = true, -- Temporal Displacement (applied by Time Warp)
+	[95809] = true, -- Insanity (applied by Ancient Hysteria)
+	[57724] = true, -- Sated (applied by Bloodlust)
+	[57723] = true, -- Exhaustion (applied by Heroism and Drums of Rage)
 }
 
 --- [encounterID] = {
@@ -121,11 +134,11 @@ local TankSwapDebuffs = {
 	},
 	-- Norushen
 	[1624] = {
-		[146124] = 1, -- Self Doubt
+		[146124] = 5, -- Self Doubt
 	},
 	-- Sha of Pride
 	[1604] = {
-		[144358] = 5, -- Wounded Pride
+		[144358] = 1, -- Wounded Pride
 	},
 	-- Galakras
 	[1622] = {
@@ -133,11 +146,11 @@ local TankSwapDebuffs = {
 	},
 	-- Iron Juggernaut
 	[1600] = {
-		[144467] = 4, -- Ignite Armor
+		[144467] = 3, -- Ignite Armor
 	},
 	-- Kor'kron Dark Shaman
 	[1606] = {
-		[144215] = 1, -- Froststorm Strike
+		[144215] = 5, -- Froststorm Strike
 	},
 	-- General Nazgrim
 	[1603] = {
@@ -145,7 +158,7 @@ local TankSwapDebuffs = {
 	},
 	-- Malkorok
 	[1595] = {
-		[142990] = 3, -- Fatal Strike ??? stacks
+		[142990] = 12, -- Fatal Strike
 	},
 	-- Thok the Bloodthirsty
 	[1599] = {
@@ -237,8 +250,6 @@ local CanDisarm = {
 local DebuffIDs = {}
 local TankDebuffs = {}
 
-local _, playerClass = UnitClass("player")
-
 local UpdateDisarms = function(canDisarm)
 	for i = 1, #Disarms do
 		DebuffIDs[Disarms[i]] = canDisarm
@@ -268,7 +279,7 @@ ns.CustomFilter = {
 
 		if (not UnitIsFriend("player", unit)) then
 			if (aura.isDebuff) then
-				if(aura.isPlayer or isBossDebuff or DebuffIDs[spellID]) then
+				if(aura.isPlayer or isBossDebuff or not UnitIsPlayer(caster) or DebuffIDs[spellID]) then
 					return true
 				end
 			else
