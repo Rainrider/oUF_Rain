@@ -395,26 +395,22 @@ local UpdateHealth = function(self, event, unit)
 	health:SetValue(cur)
 	health.disconnected = disconnected
 
-	local r, g, b, t, faded
-	if (health.colorDisconnected and disconnected or UnitIsDeadOrGhost(unit)) then
+	local r, g, b, t
+	if (disconnected and health.colorDisconnected or UnitIsDeadOrGhost(unit)) then
 		health:SetValue(max)
-		local _, class = UnitClass(unit)
-		t = UnitIsPlayer(unit) and self.colors.class[class] or self.colors.disconnected
-		faded = true
+		t = self.colors.disconnected
 	elseif (health.colorTapping and not UnitPlayerControlled(unit) and
 		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and
 		not UnitIsTappedByAllThreatList(unit)) then
 		t = self.colors.tapped
 	elseif (health.colorSmooth) then
 		r, g, b = ColorGradient(cur, max, unpack(self.colors.smooth))
+	else
+		r, g, b = 0.17, 0.17, 0.24
 	end
 
 	if (t) then
-		if (not faded) then
-			r, g, b = t[1], t[2], t[3]
-		else
-			r, g, b = t[1] * 0.5, t[2] * 0.5, t[3] * 0.5
-		end
+		r, g, b = t[1], t[2], t[3]
 	end
 
 	if (b) then

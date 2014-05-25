@@ -22,7 +22,7 @@ local RaidStyle = function(self, unit)
 	health:SetPoint("TOPLEFT")
 	health:SetStatusBarTexture(ns.media.TEXTURE)
 	health.colorDisconnected = true
-	health.colorSmooth = true
+	health.colorSmooth = nil
 	-- health.colorReaction = true -- TODO: coloring for mind-controlled units (need further events too)
 	health.frequentUpdates = nil
 	health:SetBackdrop(ns.media.BACKDROP)
@@ -33,7 +33,7 @@ local RaidStyle = function(self, unit)
 	local hpBG = health:CreateTexture(nil, "BORDER")
 	hpBG:SetAllPoints()
 	hpBG:SetTexture(ns.media.TEXTURE)
-	hpBG:SetVertexColor(0.15, 0.15, 0.15)
+	hpBG:SetVertexColor(0.84, 0.75, 0.65)
 	health.background = hpBG
 
 	local hpValue = ns.PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
