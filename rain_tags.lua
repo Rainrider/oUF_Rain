@@ -287,3 +287,14 @@ tags["rain:altpower"] = function(unit)
 	return format("%d - %d%%", cur, floor(cur / max * 100 + 0.5))
 end
 tagEvents["rain:altpower"] = "UNIT_POWER UNIT_MAXPOWER"
+
+tags["rain:status"] = function(unit)
+	if (not UnitIsConnected(unit)) then
+		return PLAYER_OFFLINE
+	elseif (UnitIsGhost(unit)) then
+		return GHOST
+	elseif (UnitIsDead(unit)) then
+		return DEAD
+	end
+end
+tagEvents["rain:status"] = "UNIT_CONNECTION UNIT_HEALTH"

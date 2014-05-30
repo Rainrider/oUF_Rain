@@ -45,6 +45,8 @@ local RaidStyle = function(self, unit)
 		elseif (ns.cfg.raidHealth == 2) then
 			self:Tag(hpValue, "[rain:raidpercenthp]")
 		end
+	else
+		self:Tag(hpValue, "[rain:status]")
 	end
 	health.value = hpValue
 
