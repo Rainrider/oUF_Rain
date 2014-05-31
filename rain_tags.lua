@@ -72,10 +72,8 @@ local SmallUnitHealthTag = function(unit)
 end
 
 tags["rain:namecolor"] = function(unit)
-	local color = {1, 1, 1}
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
-		color = {0.75, 0.75, 0.75}
-	elseif (UnitIsPlayer(unit)) then
+	local color = ns.colors.disconnected
+	if (UnitIsPlayer(unit)) then
 		local _, unitClass = UnitClass(unit)
 		if (unitClass) then
 			color = ns.colors.class[unitClass]
