@@ -154,7 +154,7 @@ local TankSwapDebuffs = {
 	},
 	-- General Nazgrim
 	[1603] = {
-		[143494] = 5, -- Sundering Blow
+		[143494] = 3, -- Sundering Blow
 	},
 	-- Malkorok
 	[1595] = {
