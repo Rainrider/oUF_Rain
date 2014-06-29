@@ -20,7 +20,6 @@ oUF.colors.power['GREEN_EMBERS'] = {100/255, 173/255, 21/255}
 
 local Update = function(self, event, unit, powerType)
 	if(unit and unit ~= 'player' or powerType and powerType ~= specPowerType) then return end
-	print('Update:', event, powerType)
 
 	local element = self.WarlockPowerBar
 	local power = 0
@@ -138,7 +137,7 @@ local ForceUpdate = function(element)
 end
 
 local Enable = function(self, unit)
-	if(unit ~= 'player' and playerClass ~= 'WARLOCK') then return end
+	if(unit ~= 'player' or playerClass ~= 'WARLOCK') then return end
 
 	local element = self.WarlockPowerBar
 
