@@ -1,207 +1,159 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
--- specs
+local _, playerClass = UnitClass'player'
+local spec = 0
+local specPowerType
+
 local SPEC_WARLOCK_AFFLICTION = SPEC_WARLOCK_AFFLICTION
 local SPEC_WARLOCK_DEMONOLOGY = SPEC_WARLOCK_DEMONOLOGY
 local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION
-
--- spell IDs
-local WARLOCK_SOULBURN = WARLOCK_SOULBURN
 local WARLOCK_BURNING_EMBERS = WARLOCK_BURNING_EMBERS
 local WARLOCK_GREEN_FIRE = WARLOCK_GREEN_FIRE
-
--- powerType
-local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS
 local SPELL_POWER_DEMONIC_FURY = SPELL_POWER_DEMONIC_FURY
 local SPELL_POWER_BURNING_EMBERS = SPELL_POWER_BURNING_EMBERS
-
---
 local MAX_POWER_PER_EMBER = MAX_POWER_PER_EMBER
-local spec = 0
 
-oUF.colors.warlock = {
-	["SOUL_SHARDS"] = {1, 0, 1},
-	["BURNING_EMBERS"] = {1, 0, 0},
-	["BURNING_EMBERS_GREEN"] = {0, 1, 0},
-	["DEMONIC_FURY"] = {0, 1, 1},
-}
+oUF.colors.power['DEMONIC_FURY'] = {155/255, 70/255, 209/255}
+oUF.colors.power['BURNING_EMBERS'] = {242/255, 149/255, 32/255}
+oUF.colors.power['GREEN_EMBERS'] = {100/255, 173/255, 21/255}
 
-local Path
+local Update = function(self, event, unit, powerType)
+	if(unit and unit ~= 'player' or powerType and powerType ~= specPowerType) then return end
+	print('Update:', event, powerType)
+
+	local element = self.WarlockPowerBar
+	local power = 0
+
+	if(element.PreUpdate) then
+		element:PreUpdate()
+	end
+
+	if(powerType == 'DEMONIC_FURY') then
+		power = UnitPower('player', SPELL_POWER_DEMONIC_FURY)
+
+		element[1]:SetValue(power)
+	elseif(powerType == 'BURNING_EMBERS') then
+		power = UnitPower('player', SPELL_POWER_BURNING_EMBERS, true)
+
+		for i = 1, 4 do
+			element[i]:SetValue(power)
+		end
+	end
+
+	if(element.PostUpdate) then
+		element:PostUpdate(powerType, power)
+	end
+end
+
+local Path = function(self, ...)
+	return (self.WarlockPowerBar.Override or Update)(self, ...)
+end
+
 local Visibility
 Visibility = function(self, event)
 	local element = self.WarlockPowerBar
-
-	spec = GetSpecialization()
-	local power = 0
-	local maxPower = 0
-	local powerType
-	local color
-	local r, g, b
 	local show
 
-	-- oUF will refresh the unit on vehicle so no need to register the events
-	if (spec and not UnitHasVehicleUI("player")) then
-		if (spec == SPEC_WARLOCK_AFFLICTION) then
-			if (IsPlayerSpell(WARLOCK_SOULBURN)) then
-				self:UnregisterEvent("SPELLS_CHANGED", Visibility)
+	spec = GetSpecialization() or 0
 
-				show = true
-				powerType = "SOUL_SHARDS"
-				power = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
-				maxPower = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
-				color = self.colors.warlock[powerType]
-				r, g, b = color[1], color[2], color[3]
-
-				for i = 1, 4 do
-					element[i]:SetStatusBarColor(r, g, b)
-					element[i]:SetMinMaxValues(0, 1)
-
-					if (element[i].bg) then
-						local mult = element[i].bg.multiplier or 1
-						element[i].bg:SetVertexColor(r * mult, g * mult, b * mult)
-					end
-
-					if (i <= maxPower) then
-						element[i]:Show()
-					else
-						element[i]:Hide()
-					end
-				end
-			else
-				self:RegisterEvent("SPELLS_CHANGED", Visibility, true)
-			end
-		elseif (spec == SPEC_WARLOCK_DEMONOLOGY) then
-			self:UnregisterEvent("SPELLS_CHANGED", Visibility)
+	if(spec > SPEC_WARLOCK_AFFLICTION and not UnitHasVehicleUI'player') then
+		if(spec == SPEC_WARLOCK_DEMONOLOGY) then
+			self:UnregisterEvent('SPELLS_CHANGED', Visibility)
 
 			show = true
-			powerType = "DEMONIC_FURY"
-			power = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
-			maxPower = UnitPowerMax("player", SPELL_POWER_DEMONIC_FURY)
-			color = self.colors.warlock[powerType]
-			r, g, b = color[1], color[2], color[3]
+			specPowerType = 'DEMONIC_FURY'
 
-			element[1]:SetStatusBarColor(r, g, b)
-			element[1]:SetMinMaxValues(0, maxPower)
+			local color = self.colors.power[specPowerType]
+			local red, green, blue = color[1], color[2], color[3]
 
-			if (element[1].bg) then
-				local mult = element[1].bg.multiplier or 1
-				element[1].bg:SetVertexColor(r * mult, g * mult, b * mult)
-			end
-
-			for i = 2, 4 do
-				element[i]:Hide()
-			end
-		elseif (spec == SPEC_WARLOCK_DESTRUCTION) then
-			self:RegisterEvent("SPELLS_CHANGED", Visibility, true)
-
-			if (IsPlayerSpell(WARLOCK_BURNING_EMBERS)) then
-				show = true
-				powerType = "BURNING_EMBERS"
-				power = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
-				maxPower = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS)
-
-				if (IsSpellKnown(WARLOCK_GREEN_FIRE)) then
-					color = self.colors.warlock["BURNING_EMBERS_GREEN"]
-					r, g, b = color[1], color[2], color[3]
+			for i = 1, 4 do
+				local segment = element[i]
+				if(i > 1) then
+					segment:Hide()
 				else
-					color = self.colors.warlock[powerType]
-					r, g, b = color[1], color[2], color[3]
+					segment:SetMinMaxValues(0, UnitPowerMax('player', SPELL_POWER_DEMONIC_FURY))
+					segment:SetStatusBarColor(red, green, blue)
+					if(segment.bg) then
+						local mult = segment.bg.multiplier or 1
+						segment.bg:SetVertexColor(red * mult, green * mult, blue * mult)
+					end
+					segment:Show()
 				end
+			end
+		elseif(spec == SPEC_WARLOCK_DESTRUCTION) then
+			-- we keep this registered because of green fire
+			self:RegisterEvent('SPELLS_CHANGED', Visibility, true)
+
+			if(IsPlayerSpell(WARLOCK_BURNING_EMBERS)) then
+				show = true
+				specPowerType = 'BURNING_EMBERS'
+
+				local color
+				if(IsSpellKnown(WARLOCK_GREEN_FIRE)) then
+					color = self.colors.power['GREEN_EMBERS']
+				else
+					color = self.colors.power[specPowerType]
+				end
+				local red, green, blue = color[1], color[2], color[3]
 
 				for i = 1, 4 do
-					element[i]:SetStatusBarColor(r, g, b)
-					element[i]:SetMinMaxValues(MAX_POWER_PER_EMBER * i - MAX_POWER_PER_EMBER, MAX_POWER_PER_EMBER * i)
-
-					if (element[i].bg) then
-						local mult = element[i].bg.multiplier or 1
-						element[i].bg:SetVertexColor(r * mult, g * mult, b * mult)
+					local segment = element[i]
+					segment:SetStatusBarColor(red, green, blue)
+					segment:SetMinMaxValues(MAX_POWER_PER_EMBER * i - MAX_POWER_PER_EMBER, MAX_POWER_PER_EMBER * i)
+					if(segment.bg) then
+						local mult = segment.bg.multiplier or 1
+						segment.bg:SetVertexColor(red * mult, green * mult, blue * mult)
 					end
-
-					if (i <= maxPower) then
-						element[i]:Show()
-					else
-						element[i]:Hide()
-					end
+					segment:Show()
 				end
 			end
 		end
 	end
 
-	if (not show) then
+	if(not show) then
+		self:UnregisterEvent('UNIT_POWER', Path)
+		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
+		self:UnregisterEvent('SPELLS_CHANGED', Visibility)
+
 		for i = 1, 4 do
 			element[i]:Hide()
 		end
 	end
 
-	if (element.PostUpdateVisibility) then
-		element:PostUpdateVisibility(spec, power, maxPower)
+	if(element.PostUpdateVisibility) then
+		element:PostUpdateVisibility(spec, show)
 	end
 
-	if (show) then
-		return Path(self, "Visibility", self.unit, powerType)
+	if(show) then
+		self:RegisterEvent('UNIT_POWER', Path)
+		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)
+
+		return Path(self, 'Visibility'..event, self.unit, specPowerType)
 	end
-end
-
-local Update = function(self, event, unit, powerType)
-	if (unit ~= "player") then return end
-
-	if (powerType and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY" and powerType ~= "BURNING_EMBERS" or not powerType) then return end
-
-	local element = self.WarlockPowerBar
-	local power = 0
-	local maxPower = 0
-
-	if (powerType == "SOUL_SHARDS" and spec == 1) then
-		power = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
-		maxPower = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
-
-		for i = 1, maxPower do
-			if (i <= power) then
-				element[i]:SetValue(1)
-			else
-				element[i]:SetValue(0)
-			end
-		end
-	elseif (powerType == "DEMONIC_FURY" and spec == 2) then
-		power = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
-		maxPower = UnitPowerMax("player", SPELL_POWER_DEMONIC_FURY)
-
-		element[1]:SetValue(power)
-	elseif (powerType == "BURNING_EMBERS" and spec == 3) then
-		power = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
-		maxPower = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS)
-
-		for i = 1, maxPower do
-			element[i]:SetValue(power)
-		end
-	end
-
-	if (element.PostUpdate) then
-		element:PostUpdate(powerType, power, maxPower)
-	end
-end
-
-Path = function(self, ...)
-	return (self.WarlockPowerBar.Override or Update) (self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Visibility(element.__owner, "ForceUpdate")
+	return Visibility(element.__owner, 'ForceUpdate')
 end
 
 local Enable = function(self, unit)
-	if (unit ~= "player") then return end
+	if(unit ~= 'player' and playerClass ~= 'WARLOCK') then return end
 
 	local element = self.WarlockPowerBar
 
-	if (element) then
+	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("UNIT_POWER", Path)
-		self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
-		self:RegisterEvent("PLAYER_TALENT_UPDATE", Visibility, true)
+		for i = 1, 4 do
+			local segment = element[i]
+			if(segment:IsObjectType'StatusBar' and not segment:GetStatusBarTexture()) then
+				segment:SetStatusBarTexture[=[Interface\TargetingFrame\UI-StatusBar]=]
+			end
+		end
+
+		self:RegisterEvent('PLAYER_TALENT_UPDATE', Visibility, true)
 
 		return true
 	end
@@ -210,11 +162,11 @@ end
 local Disable = function(self)
 	local element = self.WarlockPowerBar
 
-	if (element) then
-		self:UnregisterEvent("UNIT_POWER", Path)
-		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
-		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Visibility)
-		self:UnregisterEvent("SPELLS_CHANGED", Visibility)
+	if(element) then
+		self:UnregisterEvent('UNIT_POWER', Path)
+		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
+		self:UnregisterEvent('PLAYER_TALENT_UPDATE', Visibility)
+		self:UnregisterEvent('SPELLS_CHANGED', Visibility)
 
 		for i = 1, 4 do
 			element[i]:Hide()
@@ -222,4 +174,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement("Rain_WarlockPowerBar", Visibility, Enable, Disable)
+oUF:AddElement('Rain_WarlockPowerBar', Visibility, Enable, Disable)

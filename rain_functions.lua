@@ -429,18 +429,18 @@ local UpdateThreat = function(self, event, unit)
 		self.FrameBackdrop:SetBackdropColor(r, g, b, 1)
 	else
 		self.FrameBackdrop:SetBackdropColor(0, 0, 0, 0)
-	end	
+	end
 end
 
-local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower)
+local WarlockPowerPostUpdateVisibility = function(element, spec, power)
 	local height = element.height
 	local spacing = element.spacing
-	local width = (element.width - maxPower * spacing - spacing) / maxPower -- factoring causes rounding issues?
+	local width = (element.width - 4 * spacing - spacing) / 4 -- factoring causes rounding issues?
 	spacing = width + spacing
 
-	if (spec) then
-		if (spec == 1 or spec == 3) then -- Affliction or Destruction
-			for i = 1, maxPower do
+	if (spec > 1) then
+		if (spec == 3) then -- Destruction
+			for i = 1, 4 do
 				element[i]:ClearAllPoints()
 				element[i]:SetSize(width, height)
 				element[i]:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
@@ -460,9 +460,9 @@ local WarlockPowerPostUpdateVisibility = function(element, spec, power, maxPower
 end
 
 local MAX_POWER_PER_EMBER = MAX_POWER_PER_EMBER
-local WarlockPostUpdatePower = function(element, powerType, power, maxPower)
+local WarlockPostUpdatePower = function(element, powerType, power)
 	if (powerType == "BURNING_EMBERS") then
-		for i = 1, maxPower do
+		for i = 1, 4 do
 			if (i <= power / MAX_POWER_PER_EMBER) then
 				element[i]:SetBackdropColor(1, 0.5, 0)
 			else
@@ -619,7 +619,7 @@ local AddBuffs = function(self, unit)
 			buffs.initialAnchor = "TOPLEFT"
 			buffs["growth-x"] = "RIGHT"
 		end
-		
+
 		buffs.CustomFilter = ns.CustomFilter[unit]
 	end
 
@@ -709,7 +709,7 @@ ns.AddCastbar = AddCastbar
 local AddClassPowerIcons = function(self, width, height, spacing)
 	local classIcons = {}
 
-	classIcons.width  = width
+	classIcons.width = width
 	classIcons.height = height
 	classIcons.spacing = spacing
 

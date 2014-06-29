@@ -31,7 +31,8 @@ local UnitSpecific = {
 		elseif (playerClass == "PRIEST") then
 			ns.AddClassPowerIcons(self, 215, 5, 1)
 		elseif (playerClass == "WARLOCK") then
-			ns.AddWarlockPowerBar(self, 215, 5, 1)
+			ns.AddClassPowerIcons(self, 215, 5, 1) -- for soul shards
+			ns.AddWarlockPowerBar(self, 215, 5, 1) -- for demonic fury and burning embers
 		end
 
 		ns.AddCombatIcon(self)
@@ -524,6 +525,7 @@ SlashCmdList.OUF_RAIN = function(group)
 			local header = oUF:SpawnHeader(
 				"oUF_Rain_TestRaidGroup"..i, nil, "solo",
 				"showSolo", true,
+				"showRaid", true,
 				"yOffset", -7.5,
 				"oUF-initialConfigFunction", [[
 					self:SetWidth(64)
@@ -532,7 +534,7 @@ SlashCmdList.OUF_RAIN = function(group)
 			)
 			raid[i] = header
 			if (i == 1) then
-				header:SetPoint("TOPLEFT", UIParent, 15, -15)
+				header:SetPoint("LEFT", UIParent, 150, -15)
 			else
 				header:SetPoint("TOPLEFT", raid[i - 1], "TOPRIGHT", 7.5, 0)
 			end
