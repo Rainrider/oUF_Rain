@@ -211,15 +211,13 @@ local UpdateMonkStagger = function(Power, unit)
 
 	if (ns.playerSpec ~= SPEC_MONK_BREWMASTER) then return end
 
-	local unitHealth = UnitHealth(unit)
-	unitHealth = unitHealth > 0 and unitHealth or UnitHealthMax(unit) -- in the seldom case of UnitIsUnconscious(unit) == true
-	local staggerPercent = UnitStagger(unit) / unitHealth
+	local staggerPercent = UnitStagger(unit) / UnitHealthMax(unit)
 	local color
 
-	if (staggerPercent > STAGGER_YELLOW_TRANSITION and staggerPercent < STAGGER_RED_TRANSITION) then
-		color = Power.__owner.colors.power["STAGGER"][2]
-	elseif (staggerPercent >= STAGGER_RED_TRANSITION) then
+	if (staggerPercent >= STAGGER_RED_TRANSITION) then
 		color = Power.__owner.colors.power["STAGGER"][3]
+	elseif (staggerPercent >= STAGGER_YELLOW_TRANSITION) then
+		color = Power.__owner.colors.power["STAGGER"][2]
 	else
 		color = Power.__owner.colors.power["STAGGER"][1]
 	end
