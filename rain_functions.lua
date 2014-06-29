@@ -205,7 +205,7 @@ local UnitStagger = UnitStagger
 --]]
 
 local UpdateMonkStagger = function(Power, unit)
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
+	if (Power.disconnected or UnitIsDeadOrGhost(unit)) then
 		return Power:SetValue(0)
 	end
 
@@ -231,7 +231,7 @@ end
 ns.UpdateMonkStagger = UpdateMonkStagger
 
 local PostUpdatePower = function(Power, unit, cur, max)
-	if (not UnitIsConnected(unit) or UnitIsDeadOrGhost(unit)) then
+	if (Power.disconnected or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)
 	end
 
