@@ -5,7 +5,7 @@
 ## Notes: oUF layout
 ## X-Credits: Caellian, HankTheTank, haste, p3lim, Phanx, zork
 ## RequiredDeps: oUF
-## OptionalDeps: oUF_Reputation, oUF_Swing
+## OptionalDeps: AdiDebug, oUF_Reputation, oUF_Swing
 
 ## SavedVariables: oUF_RainDB
 
