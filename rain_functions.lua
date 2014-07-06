@@ -1,5 +1,7 @@
 local _, ns = ...
 
+local Debug = ns.Debug
+
 local format = format
 
 local playerClass = ns.playerClass
@@ -253,6 +255,7 @@ end
 ns.PostUpdatePower = PostUpdatePower
 
 local CreateAuraIcon = function(Auras, index)
+	local unit = string.match(Auras.__owner.unit, "([a-z]+)%d*")
 	Auras.createdIcons = Auras.createdIcons + 1 -- need to do this
 
 	local button = CreateFrame("Button", nil, Auras)
@@ -283,9 +286,11 @@ local CreateAuraIcon = function(Auras, index)
 	stealable:SetVertexColor(unpack(oUF.colors.class[playerClass]))
 	button.stealable = stealable
 	-- timer text
-	local remaining = PutFontString(button, ns.media.FONT, 9, "OUTLINE", "LEFT")
-	remaining:SetPoint("TOPLEFT", -0.5, 0)
-	button.remaining = remaining
+	if (unit ~= "raid") then
+		local remaining = PutFontString(button, ns.media.FONT, 9, "OUTLINE", "LEFT")
+		remaining:SetPoint("TOPLEFT", -0.5, 0)
+		button.remaining = remaining
+	end
 
 	button.UpdateTooltip = UpdateAuraTooltip
 	button:SetScript("OnEnter", AuraOnEnter)
@@ -317,17 +322,19 @@ local PostUpdateIcon = function(Auras, unit, aura, index, offset)
 		end
 	end
 
-	if (duration and duration > 0) then
-		aura.remaining:Show()
-		aura.timeLeft = expirationTime
-		aura:SetScript("OnUpdate", CreateAuraTimer)
-	else
-		aura.remaining:Hide()
-		aura.timeLeft = math.huge
-		aura:SetScript("OnUpdate", nil)
-	end
+	if (aura.remaining) then
+		if (duration and duration > 0) then
+			aura.remaining:Show()
+			aura.timeLeft = expirationTime
+			aura:SetScript("OnUpdate", CreateAuraTimer)
+		else
+			aura.remaining:Hide()
+			aura.timeLeft = math.huge
+			aura:SetScript("OnUpdate", nil)
+		end
 
-	aura.first = true
+		aura.first = true
+	end
 end
 
 local PostUpdateGapIcon = function(Auras, unit, aura, index)
@@ -524,7 +531,20 @@ end
 
 --[[ LAYOUT FUNCTIONS ]]--
 local AddAuras = function(self, unit)
-	local auras = CreateFrame("Frame", self:GetName().."_Auras", self)
+	local auras = CreateFrame("Frame", self:GetName().."_Auras", unit ~= "raid" and self or self.Health)
+
+	auras.numBuffs = 3
+	auras.numDebuffs = 3
+	auras.gap = true
+	auras.spacing = 6
+	auras.size = (230 - 7 * auras.spacing) / 8
+	auras:SetSize(7 * (auras.size + auras.spacing), auras.size + auras.spacing)
+	auras.disableCooldown = true
+	auras.showType = true
+	auras.CreateIcon = CreateAuraIcon
+	auras.PreSetPosition = PreSetPosition
+	auras.PostUpdateIcon = PostUpdateIcon
+	auras.PostUpdateGapIcon = PostUpdateGapIcon
 
 	if (unit == "party") then
 		if (ns.cfg.horizParty) then
@@ -543,22 +563,20 @@ local AddAuras = function(self, unit)
 		auras.initialAnchor = "RIGHT"
 		auras["growth-x"] = "LEFT"
 		auras["growth-y"] = "UP"
+	elseif (unit == "raid") then
+		auras.numBuffs = 2
+		auras.numDebuffs = 2
+		auras.gap = nil
+		auras.spacing = 1
+		auras.size = 12
+		auras:SetSize(4 * (auras.size + auras.spacing), auras.size + auras.spacing)
+		auras.showType = nil -- so that oUF hides the border
+		auras.PreSetPosition = nil
+		auras.PostUpdateGapIcon = nil
+		auras:SetPoint("BOTTOMLEFT", self.Power, "TOPLEFT", 0, 0)
 	end
-	auras.numBuffs = 3
-	auras.numDebuffs = 3
-	auras.gap = true
-	auras.spacing = 6
-	auras.size = (230 - 7 * auras.spacing) / 8
-	auras:SetSize(7 * (auras.size + auras.spacing), auras.size + auras.spacing)
-	auras.disableCooldown = true
-	auras.showType = true
-	auras.onlyShowPlayer = false
-	auras.CreateIcon = CreateAuraIcon
-	auras.PreSetPosition = PreSetPosition
-	auras.PostUpdateIcon = PostUpdateIcon
-	auras.PostUpdateGapIcon = PostUpdateGapIcon
-	auras.buffFilter = nil
-	auras.debuffFilter = nil
+
+	auras.CustomFilter = ns.CustomFilter[unit]
 
 	self.Auras = auras
 end

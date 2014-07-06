@@ -83,11 +83,12 @@ local RaidStyle = function(self, unit)
 	ns.AddResurrectIcon(self)
 
 	--[[ ELEMENTS ]]--
+	ns.AddAuras(self, unit)
 	ns.AddDebuffHighlight(self, unit)
 	ns.AddHealPredictionBar(self, unit)
 	ns.AddRangeCheck(self)
 	ns.AddThreatHighlight(self)
-	
+
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", function(self)
 		if (UnitIsUnit(self.unit, "target")) then
 			self.FrameBackdrop:SetBackdropBorderColor(1, 1, 0)
