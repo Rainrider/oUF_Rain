@@ -1,5 +1,9 @@
 local _, ns = ...
 
+local Debug = ns.Debug
+
+local LPS = LibStub("LibPlayerSpells-1.0")
+
 local _, playerClass = UnitClass("player")
 
 local PlayerWhiteList = {
@@ -184,8 +188,8 @@ local TankSwapDebuffs = {
 	},
 	-- Garrosh Hellscream
 	[1623] = {
-		[145183] = 8, -- Gripping Despair
-		[145195] = 8, -- Empowered Gripping Despair
+		[145183] = 3, -- Gripping Despair
+		[145195] = 3, -- Empowered Gripping Despair
 	},
 }
 
@@ -262,6 +266,56 @@ local UpdateTaunts = function(addTaunt)
 	end
 end
 
+local RaidAuras = {}
+
+local PopulateFilterTable = function(method, FilterTable, anyOf, include, exclude, role)
+	if (method == "LPS") then
+		if (not LPS) then
+			Debug("auraFilter", "|cffff0000LibPlayerSpells not found.|r")
+			return
+		end
+		-- clean-up if the player respec'd
+		for spellID, forRole in pairs(FilterTable) do
+			if (forRole ~= true and forRole ~= role) then
+				Debug("auraFilter", "Cleaning", spellID, GetSpellLink(spellID), "for role", forRole)
+				FilterTable[spellID] = nil
+			end
+		end
+
+		for buff, flags in LPS:IterateSpells(anyOf, include, exclude) do
+			FilterTable[buff] = role
+			Debug("auraFilter", "Watching", buff, GetSpellLink(buff), "in", FilterTable, "for role", role)
+		end
+	elseif (method == "BigWigs") then
+		if (not BigWigsLoader or not BigWigsLoader.RegisterMessage) then
+			Debug("aurafilter", "|cffff0000BigWigs not found or BigWigs verion too low.|r")
+			return
+		end
+
+		BigWigsLoader.RegisterMessage(RaidAuras, "BigWigs_OnBossLog", function(_, bossMod, event, ...)
+			if (event ~= "SPELL_AURA_APPLIED" and event ~= "SPELL_AURA_APPLIED_DOSE" and event ~= "SPELL_CAST_SUCCESS") then return end
+			for i = 1, select("#", ...) do
+				local id = select(i, ...)
+				Debug("auraFilter", "Watching", id, GetSpellLink(id), "for", bossMod:GetName())
+				FilterTable[id] = bossMod
+			end
+		end)
+
+		BigWigsLoader.RegisterMessage(RaidAuras, "BigWigs_OnBossDisable", function(_, bossMod)
+			Debug("auraFilter", bossMod:GetName(), "disabled, cleaning the debuffs list")
+			for id, mod in pairs(FilterTable) do
+				if mod == bossMod then
+					FilterTable[id] = nil
+				end
+			end
+		end)
+
+		Debug("auraFilter", "Using BigWigs for encounter debuffs")
+	else
+		Debug("auraFilter", "|cffff0000Filtering method", method, "unknown.|r")
+	end
+end
+
 ns.CustomFilter = {
 	player = function(Auras, unit, aura, name, rank, texture, count, dtype, duration, timeLeft, caster, canStealOrPurge, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 		if (aura.isDebuff) then
@@ -300,6 +354,11 @@ ns.CustomFilter = {
 			return true
 		end
 	end,
+	raid = function(_, _, _, _, _, _, _, _, _, _, _, _, _, spellID)
+		if (RaidAuras[spellID]) then
+			return true
+		end
+	end
 }
 
 local Frame = CreateFrame("Frame")
@@ -312,10 +371,12 @@ function Frame:PLAYER_SPECIALIZATION_CHANGED(unit)
 	if not unit or unit == "player" then
 		local _, _, _, _, _, role = GetSpecializationInfo(GetSpecialization() or 0) -- we can't rely on ns.playerSpec being correct
 		if role == "TANK" then
+			PopulateFilterTable("LPS", RaidAuras, "SURVIVAL", "AURA", "PERSONAL", role)
 			UpdateTaunts(true)
 			self:RegisterEvent("ENCOUNTER_START")
 			self:RegisterEvent("ENCOUNTER_END")
 		else
+			PopulateFilterTable("LPS", RaidAuras, "SURVIVAL", "AURA", "PERSONAL", role) -- to issue a clean-up
 			UpdateTaunts()
 			self:UnregisterEvent("ENCOUNTER_START")
 			self:UnregisterEvent("ENCOUNTER_END")

@@ -3,9 +3,9 @@
 ## Author: Rainrider
 ## Version: pre alpha
 ## Notes: oUF layout
-## X-Credits: Caellian, HankTheTank, haste, p3lim, Phanx, zork
+## X-Credits: Adirelle, Caellian, HankTheTank, haste, p3lim, Phanx, zork
 ## RequiredDeps: oUF
-## OptionalDeps: AdiDebug, oUF_Reputation, oUF_Swing
+## OptionalDeps: AdiDebug, BigWigs, LibPlayerSpells-1.0, LibStub, oUF_Reputation, oUF_Swing
 
 ## SavedVariables: oUF_RainDB
 
