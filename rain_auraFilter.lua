@@ -32,164 +32,110 @@ local ImportantDebuffs = {
 	[57723] = true, -- Exhaustion (applied by Heroism and Drums of Rage)
 }
 
---- [encounterID] = {
----		debuffID = stackSize (0 means spot away when debuff expires)
---- }
-
 local TankSwapDebuffs = {
 	----------------------
 	-- MOGU'SHAN VAULTS --
 	----------------------
+	[896] = {
 	-- Feng the Accursed
-	[1390] = {
-		[131788] = 2, -- Lightning Lash
-		[116942] = 2, -- Flaming Spear
-		[131790] = 2, -- Arcane Shock
-	},
+		[131788] =  2, -- Lightning Lash
+		[116942] =  2, -- Flaming Spear
+		[131790] =  2, -- Arcane Shock
 	-- Gara'jal the Spiritbinder
-	[1434] = {
-		[122151] = 0, -- Voodoo Dolls (Probably unneeded)
-	},
-	 -- Elegon
-	[1500] = {
+		[122151] =  0, -- Voodoo Dolls (Probably unneeded)
+	-- Elegon
 		[117878] = 10, -- Overcharged (not in LFR)
 	},
 	-------------------
 	-- HEART OF FEAR --
 	-------------------
+	[897] = {
 	-- Blade Lord Ta'yak
-	[1504] = {
-		[123474] = 2, -- Overwhelming Assault
-	},
-	 -- Amber-Shaper Un'sok
-	[1499] = {
-		[122370] = 1, -- Reshape Life
-		[121949] = 1, -- Parasitic Growth TODO: can it be applied to tanks?
-	},
-	 -- Grand Empress Shek'zeer
-	[1501] = {
-		[123707] = 4, -- Eyes of the Empress
+		[123474] =  2, -- Overwhelming Assault
+	-- Amber-Shaper Un'sok
+		[122370] =  1, -- Reshape Life
+		[121949] =  1, -- Parasitic Growth TODO: can it be applied to tanks?
+	-- Grand Empress Shek'zeer
+		[123707] =  4, -- Eyes of the Empress
 	},
 	-------------------------------
 	-- TERRACE OF ENDLESS SPRING --
 	-------------------------------
-	-- Tsulong 742
-	[1505] = {
-		[122752] = 1, -- Shadow Breath
-	},
-	-- Lei Shi 729
-	[1506] = {
+	[886] = {
+	-- Tsulong
+		[122752] =  1, -- Shadow Breath
+	-- Lei Shi
 		[123121] = 30, -- Spray
 	},
 	-----------------------
 	-- THRONE OF THUNDER --
 	-----------------------
+	[930] = {
 	-- Jin'rokh the Breaker
-	[1577] = {
-		[138349] = 1, -- Static Wound
-	},
+		[138349] =  1, -- Static Wound
 	-- Horridon
-	[1575] = {
-		[136767] = 6, -- Triple Puncture
-	},
+		[136767] =  6, -- Triple Puncture
 	-- Council of Elders
-	[1570] = {
 		[136903] = 12, -- Frigid Assault
-	},
 	-- Ji-Kun
-	[1573] = {
-		[134366] = 3, -- Talon Rake
+		[134366] =  3, -- Talon Rake
 		[140092] = 10, -- Infected Talons
-	},
 	-- Durumu the Forgotten
-	[1572] = {
-		[133767] = 4, -- Serious Wound
-	},
+		[133767] =  4, -- Serious Wound
 	-- Primordius
-	[1574] = {
-		[136050] = 6, -- Malformed Blood
-	},
+		[136050] =  6, -- Malformed Blood
 	-- Dark Animus
-	[1576] = {
-		[136962] = 1, -- Anima Ring
-	},
+		[136962] =  1, -- Anima Ring
 	-- Iron Qon
-	[1559] = {
-		[134691] = 5, -- Impale
-	},
+		[134691] =  5, -- Impale
 	-- Twin Consorts
-	[1560] = {
-		[137375] = 1, -- Beast of Nightmares
-		[137408] = 4, -- Fan of Flames
-	},
+		[137375] =  1, -- Beast of Nightmares
+		[137408] =  4, -- Fan of Flames
 	-- Lei Shen
-	[1579] = {
-		[134916] = 1, -- Decapitate
-		[136478] = 1, -- Fusion Slash
+		[134916] =  1, -- Decapitate
+		[136478] =  1, -- Fusion Slash
 		[136914] = 10, -- Electrical Shock
 		[136913] = 10, -- Overwhelming Power TODO: which one get applied to the tank
 	},
 	------------------------
-	-- Siege of Orgrimmar --
+	-- SIEGE OF ORGRIMMAR --
 	------------------------
+	[953] = {
 	-- Immerseus
-	[1602] = {
-		[143436] = 1, -- Corrosive Blast
-	},
+		[143436] =  1, -- Corrosive Blast
 	-- Norushen
-	[1624] = {
-		[146124] = 5, -- Self Doubt
-	},
+		[146124] =  5, -- Self Doubt
 	-- Sha of Pride
-	[1604] = {
-		[144358] = 1, -- Wounded Pride
-	},
+		[144358] =  1, -- Wounded Pride
 	-- Galakras
-	[1622] = {
-		[147029] = 3, -- Flames of Galakrond
-	},
+		[147029] =  3, -- Flames of Galakrond
 	-- Iron Juggernaut
-	[1600] = {
-		[144467] = 3, -- Ignite Armor
-	},
+		[144467] =  3, -- Ignite Armor
 	-- Kor'kron Dark Shaman
-	[1606] = {
-		[144215] = 5, -- Froststorm Strike
-	},
+		[144215] =  5, -- Froststorm Strike
 	-- General Nazgrim
-	[1603] = {
-		[143494] = 3, -- Sundering Blow
-	},
+		[143494] =  3, -- Sundering Blow
 	-- Malkorok
-	[1595] = {
 		[142990] = 12, -- Fatal Strike
-	},
 	-- Thok the Bloodthirsty
-	[1599] = {
-		[143766] = 3, -- Panic (applied by Fearsome Roar)
-		[143780] = 3, -- Acid Breath
-		[143773] = 3, -- Freezing Breath
-		 [83855] = 3, -- Scorching Breath ??? id
-	},
+		[143766] =  3, -- Panic (applied by Fearsome Roar)
+		[143780] =  3, -- Acid Breath
+		[143773] =  3, -- Freezing Breath
+		[ 83855] =  3, -- Scorching Breath ??? id
 	-- Siegecrafter Blackfuse
-	[1601] = {
-		[143385] = 3, -- Electrostatic Charge
-	},
+		[143385] =  3, -- Electrostatic Charge
 	-- Paragons of the Klaxxi
-	[1593] = {
 		-- Skeer the Bloodseeker
-		[143275] = 3, -- Hewn (only if Rik'kal lives) ??? stacks
+		[143275] =  3, -- Hewn (only if Rik'kal lives) ??? stacks
 		-- Rik'kal the Dissector
-		[143279] = 3, -- Genetic Alteration (only if Skeer lives) ??? stacks
+		[143279] =  3, -- Genetic Alteration (only if Skeer lives) ??? stacks
 		-- Xaril the Poisoned Mind
-		[142929] = 3, -- Tenderizing Strikes (only of Kil'ruk lives) ??? stacks
+		[142929] =  3, -- Tenderizing Strikes (only of Kil'ruk lives) ??? stacks
 		-- Kil'ruk the Wind-Reaver
-		[142931] = 3, -- Exposed Veins (only if Xaril lives) ??? stackSize
-	},
+		[142931] =  3, -- Exposed Veins (only if Xaril lives) ??? stackSize
 	-- Garrosh Hellscream
-	[1623] = {
-		[145183] = 3, -- Gripping Despair
-		[145195] = 3, -- Empowered Gripping Despair
+		[145183] =  3, -- Gripping Despair
+		[145195] =  3, -- Empowered Gripping Despair
 	},
 }
 
@@ -284,7 +230,7 @@ local PopulateFilterTable = function(method, FilterTable, anyOf, include, exclud
 
 		for buff, flags in LPS:IterateSpells(anyOf, include, exclude) do
 			FilterTable[buff] = role
-			Debug("auraFilter", "Watching", buff, GetSpellLink(buff), "in", FilterTable, "for role", role)
+			Debug("auraFilter", "Watching", buff, GetSpellLink(buff), "for role", role)
 		end
 	elseif (method == "BigWigs") then
 		if (not BigWigsLoader or not BigWigsLoader.RegisterMessage) then
@@ -373,13 +319,11 @@ function Frame:PLAYER_SPECIALIZATION_CHANGED(unit)
 		if role == "TANK" then
 			PopulateFilterTable("LPS", RaidAuras, "SURVIVAL", "AURA", "PERSONAL", role)
 			UpdateTaunts(true)
-			self:RegisterEvent("ENCOUNTER_START")
-			self:RegisterEvent("ENCOUNTER_END")
+			self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 		else
 			PopulateFilterTable("LPS", RaidAuras, "SURVIVAL", "AURA", "PERSONAL", role) -- to issue a clean-up
 			UpdateTaunts()
-			self:UnregisterEvent("ENCOUNTER_START")
-			self:UnregisterEvent("ENCOUNTER_END")
+			self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
 		end
 	end
 end
@@ -388,33 +332,19 @@ function Frame:SPELLS_CHANGED()
 	UpdateDisarms(CanDisarm[playerClass]() or nil)
 end
 
+function Frame:ZONE_CHANGED_NEW_AREA()
+	local mapID = GetCurrentMapAreaID()
+	local EncounterDebuffs = TankSwapDebuffs[mapID]
+	if (not EncounterDebuffs) then return end
+	Debug("auraFilter", "Adding tank swap debuffs for", GetMapNameByID(mapID))
+	for spellID, stackCount in pairs(EncounterDebuffs) do
+		Debug("auraFilter", spellID, GetSpellLink(spellID), stackCount)
+		TankDebuffs[spellID] = stackCount
+	end
+end
+
 function Frame:PLAYER_ENTERING_WORLD()
 	self:PLAYER_SPECIALIZATION_CHANGED("player")
 	self:SPELLS_CHANGED()
-	if (not IsEncounterInProgress()) then
-		ns.db.encounterID = nil
-	end
-	if (ns.db.encounterID) then
-		self:ENCOUNTER_START(ns.db.encounterID)
-	end
-end
-
-function Frame:ENCOUNTER_START(encounterID, name, difficultyID, size)
-	ns.db.encounterID = encounterID
-	table.wipe(TankDebuffs)
-	local currentEncounterDebuffs = TankSwapDebuffs[encounterID]
-	if currentEncounterDebuffs then
-		for spellID, stackCount in pairs(currentEncounterDebuffs) do
-			TankDebuffs[spellID] = stackCount
-		end
-	end
-	print("Tracking following debuffs for", name)
-	for spellID in pairs(TankDebuffs) do
-		print(string.gsub(GetSpellLink(spellID), "|", "\124"))
-	end
-end
-
-function Frame:ENCOUNTER_END(encounterID, name, difficultyID, size, success)
-	ns.db.encounterID = nil
-	table.wipe(TankDebuffs)
+	self:ZONE_CHANGED_NEW_AREA()
 end

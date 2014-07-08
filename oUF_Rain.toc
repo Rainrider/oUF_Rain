@@ -7,8 +7,6 @@
 ## RequiredDeps: oUF
 ## OptionalDeps: AdiDebug, BigWigs, LibPlayerSpells-1.0, LibStub, oUF_Reputation, oUF_Swing
 
-## SavedVariables: oUF_RainDB
-
 rain_init.lua
 modules\rain_ccwarn.lua
 modules\rain_dispel.lua
