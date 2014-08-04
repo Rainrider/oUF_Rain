@@ -1,3 +1,41 @@
+--[[ Element: Warlock Power Bar
+ Handle updating of demonic fury and burning embers.
+ (Soul shards are handled by the Class Icons element.)
+
+ Widget
+
+ WarlockPowerBar - an array consisting of 5 UI StatusBars
+
+ Notes
+
+ The first 4 status bars represent burning embers.
+ The fifth status bar represents demonic fury.
+
+ Example
+
+   local wpb = {}
+   for index = 1, 5 do
+      local bar = CreateFrame("StatusBar", nil, self)
+
+      -- Position and size.
+      bar:SetSize(16, 16)
+      bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', index * bar:GetWidth(), 0)
+
+      wpb[index] = bar
+   end
+
+   -- Register it with oUF
+   self.WarlockPowerBar = wpb
+
+ Hooks
+
+ Override(self) - Used to completely override the internal update function.
+                  Removing the table key entry will make the element fall-back
+                  to its internal function again.
+
+ Callbacks
+]]
+
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
@@ -24,6 +62,14 @@ local Update = function(self, event, unit, powerType)
 	local element = self.WarlockPowerBar
 	local power = 0
 
+	--[[ :PreUpdate()
+
+	 Called before the element has been updated.
+
+	 Arguments
+
+	 self - The WarlockPowerBar element.
+	]]
 	if(element.PreUpdate) then
 		element:PreUpdate()
 	end
@@ -31,7 +77,7 @@ local Update = function(self, event, unit, powerType)
 	if(powerType == 'DEMONIC_FURY') then
 		power = UnitPower('player', SPELL_POWER_DEMONIC_FURY)
 
-		element[1]:SetValue(power)
+		element[5]:SetValue(power)
 	elseif(powerType == 'BURNING_EMBERS') then
 		power = UnitPower('player', SPELL_POWER_BURNING_EMBERS, true)
 
@@ -40,8 +86,19 @@ local Update = function(self, event, unit, powerType)
 		end
 	end
 
+	--[[ :PostUpdate(powerType, power)
+
+	 Called after the element has been updated.
+
+	 Arguments
+
+	 self      - The WarlockPowerBar element.
+	 powerType - Power type which the update was done for (`'DEMONIC_FURY'` or `'BURNING_EMBERS'`).
+	 power     - Current amount of demonic fury or burning embers.
+	 spec      - The current spec of the warlock (`2` or `3`).
+	]]
 	if(element.PostUpdate) then
-		element:PostUpdate(powerType, power)
+		element:PostUpdate(powerType, power, spec)
 	end
 end
 
@@ -66,9 +123,9 @@ Visibility = function(self, event)
 			local color = self.colors.power[specPowerType]
 			local red, green, blue = color[1], color[2], color[3]
 
-			for i = 1, 4 do
+			for i = 1, 5 do
 				local segment = element[i]
-				if(i > 1) then
+				if(i < 5) then
 					segment:Hide()
 				else
 					segment:SetMinMaxValues(0, UnitPowerMax('player', SPELL_POWER_DEMONIC_FURY))
@@ -106,6 +163,7 @@ Visibility = function(self, event)
 					end
 					segment:Show()
 				end
+				element[5]:Hide()
 			end
 		end
 	end
@@ -115,20 +173,30 @@ Visibility = function(self, event)
 		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
 		self:UnregisterEvent('SPELLS_CHANGED', Visibility)
 
-		for i = 1, 4 do
+		for i = 1, 5 do
 			element[i]:Hide()
 		end
 	end
 
-	if(element.PostUpdateVisibility) then
-		element:PostUpdateVisibility(spec, show)
+	--[[ :PostVisibility(spec, show)
+
+	 Called after updating the elements visibility
+
+	 Arguments
+
+	 self - The WarlockPowerBar element.
+	 spec - The current spec of the warlock. Either 1, 2, or 3.
+	 show - `true` is the element is currently shown, `nil` otherwise.
+	]]
+	if(element.PostVisibility) then
+		element:PostVisibility(spec, show)
 	end
 
 	if(show) then
 		self:RegisterEvent('UNIT_POWER', Path)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)
 
-		return Path(self, 'Visibility'..event, self.unit, specPowerType)
+		return Path(self, 'Visibility', self.unit, specPowerType)
 	end
 end
 
@@ -145,7 +213,7 @@ local Enable = function(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		for i = 1, 4 do
+		for i = 1, 5 do
 			local segment = element[i]
 			if(segment:IsObjectType'StatusBar' and not segment:GetStatusBarTexture()) then
 				segment:SetStatusBarTexture[=[Interface\TargetingFrame\UI-StatusBar]=]
@@ -167,7 +235,7 @@ local Disable = function(self)
 		self:UnregisterEvent('PLAYER_TALENT_UPDATE', Visibility)
 		self:UnregisterEvent('SPELLS_CHANGED', Visibility)
 
-		for i = 1, 4 do
+		for i = 1, 5 do
 			element[i]:Hide()
 		end
 	end

@@ -437,35 +437,8 @@ local UpdateThreat = function(self, event, unit)
 	end
 end
 
-local WarlockPowerPostUpdateVisibility = function(element, spec, power)
-	local height = element.height
-	local spacing = element.spacing
-	local width = (element.width - 4 * spacing - spacing) / 4 -- factoring causes rounding issues?
-	spacing = width + spacing
-
-	if (spec > 1) then
-		if (spec == 3) then -- Destruction
-			for i = 1, 4 do
-				element[i]:ClearAllPoints()
-				element[i]:SetSize(width, height)
-				element[i]:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
-			end
-		else -- Demonology
-			element[1]:ClearAllPoints()
-			element[1]:SetPoint("BOTTOMLEFT", element.spacing, 1)
-			element[1]:SetPoint("BOTTOMRIGHT", -element.spacing, 1)
-		end
-	end
-
-	if (spec ~= 3) then
-		for i = 1, 4 do
-			element[i]:SetBackdropColor(0, 0, 0)
-		end
-	end
-end
-
 local MAX_POWER_PER_EMBER = MAX_POWER_PER_EMBER
-local WarlockPostUpdatePower = function(element, powerType, power)
+local WarlockPostUpdatePower = function(element, powerType, power, spec)
 	if (powerType == "BURNING_EMBERS") then
 		for i = 1, 4 do
 			if (i <= power / MAX_POWER_PER_EMBER) then
@@ -1218,17 +1191,18 @@ ns.AddTotems = AddTotems
 
 local AddWarlockPowerBar = function(self, width, height, spacing)
 	local warlockPowerBar = {}
-	warlockPowerBar.width = width
-	warlockPowerBar.height = height
-	warlockPowerBar.spacing = spacing
 
-	width = (width - 4 * spacing - spacing) / 4 -- factoring causes rounding issues?
-	spacing = width + spacing
+	local segmentWidth = (width - 5 * spacing) / 4
 
-	for i = 1, 4 do
+	for i = 1, 5 do
 		local wpb = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
-		wpb:SetSize(width, height)
-		wpb:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
+		if (i < 5) then
+			wpb:SetSize(segmentWidth, height)
+			wpb:SetPoint("BOTTOMLEFT", (i - 1) * segmentWidth +  i * spacing, 1)
+		else
+			wpb:SetSize(width - 2 * spacing, height)
+			wpb:SetPoint("BOTTOMLEFT", spacing, 1)
+		end
 		wpb:SetStatusBarTexture(ns.media.TEXTURE)
 		wpb:SetBackdrop(ns.media.BACKDROP)
 		wpb:SetBackdropColor(0, 0, 0)
@@ -1241,7 +1215,6 @@ local AddWarlockPowerBar = function(self, width, height, spacing)
 		warlockPowerBar[i] = wpb
 	end
 
-	warlockPowerBar.PostUpdateVisibility = WarlockPowerPostUpdateVisibility
 	warlockPowerBar.PostUpdate = WarlockPostUpdatePower
 
 	self.WarlockPowerBar = warlockPowerBar
