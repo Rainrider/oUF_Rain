@@ -735,16 +735,15 @@ local AddComboPointsBar = function(self, width, height, spacing)
 end
 ns.AddComboPointsBar = AddComboPointsBar
 
-local AddDebuffHighlight = function(self, unit)
-	local debuffHighlight = {}
+local AddDispelHighlight = function(self, unit)
+	local dispelHighlight = {}
 
 	local texture = self.Health:CreateTexture(nil, "OVERLAY")
 	texture:SetAllPoints()
 	texture:SetTexture(ns.media.HIGHLIGHTTEXTURE)
 	texture:SetBlendMode("ADD")
 	texture:SetVertexColor(0, 0, 0, 0)
-	debuffHighlight.texture = texture
-
+--[[
 	local icon, iconOverlay
 	if (unit == "player" or unit == "target") then
 		icon = self.Overlay:CreateTexture(nil, "OVERLAY")
@@ -765,14 +764,14 @@ local AddDebuffHighlight = function(self, unit)
 	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	iconOverlay:SetTexture(ns.media.BTNTEXTURE)
 	iconOverlay:SetVertexColor(0, 0, 0, 0)
+--]]
+	dispelHighlight.texture = texture
+	dispelHighlight.icon = icon
+	dispelHighlight.iconOverlay = iconOverlay
 
-	debuffHighlight.icon = icon
-	debuffHighlight.iconOverlay = iconOverlay
-	debuffHighlight.filter = ns.cfg.dispelTypeFilter
-
-	self.DebuffHighlight = debuffHighlight
+	self.DispelHighlight = dispelHighlight
 end
-ns.AddDebuffHighlight = AddDebuffHighlight
+ns.AddDispelHighlight = AddDispelHighlight
 
 local AddDebuffs = function(self, unit)
 	local debuffs = CreateFrame("Frame", self:GetName().."_Debuffs", self)

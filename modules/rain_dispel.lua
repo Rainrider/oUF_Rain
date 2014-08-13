@@ -1,10 +1,24 @@
---[[
-	self.DebuffHighlight = Table
-	self.DebuffHighlight.texture = Texture (will be colored by debuff type)
-	self.DebuffHighlight.filter = boolean (true = only debuffs player can dispell)
-	self.DebuffHighlight.icon = Texture (for the debuff icon)
-	self.DebuffHighlight.iconOverlay = Texture (for icon border)
+--[[ Element: DispelHighlight
+
+ Highlights debuffs the player can dispel
+
+ Widget
+
+ DispelHighlight - An array consisting of up to 3 UI textures.
+
+ Sub-Widgets
+
+ texture     - A texture to be shown/hiden if a dispelable debuff is found.
+               Will be colored in the dispel type color.
+ icon        - A texture to hold the icon representing the first dispelable debuff found.
+ iconOverlay - A border texture for the icon. Will be colored in the dispel type color.
+
+ Notes
+
+ All sub-widgets are optional.
 --]]
+local _, ns = ...
+local oUF = ns.oUF or oUF
 local _, playerClass = UnitClass("player")
 
 local dispelList = {
@@ -22,10 +36,10 @@ end
 local UpdateDispelList = {
 	["DRUID"] = function()
 		table.wipe(dispelList)
-		if (IsSpellKnown(2782)) then					-- Remove Corruption
+		if (IsSpellKnown(2782)) then         -- Remove Corruption
 			dispelList.Curse = true
 			dispelList.Poison = true
-		elseif (IsSpellKnown(88432)) then				-- Nature's Cure
+		elseif (IsSpellKnown(88432)) then    -- Nature's Cure
 			dispelList.Curse = true
 			dispelList.Magic = true
 			dispelList.Poison = true
@@ -33,92 +47,92 @@ local UpdateDispelList = {
 	end,
 	["MAGE"] = function()
 		table.wipe(dispelList)
-		if (IsSpellKnown(475)) then						-- Remove Curse
+		if (IsSpellKnown(475)) then          -- Remove Curse
 			dispelList.Curse = true
 		end
 	end,
 	["MONK"] = function()
 		table.wipe(dispelList)
-		if (IsSpellKnown(115450)) then					-- Detox
+		if (IsSpellKnown(115450)) then       -- Detox
 			dispelList.Desease = true
 			dispelList.Poison = true
-			if (IsSpellKnown(115451)) then				-- Internal Medicine
+			if (IsSpellKnown(115451)) then   -- Internal Medicine
 				dispelList.Magic = true
 			end
 		end
 	end,
 	["PALADIN"] = function()
 		table.wipe(dispelList)
-		if (IsSpellKnown(4987)) then					-- Cleanse
+		if (IsSpellKnown(4987)) then         -- Cleanse
 			dispelList.Desease = true
 			dispelList.Poison = true
-			if (IsSpellKnown(53551)) then				-- Sacred Cleansing
+			if (IsSpellKnown(53551)) then    -- Sacred Cleansing
 				dispelList.Magic = true
 			end
 		end
 	end,
 	["PRIEST"] = function()
 		table.wipe(dispelList)
-		if (IsSpellKnown(527)) then						-- Purify
+		if (IsSpellKnown(527)) then          -- Purify
 			dispelList.Desease = true
 			dispelList.Magic = true
 		end
 	end,
 	["SHAMAN"] = function()
 		table.wipe(dispelList)
-		if (IsSpellKnown(51886)) then					-- Cleanse Spirit
+		if (IsSpellKnown(51886)) then        -- Cleanse Spirit
 			dispelList.Curse = true
-		elseif (IsSpellKnown(77130)) then				-- Purify Spirit
+		elseif (IsSpellKnown(77130)) then    -- Purify Spirit
 			dispelList.Curse = true
 			dispelList.Magic = true
 		end
 	end,
 	["WARLOCK"] = function()
 		table.wipe(dispelList)
-		local _, _, texture = GetSpellInfo(119898)		-- Command Demon
-		if (string.find(texture, "spell_fel_elementaldevastation")		-- Singe Magic (Imp Sacrifice) NOTE: IsSpellKnown(132411) always returns false
-			or IsSpellKnown(89808, true) 				-- Singe Magic (Imp ability)
-			or IsSpellKnown(115276, true)) then			-- Sear Magic (Fel Imp ability)
+		local _, _, texture = GetSpellInfo(119898) -- Command Demon
+		if (string.find(texture, "spell_fel_elementaldevastation") -- Singe Magic (Imp Sacrifice) NOTE: IsSpellKnown(132411) always returns false
+			or IsSpellKnown(89808, true)           -- Singe Magic (Imp ability)
+			or IsSpellKnown(115276, true)) then    -- Sear Magic (Fel Imp ability)
 			dispelList.Magic = true
 		end
 	end,
 }
 
-local GetDebuffInfo = function(unit, filter)
-	if (not UnitCanAssist("player", unit)) then return end
-
-	local i = 1
-	while (true) do
-		local name, _, texture, _, dispelType, _, _, _, _, _, _, _, isBossDebuff = UnitDebuff(unit, i)
-		if (not texture) then break end
-		if ((not filter and isBossDebuff) or (filter and dispelList[dispelType])) then
-			return dispelType, texture, isBossDebuff
-		end
-		i = i + 1
-	end
-end
-
 local Update = function(self, event, unit)
 	if (unit ~= self.unit) then return end
 
-	local element = self.DebuffHighlight
+	local element = self.DispelHighlight
 
-	local dispelType, texture, isBossDebuff = GetDebuffInfo(unit, element.filter)
-	local color = debuffTypeColor[dispelType] or debuffTypeColor["none"]
+	local texture, dispelType
+	local r, g, b = 1, 1, 1
+
+	local i = 1
+	local canAssist = UnitCanAssist("player", unit)
+	while (canAssist) do
+		_, _, texture, _, dispelType = UnitDebuff(unit, i)
+		if (not texture) then
+			break
+		elseif (dispelList[dispelType]) then
+			local color = debuffTypeColor[dispelType]
+			r, g, b = color[1], color[2], color[3]
+			break
+		end
+		i = i + 1
+	end
 
 	if (element.texture) then
 		if (texture) then
-			element.texture:SetVertexColor(color[1], color[2], color[3], 1)
+			element.texture:SetVertexColor(r, g, b, 1)
 		else
 			element.texture:SetVertexColor(0, 0, 0, 0)
 		end
 	end
 
-	if (isBossDebuff and element.icon) then
+	if (element.icon) then
 		if (texture) then
 			element.icon:SetTexture(texture)
 			if (element.iconOverlay) then
-				element.iconOverlay:SetVertexColor(color[1], color[2], color[3], 1)
+				element.iconOverlay:SetVertexColor(r, g, b, 1)
 			end
 		else
 			element.icon:SetTexture(nil)
@@ -134,7 +148,7 @@ local Update = function(self, event, unit)
 end
 
 local Path = function(self, ...)
-	return (self.DebuffHighlight.Override or Update)(self, ...)
+	return (self.DispelHighlight.Override or Update)(self, ...)
 end
 
 local ForceUpdate = function(element)
@@ -142,30 +156,26 @@ local ForceUpdate = function(element)
 end
 
 local Enable = function(self)
-	local element = self.DebuffHighlight
+	local element = self.DispelHighlight
 
-	if (not element or element.filter and not UpdateDispelList[playerClass]) then return end
+	if (not element or not UpdateDispelList[playerClass]) then return end
 
 	element.__owner = self
 	element.ForceUpdate = ForceUpdate
 
-	if (element.filter and UpdateDispelList[playerClass]) then
-		UpdateDispelList[playerClass]()
-		self:RegisterEvent("SPELLS_CHANGED", UpdateDispelList[playerClass])
-	end
+	UpdateDispelList[playerClass]()
 
+	self:RegisterEvent("SPELLS_CHANGED", UpdateDispelList[playerClass])
 	self:RegisterEvent("UNIT_AURA", Path)
 
 	return true
 end
 
 local Disable = function(self)
-	if (self.DebuffHighlight) then
-		self:UnregisterEvent("UNIT_AURA")
-		if (UpdateDispelList[playerClass]) then
-			self:UnregisterEvent("SPELLS_CHANGED")
-		end
+	if (self.DispelHighlight) then
+		self:UnregisterEvent("UNIT_AURA", Path)
+		self:UnregisterEvent("SPELLS_CHANGED", UpdateDispelList[playerClass])
 	end
 end
 
-oUF:AddElement("rain_dispel", Path, Enable, Disable)
+oUF:AddElement("DispelHighlight", Path, Enable, Disable)

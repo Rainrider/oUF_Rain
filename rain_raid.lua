@@ -84,7 +84,7 @@ local RaidStyle = function(self, unit)
 
 	--[[ ELEMENTS ]]--
 	ns.AddAuras(self, unit)
-	ns.AddDebuffHighlight(self, unit)
+	ns.AddDispelHighlight(self, unit)
 	ns.AddHealPredictionBar(self, unit)
 	ns.AddRangeCheck(self)
 	ns.AddThreatHighlight(self)

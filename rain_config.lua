@@ -23,9 +23,6 @@ cfg.showPlayerBuffs = true			-- true to enable the display of player buffs left 
 cfg.onlyShowPlayerBuffs = true		-- true to show only player buffs; false to show all buffs (for friendly targets only)
 cfg.onlyShowPlayerDebuffs = false	-- true to show only player debuffs; false to show only player class debuffs (for enemies only)
 
--- debuff highlightingt
-cfg.dispelTypeFilter = true 		-- true to highlight only debuffs the player can dispel; false to only highlight boss debuffs
-
 -- class specific
 -- A value of 1 behind the spell means the buff/debuff should be applied by the player in order to be shown
 -- A maximum of 3 buffs and 3 debuffs per class allowed

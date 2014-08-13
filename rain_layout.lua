@@ -75,11 +75,11 @@ local UnitSpecific = {
 
 	focus = function(self)
 		ns.AddDebuffs(self, "focus")
-		ns.AddDebuffHighlight(self, "focus")
+		ns.AddDispelHighlight(self, "focus")
 	end,
 
 	targettarget = function(self)
-		ns.AddDebuffHighlight(self, "targettarget")
+		ns.AddDispelHighlight(self, "targettarget")
 	end,
 }
 
@@ -187,7 +187,7 @@ local Shared = function(self, unit)
 			ns.AddBuffs(self, unit)
 		end
 		ns.AddDebuffs(self, unit)
-		ns.AddDebuffHighlight(self, unit)
+		ns.AddDispelHighlight(self, unit)
 
 		local pvpStatus = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
 		pvpStatus:SetPoint("RIGHT", -3.5, 2)
@@ -253,7 +253,7 @@ local Shared = function(self, unit)
 			ns.AddResurrectIcon(self)
 
 			--ns.AddAuras(self, unit)
-			ns.AddDebuffHighlight(self, unit)
+			ns.AddDispelHighlight(self, unit)
 			ns.AddRangeCheck(self)
 		end
 
