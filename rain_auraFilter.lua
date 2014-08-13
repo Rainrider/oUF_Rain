@@ -279,7 +279,7 @@ ns.CustomFilter = {
 
 		if (not UnitIsFriend("player", unit)) then
 			if (aura.isDebuff) then
-				if(aura.isPlayer or isBossDebuff or not UnitIsPlayer(caster) or DebuffIDs[spellID]) then
+				if(aura.isPlayer or isBossDebuff or caster and not UnitIsPlayer(caster) or DebuffIDs[spellID]) then
 					return true
 				end
 			else
