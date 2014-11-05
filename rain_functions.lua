@@ -702,7 +702,7 @@ local AddClassPowerIcons = function(self, width, height, spacing)
 	classIcons.height = height
 	classIcons.spacing = spacing
 
-	local maxPower = 5
+	local maxPower = 6
 
 	for i = 1, maxPower do
 		classIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ClassIcon_"..i, "OVERLAY")
