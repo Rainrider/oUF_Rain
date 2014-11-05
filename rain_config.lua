@@ -51,17 +51,17 @@ cfg.debuffTable = {
 -- click casting spell
 -- use i.e. ["ENGLISH_CLASS_NAME"] = spellID,
 cfg.clickSpell = {
-	["DEATHKNIGHT"] = 61999,	-- Raise Ally (61999)
-	["DRUID"] = 29166,			-- Innervate (29166)
-	["HUNTER"] = 34477,			-- Misdirection (34477)
-	["MAGE"] = 475,				-- Remove Curse (475)
-	["MONK"] = 115450,			-- Detox (115450)
-	["PALADIN"] = 31789,		-- Righteous Defense (31789)
-	["PRIEST"] = 73325,			-- Leap of Faith (73325)
-	["ROGUE"] = 57934,			-- Tricks of the Trade (57934)
-	["SHAMAN"] = 546,			-- Water Walking (546)
-	["WARRIOR"] = 3411,			-- Intervene (3411)
-	["WARLOCK"] = 109773,		-- Dark Intent (109773)
+	["DEATHKNIGHT"] = 61999, -- Raise Ally (61999)
+	["DRUID"] = 20484,       -- Rebirth (20484)
+	["HUNTER"] = 34477,      -- Misdirection (34477)
+	["MAGE"] = 475,          -- Remove Curse (475)
+	["MONK"] = 115450,       -- Detox (115450)
+	["PALADIN"] = 31789,     -- Righteous Defense (31789)
+	["PRIEST"] = 73325,      -- Leap of Faith (73325)
+	["ROGUE"] = 57934,       -- Tricks of the Trade (57934)
+	["SHAMAN"] = 546,        -- Water Walking (546)
+	["WARRIOR"] = 3411,      -- Intervene (3411)
+	["WARLOCK"] = 109773,    -- Dark Intent (109773)
 }
 
 -- other
