@@ -862,8 +862,8 @@ local AddExperienceBar = function(self)
 	experience:SetAlpha(0)
 
 	experience:EnableMouse()
-	experience:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
-	experience:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
+	experience:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
+	experience:SetScript("OnLeave", function(self) self:SetAlpha(0) end)
 
 	local rested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", experience)
 	rested:SetPoint("TOPLEFT", experience:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -1039,8 +1039,8 @@ local AddReputationBar = function(self)
 	reputation:SetAlpha(0)
 
 	reputation:EnableMouse()
-	reputation:HookScript("OnEnter", function(self) self:SetAlpha(1) end)
-	reputation:HookScript("OnLeave", function(self) self:SetAlpha(0) end)
+	reputation:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
+	reputation:SetScript("OnLeave", function(self) self:SetAlpha(0) end)
 
 	local bg = reputation:CreateTexture(nil, "BORDER")
 	bg:SetAllPoints(reputation)
