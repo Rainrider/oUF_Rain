@@ -5,17 +5,14 @@ local origR, origG, origB, origA
 local crowdControl = {
 	-- DRUID
 	[33786] = true,		-- Cyclone
-	[2637] = true,		-- Hibernate
 	-- HUNTER
 	[3355] = true,		-- Freezing Trap
 	[19386] = true,		-- Wyvern Sting
-	[1513] = true,		-- Scare Beast
 	-- MAGE
 	[118] = true,		-- Polymorph
 	[61305] = true,		-- Polymorph (Black Cat)
 	[28272] = true,		-- Polymorph (Pig)
-	[61721] = true,		-- Polymorph (Rabbit)		-- TODO
-	[28271] = true,		-- Polymorph (Turtle)		-- TODO
+	[61721] = true,		-- Polymorph (Rabbit)
 	-- MONK
 	[115078] = true,	-- Paralysis
 	-- PALADIN
@@ -23,20 +20,18 @@ local crowdControl = {
 	[10326] = true,		-- Turn Evil
 	-- PRIEST
 	[9484] = true,		-- Shackle Undead
-	[113792] = true,	-- Psychic Terror (Psyfiend)
 	-- ROGUE
 	[2094] = true,		-- Blind
 	[6770] = true,		-- Sap
 	-- SHAMAN
-	[76780] = true,		-- Bind Elemental
 	[51514] = true,		-- Hex
 	-- WARLOCK
 	[710] = true,		-- Banish
 	[5484] = true,		-- Howl of Terror
-	[118699] = true,	-- Blood Fear / Fear
+	[118699] = true,	-- Fear
+	[130616] = true,	-- Fear (with Glyph of Fear)
 	[6358] = true,		-- Seduction (Succubus)
 	[115268] = true,	-- Mesmerize (Shivarra)
-	[104045] =  true,	-- Sleep (Dark Apotheosis)
 }
 
 local Update = function(self, event, unit)
