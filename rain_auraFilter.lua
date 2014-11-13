@@ -155,56 +155,15 @@ local Taunts = {
 	-- Paladin
 	62124,		-- Reckoning
 	31790,		-- Righteous Defense -- TODO: confirm debuff
-	-- Rogue
-	113612,		-- Growl (Symbiosis)
-	-- Shaman
-	73684,		-- Unleash Earth (Unleash Elements with Rockbiter Weapon Imbue)
 	-- Warlock
-	97827,		-- Provocation (Dark Apotheosis)
 	17735,		-- Suffering (Voidwalker and Voidlord)
 	-- Warrior
 	355,		-- Taunt
 	114198,		-- Mocking Banner
 }
 
-local Disarms = {
-	-- HUNTER
-	50541,		-- Clench (Scorpid)
-	91644,		-- Snatch (Bird of Prey)
-	-- MONK
-	117368,		-- Grapple Weapon
-	-- PRIEST
-	64058,		-- Psychic Horror
-	-- ROGUE
-	51722,		-- Dismantle
-	-- Warlock
-	118093,		-- Disarm (Voidwalker or Voidlord)
-	-- WARRIOR
-	676,		-- Disarm
-}
-
-local CanDisarm = {
-	["DEATHKNIGHT"] = function() end,
-	["DRUID"] = function() end,
-	["HUNTER"] = function() return IsSpellKnown(50541, true) or IsSpellKnown(91644, true) end,
-	["MAGE"] = function() end,
-	["MONK"] = function() return IsSpellKnown(117368) end,
-	["PALADIN"] = function() end,
-	["PRIEST"] = function() return IsSpellKnown(64044) end, -- Psychic Horror
-	["ROGUE"] = function() return IsSpellKnown(51722) end,
-	["SHAMAN"] = function() end,
-	["WARLOCK"] = function() return IsSpellKnown(118093, true) end,
-	["WARRIOR"] = function() return IsSpellKnown(676) end,
-}
-
 local DebuffIDs = {}
 local TankDebuffs = {}
-
-local UpdateDisarms = function(canDisarm)
-	for i = 1, #Disarms do
-		DebuffIDs[Disarms[i]] = canDisarm
-	end
-end
 
 local UpdateTaunts = function(addTaunt)
 	for i = 1, #Taunts do
@@ -329,7 +288,7 @@ function Frame:PLAYER_SPECIALIZATION_CHANGED(unit)
 end
 
 function Frame:SPELLS_CHANGED()
-	UpdateDisarms(CanDisarm[playerClass]() or nil)
+
 end
 
 function Frame:ZONE_CHANGED_NEW_AREA()
