@@ -4,34 +4,34 @@ local oUF = ns.oUF or oUF
 local origR, origG, origB, origA
 local crowdControl = {
 	-- DRUID
-	[33786] = true,		-- Cyclone
+	[ 33786] = true, -- Cyclone
 	-- HUNTER
-	[3355] = true,		-- Freezing Trap
-	[19386] = true,		-- Wyvern Sting
+	[  3355] = true, -- Freezing Trap
+	[ 19386] = true, -- Wyvern Sting
 	-- MAGE
-	[118] = true,		-- Polymorph
-	[61305] = true,		-- Polymorph (Black Cat)
-	[28272] = true,		-- Polymorph (Pig)
-	[61721] = true,		-- Polymorph (Rabbit)
+	[   118] = true, -- Polymorph
+	[ 28272] = true, -- Polymorph (Pig)
+	[ 61305] = true, -- Polymorph (Black Cat)
+	[ 61721] = true, -- Polymorph (Rabbit)
 	-- MONK
-	[115078] = true,	-- Paralysis
+	[115078] = true, -- Paralysis
 	-- PALADIN
-	[20066] = true,		-- Repentance
-	[10326] = true,		-- Turn Evil
+	[ 10326] = true, -- Turn Evil
+	[ 20066] = true, -- Repentance
 	-- PRIEST
-	[9484] = true,		-- Shackle Undead
+	[  9484] = true, -- Shackle Undead
 	-- ROGUE
-	[2094] = true,		-- Blind
-	[6770] = true,		-- Sap
+	[  2094] = true, -- Blind
+	[  6770] = true, -- Sap
 	-- SHAMAN
-	[51514] = true,		-- Hex
+	[ 51514] = true, -- Hex
 	-- WARLOCK
-	[710] = true,		-- Banish
-	[5484] = true,		-- Howl of Terror
-	[118699] = true,	-- Fear
-	[130616] = true,	-- Fear (with Glyph of Fear)
-	[6358] = true,		-- Seduction (Succubus)
-	[115268] = true,	-- Mesmerize (Shivarra)
+	[   710] = true, -- Banish
+	[  5484] = true, -- Howl of Terror
+	[  6358] = true, -- Seduction (Succubus)
+	[115268] = true, -- Mesmerize (Shivarra)
+	[118699] = true, -- Fear
+	[130616] = true, -- Fear (with Glyph of Fear)
 }
 
 local Update = function(self, event, unit)
