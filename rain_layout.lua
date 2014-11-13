@@ -57,7 +57,6 @@ local UnitSpecific = {
 		self.Info = info
 
 		ns.AddComboPointsBar(self, 215, 5, 1)
-		--ns.AddMissingGroupDebuffs(self)
 
 		ns.AddQuestIcon(self)
 		ns.AddResurrectIcon(self)
