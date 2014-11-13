@@ -4,7 +4,7 @@ local Debug = ns.Debug
 
 local LPS = LibStub("LibPlayerSpells-1.0")
 
-local _, playerClass = UnitClass("player")
+local playerClass = ns.playerClass
 
 local PlayerWhiteList = {
 	-- raid buffs
@@ -269,7 +269,6 @@ ns.CustomFilter = {
 local Frame = CreateFrame("Frame")
 Frame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-Frame:RegisterEvent("SPELLS_CHANGED")
 Frame:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 
 function Frame:PLAYER_SPECIALIZATION_CHANGED(unit)
@@ -287,10 +286,6 @@ function Frame:PLAYER_SPECIALIZATION_CHANGED(unit)
 	end
 end
 
-function Frame:SPELLS_CHANGED()
-
-end
-
 function Frame:ZONE_CHANGED_NEW_AREA()
 	local mapID = GetCurrentMapAreaID()
 	local EncounterDebuffs = TankSwapDebuffs[mapID]
@@ -304,6 +299,5 @@ end
 
 function Frame:PLAYER_ENTERING_WORLD()
 	self:PLAYER_SPECIALIZATION_CHANGED("player")
-	self:SPELLS_CHANGED()
 	self:ZONE_CHANGED_NEW_AREA()
 end
