@@ -137,6 +137,22 @@ local TankSwapDebuffs = {
 		[145183] =  3, -- Gripping Despair
 		[145195] =  3, -- Empowered Gripping Despair
 	},
+	--------------
+	-- HIGHMAUL --
+	--------------
+	[994] = {
+	-- Kargath Bladefist
+		[159178] = 2, -- Open Wounuds
+	-- The Butcher
+		[156147] = 3, -- The Cleaver
+		[156151] = 3, -- The Tenderizer
+	-- Brackenspore
+		[163241] = 4, -- Rot
+	-- Ko'ragh
+		[162186] = 1, -- Expel Magic: Arcane
+	-- Imperator Mar'gok
+		[158605] = 1, -- Mark of Chaos
+	},
 }
 
 local Taunts = {
