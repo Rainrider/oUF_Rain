@@ -575,7 +575,7 @@ local AddAltPowerBar = function(self)
 		self:UpdateTooltip()
 	end
 
-	altPowerBar:EnableMouse()
+	altPowerBar:EnableMouse(true)
 	altPowerBar:SetScript("OnEnter", altPowerBar.OnEnter)
 
 	self.AltPowerBar = altPowerBar
@@ -861,7 +861,7 @@ local AddExperienceBar = function(self)
 	experience:SetBackdropColor(0, 0, 0)
 	experience:SetAlpha(0)
 
-	experience:EnableMouse()
+	experience:EnableMouse(true)
 	experience:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
 	experience:SetScript("OnLeave", function(self) self:SetAlpha(0) end)
 
@@ -1018,7 +1018,7 @@ local AddReputationBar = function(self)
 	reputation:SetBackdropColor(0, 0, 0)
 	reputation:SetAlpha(0)
 
-	reputation:EnableMouse()
+	reputation:EnableMouse(true)
 	reputation:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
 	reputation:SetScript("OnLeave", function(self) self:SetAlpha(0) end)
 
@@ -1153,7 +1153,7 @@ local AddTotems = function(self, width, height, spacing)
 		bg:SetAllPoints()
 		bg:SetTexture(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
 
-		totem:EnableMouse()
+		totem:EnableMouse(true)
 		totem.UpdateTooltip = function(self)
 			GameTooltip:SetTotem(self:GetID())
 			GameTooltip:Show()
