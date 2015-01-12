@@ -82,9 +82,9 @@ local UpdateDispelList = {
 		table.wipe(dispelList)
 		if (IsSpellKnown(51886)) then        -- Cleanse Spirit
 			dispelList.Curse = true
-		elseif (IsSpellKnown(77130)) then    -- Purify Spirit
-			dispelList.Curse = true
-			dispelList.Magic = true
+			if (IsPlayerSpell(77130)) then   -- Purify Spirit
+				dispelList.Magic = true
+			end
 		end
 	end,
 	["WARLOCK"] = function()
