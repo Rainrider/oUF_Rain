@@ -1040,7 +1040,7 @@ local AddReputationBar = function(self)
 			GameTooltip:AddLine(format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100 + 0.5))
 		else
 			local currentValue = friendRep - friendThreshold
-			local maxCurrentValue = math.min(friendMaxRep - friendThreshold, 8400)
+			local maxCurrentValue = (nextFriendThreshold or friendMaxRep) - friendThreshold
 			GameTooltip:AddLine(format("%s (%s)", name, friendTextLevel))
 			GameTooltip:AddLine(format("%d / %d (%d%%)", currentValue, maxCurrentValue, currentValue / maxCurrentValue * 100 + 0.5))
 		end
