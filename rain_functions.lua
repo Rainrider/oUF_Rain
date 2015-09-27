@@ -109,6 +109,7 @@ local PutFontString = function(parent, fontName, fontHeight, fontStyle, justifyH
 	fontString:SetJustifyH(justifyH or "LEFT")
 	fontString:SetShadowColor(0, 0, 0)
 	fontString:SetShadowOffset(0.75, -0.75)
+	fontString:SetWordWrap(false)
 
 	return fontString
 end
