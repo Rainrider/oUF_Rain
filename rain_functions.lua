@@ -1036,7 +1036,7 @@ local AddReputationBar = function(self)
 		local _, friendRep, friendMaxRep, _, _, _, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(id)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 5)
 		if (not friendRep) then
-			GameTooltip:AddLine(format("%s (%s)", name, _G["FACTION_STANDING_LABEL"..standing], UnitSex("player")))
+			GameTooltip:AddLine(format("%s (%s)", name, GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))))
 			GameTooltip:AddLine(format("%d / %d (%d%%)", value - min, max - min, (value - min) / (max - min) * 100 + 0.5))
 		else
 			local currentValue = friendRep - friendThreshold
