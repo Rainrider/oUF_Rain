@@ -21,6 +21,11 @@ local PlayerWhiteList = {
 	[118335] = true, -- Dancing Steel (str) ???
 	[104993] = true, -- Jade Spirit ???
 	[116660] = true, -- River's Song ???
+	-- some more
+	[ 43052] = true, -- Ram Fatigue (Brew Fest)
+	[ 42992] = true, -- Ram - Trot
+	[ 42993] = true, -- Ram - Canter
+	[ 42994] = true, -- Ram - Gallop
 }
 
 local ImportantDebuffs = {
@@ -144,7 +149,7 @@ local TankSwapDebuffs = {
 	-- Kargath Bladefist
 		[159178] = 2, -- Open Wounuds
 	-- The Butcher
-		[156147] = 3, -- The Cleaver
+		--[156147] = 3, -- The Cleaver
 		[156151] = 3, -- The Tenderizer
 	-- Brackenspore
 		[163241] = 4, -- Rot
