@@ -21,6 +21,7 @@ local PlayerWhiteList = {
 	[118335] = true, -- Dancing Steel (str) ???
 	[104993] = true, -- Jade Spirit ???
 	[116660] = true, -- River's Song ???
+	[173322] = true, -- Mark of Bleeding Hollow
 	-- some more
 	[ 43052] = true, -- Ram Fatigue (Brew Fest)
 	[ 42992] = true, -- Ram - Trot
@@ -157,6 +158,37 @@ local TankSwapDebuffs = {
 		[162186] = 1, -- Expel Magic: Arcane
 	-- Imperator Mar'gok
 		[158605] = 1, -- Mark of Chaos
+	},
+	-----------------------
+	-- BLACKROCK FOUNDRY --
+	-----------------------
+	[988] = {
+	-- Gruul
+		[162322] = 3, -- Inferno Strike
+		[155078] = 1, -- Overwhelming Blows
+	-- Oregorger
+		[156297] = 1, -- Acid Torrent -
+	-- Blast Furnace
+		[155242] = 3, -- Heat
+	-- Hans'gar and Franzok
+		[157139] = 1, -- Shattered Vertebrae
+	-- Flamebender Ka'graz
+		[155074] = 1, -- Charring Breath (from the wolves)
+		[163284] = 4, -- Rising Flames
+	-- Kromog
+		[156766] = 3, -- Warped Armor
+	-- Beastlord Darmac
+		[155061] = 2, -- Rend and Tear -- TODO id??
+		[162283] = 2, -- Rend and Tear
+		[155236] = 2, -- Crush Armor
+		[155030] = 5, -- Seared Flesh
+	-- Operator Thogar
+		[155921] = 2, -- Enkindle
+	-- Blackhand
+		[159179] = 1, -- Throw Slag Bombs
+		[157015] = 1, -- Slag Bomb -- TODO: this rather than throw slag bombs?
+	-- Trash
+		[175594] = 8, -- Burning (Forgemistress Flamehand)
 	},
 }
 
