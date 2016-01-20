@@ -19,6 +19,7 @@ local UnitSpecific = {
 		ns.AddExperienceBar(self)
 		ns.AddAltPowerBar(self)
 		ns.AddTotems(self, 215, 5, 1)
+		ns.AddComboPointsBar(self, 215, 5, 1)
 
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 215, 5, 1)
@@ -55,8 +56,6 @@ local UnitSpecific = {
 		info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
 		self:Tag(info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
 		self.Info = info
-
-		ns.AddComboPointsBar(self, 215, 5, 1)
 
 		ns.AddQuestIcon(self)
 		ns.AddResurrectIcon(self)
