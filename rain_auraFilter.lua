@@ -190,6 +190,37 @@ local TankSwapDebuffs = {
 	-- Trash
 		[175594] = 8, -- Burning (Forgemistress Flamehand)
 	},
+	---------------------
+	-- HELLFIRE CITADEL--
+	---------------------
+	[1026] = {
+	-- Hellfire Assault
+		[184243] = 2, -- Slam
+	-- Iron Reaver
+		[182108] = 1, -- Artillery
+	-- Kormrok
+		[181306] = 1, -- Explosive Burst
+		[181321] = 1, -- Fel Touch
+	-- Kilrogg Deadeye
+		[182159] = 3, -- Fel Corruption
+		[180200] = 5, -- Shredded Armor
+	-- Gorefiend
+		[179864] = 1, -- Shadow of Death
+		[185189] = 10, -- Fel Flames
+	-- Fel Lord Zakuun
+		[189260] = 1, -- Cloven Soul
+		[179407] = 1, -- Disembodied
+	-- Socrethar the Eternal
+		[182038] = 2, -- Shattered Defenses (Soulbound Contruct)
+	-- Tyrant Velhari
+		[180000] = 3, -- Seal of Decay
+	-- Mannoroth
+		[181359] = 1, -- Massive Blast
+	-- Archimonde
+		[183828] = 1, -- Death Brand
+		[186961] = 1, -- Nether Banish
+		[183864] = 3, -- Shadow Blast
+	},
 }
 
 local Taunts = {
