@@ -1082,24 +1082,6 @@ local AddRuneBar = function(self, width, height, spacing)
 end
 ns.AddRuneBar = AddRuneBar
 
-local AddSwingBar = function(self)
-	if (not IsAddOnLoaded("oUF_Swing")) then return end
-
-	local swing = CreateFrame("Frame", self:GetName().."_Swing", self)
-	swing:SetHeight(3)
-	swing:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 7)
-	swing:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, 7)
-	swing.texture = ns.media.TEXTURE
-	swing.color = {0.55, 0.57, 0.61, 1}
-	swing.textureBG = ns.media.TEXTURE
-	swing.colorBG = {0, 0, 0, 0.6}
-
-	swing.hideOoc = true
-
-	self.Swing = swing
-end
-ns.AddSwingBar = AddSwingBar
-
 local AddThreatHighlight = function(self)
 	local threat = self:CreateTexture(nil) -- oUF requires that IsObjectType can be called with this
 	threat:SetTexture(1, 1, 1, 0) -- so that oUF does not try to replace it

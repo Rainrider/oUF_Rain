@@ -14,7 +14,6 @@ local playerClass = ns.playerClass
 -- layout rules for specific unit frames (auras, combo points, totembar, runes, holy power, shards, druid mana ...)
 local UnitSpecific = {
 	player = function(self)
-		ns.AddSwingBar(self)
 		ns.AddReputationBar(self)
 		ns.AddExperienceBar(self)
 		ns.AddAltPowerBar(self)
