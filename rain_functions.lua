@@ -13,9 +13,7 @@ local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitClass = UnitClass
 local UnitIsPlayer = UnitIsPlayer
 local UnitPlayerControlled = UnitPlayerControlled
-local UnitIsTapped = UnitIsTapped
-local UnitIsTappedByPlayer = UnitIsTappedByPlayer
-local UnitIsTappedByAllThreatList = UnitIsTappedByAllThreatList
+local UnitIsTapDenied = UnitIsTapDenied
 
 local ColorGradient = oUF.ColorGradient
 
@@ -406,8 +404,7 @@ local UpdateHealth = function(self, event, unit)
 		health:SetValue(max)
 		t = self.colors.disconnected
 	elseif (health.colorTapping and not UnitPlayerControlled(unit) and
-		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and
-		not UnitIsTappedByAllThreatList(unit)) then
+		UnitIsTapDenied(unit)) then
 		t = self.colors.tapped
 	elseif (health.colorSmooth) then
 		r, g, b = ColorGradient(cur, max, unpack(self.colors.smooth))
