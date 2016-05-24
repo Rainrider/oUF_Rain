@@ -1,13 +1,6 @@
 local _, ns = ...
 
 ns.colors = setmetatable({
-	cpoints = {
-		{1, 0.68, 0.35},
-		{1, 0.6, 0.18},
-		{1, 0.5, 0},
-		{0.87, 0.45, 0},
-		{0.71, 0.37, 0},
-	},
 	disconnected = {0.42, 0.37, 0.32},
 	power = setmetatable({
 		-- original colors contained in FrameXML/UnitFrame.lua (table PowerColorBar)
@@ -27,7 +20,6 @@ ns.colors = setmetatable({
 			{1.0, 0.98, 0.72},
 			{1.0, 0.42, 0.42},
 		},
-		-- for list of available power types look in FrameXML/GlobalStrings.lua
 		["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
 		["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},
 	}, {__index = oUF.colors.power}),
@@ -36,12 +28,6 @@ ns.colors = setmetatable({
 		0.71, 0.43, 0.27,
 		0.17, 0.17, 0.24,
 	}, {__index = oUF.colors.smooth}),
-	runes = setmetatable({
-		{0.69, 0.31, 0.31},	-- blood
-		{0.33, 0.59, 0.33},	-- unholy
-		{0.31, 0.45, 0.63},	-- frost
-		{0.84, 0.75, 0.75},	-- death
-	}, {__index = oUF.colors.runes}),
 	totems = {
 		[FIRE_TOTEM_SLOT] = { 181/255, 073/255, 033/255 },
 		[EARTH_TOTEM_SLOT] = { 074/255, 142/255, 041/255 },
@@ -58,5 +44,9 @@ ns.colors.power[4] = ns.colors.power["CHI"]
 ns.colors.power[5] = ns.colors.power["RUNES"]
 ns.colors.power[6] = ns.colors.power["RUNIC_POWER"]
 ns.colors.power[7] = ns.colors.power["SOUL_SHARDS"]
-ns.colors.power[8] = ns.colors.power["ECLIPSE"]
+ns.colors.power[8] = ns.colors.power["LUNAR_POWER"]
 ns.colors.power[9] = ns.colors.power["HOLY_POWER"]
+ns.colors.power[11] = ns.colors.power['MAELSTROM']
+ns.colors.power[13] = ns.colors.power['INSANITY']
+ns.colors.power[17] = ns.colors.power['FURY']
+ns.colors.power[18] = ns.colors.power['PAIN']

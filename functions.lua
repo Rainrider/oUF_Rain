@@ -724,8 +724,8 @@ local AddComboPointsBar = function(self, width, height, spacing)
 		local cPoint = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
 		cPoint:SetSize(width, height)
 		cPoint:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
-		local color = ns.colors.cpoints[i]
-		cPoint:SetTexture(color[1], color[2], color[3])
+		--local color = ns.colors.cpoints[i]
+		--cPoint:SetTexture(color[1], color[2], color[3])
 		comboPoints[i] = cPoint
 	end
 
