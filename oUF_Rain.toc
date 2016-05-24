@@ -7,18 +7,18 @@
 ## RequiredDeps: oUF
 ## OptionalDeps: AdiDebug, BigWigs, LibPlayerSpells-1.0, LibStub, oUF_Reputation
 
-rain_init.lua
-modules\rain_ccwarn.lua
-modules\rain_dispel.lua
-modules\rain_healprediction.lua
-modules\rain_interrupt.lua
-modules\rain_experience.lua
-modules\rain_warlockpowerbar.lua
-rain_config.lua
-rain_colors.lua
-rain_auraFilter.lua
-rain_functions.lua
-rain_menu.lua
-rain_tags.lua
-rain_raid.lua
-rain_layout.lua
+init.lua
+modules\ccwarn.lua
+modules\dispel.lua
+modules\healprediction.lua
+modules\interrupt.lua
+modules\experience.lua
+modules\warlockpowerbar.lua
+config.lua
+colors.lua
+auraFilter.lua
+functions.lua
+menu.lua
+tags.lua
+raid.lua
+layout.lua
