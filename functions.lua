@@ -724,8 +724,8 @@ local AddComboPointsBar = function(self, width, height, spacing)
 		local cPoint = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
 		cPoint:SetSize(width, height)
 		cPoint:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
-		--local color = ns.colors.cpoints[i]
-		--cPoint:SetTexture(color[1], color[2], color[3])
+		local color = ns.colors.power.COMBO_POINTS
+		cPoint:SetColorTexture(color[1], color[2], color[3])
 		comboPoints[i] = cPoint
 	end
 
@@ -1081,7 +1081,7 @@ ns.AddRuneBar = AddRuneBar
 
 local AddThreatHighlight = function(self)
 	local threat = self:CreateTexture(nil) -- oUF requires that IsObjectType can be called with this
-	threat:SetTexture(1, 1, 1, 0) -- so that oUF does not try to replace it
+	threat:SetColorTexture(1, 1, 1, 0) -- so that oUF does not try to replace it
 	threat.Override = UpdateThreat
 	self.Threat = threat
 end
@@ -1130,7 +1130,7 @@ local AddTotems = function(self, width, height, spacing)
 
 		local bg = totem:CreateTexture(nil, "BORDER")
 		bg:SetAllPoints()
-		bg:SetTexture(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
+		bg:SetColorTexture(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
 
 		totem:EnableMouse(true)
 		totem.UpdateTooltip = function(self)
