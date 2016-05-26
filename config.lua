@@ -61,7 +61,7 @@ cfg.clickSpell = {
 	["ROGUE"] = 57934,       -- Tricks of the Trade (57934)
 	["SHAMAN"] = 546,        -- Water Walking (546)
 	["WARRIOR"] = 3411,      -- Intervene (3411)
-	["WARLOCK"] = 109773,    -- Dark Intent (109773)
+	["WARLOCK"] = 5697,      -- Unending Breath
 }
 
 -- other
