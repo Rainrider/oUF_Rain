@@ -435,19 +435,6 @@ local UpdateThreat = function(self, event, unit)
 	end
 end
 
-local MAX_POWER_PER_EMBER = MAX_POWER_PER_EMBER
-local WarlockPostUpdatePower = function(element, powerType, power, spec)
-	if (powerType == "BURNING_EMBERS") then
-		for i = 1, 4 do
-			if (i <= power / MAX_POWER_PER_EMBER) then
-				element[i]:SetBackdropColor(1, 0.5, 0)
-			else
-				element[i]:SetBackdropColor(0, 0, 0)
-			end
-		end
-	end
-end
-
 local PostUpdateRune = function(_, rune, _, _, _, runeReady)
 	if (runeReady) then
 		UIFrameFlash(rune, 0.5, 0.5, 1, true)
@@ -1148,38 +1135,6 @@ local AddTotems = function(self, width, height, spacing)
 	self.Totems = totems
 end
 ns.AddTotems = AddTotems
-
-local AddWarlockPowerBar = function(self, width, height, spacing)
-	local warlockPowerBar = {}
-
-	local segmentWidth = (width - 5 * spacing) / 4
-
-	for i = 1, 5 do
-		local wpb = CreateFrame("StatusBar", "oUF_Rain_WarlockPowerBar"..i, self.Overlay)
-		if (i < 5) then
-			wpb:SetSize(segmentWidth, height)
-			wpb:SetPoint("BOTTOMLEFT", (i - 1) * segmentWidth +  i * spacing, 1)
-		else
-			wpb:SetSize(width - 2 * spacing, height)
-			wpb:SetPoint("BOTTOMLEFT", spacing, 1)
-		end
-		wpb:SetStatusBarTexture(ns.media.TEXTURE)
-		wpb:SetBackdrop(ns.media.BACKDROP)
-		wpb:SetBackdropColor(0, 0, 0)
-
-		local bg = wpb:CreateTexture(nil, "BORDER")
-		bg:SetTexture(ns.media.TEXTURE)
-		bg:SetAllPoints()
-		bg.multiplier = 0.3
-		wpb.bg = bg
-		warlockPowerBar[i] = wpb
-	end
-
-	warlockPowerBar.PostUpdate = WarlockPostUpdatePower
-
-	self.WarlockPowerBar = warlockPowerBar
-end
-ns.AddWarlockPowerBar = AddWarlockPowerBar
 
 --[[ ICONS ]]--
 

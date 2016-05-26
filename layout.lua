@@ -31,8 +31,7 @@ local UnitSpecific = {
 		elseif (playerClass == "PRIEST") then
 			ns.AddClassPowerIcons(self, 215, 5, 1)
 		elseif (playerClass == "WARLOCK") then
-			ns.AddClassPowerIcons(self, 215, 5, 1) -- for soul shards
-			ns.AddWarlockPowerBar(self, 215, 5, 2) -- for demonic fury and burning embers
+			ns.AddClassPowerIcons(self, 215, 5, 1)
 		end
 
 		ns.AddCombatIcon(self)

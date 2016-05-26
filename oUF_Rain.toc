@@ -13,7 +13,6 @@ modules\dispel.lua
 modules\healprediction.lua
 modules\interrupt.lua
 modules\experience.lua
-modules\warlockpowerbar.lua
 config.lua
 colors.lua
 auraFilter.lua
