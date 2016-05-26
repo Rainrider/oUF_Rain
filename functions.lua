@@ -803,38 +803,6 @@ local AddDebuffs = function(self, unit)
 end
 ns.AddDebuffs = AddDebuffs
 
-local AddEclipseBar = function(self, width, height)
-	local eclipseBar = CreateFrame("Frame", "oUF_Rain_EclipseBar", self.Overlay)
-	eclipseBar:SetHeight(5)
-	eclipseBar:SetPoint("BOTTOMLEFT", self.Overlay, 1, 1)
-	eclipseBar:SetPoint("BOTTOMRIGHT", self.Overlay, -1, 1)
-	eclipseBar:SetBackdrop(ns.media.BACKDROP)
-	eclipseBar:SetBackdropColor(0, 0, 0)
-
-	local lunarBar = CreateFrame("StatusBar", "oUF_Rain_LunarBar", eclipseBar)
-	lunarBar:SetAllPoints(eclipseBar)
-	lunarBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-	lunarBar:SetStatusBarTexture(ns.media.TEXTURE)
-	lunarBar:SetStatusBarColor(0.34, 0.1, 0.86)
-	eclipseBar.LunarBar = lunarBar
-
-	local solarBar = CreateFrame("StatusBar", "oUF_Rain_SolarBar", eclipseBar)
-	solarBar:SetHeight(5)
-	solarBar:SetWidth(213)
-	solarBar:SetPoint("LEFT", lunarBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-	solarBar:SetFrameLevel(self.Overlay:GetFrameLevel() + 1)
-	solarBar:SetStatusBarTexture(ns.media.TEXTURE)
-	solarBar:SetStatusBarColor(0.95, 0.73, 0.15)
-	eclipseBar.SolarBar = solarBar
-
-	local eclipseBarText = PutFontString(solarBar, ns.media.FONT2, 10, "OUTLINE", "CENTER")
-	eclipseBarText:SetPoint("CENTER", eclipseBar, 0, 0)
-	self:Tag(eclipseBarText, "[pereclipse]%")
-
-	self.EclipseBar = eclipseBar
-end
-ns.AddEclipseBar = AddEclipseBar
-
 local AddExperienceBar = function(self)
 	local experience = CreateFrame("StatusBar", "oUF_Rain_Experience", self)
 	experience:SetHeight(5)

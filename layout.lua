@@ -23,7 +23,7 @@ local UnitSpecific = {
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 215, 5, 1)
 		elseif (playerClass == "DRUID") then
-			ns.AddEclipseBar(self, 230, 7)
+			-- TODO: lunar power
 		elseif (playerClass == "MONK") then
 			ns.AddClassPowerIcons(self, 215, 5, 1)
 		elseif (playerClass == "PALADIN") then
