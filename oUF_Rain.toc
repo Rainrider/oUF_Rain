@@ -17,7 +17,6 @@ config.lua
 colors.lua
 auraFilter.lua
 functions.lua
-menu.lua
 tags.lua
 raid.lua
 layout.lua
