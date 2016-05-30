@@ -849,13 +849,11 @@ ns.AddExperienceBar = AddExperienceBar
 
 local AddHealPredictionBar = function(self, unit)
 	local health = self.Health
-	local width
-	if (unit == "raid") then
+	local width = 110 -- party, focus, pet
+	if (unit == "player" or unit == "target") then
+		width = 230
+	elseif (unit == "raid") then
 		width = 64
-	elseif (unit == "party") then
-		width = 110
-	else
-		width = self:GetWidth()
 	end
 
 	local hab = CreateFrame("StatusBar", nil, health)
@@ -892,6 +890,7 @@ local AddHealPredictionBar = function(self, unit)
 	absorb:SetWidth(width)
 
 	local overAbsorb = health:CreateTexture(nil, "OVERLAY")
+	overAbsorb:SetSize(16, 0)
 	overAbsorb:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
 	overAbsorb:SetBlendMode("ADD")
 	overAbsorb:SetPoint("TOP")
@@ -900,6 +899,7 @@ local AddHealPredictionBar = function(self, unit)
 	overAbsorb:Hide()
 
 	local overHealAbsorb = health:CreateTexture(nil, "OVERLAY")
+	overHealAbsorb:SetSize(16, 0)
 	overHealAbsorb:SetTexture([[Interface\RaidFrame\Absorb-Overabsorb]])
 	overHealAbsorb:SetBlendMode("ADD")
 	overHealAbsorb:SetPoint("TOP")
