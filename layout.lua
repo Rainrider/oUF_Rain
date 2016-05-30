@@ -16,6 +16,7 @@ local UnitSpecific = {
 	player = function(self)
 		ns.AddReputationBar(self)
 		ns.AddExperienceBar(self)
+		ns.AddPowerPredictionBar(self)
 		ns.AddAltPowerBar(self)
 		ns.AddTotems(self, 215, 5, 1)
 		ns.AddComboPointsBar(self, 215, 5, 1)

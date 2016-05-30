@@ -951,6 +951,22 @@ local AddPortrait = function(self)
 end
 ns.AddPortrait = AddPortrait
 
+local AddPowerPredictionBar = function(self)
+	local mainBar = CreateFrame("StatusBar", nil, self.Power)
+	mainBar:SetStatusBarTexture(ns.media.TEXTURE)
+	mainBar:SetStatusBarColor(0, 0, 1, 0.5)
+	mainBar:SetReverseFill(true)
+	mainBar:SetPoint("TOP")
+	mainBar:SetPoint("BOTTOM")
+	mainBar:SetPoint("RIGHT", self.Power:GetStatusBarTexture())
+	mainBar:SetWidth(230)
+
+	self.PowerPrediction = {
+		mainBar = mainBar,
+	}
+end
+ns.AddPowerPredictionBar = AddPowerPredictionBar
+
 local AddRangeCheck = function(self)
 	self.Range = {
 		insideAlpha = 1,
