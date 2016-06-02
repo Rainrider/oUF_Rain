@@ -5,7 +5,7 @@
 ## Notes: oUF layout
 ## X-Credits: Adirelle, Caellian, HankTheTank, haste, p3lim, Phanx, zork
 ## RequiredDeps: oUF
-## OptionalDeps: AdiDebug, BigWigs, LibPlayerSpells-1.0, LibStub, oUF_Reputation
+## OptionalDeps: AdiDebug, BigWigs, LibPlayerSpells-1.0, LibStub, oUF_ArtifactPower, oUF_Reputation
 
 init.lua
 modules\ccwarn.lua

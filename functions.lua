@@ -485,6 +485,12 @@ local PostUpdateHealPrediction = function(element, unit, overAbsorb, overHealAbs
 		element.overAbsorbGlow:Hide()
 	end
 end
+
+local PostUpdateArtifactPower = function(element, event, isShown)
+	if (not isShown) then return end
+
+	element.text:SetFormattedText("%d / %d", element.totalPower, element.powerForNextTrait - element.power)
+end
 --[[ END OF PRE AND POST FUNCTIONS ]]--
 
 --[[ LAYOUT FUNCTIONS ]]--
@@ -566,6 +572,31 @@ local AddAltPowerBar = function(self)
 	self.AltPowerBar = altPowerBar
 end
 ns.AddAltPowerBar = AddAltPowerBar
+
+local AddArtifactPowerBar = function(self)
+	local artifactPower = CreateFrame("StatusBar", "oUF_Rain_ArtifactPowerBar", self)
+	artifactPower:SetHeight(5)
+	artifactPower:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
+	artifactPower:SetPoint("BOTTOMRIGHT", self.Health, "TOP", -2, 2.5)
+	artifactPower:SetStatusBarTexture(ns.media.TEXTURE)
+	artifactPower:SetStatusBarColor(.901, .8, .601)
+	artifactPower:SetBackdrop(ns.media.BACKDROP)
+	artifactPower:SetBackdropColor(0, 0, 0)
+	artifactPower:EnableMouse(true)
+	artifactPower:Hide()
+
+	artifactPower.onAlpha = 1
+	artifactPower.offAlpha = 0
+
+	local text = PutFontString(artifactPower, ns.media.FONT2, 9, nil, "CENTER")
+	text:SetPoint("CENTER")
+	artifactPower.text = text
+
+	artifactPower.PostUpdate = PostUpdateArtifactPower
+
+	self.ArtifactPower = artifactPower
+end
+ns.AddArtifactPowerBar = AddArtifactPowerBar
 
 local AddBuffs = function(self, unit)
 	local buffs = CreateFrame("Frame", self:GetName().."_Buffs", self)
