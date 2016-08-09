@@ -1102,43 +1102,31 @@ local AddTotems = function(self, width, height, spacing)
 
 	for i = 1, maxTotems do
 		local totem = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
+		local color = ns.colors.class[playerClass]
 		totem:SetStatusBarTexture(ns.media.TEXTURE)
 		totem:SetSize(width, height)
 		totem:SetMinMaxValues(0, 1)
-		local color
-
-		if (playerClass == "SHAMAN") then
-			totem:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
-			color = ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]] or {1, 0, 0}
-		elseif (playerClass == "DRUID") then -- Druid's mushrooms
-			if (i == 1) then
-				totem:SetPoint("TOP", 0, height / 2)
-			elseif (i == 2) then
-				totem:SetPoint("RIGHT", totems[1], "LEFT", -(spacing - width), 0)
-			else
-				totem:SetPoint("LEFT", totems[1], "RIGHT", spacing - width, 0)
-			end
-			color = ns.colors.class[playerClass]
-		else
-			-- Death knight: Ghoul
-			-- Mage
-			-- Monk: Statues
-			-- Paladin: Consecration
-			-- Warlock
-			-- Warrior: Banners
-			totem:SetPoint("TOP", 0, height / 2)
-			color = ns.colors.class[playerClass]
-		end
-
+		totem:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
 		totem:SetStatusBarColor(color[1], color[2], color[3])
 		totem:SetBackdrop(ns.media.BACKDROP)
 		totem:SetBackdropColor(0, 0, 0)
+		totem:EnableMouse(true)
+
+		if (i == 5) then
+			totem:SetID(i)
+			totem:Hide()
+			totem:SetScript("OnEnter", function(self)
+				if(not self:IsVisible()) then return end
+				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+				self:UpdateTooltip()
+			end)
+			totem:SetScript("OnLeave", function(self) self:Hide() end)
+		end
 
 		local bg = totem:CreateTexture(nil, "BORDER")
 		bg:SetAllPoints()
 		bg:SetColorTexture(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
 
-		totem:EnableMouse(true)
 		totem.UpdateTooltip = function(self)
 			GameTooltip:SetTotem(self:GetID())
 			GameTooltip:Show()
