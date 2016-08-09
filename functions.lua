@@ -312,13 +312,15 @@ local PostUpdateIcon = function(Auras, unit, aura, index, offset)
 		aura.isPlayer = true
 	end
 
-	if (not aura.isPlayer and unit ~= "player") then
+	if (unit ~= "player" and not aura.isPlayer) then
 		local friend = UnitIsFriend("player", unit)
 		if ((not friend and aura.isDebuff)
 				or (friend and not aura.isDebuff)) then
 			aura.icon:SetDesaturated(true)
 			aura.overlay:SetVertexColor(0.5, 0.5, 0.5)
 		end
+	elseif (unit ~= "player" and aura.isPlayer) then
+		aura.icon:SetDesaturated(false)
 	end
 
 	if (aura.remaining) then
