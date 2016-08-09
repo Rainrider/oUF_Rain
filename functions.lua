@@ -346,7 +346,7 @@ local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or S
 
 local UpdateTotem = function(self, event, slot)
 	local total = 0
-	local totem = self.Totems[totemPriorities[slot]]
+	local totem = self.Totems[totemPriorities[slot] or 5]
 	local haveTotem, name, start, duration, icon = GetTotemInfo(slot)
 
 	if (duration > 0) then
@@ -1093,7 +1093,7 @@ ns.AddThreatHighlight = AddThreatHighlight
 
 local AddTotems = function(self, width, height, spacing)
 	local totems = {}
-	local maxTotems = MAX_TOTEMS
+	local maxTotems = MAX_TOTEMS + 1
 
 	width = (width - maxTotems * spacing - spacing) / maxTotems -- factoring causes rounding issues?
 	spacing = width + spacing
@@ -1107,7 +1107,7 @@ local AddTotems = function(self, width, height, spacing)
 
 		if (playerClass == "SHAMAN") then
 			totem:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
-			color = ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]]
+			color = ns.colors.totems[SHAMAN_TOTEM_PRIORITIES[i]] or {1, 0, 0}
 		elseif (playerClass == "DRUID") then -- Druid's mushrooms
 			if (i == 1) then
 				totem:SetPoint("TOP", 0, height / 2)
