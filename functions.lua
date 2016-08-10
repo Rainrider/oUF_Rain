@@ -344,27 +344,6 @@ local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.timeLeft = aura.isDebuff and math.huge or -5
 end
 
-local totemPriorities = playerClass == "SHAMAN" and SHAMAN_TOTEM_PRIORITIES or STANDARD_TOTEM_PRIORITIES
-
-local UpdateTotem = function(self, event, slot)
-	local total = 0
-	local totem = self.Totems[totemPriorities[slot] or 5]
-	local haveTotem, name, start, duration, icon = GetTotemInfo(slot)
-
-	if (duration > 0) then
-		totem:SetValue(1 - (GetTime() - start) / duration)
-		totem:SetScript("OnUpdate", function(self, elapsed)
-			total = total + elapsed
-			if (total >= 0.9) then
-				total = 0
-				self:SetValue(1 - (GetTime() - start) / duration)
-			end
-		end)
-		totem:Show()
-	else
-		totem:Hide()
-	end
-end
 -- TODO: not used?
 local PostUpdateClassBar = function(classBar, unit)
 	if (UnitHasVehicleUI("player")) then
@@ -1096,75 +1075,36 @@ ns.AddThreatHighlight = AddThreatHighlight
 local AddTotems = function(self, width, height, spacing)
 	local totems = {}
 	local maxTotems = 5
-	local numShown = 0
 
 	width = (width - (maxTotems + 1) * spacing) / maxTotems
 
-	local UpdatePositions = function()
-		local xMult = numShown / 2
-		local xPos = -(xMult * width + (xMult - 0.5) * spacing)
-		--totems[1]:ClearAllPoints()
-		totems[1]:SetPoint("LEFT", self.Overlay, "CENTER", xPos, 0)
-		print(xMult, xPos)
-	end
-
-	local UpdateNumShown = function()
-		numShown = 0
-		for i = 1, #totems do
-			if (totems[i]:IsShown()) then
-				numShown = numShown + 1
-			end
-		end
-		print("Totems shown:", numShown)
-		UpdatePositions()
-	end
-
 	for i = 1, maxTotems do
 		local totem = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
-		local color = ns.colors.class[playerClass]
-		totem:SetStatusBarTexture(ns.media.TEXTURE)
 		totem:SetSize(width, height)
-		totem:SetMinMaxValues(0, 1)
 		if (i == 1) then
 			totem:SetPoint(playerClass == "SHAMAN" and "BOTTOM" or "TOP", 0, 1)
 			totem:SetPoint("LEFT", spacing, 0)
 		else
 			totem:SetPoint("LEFT", totems[i-1], "RIGHT", spacing, 0)
 		end
-		totem:SetStatusBarColor(color[1], color[2], color[3])
-		totem:SetBackdrop(ns.media.BACKDROP)
-		totem:SetBackdropColor(0, 0, 0)
-		totem:EnableMouse(true)
 
-		if (i == 5) then
-			totem:SetID(i)
-			totem:Hide()
-			totem:SetScript("OnEnter", function(self)
-				if(not self:IsVisible()) then return end
-				GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-				self:UpdateTooltip()
-			end)
-			totem:SetScript("OnLeave", function(self) self:Hide() end)
-		end
-
-		local bg = totem:CreateTexture(nil, "BORDER")
-		bg:SetAllPoints()
-		bg:SetColorTexture(color[1] * 0.5, color[2] * 0.5, color[3] * 0.5)
-
-		totem.UpdateTooltip = function(self)
-			GameTooltip:SetTotem(self:GetID())
-			GameTooltip:Show()
-		end
-
-		totem:SetScript("OnShow", UpdateNumShown)
-		totem:SetScript("OnHide", UpdateNumShown)
+		local icon = totem:CreateTexture(nil, "ARTWORK")
+		icon:SetSize(width, width)
+		icon:SetPoint("BOTTOM", totem, "TOP", 0, 1)
+		icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		icon:Hide()
+		totem.Icon = icon
 
 		totems[i] = totem
 	end
 
-	totems.Override = UpdateTotem
+	totems.PostUpdate = function(totems, _, numShown)
+		local xMult = numShown / 2
+		local xPos = -(xMult * width + (xMult - 0.5) * spacing)
+		totems[1]:SetPoint("LEFT", self.Overlay, "CENTER", xPos, 0)
+	end
 
-	self.Totems = totems
+	self.CustomTotems = totems
 end
 ns.AddTotems = AddTotems
 

@@ -13,6 +13,7 @@ modules\dispel.lua
 modules\healprediction.lua
 modules\interrupt.lua
 modules\experience.lua
+modules\totems.lua
 config.lua
 colors.lua
 auraFilter.lua
