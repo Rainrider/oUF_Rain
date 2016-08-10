@@ -1095,10 +1095,29 @@ ns.AddThreatHighlight = AddThreatHighlight
 
 local AddTotems = function(self, width, height, spacing)
 	local totems = {}
-	local maxTotems = MAX_TOTEMS + 1
+	local maxTotems = 5
+	local numShown = 0
 
-	width = (width - maxTotems * spacing - spacing) / maxTotems -- factoring causes rounding issues?
-	spacing = width + spacing
+	width = (width - (maxTotems + 1) * spacing) / maxTotems
+
+	local UpdatePositions = function()
+		local xMult = numShown / 2
+		local xPos = -(xMult * width + (xMult - 0.5) * spacing)
+		--totems[1]:ClearAllPoints()
+		totems[1]:SetPoint("LEFT", self.Overlay, "CENTER", xPos, 0)
+		print(xMult, xPos)
+	end
+
+	local UpdateNumShown = function()
+		numShown = 0
+		for i = 1, #totems do
+			if (totems[i]:IsShown()) then
+				numShown = numShown + 1
+			end
+		end
+		print("Totems shown:", numShown)
+		UpdatePositions()
+	end
 
 	for i = 1, maxTotems do
 		local totem = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
@@ -1106,7 +1125,12 @@ local AddTotems = function(self, width, height, spacing)
 		totem:SetStatusBarTexture(ns.media.TEXTURE)
 		totem:SetSize(width, height)
 		totem:SetMinMaxValues(0, 1)
-		totem:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
+		if (i == 1) then
+			totem:SetPoint(playerClass == "SHAMAN" and "BOTTOM" or "TOP", 0, 1)
+			totem:SetPoint("LEFT", spacing, 0)
+		else
+			totem:SetPoint("LEFT", totems[i-1], "RIGHT", spacing, 0)
+		end
 		totem:SetStatusBarColor(color[1], color[2], color[3])
 		totem:SetBackdrop(ns.media.BACKDROP)
 		totem:SetBackdropColor(0, 0, 0)
@@ -1131,6 +1155,9 @@ local AddTotems = function(self, width, height, spacing)
 			GameTooltip:SetTotem(self:GetID())
 			GameTooltip:Show()
 		end
+
+		totem:SetScript("OnShow", UpdateNumShown)
+		totem:SetScript("OnHide", UpdateNumShown)
 
 		totems[i] = totem
 	end
