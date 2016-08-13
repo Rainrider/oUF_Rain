@@ -1081,12 +1081,7 @@ local AddTotems = function(self, width, height, spacing)
 	for i = 1, maxTotems do
 		local totem = CreateFrame("StatusBar", "oUF_Rain_Totem"..i, self.Overlay)
 		totem:SetSize(width, height)
-		if (i == 1) then
-			totem:SetPoint(playerClass == "SHAMAN" and "BOTTOM" or "TOP", 0, 1)
-			totem:SetPoint("LEFT", spacing, 0)
-		else
-			totem:SetPoint("LEFT", totems[i-1], "RIGHT", spacing, 0)
-		end
+		totem:SetPoint(playerClass == "SHAMAN" and "BOTTOM" or "TOP", 0, 1)
 
 		local icon = totem:CreateTexture(nil, "ARTWORK")
 		icon:SetSize(width, width)
@@ -1099,9 +1094,29 @@ local AddTotems = function(self, width, height, spacing)
 	end
 
 	totems.PostUpdate = function(totems, _, numShown)
+		if numShown <= 0 then return end
 		local xMult = numShown / 2
 		local xPos = -(xMult * width + (xMult - 0.5) * spacing)
-		totems[1]:SetPoint("LEFT", self.Overlay, "CENTER", xPos, 0)
+		local first = totems[1]
+		first:SetPoint("LEFT", self.Overlay, "CENTER", xPos, 0)
+		local lastVisible
+		for slot = 1, #totems do
+			local totem = totems[slot]
+			if totem:IsVisible() then
+				if lastVisible then
+					totem:SetPoint("LEFT", lastVisible, "RIGHT", spacing, 0)
+				elseif slot > 1 then
+					for i = 1, first:GetNumPoints() do
+						local point, relativeTo, relativePoint, x, y = first:GetPoint(i)
+						if point == "LEFT" then
+							totem:SetPoint(point, relativeTo, relativePoint, x, y)
+							break
+						end
+					end
+				end
+				lastVisible = totem
+			end
+		end
 	end
 
 	self.CustomTotems = totems
