@@ -26,6 +26,18 @@ local OnLeave = function(totem)
 	_G.GameTooltip:Hide()
 end
 
+local OnUpdate = function(totem, elapsed)
+	local lastUpdate = totem.lastUpdate + elapsed
+	if lastUpdate >= 0.5 then
+		local timeLeft = totem.timeLeft - lastUpdate
+		totem:SetValue(timeLeft)
+		totem.timeLeft = timeLeft
+		totem.lastUpdate = 0
+	else
+		totem.lastUpdate = lastUpdate
+	end
+end
+
 local shown = {}
 local numShown = 0
 local UpdateTotem = function(self, event, slot)
@@ -39,15 +51,8 @@ local UpdateTotem = function(self, event, slot)
 		if totem.Icon then
 			totem.Icon:SetTexture(icon)
 		end
-		local total = 0
-		totem:SetValue(1 - (GetTime() - start) / duration)
-		totem:SetScript("OnUpdate", function(totem, elapsed)
-			total = total + elapsed
-			if total >= 0.9 then
-				total = 0
-				totem:SetValue(1 - (GetTime() - start) / duration)
-			end
-		end)
+		totem:SetMinMaxValues(-duration, 0)
+		totem.timeLeft = start - GetTime()
 		totem:Show()
 		if not shown[slot] then
 			numShown = numShown + 1
@@ -62,7 +67,7 @@ local UpdateTotem = function(self, event, slot)
 	end
 
 	if totems.PostUpdate then
-		totems:PostUpdate(slot, numShown)
+		totems:PostUpdate(slot, numShown, start, duration, icon)
 	end
 end
 
@@ -71,9 +76,7 @@ local Path = function(self, ...)
 end
 
 local Update = function(self, event)
-	local totems = self.CustomTotems
-
-	for i = 1, #totems do
+	for i = 1, #self.CustomTotems do
 		Path(self, event, i)
 	end
 end
@@ -91,6 +94,7 @@ local Enable = function(self)
 
 	for i = 1, 5 do
 		local totem = totems[i]
+		
 		local color = ns.colors.totems[i]
 		local r, g, b = color[1], color[2], color[3]
 
@@ -109,10 +113,10 @@ local Enable = function(self)
 		totem:EnableMouse(true)
 		totem:SetScript("OnEnter", OnEnter)
 		totem:SetScript("OnLeave", OnLeave)
+		totem:SetScript("OnUpdate", OnUpdate)
+		totem.lastUpdate = 0
 
 		totem.UpdateTooltip = UpdateTooltip
-
-		totem:Hide()
 	end
 
 
