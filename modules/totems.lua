@@ -92,7 +92,7 @@ local Enable = function(self)
 	totems.__owner = self
 	totems.ForceUpdate = ForceUpdate
 
-	for i = 1, 5 do
+	for i = 1, #totems do
 		local totem = totems[i]
 		
 		local color = ns.colors.totems[i]
