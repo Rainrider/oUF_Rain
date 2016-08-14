@@ -1040,7 +1040,7 @@ local AddRuneBar = function(self, width, height, spacing)
 	local color = ns.colors.power.RUNES
 	local r, g, b = color[1], color[2], color[3]
 
-	width = (width - maxRunes * spacing - spacing) / maxRunes -- factoring causes rounding issues?
+	width = (width - (maxRunes + 1) * spacing) / maxRunes
 	spacing = width + spacing
 
 	for i = 1, maxRunes do
@@ -1059,7 +1059,7 @@ local AddRuneBar = function(self, width, height, spacing)
 		runes[i] = rune
 	end
 
-	runes.PostUpdateRune = PostUpdateRune
+	runes.PostUpdate = PostUpdateRune
 	self.Runes = runes
 end
 ns.AddRuneBar = AddRuneBar
