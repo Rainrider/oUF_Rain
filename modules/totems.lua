@@ -89,11 +89,10 @@ local Enable = function(self)
 	totems.__owner = self
 	totems.ForceUpdate = ForceUpdate
 
-	local color = ns.colors.class[select(2, _G.UnitClass("player"))]
-	local r, g, b = color[1], color[2], color[3]
-
 	for i = 1, 5 do
 		local totem = totems[i]
+		local color = ns.colors.totems[i]
+		local r, g, b = color[1], color[2], color[3]
 
 		totem:SetStatusBarTexture(ns.media.TEXTURE)
 		totem:SetStatusBarColor(r, g, b)

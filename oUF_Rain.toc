@@ -8,14 +8,14 @@
 ## OptionalDeps: AdiDebug, BigWigs, LibPlayerSpells-1.0, LibStub, oUF_ArtifactPower, oUF_Reputation
 
 init.lua
+config.lua
+colors.lua
 modules\ccwarn.lua
 modules\dispel.lua
 modules\healprediction.lua
 modules\interrupt.lua
 modules\experience.lua
 modules\totems.lua
-config.lua
-colors.lua
 auraFilter.lua
 functions.lua
 tags.lua
