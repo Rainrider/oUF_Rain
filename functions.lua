@@ -233,6 +233,13 @@ local PostUpdatePower = function(Power, unit, cur, max)
 	if (Power.disconnected or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)
 	end
+	
+	local atlas = Power:GetStatusBarAtlas()
+	if (atlas) then
+		Power.bg:SetAtlas(atlas)
+	else
+		Power.bg:SetTexture(ns.media.TEXTURE)
+	end
 
 	if (unit == "target") then
 		local self = Power.__owner

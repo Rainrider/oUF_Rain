@@ -133,6 +133,7 @@ local Shared = function(self, unit)
 		power.colorClass = true
 		power.colorReaction = true
 		power.frequentUpdates = unit == "player" or unit == "target"
+		power.useAtlas = unit == "player" or unit == "target"
 
 		if (unitIsBoss) then
 			power.displayAltPower = true
