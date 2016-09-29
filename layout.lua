@@ -11,7 +11,7 @@ local PutFontString = ns.PutFontString
 
 local playerClass = ns.playerClass
 
--- layout rules for specific unit frames (auras, combo points, totembar, runes, holy power, shards, druid mana ...)
+-- layout rules for specific unit frames (auras, totems, runes, ...)
 local UnitSpecific = {
 	player = function(self)
 		ns.AddReputationBar(self)
@@ -20,16 +20,10 @@ local UnitSpecific = {
 		ns.AddPowerPredictionBar(self)
 		ns.AddAltPowerBar(self)
 		ns.AddTotems(self, 215, 5, 1)
-		ns.AddComboPointsBar(self, 215, 5, 1)
+		ns.AddClassPowerIcons(self, 215, 5, 1)
 
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 215, 5, 1)
-		elseif (playerClass == "MONK") then
-			ns.AddClassPowerIcons(self, 215, 5, 1)
-		elseif (playerClass == "PALADIN") then
-			ns.AddClassPowerIcons(self, 215, 5, 1)
-		elseif (playerClass == "WARLOCK") then
-			ns.AddClassPowerIcons(self, 215, 5, 1)
 		end
 
 		ns.AddCombatIcon(self)

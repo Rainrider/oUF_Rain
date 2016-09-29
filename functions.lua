@@ -233,7 +233,7 @@ local PostUpdatePower = function(Power, unit, cur, max)
 	if (Power.disconnected or UnitIsDeadOrGhost(unit)) then
 		Power:SetValue(0)
 	end
-	
+
 	local atlas = Power:GetStatusBarAtlas()
 	if (atlas) then
 		Power.bg:SetAtlas(atlas)
@@ -718,26 +718,6 @@ local AddClassPowerIcons = function(self, width, height, spacing)
 	self.ClassIcons = classIcons
 end
 ns.AddClassPowerIcons = AddClassPowerIcons
-
-local AddComboPointsBar = function(self, width, height, spacing)
-	local comboPoints = {}
-	local maxCPoints = MAX_COMBO_POINTS
-
-	width = (width - maxCPoints * spacing - spacing) / maxCPoints -- factoring causes rounding issues?
-	spacing = width + spacing
-
-	for i = 1, maxCPoints do
-		local cPoint = self.Overlay:CreateTexture("oUF_Rain_ComboPoint_"..i, "OVERLAY")
-		cPoint:SetSize(width, height)
-		cPoint:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
-		local color = ns.colors.power.COMBO_POINTS
-		cPoint:SetColorTexture(color[1], color[2], color[3])
-		comboPoints[i] = cPoint
-	end
-
-	self.CPoints = comboPoints
-end
-ns.AddComboPointsBar = AddComboPointsBar
 
 local AddDispelHighlight = function(self, unit)
 	local dispelHighlight = {}
