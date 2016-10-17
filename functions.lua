@@ -195,6 +195,16 @@ local PostUpdateCast = function(castbar, unit, name)
 	end
 end
 
+local PostCastFailedOrInterrupted = function(castbar, unit, name, castID)
+	castbar:SetStatusBarColor(0.69, 0.31, 0.31)
+	castbar:SetValue(castbar.max)
+
+	local time = castbar.Time
+	if time then
+		time:SetText(name)
+	end
+end
+
 local SPEC_MONK_BREWMASTER = SPEC_MONK_BREWMASTER
 local STAGGER_YELLOW_TRANSITION = STAGGER_YELLOW_TRANSITION
 local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
@@ -670,13 +680,15 @@ local AddCastbar = function(self, unit)
 		castbar.SafeZone = safeZone
 	end
 
-	if (unit == "target" or unit:match("^boss%d$") or unit == "focus") then
+	if (unit == "player" or unit == "target" or unit:match("^boss%d$") or unit == "focus") then
 		local icon = castbar:CreateTexture(nil, "ARTWORK")
 		icon:SetSize(30, 30)
 		icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
 		if (unit == "target") then
 			icon:SetPoint("RIGHT", castbar, "LEFT", -15, 0)
+		elseif (unit == "player") then
+			icon:SetPoint("LEFT", castbar, "RIGHT", 15, 0)
 		else
 			icon:SetPoint("LEFT", self, "RIGHT", 7.5, 0)
 		end
@@ -687,12 +699,16 @@ local AddCastbar = function(self, unit)
 		iconOverlay:SetPoint("TOPLEFT", icon, -5, 5)
 		iconOverlay:SetPoint("BOTTOMRIGHT", icon, 5, -5)
 
+		castbar.timeToHold = 1
+
 		castbar.Icon = icon
 		castbar.IconOverlay = iconOverlay
 		castbar.PostCastStart = PostUpdateCast
 		castbar.PostChannelStart = PostUpdateCast
 		castbar.PostCastInterruptible = PostUpdateCast
 		castbar.PostCastNotInterruptible = PostUpdateCast
+		castbar.PostCastFailed = PostCastFailedOrInterrupted
+		castbar.PostCastInterrupted = PostCastFailedOrInterrupted
 	end
 
 	self.Castbar = castbar
