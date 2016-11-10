@@ -18,9 +18,9 @@ local UnitSpecific = {
 		ns.AddExperienceBar(self)
 		ns.AddArtifactPowerBar(self)
 		ns.AddPowerPredictionBar(self)
-		ns.AddAltPowerBar(self)
+		ns.AddAlternativePower(self)
 		ns.AddTotems(self, 215, 5, 1)
-		ns.AddClassPowerIcons(self, 215, 5, 1)
+		ns.AddClassPower(self, 215, 5, 1)
 
 		if (playerClass == "DEATHKNIGHT") then
 			ns.AddRuneBar(self, 215, 5, 1)
@@ -55,7 +55,7 @@ local UnitSpecific = {
 	end,
 
 	pet = function(self)
-		ns.AddAltPowerBar(self) -- this is needed when the player is in vehicle. because the pet frame then holds the player unit
+		ns.AddAlternativePower(self) -- this is needed when the player is in vehicle. because the pet frame then holds the player unit
 
 		ns.AddAuras(self, "pet")
 		ns.AddRangeCheck(self)
@@ -143,7 +143,7 @@ local Shared = function(self, unit)
 		self.Power = power
 	end
 
-	ns.AddRaidIcon(self)
+	ns.AddRaidTargetIcon(self)
 	ns.AddPhaseIcon(self)
 
 	if (unit == "player" or unit == "target") then
@@ -169,7 +169,7 @@ local Shared = function(self, unit)
 		ns.AddPortrait(self)
 		ns.AddOverlay(self, unit)
 		ns.AddCastbar(self, unit)
-		ns.AddHealPredictionBar(self, unit)
+		ns.AddHealthPrediction(self, unit)
 		ns.AddThreatHighlight(self)
 
 		if (unit == "player" and ns.cfg.showPlayerBuffs or unit == "target") then
@@ -258,7 +258,7 @@ local Shared = function(self, unit)
 
 		if (unit == "pet" or unit == "focus"  or unitIsPartyMember) then
 			ns.AddCastbar(self, unit)
-			ns.AddHealPredictionBar(self, unit)
+			ns.AddHealthPrediction(self, unit)
 			ns.AddThreatHighlight(self)
 		end
 	end

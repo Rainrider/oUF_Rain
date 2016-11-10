@@ -183,7 +183,7 @@ end
 --[[ PRE AND POST FUNCTIONS ]]--
 
 local PostUpdateCast = function(castbar, unit, name)
-	if (castbar.interrupt and UnitCanAttack("player", unit)) then
+	if (castbar.notInterruptible and UnitCanAttack("player", unit)) then
 		castbar:SetStatusBarColor(0.69, 0.31, 0.31)
 		castbar.IconOverlay:SetVertexColor(0.69, 0.31, 0.31)
 	elseif (ns.interruptSpellNames[name]) then
@@ -209,11 +209,6 @@ local SPEC_MONK_BREWMASTER = SPEC_MONK_BREWMASTER
 local STAGGER_YELLOW_TRANSITION = STAGGER_YELLOW_TRANSITION
 local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
 local UnitStagger = UnitStagger
-
---[[
-	 This differs from blizzard's implementation in that it uses the player's current health instead of max health
-	 This is to make the display more meaningful when playing solo
---]]
 
 local UpdateMonkStagger = function(Power, unit)
 	if (Power.disconnected or UnitIsDeadOrGhost(unit)) then
@@ -272,7 +267,6 @@ ns.PostUpdatePower = PostUpdatePower
 
 local CreateAuraIcon = function(Auras, index)
 	local unit = string.match(Auras.__owner.unit, "([a-z]+)%d*")
-	Auras.createdIcons = Auras.createdIcons + 1 -- need to do this
 
 	local button = CreateFrame("Button", nil, Auras)
 
@@ -298,7 +292,7 @@ local CreateAuraIcon = function(Auras, index)
 	stealable:SetPoint("TOPLEFT", -4.5, 4.5)
 	stealable:SetPoint("BOTTOMRIGHT", 4.5, -4.5)
 	stealable:SetTexCoord(0, 1, 0, 1)
-	stealable:SetBlendMode("DISABLE")
+	stealable:SetBlendMode("ADD")
 	stealable:SetVertexColor(unpack(oUF.colors.class[playerClass]))
 	button.stealable = stealable
 	-- timer text
@@ -311,8 +305,6 @@ local CreateAuraIcon = function(Auras, index)
 	button.UpdateTooltip = UpdateAuraTooltip
 	button:SetScript("OnEnter", AuraOnEnter)
 	button:SetScript("OnLeave", AuraOnLeave)
-
-	table.insert(Auras, button)
 
 	return button
 end
@@ -361,16 +353,7 @@ local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.timeLeft = aura.isDebuff and math.huge or -5
 end
 
--- TODO: not used?
-local PostUpdateClassBar = function(classBar, unit)
-	if (UnitHasVehicleUI("player")) then
-		classBar:Hide()
-	else
-		classBar:Show()
-	end
-end
-
-local PostUpdateClassPowerIcons = function(element, power, maxPower, maxPowerChanged)
+local PostUpdateClassPower = function(element, power, maxPower, maxPowerChanged)
 	if (not maxPowerChanged) then return end
 
 	local height = element.height
@@ -444,37 +427,11 @@ local PostUpdateRune = function(_, rune, _, _, _, runeReady)
 	end
 end
 
-local PostUpdateHealPrediction = function(element, unit, overAbsorb, overHealAbsorb)
-	local health = element.__owner.Health
-	local maxHealth = UnitHealthMax(unit)
-	local myBar = element.myBar
-	local absorbBar = element.absorbBar
-	local healAbsorbBar = element.healAbsorbBar
-	local myCurrentHealAbsorb = UnitGetTotalHealAbsorbs(unit) or 0
-	local myCurrentHealAbsorbPercent = myCurrentHealAbsorb / maxHealth
-
-	if (absorbBar:GetValue() > 0) then
-		absorbBar:ClearAllPoints()
-		absorbBar:SetPoint("TOP")
-		absorbBar:SetPoint("BOTTOM")
-
-		if (healAbsorbBar:GetValue() > 0) then
-			absorbBar:SetPoint("LEFT", healAbsorbBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-		else
-			absorbBar:SetPoint("LEFT", element.otherBar:GetStatusBarTexture(), "RIGHT", 0, 0)
-		end
-	end
-
+local PostUpdateHealthPrediction = function(element, unit, overAbsorb, overHealAbsorb)
 	if (overHealAbsorb) then
 		element.overHealAbsorbGlow:Show()
-		myBar:Hide()
 	else
 		element.overHealAbsorbGlow:Hide()
-		myBar:ClearAllPoints()
-		myBar:SetPoint("TOP")
-		myBar:SetPoint("BOTTOM")
-		myBar:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT", -(health:GetWidth() * myCurrentHealAbsorbPercent), 0)
-		myBar:Show()
 	end
 
 	if (overAbsorb) then
@@ -544,7 +501,7 @@ local AddAuras = function(self, unit)
 end
 ns.AddAuras = AddAuras
 
-local AddAltPowerBar = function(self)
+local AddAlternativePower = function(self)
 	local altPowerBar = CreateFrame("StatusBar", "oUF_Rain_AltPowerBar", self)
 	altPowerBar:SetHeight(3)
 	altPowerBar:SetPoint("TOPLEFT", "oUF_Rain_Player_Overlay", 0, 0)
@@ -567,9 +524,9 @@ local AddAltPowerBar = function(self)
 	altPowerBar:EnableMouse(true)
 	altPowerBar:SetScript("OnEnter", altPowerBar.OnEnter)
 
-	self.AltPowerBar = altPowerBar
+	self.AlternativePower = altPowerBar
 end
-ns.AddAltPowerBar = AddAltPowerBar
+ns.AddAlternativePower = AddAlternativePower
 
 local AddArtifactPowerBar = function(self)
 	local artifactPower = CreateFrame("StatusBar", "oUF_Rain_ArtifactPowerBar", self)
@@ -715,25 +672,25 @@ local AddCastbar = function(self, unit)
 end
 ns.AddCastbar = AddCastbar
 
-local AddClassPowerIcons = function(self, width, height, spacing)
-	local classIcons = {}
+local AddClassPower = function(self, width, height, spacing)
+	local classPower = {}
 
-	classIcons.width = width
-	classIcons.height = height
-	classIcons.spacing = spacing
+	classPower.width = width
+	classPower.height = height
+	classPower.spacing = spacing
 
 	local maxPower = 6
 
 	for i = 1, maxPower do
-		classIcons[i] = self.Overlay:CreateTexture("oUF_Rain_ClassIcon_"..i, "OVERLAY")
-		classIcons[i]:SetTexture(ns.media.TEXTURE)
+		classPower[i] = self.Overlay:CreateTexture("oUF_Rain_ClassIcon_"..i, "OVERLAY")
+		classPower[i]:SetTexture(ns.media.TEXTURE)
 	end
 
-	classIcons.PostUpdate = PostUpdateClassPowerIcons
+	classPower.PostUpdate = PostUpdateClassPower
 
-	self.ClassIcons = classIcons
+	self.ClassPower = classPower
 end
-ns.AddClassPowerIcons = AddClassPowerIcons
+ns.AddClassPower = AddClassPower
 
 local AddDispelHighlight = function(self, unit)
 	local dispelHighlight = {}
@@ -743,6 +700,7 @@ local AddDispelHighlight = function(self, unit)
 	texture:SetTexture(ns.media.HIGHLIGHTTEXTURE)
 	texture:SetBlendMode("ADD")
 	texture:SetVertexColor(0, 0, 0, 0)
+	dispelHighlight.texture = texture
 --[[
 	local icon, iconOverlay
 	if (unit == "player" or unit == "target") then
@@ -764,11 +722,9 @@ local AddDispelHighlight = function(self, unit)
 	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	iconOverlay:SetTexture(ns.media.BTNTEXTURE)
 	iconOverlay:SetVertexColor(0, 0, 0, 0)
---]]
-	dispelHighlight.texture = texture
 	dispelHighlight.icon = icon
 	dispelHighlight.iconOverlay = iconOverlay
-
+--]]
 	self.DispelHighlight = dispelHighlight
 end
 ns.AddDispelHighlight = AddDispelHighlight
@@ -862,7 +818,7 @@ local AddExperienceBar = function(self)
 end
 ns.AddExperienceBar = AddExperienceBar
 
-local AddHealPredictionBar = function(self, unit)
+local AddHealthPrediction = function(self, unit)
 	local health = self.Health
 	local width = 110 -- party, focus, pet
 	if (unit == "player" or unit == "target") then
@@ -876,7 +832,7 @@ local AddHealPredictionBar = function(self, unit)
 	hab:SetStatusBarColor(0.75, 0.75, 0, 0.5)
 	hab:SetPoint("TOP")
 	hab:SetPoint("BOTTOM")
-	hab:SetPoint("LEFT", health:GetStatusBarTexture(), "RIGHT", -230, 0)
+	hab:SetPoint("RIGHT", health:GetStatusBarTexture())
 	hab:SetWidth(width)
 	hab:SetReverseFill(true)
 
@@ -905,24 +861,24 @@ local AddHealPredictionBar = function(self, unit)
 	absorb:SetWidth(width)
 
 	local overAbsorb = health:CreateTexture(nil, "OVERLAY")
-	overAbsorb:SetSize(16, 0)
+	overAbsorb:SetSize(6, 0)
 	overAbsorb:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
 	overAbsorb:SetBlendMode("ADD")
 	overAbsorb:SetPoint("TOP")
 	overAbsorb:SetPoint("BOTTOM")
-	overAbsorb:SetPoint("LEFT", health, "RIGHT", -7, 0)
+	overAbsorb:SetPoint("LEFT", health, "RIGHT", -3, 0)
 	overAbsorb:Hide()
 
 	local overHealAbsorb = health:CreateTexture(nil, "OVERLAY")
-	overHealAbsorb:SetSize(16, 0)
+	overHealAbsorb:SetSize(6, 0)
 	overHealAbsorb:SetTexture([[Interface\RaidFrame\Absorb-Overabsorb]])
 	overHealAbsorb:SetBlendMode("ADD")
 	overHealAbsorb:SetPoint("TOP")
 	overHealAbsorb:SetPoint("BOTTOM")
-	overHealAbsorb:SetPoint("RIGHT", health, "LEFT", 7, 0)
+	overHealAbsorb:SetPoint("RIGHT", health, "LEFT", 3, 0)
 	overHealAbsorb:Hide()
 
-	self.HealPrediction = {
+	self.HealthPrediction = {
 		healAbsorbBar = hab,
 		myBar = mhpb,
 		otherBar = ohpb,
@@ -931,10 +887,10 @@ local AddHealPredictionBar = function(self, unit)
 		overHealAbsorbGlow = overHealAbsorb,
 		maxOverflow = unit == "target" and 1.25 or 1,
 		frequentUpdates = health.frequentUpdates,
-		PostUpdate = PostUpdateHealPrediction
+		PostUpdate = PostUpdateHealthPrediction
 	}
 end
-ns.AddHealPredictionBar = AddHealPredictionBar
+ns.AddHealthPrediction = AddHealthPrediction
 
 local AddOverlay = function(self, unit)
 	local overlay = CreateFrame("Frame", self:GetName().."_Overlay", self.Portrait)
@@ -1132,7 +1088,7 @@ local AddAssistantIcon = function(self)
 	local assistant = self.Health:CreateTexture(nil, "OVERLAY")
 	assistant:SetSize(16, 16)
 	assistant:SetPoint("TOPLEFT", -8.5, 8.5)
-	self.Assistant = assistant
+	self.AssistantIndicator = assistant
 end
 ns.AddAssistantIcon = AddAssistantIcon
 
@@ -1140,7 +1096,7 @@ local AddCombatIcon = function(self)
 	local combat = self.Health:CreateTexture(nil, "OVERLAY")
 	combat:SetSize(20, 20)
 	combat:SetPoint("TOP", 0, 1)
-	self.Combat = combat
+	self.CombatIndicator = combat
 end
 ns.AddCombatIcon = AddCombatIcon
 
@@ -1148,7 +1104,7 @@ local AddLeaderIcon = function(self)
 	local leader = self.Health:CreateTexture(nil, "OVERLAY")
 	leader:SetSize(16, 16)
 	leader:SetPoint("TOPLEFT", -8.5, 8.5)
-	self.Leader = leader
+	self.LeaderIndicator = leader
 end
 ns.AddLeaderIcon = AddLeaderIcon
 
@@ -1156,7 +1112,7 @@ local AddMasterLooterIcon = function(self)
 	local masterLooter = self.Health:CreateTexture(nil, "OVERLAY")
 	masterLooter:SetSize(16, 16)
 	masterLooter:SetPoint("TOPRIGHT", 8.5, 8.5)
-	self.MasterLooter = masterLooter
+	self.MasterLooterIndicator = masterLooter
 end
 ns.AddMasterLooterIcon = AddMasterLooterIcon
 
@@ -1164,7 +1120,7 @@ local AddPhaseIcon = function(self)
 	local phaseIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	phaseIcon:SetSize(16, 16)
 	phaseIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
-	self.PhaseIcon = phaseIcon
+	self.PhaseIndicator = phaseIcon
 end
 ns.AddPhaseIcon = AddPhaseIcon
 
@@ -1172,24 +1128,24 @@ local AddQuestIcon = function(self)
 	local questIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	questIcon:SetSize(16, 16)
 	questIcon:SetPoint("TOPRIGHT", 8.5, 8.5)
-	self.QuestIcon = questIcon
+	self.QuestIndicator = questIcon
 end
 ns.AddQuestIcon = AddQuestIcon
 
-local AddRaidIcon = function(self)
-	raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
+local AddRaidTargetIcon = function(self)
+	local raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	raidIcon:SetTexture(ns.media.RAIDICONS)
 	raidIcon:SetSize(18, 18)
 	raidIcon:SetPoint("CENTER", self.Health, "TOP", 0, 0)
-	self.RaidIcon = raidIcon
+	self.RaidTargetIndicator = raidIcon
 end
-ns.AddRaidIcon = AddRaidIcon
+ns.AddRaidTargetIcon = AddRaidTargetIcon
 
 local AddRaidRoleIcon = function(self)
 	local raidRole = self:CreateTexture(nil, "OVERLAY")
 	raidRole:SetSize(16, 16)
 	raidRole:SetPoint("BOTTOMRIGHT", -8.5, 8.5)
-	self.RaidRole = raidRole
+	self.RaidRoleIndicator = raidRole
 end
 ns.AddRaidRoleIcon = AddRaidRoleIcon
 
@@ -1202,7 +1158,7 @@ local AddReadyCheckIcon = function(self)
 	readyCheck.finishedTime = 10
 	readyCheck.fadeTime = 3
 
-	self.ReadyCheck = readyCheck
+	self.ReadyCheckIndicator = readyCheck
 end
 ns.AddReadyCheckIcon = AddReadyCheckIcon
 
@@ -1210,7 +1166,7 @@ local AddRestingIcon = function(self)
 	local resting = self.Power:CreateTexture(nil, "OVERLAY")
 	resting:SetSize(16, 16)
 	resting:SetPoint("BOTTOMLEFT", -8.5, -8.5)
-	self.Resting = resting
+	self.RestingIndicator = resting
 end
 ns.AddRestingIcon = AddRestingIcon
 
@@ -1218,6 +1174,6 @@ local AddResurrectIcon = function(self)
 	local resurrectIcon = self.Health:CreateTexture(nil, "OVERLAY")
 	resurrectIcon:SetSize(16, 16)
 	resurrectIcon:SetPoint("CENTER")
-	self.ResurrectIcon = resurrectIcon
+	self.ResurrectIndicator = resurrectIcon
 end
 ns.AddResurrectIcon = AddResurrectIcon
