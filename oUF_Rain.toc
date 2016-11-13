@@ -12,7 +12,6 @@ config.lua
 colors.lua
 modules\ccwarn.lua
 modules\dispel.lua
-modules\healprediction.lua
 modules\interrupt.lua
 modules\experience.lua
 modules\totems.lua

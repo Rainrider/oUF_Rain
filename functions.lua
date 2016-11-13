@@ -427,20 +427,6 @@ local PostUpdateRune = function(_, rune, _, _, _, runeReady)
 	end
 end
 
-local PostUpdateHealthPrediction = function(element, unit, overAbsorb, overHealAbsorb)
-	if (overHealAbsorb) then
-		element.overHealAbsorbGlow:Show()
-	else
-		element.overHealAbsorbGlow:Hide()
-	end
-
-	if (overAbsorb) then
-		element.overAbsorbGlow:Show()
-	else
-		element.overAbsorbGlow:Hide()
-	end
-end
-
 local PostUpdateArtifactPower = function(element, event, isShown)
 	if (not isShown) then return end
 
@@ -861,33 +847,26 @@ local AddHealthPrediction = function(self, unit)
 	absorb:SetWidth(width)
 
 	local overAbsorb = health:CreateTexture(nil, "OVERLAY")
-	overAbsorb:SetSize(6, 0)
-	overAbsorb:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
-	overAbsorb:SetBlendMode("ADD")
+	overAbsorb:SetWidth(6)
 	overAbsorb:SetPoint("TOP")
 	overAbsorb:SetPoint("BOTTOM")
-	overAbsorb:SetPoint("LEFT", health, "RIGHT", -3, 0)
-	overAbsorb:Hide()
+	overAbsorb:SetPoint("LEFT", health, "RIGHT")--, -3, 0)
 
 	local overHealAbsorb = health:CreateTexture(nil, "OVERLAY")
-	overHealAbsorb:SetSize(6, 0)
-	overHealAbsorb:SetTexture([[Interface\RaidFrame\Absorb-Overabsorb]])
-	overHealAbsorb:SetBlendMode("ADD")
+	overHealAbsorb:SetWidth(10)
 	overHealAbsorb:SetPoint("TOP")
 	overHealAbsorb:SetPoint("BOTTOM")
 	overHealAbsorb:SetPoint("RIGHT", health, "LEFT", 3, 0)
-	overHealAbsorb:Hide()
 
 	self.HealthPrediction = {
 		healAbsorbBar = hab,
 		myBar = mhpb,
 		otherBar = ohpb,
 		absorbBar = absorb,
-		overAbsorbGlow = overAbsorb,
-		overHealAbsorbGlow = overHealAbsorb,
+		overAbsorb = overAbsorb,
+		overHealAbsorb = overHealAbsorb,
 		maxOverflow = unit == "target" and 1.25 or 1,
 		frequentUpdates = health.frequentUpdates,
-		PostUpdate = PostUpdateHealthPrediction
 	}
 end
 ns.AddHealthPrediction = AddHealthPrediction
