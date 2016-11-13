@@ -181,10 +181,10 @@ local Shared = function(self, unit)
 		local pvpStatus = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
 		pvpStatus:SetPoint("RIGHT", -3.5, 2)
 		pvpStatus:SetTextColor(0.69, 0.31, 0.31, 0.6)
-		self:Tag(pvpStatus, "[pvp]")
+		self:Tag(pvpStatus, "[rain:pvp]")
 
 		self:HookScript("OnEnter", function(self)
-			if (UnitIsUnit("player", unit) and UnitIsPVP(unit)) then
+			if (unit == "player" and UnitIsPVP(unit)) then
 				local pvpTimer = GetPVPTimer() / 1000 -- remaining seconds
 				if (pvpTimer < 300 and pvpTimer > 0) then
 					pvpStatus:SetText(format("%d:%02d", floor(pvpTimer / 60), pvpTimer % 60))

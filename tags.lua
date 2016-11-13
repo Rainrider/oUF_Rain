@@ -241,6 +241,30 @@ tags["rain:power"] = function(unit)
 end
 tagEvents["rain:power"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
+tags["rain:pvp"] = function(unit)
+	local prestige = UnitPrestige(unit)
+	local status
+	local color
+
+	if (UnitIsPVPFreeForAll(unit)) then
+		status = "FFA"
+		color = ORANGE_FONT_COLOR_CODE
+	elseif (UnitIsPVP(unit)) then
+		status = "PvP"
+		color = RED_FONT_COLOR_CODE
+	end
+
+	if (status) then
+		if (prestige and prestige > 0) then
+			status = format("%s %d", status, prestige)
+		end
+
+		return format("%s%s|r", color, status)
+	end
+end
+
+tagEvents["rain:pvp"] = "UNIT_FACTION HONOR_PRESTIGE_UPDATE"
+
 tags["rain:role"] = function(unit)
 	local xOffset = 0
 	local yOffset = 0
