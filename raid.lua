@@ -36,7 +36,7 @@ local RaidStyle = function(self, unit)
 	hpBG:SetVertexColor(0.84, 0.75, 0.65)
 	health.background = hpBG
 
-	local hpValue = ns.PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
+	local hpValue = ns.GenerateFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
 	hpValue:SetPoint("BOTTOMRIGHT", -2, 2)
 
 	if (ns.cfg.raidHealth > 0) then
@@ -68,7 +68,7 @@ local RaidStyle = function(self, unit)
 
 	self.Power = power
 
-	local name = ns.PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+	local name = ns.GenerateFontString(health, ns.media.FONT2, 9, nil, "LEFT")
 	name:SetPoint("TOPLEFT", 2, -2)
 	self:Tag(name, "[rain:role][rain:name]")
 

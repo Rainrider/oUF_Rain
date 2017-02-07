@@ -101,7 +101,7 @@ local FormatTime = function(seconds)
 	end
 end
 
-local PutFontString = function(parent, fontName, fontHeight, fontStyle, justifyH)
+local GenerateFontString = function(parent, fontName, fontHeight, fontStyle, justifyH)
 	local fontString = parent:CreateFontString(nil, "OVERLAY")
 	fontString:SetFont(fontName, fontHeight, fontStyle)
 	fontString:SetJustifyH(justifyH or "LEFT")
@@ -111,7 +111,7 @@ local PutFontString = function(parent, fontName, fontHeight, fontStyle, justifyH
 
 	return fontString
 end
-ns.PutFontString = PutFontString
+ns.GenerateFontString = GenerateFontString
 
 local CustomCastTimeText = function(Castbar, duration)
 	Castbar.Time:SetText(format("%.1f / %.2f", Castbar.channeling and duration or Castbar.max - duration, Castbar.max))
@@ -275,7 +275,7 @@ local CreateAuraIcon = function(Auras, index)
 	icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 	button.icon = icon
 
-	local count = PutFontString(button, ns.media.FONT, 9, "OUTLINE", "RIGHT")
+	local count = GenerateFontString(button, ns.media.FONT, 9, "OUTLINE", "RIGHT")
 	count:SetPoint("BOTTOMRIGHT", 2.5, 0)
 	count:SetTextColor(0.84, 0.75, 0.65)
 	button.count = count
@@ -297,7 +297,7 @@ local CreateAuraIcon = function(Auras, index)
 	button.stealable = stealable
 	-- timer text
 	if (unit ~= "raid") then
-		local remaining = PutFontString(button, ns.media.FONT, 9, "OUTLINE", "LEFT")
+		local remaining = GenerateFontString(button, ns.media.FONT, 9, "OUTLINE", "LEFT")
 		remaining:SetPoint("TOPLEFT", -0.5, 0)
 		button.remaining = remaining
 	end
@@ -498,7 +498,7 @@ local AddAlternativePower = function(self)
 	altPowerBar:SetBackdrop(ns.media.BACKDROP)
 	altPowerBar:SetBackdropColor(0, 0, 0, 0)
 
-	altPowerBar.Text = PutFontString(altPowerBar, ns.media.FONT2, 8, nil, "CENTER")
+	altPowerBar.Text = GenerateFontString(altPowerBar, ns.media.FONT2, 8, nil, "CENTER")
 	altPowerBar.Text:SetPoint("CENTER", altPowerBar, 0, 0)
 	self:Tag(altPowerBar.Text, "[rain:altpower]")
 
@@ -529,7 +529,7 @@ local AddArtifactPowerBar = function(self)
 	artifactPower.onAlpha = 1
 	artifactPower.offAlpha = 0
 
-	local text = PutFontString(artifactPower, ns.media.FONT2, 9, nil, "CENTER")
+	local text = GenerateFontString(artifactPower, ns.media.FONT2, 9, "OUTLINE", "CENTER")
 	text:SetPoint("CENTER")
 	artifactPower.text = text
 
@@ -599,7 +599,7 @@ local AddCastbar = function(self, unit)
 	if (unit == "player" or unit == "target") then
 		castbar:SetAllPoints(self.Overlay)
 
-		local castTime = PutFontString(castbar, ns.media.FONT2, 12, nil, "RIGHT")
+		local castTime = GenerateFontString(castbar, ns.media.FONT2, 12, nil, "RIGHT")
 		castTime:SetPoint("RIGHT", -3.5, 3)
 		castTime:SetTextColor(0.84, 0.75, 0.65)
 		castbar.Time = castTime
@@ -607,7 +607,7 @@ local AddCastbar = function(self, unit)
 		castbar.CustomTimeText = CustomCastTimeText
 		castbar.CustomDelayText = CustomCastDelayText
 
-		local text = PutFontString(castbar, ns.media.FONT2, 12, nil, "LEFT")
+		local text = GenerateFontString(castbar, ns.media.FONT2, 12, nil, "LEFT")
 		text:SetPoint("LEFT", 3.5, 3)
 		text:SetPoint("RIGHT", castbar.Time, "LEFT", -3.5, 0)
 		text:SetTextColor(0.84, 0.75, 0.65)

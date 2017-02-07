@@ -7,7 +7,7 @@ local oUFversion = major * 1000 + minor * 100 + rev
 
 assert(oUFversion >= 1600, "Consider updating your version of oUF to at least 1.6")
 
-local PutFontString = ns.PutFontString
+local GenerateFontString = ns.GenerateFontString
 
 local playerClass = ns.playerClass
 
@@ -41,7 +41,7 @@ local UnitSpecific = {
 	end,
 
 	target = function(self)
-		local info = PutFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
+		local info = GenerateFontString(self.Health, ns.media.FONT2, 12, nil, "LEFT")
 		info:SetPoint("TOPLEFT", 3.5, -3.5)
 		info:SetPoint("RIGHT", self.Health.value, "LEFT", -5, 0)
 		self:Tag(info, "[rain:role< ][rain:name][difficulty][ >rain:level][ >shortclassification]|r")
@@ -153,7 +153,7 @@ local Shared = function(self, unit)
 		health:SetPoint("TOPRIGHT")
 		health:SetPoint("TOPLEFT")
 
-		local healthValue = PutFontString(health, ns.media.FONT2, 12, nil, "RIGHT")
+		local healthValue = GenerateFontString(health, ns.media.FONT2, 12, nil, "RIGHT")
 		healthValue:SetPoint("TOPRIGHT", health, -3.5, -3.5)
 		self:Tag(healthValue, "[rain:health]")
 		health.value = healthValue
@@ -162,7 +162,7 @@ local Shared = function(self, unit)
 		power:SetPoint("BOTTOMRIGHT")
 		power:SetPoint("BOTTOMLEFT")
 
-		local powerValue = PutFontString(health, ns.media.FONT2, 12, nil, "LEFT")
+		local powerValue = GenerateFontString(health, ns.media.FONT2, 12, nil, "LEFT")
 		powerValue:SetPoint("TOPLEFT", health, 3.5, -3.5)
 		power.value = powerValue
 
@@ -178,7 +178,7 @@ local Shared = function(self, unit)
 		ns.AddDebuffs(self, unit)
 		ns.AddDispelHighlight(self, unit)
 
-		local pvpStatus = PutFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
+		local pvpStatus = GenerateFontString(self.Portrait, ns.media.FONT2, 18, "OUTLINE", "RIGHT")
 		pvpStatus:SetPoint("RIGHT", -3.5, 2)
 		pvpStatus:SetTextColor(0.69, 0.31, 0.31, 0.6)
 		self:Tag(pvpStatus, "[rain:pvp]")
@@ -213,7 +213,7 @@ local Shared = function(self, unit)
 		health:SetPoint("TOPRIGHT")
 		health:SetPoint("TOPLEFT")
 
-		local healthValue = PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
+		local healthValue = GenerateFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
 		healthValue:SetPoint("TOPRIGHT", -2, -2)
 		if (unitIsBoss) then
 			self:Tag(healthValue, "[rain:bossHealth]")
@@ -226,7 +226,7 @@ local Shared = function(self, unit)
 		power:SetPoint("BOTTOMRIGHT")
 		power:SetPoint("BOTTOMLEFT")
 
-		local name = PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+		local name = GenerateFontString(health, ns.media.FONT2, 9, nil, "LEFT")
 		name:SetPoint("TOPLEFT", 2, -2)
 		name:SetPoint("RIGHT", healthValue, "LEFT", -3, 0)
 
@@ -268,12 +268,12 @@ local Shared = function(self, unit)
 		health:SetPoint("TOPRIGHT")
 		health:SetPoint("TOPLEFT")
 
-		local healthValue = PutFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
+		local healthValue = GenerateFontString(health, ns.media.FONT2, 9, nil, "RIGHT")
 		healthValue:SetPoint("RIGHT", -2, 0)
 		self:Tag(healthValue, "[perhp<%]")
 		health.value = healthValue
 
-		local name = PutFontString(health, ns.media.FONT2, 9, nil, "LEFT")
+		local name = GenerateFontString(health, ns.media.FONT2, 9, nil, "LEFT")
 		name:SetPoint("LEFT", 2, 0)
 		name:SetPoint("RIGHT", healthValue, "LEFT", -3, 0)
 		self:Tag(name, "[rain:name]")
