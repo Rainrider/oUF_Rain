@@ -1,12 +1,5 @@
 local _, ns = ...
 
-local major, minor, rev = strsplit(".", GetAddOnMetadata("oUF", "version"))
-minor = minor or 0
-rev = rev or 0
-local oUFversion = major * 1000 + minor * 100 + rev
-
-assert(oUFversion >= 1600, "Consider updating your version of oUF to at least 1.6")
-
 local GenerateFontString = ns.GenerateFontString
 
 local playerClass = ns.playerClass
