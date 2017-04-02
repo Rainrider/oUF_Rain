@@ -34,7 +34,9 @@ end
 --[[ HELPER FUNCTIONS ]]--
 
 local SiValue = function(val)
-	if (val >= 1e6) then
+	if (val >= 1e9) then
+		return format("%.1fb", val / 1e9)
+	elseif (val >= 1e6) then
 		return format("%.1fm", val / 1e6)
 	elseif (val >= 1e4) then
 		return format("%.1fk", val / 1e3)
@@ -430,7 +432,7 @@ end
 local PostUpdateArtifactPower = function(element, event, isShown)
 	if (not isShown) then return end
 
-	element.text:SetFormattedText("%d / %d", element.totalPower, element.powerForNextTrait - element.power)
+	element.text:SetFormattedText("%s / %s", SiValue(element.totalPower), SiValue(element.powerForNextTrait - element.power))
 end
 --[[ END OF PRE AND POST FUNCTIONS ]]--
 
