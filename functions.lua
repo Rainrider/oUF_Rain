@@ -985,8 +985,6 @@ ns.AddReputationBar = AddReputationBar
 local AddRuneBar = function(self, width, height, spacing)
 	local runes = {}
 	local maxRunes = 6
-	local color = ns.colors.power.RUNES
-	local r, g, b = color[1], color[2], color[3]
 
 	width = (width - (maxRunes + 1) * spacing) / maxRunes
 	spacing = width + spacing
@@ -996,17 +994,17 @@ local AddRuneBar = function(self, width, height, spacing)
 		rune:SetSize(width, height)
 		rune:SetPoint("BOTTOMLEFT", (i - 1) * spacing + 1, 1)
 		rune:SetStatusBarTexture(ns.media.TEXTURE)
-		rune:SetStatusBarColor(r, g, b)
 		rune:SetBackdrop(ns.media.BACKDROP)
 		rune:SetBackdropColor(0, 0, 0)
 
 		local bg = rune:CreateTexture(nil, "BORDER")
 		bg:SetTexture(ns.media.TEXTURE)
 		bg:SetAllPoints()
-		bg:SetVertexColor(r * 0.5, g * 0.5, b * 0.5)
+		bg.multiplier = 0.5
 		runes[i] = rune
 	end
 
+	runes.colorSpec = true
 	runes.PostUpdate = PostUpdateRune
 	self.Runes = runes
 end
