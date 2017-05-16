@@ -105,7 +105,7 @@ local Shared = function(self, unit)
 	hbBG:SetVertexColor(0.15, 0.15, 0.15)
 	health.background = hbBG
 
-	health.Override = ns.UpdateHealth
+	health.UpdateColor = ns.UpdateHealthColor
 
 	local power
 

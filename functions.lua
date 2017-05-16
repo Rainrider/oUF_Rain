@@ -378,40 +378,30 @@ local PostUpdateClassPower = function(element, power, maxPower, mod, maxPowerCha
 	end
 end
 
-local UpdateHealth = function(self, event, unit)
-	if (self.unit ~= unit) then return end
-
-	local health = self.Health
-
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	local disconnected = not UnitIsConnected(unit)
-
-	health:SetMinMaxValues(0, max)
-	health:SetValue(cur)
-	health.disconnected = disconnected
+local UpdateHealthColor = function(element, unit, cur, max)
+	local parent = element.__owner
 
 	local r, g, b, t
-	if (disconnected and health.colorDisconnected or UnitIsDeadOrGhost(unit)) then
-		health:SetValue(max)
-		t = self.colors.disconnected
-	elseif (health.colorTapping and not UnitPlayerControlled(unit) and
-		UnitIsTapDenied(unit)) then
-		t = self.colors.tapped
-	elseif (health.colorSmooth) then
-		r, g, b = ColorGradient(cur, max, unpack(self.colors.smooth))
+	if(element.disconnected and element.colorDisconnected or UnitIsDeadOrGhost(unit)) then
+		element:SetValue(max)
+		t = parent.colors.disconnected
+	elseif(element.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)) then
+		t = parent.colors.tapped
+	elseif(element.colorSmooth) then
+		r, g, b = ColorGradient(cur, max, unpack(parent.colors.smooth))
 	else
-		r, g, b = 0.17, 0.17, 0.24
+		t = parent.colors.health
 	end
 
-	if (t) then
+	if(t) then
 		r, g, b = t[1], t[2], t[3]
 	end
 
-	if (b) then
-		health:SetStatusBarColor(r, g, b)
+	if(b) then
+		element:SetStatusBarColor(r, g, b)
 	end
 end
-ns.UpdateHealth = UpdateHealth
+ns.UpdateHealthColor = UpdateHealthColor
 
 local UpdateThreat = function(self, event, unit)
 	if (self.unit ~= unit) then return end

@@ -28,7 +28,7 @@ local RaidStyle = function(self, unit)
 	health:SetBackdrop(ns.media.BACKDROP)
 	health:SetBackdropColor(0, 0, 0)
 
-	health.Override = ns.UpdateHealth
+	health.UpdateColor = ns.UpdateHealthColor
 
 	local hpBG = health:CreateTexture(nil, "BORDER")
 	hpBG:SetAllPoints()

@@ -2,6 +2,7 @@ local _, ns = ...
 
 ns.colors = setmetatable({
 	disconnected = {0.42, 0.37, 0.32},
+	health = {0.17, 0.17, 0.24},
 	power = setmetatable({
 		-- original colors contained in FrameXML/UnitFrame.lua (table PowerColorBar)
 		["MANA"] = {0.31, 0.45, 0.63},
