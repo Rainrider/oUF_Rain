@@ -355,7 +355,15 @@ local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.timeLeft = aura.isDebuff and math.huge or -5
 end
 
-local PostUpdateClassPower = function(element, power, maxPower, maxPowerChanged)
+local PostUpdateClassPower = function(element, power, maxPower, mod, maxPowerChanged)
+	if (not maxPower) then return end
+
+	for i = 1, maxPower do
+		if((power / mod + 0.9) < i) then
+			element[i]:Hide()
+		end
+	end
+
 	if (not maxPowerChanged) then return end
 
 	local height = element.height
@@ -667,11 +675,21 @@ local AddClassPower = function(self, width, height, spacing)
 	classPower.height = height
 	classPower.spacing = spacing
 
-	local maxPower = 6
+	local maxPower = 10
 
 	for i = 1, maxPower do
-		classPower[i] = self.Overlay:CreateTexture("oUF_Rain_ClassIcon_"..i, "OVERLAY")
-		classPower[i]:SetTexture(ns.media.TEXTURE)
+		local bar = CreateFrame("StatusBar", "oUF_Rain_ClassBar_"..i, self.Overlay)
+		bar:SetStatusBarTexture(ns.media.TEXTURE)
+		bar:SetBackdrop(ns.media.BACKDROP)
+		bar:SetBackdropColor(0, 0, 0)
+
+		local bg = bar:CreateTexture(nil, "BORDER")
+		bg:SetTexture(ns.media.TEXTURE)
+		bg:SetAllPoints()
+		bg.multiplier = 0.5
+		bar.bg = bg
+
+		classPower[i] = bar
 	end
 
 	classPower.PostUpdate = PostUpdateClassPower
