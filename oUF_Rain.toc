@@ -1,4 +1,4 @@
-## Interface: 70000
+## Interface: 70200
 ## Title: oUF |cff0099CCRain|r
 ## Author: Rainrider
 ## Version: pre alpha
