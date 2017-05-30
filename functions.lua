@@ -355,16 +355,8 @@ local PostUpdateGapIcon = function(Auras, unit, aura, index)
 	aura.timeLeft = aura.isDebuff and math.huge or -5
 end
 
-local PostUpdateClassPower = function(element, power, maxPower, mod, maxPowerChanged)
-	if (not maxPower) then return end
-
-	for i = 1, maxPower do
-		if((power / mod + 0.9) < i) then
-			element[i]:Hide()
-		end
-	end
-
-	if (not maxPowerChanged) then return end
+local PostUpdateClassPower = function(element, power, maxPower, maxPowerChanged)
+	if (not maxPower or not maxPowerChanged) then return end
 
 	local height = element.height
 	local spacing = element.spacing
