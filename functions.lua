@@ -768,39 +768,20 @@ local AddExperienceBar = function(self)
 	experience:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 2.5)
 	experience:SetPoint("BOTTOMRIGHT", self.Health, "TOP", -2, 2.5)
 	experience:SetStatusBarTexture(ns.media.TEXTURE)
-	experience:SetStatusBarColor(0.67, 0.51, 1)
 	experience:SetBackdrop(ns.media.BACKDROP)
 	experience:SetBackdropColor(0, 0, 0)
-	experience:SetAlpha(0)
 
 	experience:EnableMouse(true)
-	experience:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
-	experience:SetScript("OnLeave", function(self) self:SetAlpha(0) end)
+	experience.outAlpha = 0
+	experience.tooltipAnchor = "ANCHOR_TOPRIGHT"
 
 	local rested = CreateFrame("StatusBar", "oUF_Rain_Experience_Rested", experience)
 	rested:SetPoint("TOPLEFT", experience:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
 	rested:SetPoint("BOTTOMRIGHT", experience, 0, 0)
 	rested:SetStatusBarTexture(ns.media.TEXTURE)
-	rested:SetStatusBarColor(0, 0.56, 1)
 	rested:SetBackdrop(ns.media.BACKDROP)
 	rested:SetBackdropColor(0, 0, 0)
 	experience.Rested = rested
-
-	experience.Tooltip = function(self)
-		local curXP, maxXP = UnitXP("player"), UnitXPMax("player")
-		local bars = 20
-		local rested = GetXPExhaustion()
-		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT", 0, 5)
-		GameTooltip:AddLine(format("XP: %s / %s (%d%% - %.1f bars)", BreakUpLargeNumbers(curXP), BreakUpLargeNumbers(maxXP), curXP/maxXP * 100 + 0.5, bars * curXP / maxXP))
-		GameTooltip:AddLine(format("Remaining: %s (%d%% - %.1f bars)", BreakUpLargeNumbers(maxXP - curXP), (maxXP - curXP) / maxXP * 100 + 0.5, bars * (maxXP - curXP) / maxXP))
-		if (rested and rested > 0) then
-			GameTooltip:AddLine(format("|cff0090ffRested: +%s (%d%%)", BreakUpLargeNumbers(rested), rested / maxXP * 100 + 0.5))
-		end
-		GameTooltip:Show()
-	end
-
-	experience:HookScript("OnLeave", GameTooltip_Hide)
-	experience:HookScript("OnEnter", experience.Tooltip)
 
 	self.Experience = experience
 end
