@@ -24,9 +24,15 @@ local UnitSpecific = {
 
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", function()
 			if (UnitExists("target")) then
-				PlaySound("igCreatureAggroSelect")
+				if (UnitIsEnemy("target", "player")) then
+					PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
+				elseif (UnitIsFriend("target", "player")) then
+					PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
+				else
+					PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
+				end
 			else
-				PlaySound("igCreatureAggroDeselect")
+				PlaySound(SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT)
 			end
 		end)
 
