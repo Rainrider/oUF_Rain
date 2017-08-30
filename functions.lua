@@ -518,8 +518,8 @@ local AddArtifactPowerBar = function(self)
 	artifactPower:EnableMouse(true)
 	artifactPower:Hide()
 
-	artifactPower.onAlpha = 1
 	artifactPower.offAlpha = 0
+	artifactPower.tooltipAnchor = 'ANCHOR_TOPRIGHT'
 
 	local text = GenerateFontString(artifactPower, ns.media.FONT2, 9, "OUTLINE", "CENTER")
 	text:SetPoint("CENTER")
