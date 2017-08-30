@@ -918,11 +918,8 @@ local AddReputationBar = function(self)
 	reputation:SetStatusBarTexture(ns.media.TEXTURE)
 	reputation:SetBackdrop(ns.media.BACKDROP)
 	reputation:SetBackdropColor(0, 0, 0)
-	reputation:SetAlpha(0)
 
 	reputation:EnableMouse(true)
-	reputation:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
-	reputation:SetScript("OnLeave", function(self) self:SetAlpha(0) end)
 
 	local bg = reputation:CreateTexture(nil, "BORDER")
 	bg:SetAllPoints(reputation)
@@ -931,6 +928,8 @@ local AddReputationBar = function(self)
 	reputation.bg = bg
 
 	reputation.colorStanding = true
+	reputation.tooltipAnchor = "ANCHOR_TOPLEFT"
+	reputation.outAlpha = 0
 
 	reputation.Tooltip = function(self)
 		local name, standing, min, max, value, id = GetWatchedFactionInfo()
@@ -947,9 +946,6 @@ local AddReputationBar = function(self)
 		end
 		GameTooltip:Show()
 	end
-
-	reputation:HookScript("OnLeave", GameTooltip_Hide)
-	reputation:HookScript("OnEnter", reputation.Tooltip)
 
 	self.Reputation = reputation
 end
